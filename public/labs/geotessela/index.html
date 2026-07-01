@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0c302d">
   <meta name="description" content="Plataforma dinâmica para investigação de ladrilhamentos com polígonos regulares.">
-  <title>GeoTessela Lab | DIASMATH LABS</title>
+  <title>GeoTessela Lab — Investigação de Ladrilhamentos</title>
 
   <style>
     :root{
@@ -527,10 +527,50 @@
       .custom-row{grid-template-columns:1fr}
       .canvas-box{height:425px}
     }
+  
+    /* DIASMATH PROFESSIONAL INTEGRATION */
+    .diasmath-topbar{
+      position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:14px;
+      padding:10px 16px;background:rgba(15,23,42,.96);color:#fff;border-bottom:1px solid rgba(255,255,255,.12);backdrop-filter:blur(12px);
+    }
+    .diasmath-topbar a{color:#fff;text-decoration:none;font-weight:950}
+    .diasmath-brand{display:flex;align-items:center;gap:10px;min-width:0}
+    .diasmath-logo{width:34px;height:34px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,#1D4ED8,#16A34A);box-shadow:0 10px 26px rgba(0,0,0,.25)}
+    .diasmath-brand-text{display:flex;flex-direction:column;line-height:1.05}
+    .diasmath-brand-text strong{font-size:.92rem;letter-spacing:.04em}
+    .diasmath-brand-text span{color:#cbd5e1;font-size:.72rem;font-weight:700}
+    .diasmath-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .diasmath-action{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:7px 12px;border-radius:999px;color:#0f172a !important;background:#fff;font-size:.78rem;font-weight:950;box-shadow:0 6px 16px rgba(0,0,0,.18)}
+    .diasmath-action.secondary{color:#fff !important;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);box-shadow:none}
+    .hero{margin-top:14px}
+    .hero .eyebrow::before{content:"DIASMATH LABS · "}
+    .lab-purpose{margin-top:14px;padding:13px 15px;border-radius:18px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);color:#e0f2fe;font-size:.9rem;line-height:1.45}
+    .teacher-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+    .teacher-strip div{padding:12px;border-radius:16px;background:#ffffff;border:1px solid #d7e4df;box-shadow:0 8px 20px rgba(15,60,55,.08)}
+    .teacher-strip strong{display:block;color:#0f615b;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+    .teacher-strip span{color:#425f5a;font-size:.86rem;line-height:1.35}
+    @media(max-width:850px){.diasmath-topbar{align-items:flex-start;flex-direction:column}.diasmath-actions{justify-content:flex-start}.teacher-strip{grid-template-columns:1fr 1fr}}
+    @media(max-width:560px){.teacher-strip{grid-template-columns:1fr}.diasmath-brand-text span{display:none}}
+
   </style>
 </head>
 
 <body>
+
+  <nav class="diasmath-topbar" aria-label="Barra DIASMATH">
+    <div class="diasmath-brand">
+      <div class="diasmath-logo" aria-hidden="true">🧪</div>
+      <div class="diasmath-brand-text">
+        <strong>DIASMATH LABS</strong>
+        <span>Laboratório digital de Geometria</span>
+      </div>
+    </div>
+    <div class="diasmath-actions">
+      <a class="diasmath-action secondary" href="/labs">← Voltar aos Labs</a>
+      <a class="diasmath-action" href="/labs/geotessela">Página do laboratório</a>
+    </div>
+  </nav>
+
   <div class="shell">
     <header class="hero">
       <div class="hero-row">
@@ -554,7 +594,11 @@
         <span class="badge">Análise de conjecturas</span>
         <span class="badge">Até 4 tipos diferentes</span>
         <span class="badge">Verificação de códigos</span>
-        <span class="badge">Funciona offline</span>
+    
+      </div>
+
+      <div class="lab-purpose">
+        <strong>Objetivo do laboratório:</strong> investigar ladrilhamentos com polígonos regulares, testar códigos de vértice, analisar a soma angular e diferenciar compatibilidade local de ladrilhamentos uniformes clássicos.
       </div>
     </header>
 
@@ -694,7 +738,21 @@
       </div>
     </section>
 
-    <footer>© 2026 Francisco Vieira Dias. Todos os direitos reservados. </footer>
+
+    <section class="card theory-card">
+      <div class="section-title">
+        <h2><span class="step">4</span> Guia rápido para o professor</h2>
+      </div>
+
+      <div class="teacher-strip">
+        <div><strong>Público</strong><span>Ensino Fundamental II e Ensino Médio.</span></div>
+        <div><strong>Conteúdo</strong><span>Polígonos regulares, ângulos internos e ladrilhamentos.</span></div>
+        <div><strong>Uso em aula</strong><span>Investigação, conjecturas, validação e discussão coletiva.</span></div>
+        <div><strong>Produto</strong><span>Registro de códigos testados e análise da soma angular.</span></div>
+      </div>
+    </section>
+
+    <footer>© 2026 Francisco Vieira Dias · DIASMATH Labs. Todos os direitos reservados.</footer>
   </div>
 
   <div class="toast" id="toast"></div>

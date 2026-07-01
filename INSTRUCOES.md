@@ -1,24 +1,38 @@
-# Atualização 06 — DIASMATH LABS: GeoTessela Lab
+# Atualização 06 — GeoTessela Lab profissional
 
-## Como subir no GitHub
+Esta atualização integra o GeoTessela Lab à DIASMATH.
+
+## Arquivos criados
+
+- public/labs/geotessela/index.html
+- app/labs/page.tsx
+- app/labs/geotessela/page.tsx
+
+## Como aplicar no GitHub
 
 1. Extraia este ZIP.
-2. Abra o repositório `diasmath-platform`.
-3. Clique em `Add file` → `Upload files`.
-4. Arraste as pastas:
-   - `public`
-   - `app`
-5. Aguarde o upload.
-6. Clique em `Commit changes`.
-7. Aguarde o deploy automático da Vercel.
+2. No GitHub, clique em Add file → Upload files.
+3. Arraste as pastas:
+   - public
+   - app
+4. Confirme a substituição quando o GitHub pedir.
+5. Clique em Commit changes.
+6. Aguarde o deploy automático da Vercel.
 
 ## Como testar
 
-Página dos laboratórios:
-https://diasmath.com.br/labs
+Após o deploy, acesse:
 
-GeoTessela Lab:
-https://diasmath.com.br/labs/geotessela
+/labs
 
-HTML direto:
-https://diasmath.com.br/labs/geotessela/index.html
+Clique em:
+
+GeoTessela Lab → Abrir laboratório
+
+Ou acesse diretamente:
+
+/labs/geotessela
+
+## Versão direta do laboratório
+
+/labs/geotessela/index.html
