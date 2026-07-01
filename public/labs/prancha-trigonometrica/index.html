@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prancha Trigonométrica | DIASMATH Labs</title>
+  <style>
+    :root{
+      --bg:#f3f7fb; --surface:#ffffff; --ink:#102033; --muted:#607086;
+      --axis:#000000; --primary:#1f5fbf; --primary-soft:#e7f0ff;
+      --sin:#1f5fbf; --cos:#168a4a; --tan:#7c3aed; --rad:#d22f27; --arc:#f08a24;
+      --shadow:0 18px 45px rgba(16,32,51,.10); --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+    .app{max-width:1500px;margin:0 auto;padding:18px}
+    header{background:linear-gradient(135deg,#fff 0%,#edf5ff 100%);border:1px solid #dce7f4;border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 26px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;margin-bottom:18px}
+    .brand h1{margin:0;font-size:30px;letter-spacing:-.7px;color:#123d7c}.brand p{margin:7px 0 0;color:var(--muted);font-size:15px}
+    .teacher{text-align:right;color:#123d7c;font-weight:800;font-style:italic;font-size:19px;white-space:nowrap}
+    .layout{display:grid;grid-template-columns:minmax(760px,1fr) 395px;gap:18px;align-items:start}.card{background:var(--surface);border:1px solid #dde8f5;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .board{padding:18px;overflow:auto}svg{display:block;width:100%;min-width:850px;height:720px;border-radius:18px;background:white}.panel{padding:20px;position:sticky;top:14px}
+    .panel h2{margin:0;font-size:23px;color:#123d7c}.panel .hint{margin:8px 0 18px;color:var(--muted);line-height:1.45;font-size:14.5px}
+    .control-group{margin-bottom:14px}label{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;font-weight:800;color:#26384d;font-size:14px}
+    select,input[type="range"]{width:100%}select{border:1px solid #c9d7e8;border-radius:14px;padding:12px 13px;font-size:15px;color:var(--ink);background:white;outline:none}input[type="range"]{accent-color:var(--primary)}
+    .buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 18px}button{border:0;border-radius:14px;padding:12px 10px;color:white;font-weight:800;cursor:pointer;background:var(--primary);font-size:14px}button.secondary{background:#42526a}button:hover{filter:brightness(.96)}
+    .angle-card{border:1px solid #cfe0f5;border-radius:20px;overflow:hidden;margin-bottom:14px}.angle-head{background:var(--primary-soft);padding:16px;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center}.degrees{font-size:42px;font-weight:900;line-height:1;color:#123d7c}.meta{color:#245da8;font-weight:800;line-height:1.4}
+    .values{padding:13px;display:grid;gap:10px;background:#fbfdff}.value-row{display:grid;grid-template-columns:94px 1fr;gap:10px;align-items:center;border:1px solid #e1eaf5;border-radius:15px;padding:11px 12px;background:white}.value-row strong{font-size:16px}.value-row span{font-weight:900;font-size:20px;color:#172033}.value-row small{color:var(--muted);font-weight:700}.sin{color:var(--sin)}.cos{color:var(--cos)}.tan{color:var(--tan)}
+    .didactic{border-radius:18px;padding:15px;background:#fff8ef;border:1px solid #ffd8a8;color:#7a3b00;line-height:1.5;font-size:14.2px;margin-bottom:14px}.mini-title{font-weight:900;color:#26384d;margin:10px 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.4px}.legend{display:grid;gap:8px;font-size:14px;color:#334155}.legend div{display:flex;align-items:center;gap:8px}.dot{width:13px;height:13px;border-radius:50%;display:inline-block}.dot.sin{background:var(--sin)}.dot.cos{background:var(--cos)}.dot.tan{background:var(--tan)}.dot.rad{background:var(--rad)}.dot.arc{background:var(--arc)}
+    .table{margin-top:14px;border:1px solid #e1eaf5;border-radius:16px;overflow:hidden;font-size:13px}.table-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr}.table-row div{padding:8px;border-right:1px solid #e1eaf5;border-bottom:1px solid #e1eaf5;text-align:center;font-weight:700}.table-row div:last-child{border-right:0}.table-row:last-child div{border-bottom:0}.table-head div{background:#f1f6ff;color:#123d7c;font-weight:900}
+    @media(max-width:1150px){.layout{grid-template-columns:1fr}.panel{position:static}header{grid-template-columns:1fr}.teacher{text-align:left}}
+  
+    /* DIASMATH PROFESSIONAL INTEGRATION */
+    .diasmath-topbar{
+      position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:14px;
+      padding:10px 16px;background:rgba(15,23,42,.96);color:#fff;border-bottom:1px solid rgba(255,255,255,.12);backdrop-filter:blur(12px);
+    }
+    .diasmath-topbar a{color:#fff;text-decoration:none;font-weight:950}
+    .diasmath-brand{display:flex;align-items:center;gap:10px;min-width:0}
+    .diasmath-logo{width:34px;height:34px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,#1D4ED8,#7C3AED);box-shadow:0 10px 26px rgba(0,0,0,.25)}
+    .diasmath-brand-text{display:flex;flex-direction:column;line-height:1.05}
+    .diasmath-brand-text strong{font-size:.92rem;letter-spacing:.04em}
+    .diasmath-brand-text span{color:#cbd5e1;font-size:.72rem;font-weight:700}
+    .diasmath-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .diasmath-action{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:7px 12px;border-radius:999px;color:#0f172a !important;background:#fff;font-size:.78rem;font-weight:950;box-shadow:0 6px 16px rgba(0,0,0,.18)}
+    .diasmath-action.secondary{color:#fff !important;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);box-shadow:none}
+    .app{padding-top:14px}
+    header{border-color:#dbeafe;background:radial-gradient(circle at 8% 0%, rgba(29,78,216,.10), transparent 28%),radial-gradient(circle at 94% 0%, rgba(124,58,237,.10), transparent 28%),linear-gradient(135deg,#ffffff 0%,#eef5ff 100%)}
+    .brand h1::before{content:"DIASMATH LABS · ";display:block;color:#1D4ED8;font-size:.72rem;font-weight:950;letter-spacing:.16em;text-transform:uppercase;margin-bottom:4px}
+    .teacher{padding:10px 14px;border-radius:999px;background:#eef5ff;border:1px solid #dbeafe;font-size:15px;font-style:normal}
+    .lab-purpose{margin:0 0 18px;padding:15px 18px;border-radius:20px;background:#ffffff;border:1px solid #dbeafe;box-shadow:0 12px 28px rgba(16,32,51,.07);color:#334155;line-height:1.5;font-size:.95rem}
+    .teacher-guide{margin-top:18px;padding:18px}
+    .teacher-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+    .teacher-grid div{padding:13px;border-radius:16px;background:#fbfdff;border:1px solid #dbeafe}
+    .teacher-grid strong{display:block;color:#123d7c;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+    .teacher-grid span{color:#475569;font-size:.86rem;line-height:1.35}
+    @media(max-width:850px){.diasmath-topbar{align-items:flex-start;flex-direction:column}.diasmath-actions{justify-content:flex-start}.teacher-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:560px){.teacher-grid{grid-template-columns:1fr}.diasmath-brand-text span{display:none}}
+
+  </style>
+</head>
+<body>
+
+  <nav class="diasmath-topbar" aria-label="Barra DIASMATH">
+    <div class="diasmath-brand">
+      <div class="diasmath-logo" aria-hidden="true">📐</div>
+      <div class="diasmath-brand-text">
+        <strong>DIASMATH LABS</strong>
+        <span>Laboratório digital de Trigonometria</span>
+      </div>
+    </div>
+    <div class="diasmath-actions">
+      <a class="diasmath-action secondary" href="/labs">← Voltar aos Labs</a>
+      <a class="diasmath-action" href="/labs/prancha-trigonometrica">Página do laboratório</a>
+    </div>
+  </nav>
+
+  <div class="app">
+    <header>
+      <div class="brand"><h1>Prancha Trigonométrica Interativa</h1><p>Plano cartesiano visível, ciclo trigonométrico, redução ao 1º quadrante e reta tangente graduada.</p></div>
+      <div class="teacher">Profº. Francisco Dias</div>
+    </header>
+
+    <section class="lab-purpose">
+      <strong>Objetivo do laboratório:</strong> explorar o ciclo trigonométrico, os ângulos notáveis, a redução ao primeiro quadrante e a relação entre seno, cosseno e tangente por meio de uma prancha visual interativa.
+    </section>
+
+    <main class="layout">
+      <section class="card board"><svg id="svg" viewBox="0 0 1060 720" aria-label="Prancha trigonométrica interativa"></svg></section>
+      <aside class="card panel">
+        <h2>Painel didático</h2><p class="hint">Use os ângulos notáveis e observe os eixos coordenados, a redução ao 1º quadrante e a leitura da tangente na reta x = 1.</p>
+        <div class="control-group"><label for="notable">Ângulo notável <small>graus e radianos</small></label><select id="notable"></select></div>
+        <div class="control-group"><label for="slider">Exploração livre <small id="sliderLabel">30°</small></label><input id="slider" type="range" min="0" max="360" step="1" value="30"></div>
+        <div class="buttons"><button id="animate">Animar ciclo</button><button id="reset" class="secondary">Voltar ao 30°</button></div>
+        <div id="readout" class="angle-card"></div><div id="teacherNote" class="didactic"></div>
+        <div class="mini-title">Legenda visual</div>
+        <div class="legend"><div><span class="dot rad"></span> Raio: segmento que determina o ângulo θ</div><div><span class="dot cos"></span> Cosseno: leitura no eixo x</div><div><span class="dot sin"></span> Seno: leitura no eixo y</div><div><span class="dot tan"></span> Tangente: leitura na reta x = 1</div><div><span class="dot arc"></span> Arco: abertura do ângulo</div></div>
+        <div class="table"><div class="table-row table-head"><div>Quadrante</div><div>sen</div><div>cos</div><div>tg</div></div><div class="table-row"><div>I</div><div>+</div><div>+</div><div>+</div></div><div class="table-row"><div>II</div><div>+</div><div>−</div><div>−</div></div><div class="table-row"><div>III</div><div>−</div><div>−</div><div>+</div></div><div class="table-row"><div>IV</div><div>−</div><div>+</div><div>−</div></div></div>
+      </aside>
+    </main>
+
+    <section class="card teacher-guide">
+      <div class="mini-title">Guia rápido para o professor</div>
+      <div class="teacher-grid">
+        <div><strong>Público</strong><span>Ensino Fundamental II e Ensino Médio.</span></div>
+        <div><strong>Conteúdo</strong><span>Ciclo trigonométrico, seno, cosseno, tangente, radianos e quadrantes.</span></div>
+        <div><strong>Uso em aula</strong><span>Demonstração projetada, exploração individual ou investigação guiada em duplas.</span></div>
+        <div><strong>Produto</strong><span>Registro dos ângulos, sinais por quadrante e valores notáveis observados.</span></div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    const svg=document.getElementById('svg'), notable=document.getElementById('notable'), slider=document.getElementById('slider'), sliderLabel=document.getElementById('sliderLabel'), readout=document.getElementById('readout'), teacherNote=document.getElementById('teacherNote'), animateBtn=document.getElementById('animate'), resetBtn=document.getElementById('reset');
+    const CX=455,CY=360,R=235,TX=CX+R; let animation=null;
+    const special={0:{rad:'0',sin:'0',cos:'1',tan:'0'},30:{rad:'π/6',sin:'1/2',cos:'√3/2',tan:'√3/3'},45:{rad:'π/4',sin:'√2/2',cos:'√2/2',tan:'1'},60:{rad:'π/3',sin:'√3/2',cos:'1/2',tan:'√3'},90:{rad:'π/2',sin:'1',cos:'0',tan:'não existe'},120:{rad:'2π/3',sin:'√3/2',cos:'−1/2',tan:'−√3'},135:{rad:'3π/4',sin:'√2/2',cos:'−√2/2',tan:'−1'},150:{rad:'5π/6',sin:'1/2',cos:'−√3/2',tan:'−√3/3'},180:{rad:'π',sin:'0',cos:'−1',tan:'0'},210:{rad:'7π/6',sin:'−1/2',cos:'−√3/2',tan:'√3/3'},225:{rad:'5π/4',sin:'−√2/2',cos:'−√2/2',tan:'1'},240:{rad:'4π/3',sin:'−√3/2',cos:'−1/2',tan:'√3'},270:{rad:'3π/2',sin:'−1',cos:'0',tan:'não existe'},300:{rad:'5π/3',sin:'−√3/2',cos:'1/2',tan:'−√3'},315:{rad:'7π/4',sin:'−√2/2',cos:'√2/2',tan:'−1'},330:{rad:'11π/6',sin:'−1/2',cos:'√3/2',tan:'−√3/3'},360:{rad:'2π',sin:'0',cos:'1',tan:'0'}};
+    const notableAngles=Object.keys(special).map(Number); notableAngles.forEach(g=>{const o=document.createElement('option');o.value=g;o.textContent=`${g}°  =  ${special[g].rad}`;notable.appendChild(o)});
+    function create(tag,attrs={}){const n=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,v);svg.appendChild(n);return n}
+    function text(x,y,value,size=14,color='#102033',anchor='middle',weight='500'){const n=create('text',{x,y,'font-size':size,fill:color,'text-anchor':anchor,'font-family':'Inter, Arial, sans-serif','font-weight':weight});n.textContent=value;return n}
+    function point(angle,radius=R){const a=angle*Math.PI/180;return{x:CX+radius*Math.cos(a),y:CY-radius*Math.sin(a)}}
+    function line(x1,y1,x2,y2,color,width=2,dash=''){const a={x1,y1,x2,y2,stroke:color,'stroke-width':width,'stroke-linecap':'round'};if(dash)a['stroke-dasharray']=dash;return create('line',a)}
+    function circle(cx,cy,r,fill,stroke='none',width=1){return create('circle',{cx,cy,r,fill,stroke,'stroke-width':width})}
+
+    function drawBase(){
+      svg.innerHTML=''; create('rect',{x:0,y:0,width:1060,height:720,rx:18,fill:'#fff'}); create('rect',{x:34,y:38,width:910,height:640,rx:18,fill:'#fbfdff',stroke:'#e4edf7'});
+      for(let v=-1.25;v<=1.25;v+=0.25){let x=CX+v*R,y=CY-v*R;line(x,75,x,645,'#e8eef6',1);line(70,y,930,y,'#e8eef6',1)}
+      // Eixos coordenados destacados e desenhados por cima da grade
+      line(70,CY,930,CY,'#000',4); line(CX,75,CX,645,'#000',4); create('polygon',{points:`930,${CY} 914,${CY-8} 914,${CY+8}`,fill:'#000'}); create('polygon',{points:`${CX},75 ${CX-8},91 ${CX+8},91`,fill:'#000'}); text(942,CY+6,'x',20,'#000','start','900'); text(CX+12,70,'y',20,'#000','start','900'); text(CX+12,CY+22,'O',15,'#000','start','900');
+      // Ciclo unitário
+      circle(CX,CY,R,'#ffffff','#102033',3); circle(CX,CY,4,'#000');
+      // Reta tangente graduada
+      line(TX,75,TX,645,'#7c3aed',4); text(TX+14,92,'x = 1',15,'#7c3aed','start','900'); text(TX+14,112,'reta tangente',13,'#7c3aed','start','700');
+      const tanTicks=[[-3,'−3'],[-2,'−2'],[-1,'−1'],[-Math.sqrt(3),'−√3'],[-1/Math.sqrt(3),'−√3/3'],[0,'0'],[1/Math.sqrt(3),'√3/3'],[1,'1'],[Math.sqrt(3),'√3'],[2,'2'],[3,'3']];
+      tanTicks.forEach(([v,label])=>{const y=CY-v*R;if(y>=75&&y<=645){line(TX-9,y,TX+9,y,'#7c3aed',2);text(TX+18,y+4,label,12,'#7c3aed','start','800')}});
+      // Marcas nos eixos coordenados
+      const ticks=[[-1,'−1'],[-Math.sqrt(3)/2,'−√3/2'],[-Math.SQRT1_2,'−√2/2'],[-0.5,'−1/2'],[0.5,'1/2'],[Math.SQRT1_2,'√2/2'],[Math.sqrt(3)/2,'√3/2'],[1,'1']];
+      ticks.forEach(([v,label])=>{const x=CX+v*R,y=CY-v*R;line(x,CY-8,x,CY+8,'#000',1.5);line(CX-8,y,CX+8,y,'#000',1.5);if(Math.abs(v)!==1){text(x,CY+28,label,12,'#26384d','middle','800');text(CX-14,y+4,label,12,'#26384d','end','800')}});
+      text(CX+R,CY+28,'1',13,'#000','middle','900'); text(CX-R,CY+28,'−1',13,'#000','middle','900'); text(CX-14,CY-R+5,'1',13,'#000','end','900'); text(CX-14,CY+R+5,'−1',13,'#000','end','900');
+      text(CX+R/2,CY-R/2,'QI',22,'#d7e4f5','middle','900'); text(CX-R/2,CY-R/2,'QII',22,'#d7e4f5','middle','900'); text(CX-R/2,CY+R/2,'QIII',22,'#d7e4f5','middle','900'); text(CX+R/2,CY+R/2,'QIV',22,'#d7e4f5','middle','900');
+      notableAngles.filter(g=>g!==360).forEach(g=>{const p=point(g,R),l=point(g,R+34);circle(p.x,p.y,4.5,'#102033');text(l.x,l.y+4,special[g].rad,13,'#102033','middle','850')});
+    }
+    function referenceAngle(angle){if(angle>90&&angle<=180)return 180-angle;if(angle>180&&angle<=270)return angle-180;if(angle>270&&angle<360)return 360-angle;return angle}
+    function drawAngle(angle){
+      drawBase(); const a=angle*Math.PI/180,sin=Math.sin(a),cos=Math.cos(a),tan=Math.tan(a),P=point(angle,R),ref=referenceAngle(angle),Pref=point(ref,R);
+      const arcR=72,A=point(angle,arcR),Aref=point(ref,arcR); create('path',{d:`M ${CX+arcR} ${CY} A ${arcR} ${arcR} 0 ${angle>180?1:0} 0 ${A.x} ${A.y}`,fill:'none',stroke:'#f08a24','stroke-width':7,'stroke-linecap':'round'}); create('path',{d:`M ${CX+arcR} ${CY} A ${arcR} ${arcR} 0 0 0 ${Aref.x} ${Aref.y}`,fill:'none',stroke:'#64748b','stroke-width':4,'stroke-dasharray':'6 6'}); text(CX+92,CY-18,'θ',23,'#d06b12','start','900'); text(CX+92,CY+18,'θ₀',18,'#64748b','start','800');
+      line(P.x,P.y,P.x,CY,'#9aacbf',2,'8 8'); line(P.x,P.y,CX,P.y,'#9aacbf',2,'8 8'); line(CX,CY,Pref.x,Pref.y,'#64748b',2,'4 4'); line(Pref.x,Pref.y,Pref.x,CY,'#64748b',2,'4 4'); line(Pref.x,CY,CX,CY,'#64748b',2,'4 4');
+      line(CX,CY+38,P.x,CY+38,'#168a4a',10); circle(P.x,CY,7,'#168a4a'); text((CX+P.x)/2,CY+68,'cos θ',17,'#168a4a','middle','900');
+      line(CX-38,CY,CX-38,P.y,'#1f5fbf',10); circle(CX,P.y,7,'#1f5fbf'); text(CX-68,(CY+P.y)/2,'sen θ',17,'#1f5fbf','middle','900');
+      line(CX,CY,P.x,P.y,'#d22f27',5.5); circle(P.x,P.y,13,'#e7f0ff','#1f5fbf',4); text(P.x+18,P.y-18,'P(cos θ, sen θ)',15,'#1f5fbf','start','900');
+      if(Math.abs(cos)>0.0001){const tanY=CY-tan*R; line(CX,CY,TX,tanY,'#7c3aed',2.5,'9 7'); if(tanY>-520&&tanY<1260){circle(TX,tanY,8,'#7c3aed'); line(TX+22,CY,TX+22,tanY,'#7c3aed',8); text(TX+39,(CY+tanY)/2,'tg θ',16,'#7c3aed','start','900'); text(TX+39,tanY-10,`tg=${special[angle]?.tan || fmtNumber(tan)}`,13,'#7c3aed','start','900')}} else {text(TX+34,CY-18,'tg θ não existe',16,'#7c3aed','start','900')}
+      // redesenha eixos por cima das projeções para ficarem sempre visíveis
+      line(70,CY,930,CY,'#000',3.2); line(CX,75,CX,645,'#000',3.2); create('polygon',{points:`930,${CY} 914,${CY-8} 914,${CY+8}`,fill:'#000'}); create('polygon',{points:`${CX},75 ${CX-8},91 ${CX+8},91`,fill:'#000'}); text(942,CY+6,'x',20,'#000','start','900'); text(CX+12,70,'y',20,'#000','start','900');
+      updatePanel(angle,sin,cos,tan,ref)
+    }
+    function fmtNumber(n){if(Math.abs(n)<.000001)return'0';if(Math.abs(n-1)<.000001)return'1';if(Math.abs(n+1)<.000001)return'−1';return n.toFixed(3).replace('.',',').replace('-','−')}
+    function radApprox(angle){return `${fmtNumber(angle*Math.PI/180)} rad`}
+    function updatePanel(angle,sin,cos,tan,ref){sliderLabel.textContent=`${angle}°`;const e=special[angle],sv=e?e.sin:fmtNumber(sin),cv=e?e.cos:fmtNumber(cos),tv=e?e.tan:(Math.abs(cos)<.0001?'não existe':fmtNumber(tan)),rv=e?e.rad:radApprox(angle);readout.innerHTML=`<div class="angle-head"><div class="degrees">${angle}°</div><div class="meta">Radiano: ${rv}<br>Ângulo de referência: ${ref}°</div></div><div class="values"><div class="value-row"><strong class="sin">sen θ</strong><span>${sv}</span><small>leitura no eixo y</small></div><div class="value-row"><strong class="cos">cos θ</strong><span>${cv}</span><small>leitura no eixo x</small></div><div class="value-row"><strong class="tan">tg θ</strong><span>${tv}</span><small>leitura na reta x = 1</small></div></div>`;teacherNote.innerHTML=`<strong>Redução ao 1º quadrante:</strong><br>• θ₀ = ${ref}° é o ângulo de referência.<br>• O triângulo auxiliar mostra os valores-base no 1º quadrante.<br>• Os sinais de seno, cosseno e tangente dependem do quadrante original.<br>• A reta roxa x = 1 está graduada para facilitar a leitura da tangente.`}
+    function setAngle(angle){angle=Number(angle);slider.value=angle;notable.value=special[angle]?angle:0;drawAngle(angle)}
+    notable.addEventListener('change',e=>setAngle(e.target.value)); slider.addEventListener('input',e=>drawAngle(Number(e.target.value))); resetBtn.addEventListener('click',()=>{clearInterval(animation);setAngle(30)}); animateBtn.addEventListener('click',()=>{clearInterval(animation);let angle=0;animation=setInterval(()=>{slider.value=angle;drawAngle(angle);angle+=1;if(angle>360)clearInterval(animation)},22)}); setAngle(30);
+  </script>
+</body>
+</html>

@@ -12,11 +12,19 @@ const labs = [
     area: "Geometria"
   },
   {
+    title: "Prancha Trigonométrica",
+    status: "Publicado",
+    description: "Laboratório para explorar ciclo trigonométrico, ângulos notáveis, redução ao 1º quadrante, seno, cosseno e tangente.",
+    href: "/labs/prancha-trigonometrica",
+    emoji: "📐",
+    area: "Trigonometria"
+  },
+  {
     title: "GeoPlan",
     status: "Planejado",
     description: "Laboratório digital para exploração de pontos, retas, ângulos e polígonos.",
     href: "#",
-    emoji: "📐",
+    emoji: "📏",
     area: "Geometria"
   },
   {

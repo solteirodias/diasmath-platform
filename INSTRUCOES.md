@@ -1,12 +1,12 @@
-# Atualização 06 — GeoTessela Lab profissional
+# Atualização 07 — Prancha Trigonométrica
 
-Esta atualização integra o GeoTessela Lab à DIASMATH.
+Esta atualização integra a Prancha Trigonométrica à DIASMATH.
 
 ## Arquivos criados
 
-- public/labs/geotessela/index.html
+- public/labs/prancha-trigonometrica/index.html
 - app/labs/page.tsx
-- app/labs/geotessela/page.tsx
+- app/labs/prancha-trigonometrica/page.tsx
 
 ## Como aplicar no GitHub
 
@@ -27,12 +27,12 @@ Após o deploy, acesse:
 
 Clique em:
 
-GeoTessela Lab → Abrir laboratório
+Prancha Trigonométrica → Abrir laboratório
 
 Ou acesse diretamente:
 
-/labs/geotessela
+/labs/prancha-trigonometrica
 
 ## Versão direta do laboratório
 
-/labs/geotessela/index.html
+/labs/prancha-trigonometrica/index.html
