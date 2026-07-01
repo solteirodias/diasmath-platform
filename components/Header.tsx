@@ -12,9 +12,16 @@ const links = [
 export function Header() {
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <Link href="/" className="text-2xl font-black tracking-tight text-diasmath-blue">
-          DIASMATH
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
+        <Link href="/" className="flex items-center gap-3">
+          <img
+            src="/brand/diasmath-icon.svg"
+            alt="DIASMATH"
+            className="h-10 w-10 rounded-xl"
+          />
+          <span className="text-xl font-black tracking-tight text-slate-950">
+            DIASMATH
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-6 text-sm font-medium text-slate-700 md:flex">
