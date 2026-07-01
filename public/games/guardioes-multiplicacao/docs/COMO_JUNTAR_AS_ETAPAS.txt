@@ -1,0 +1,6 @@
+COMO APLICAR A ETAPA 8
+
+Opção recomendada: use diretamente a pasta Guardioes_Multiplicacao_Etapa_8.
+
+Para atualizar a Etapa 7: copie o conteúdo do Patch da Etapa 8 sobre a pasta da Etapa 7 e confirme a substituição dos arquivos.
+Arquivos alterados: index.html, css/base.css, js/config.js, js/engine.js, js/progress.js e docs.

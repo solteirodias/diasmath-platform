@@ -1,0 +1,12 @@
+ETAPA 7 — REVISÃO, TESTES E POLIMENTO
+
+- Persistência das configurações de acessibilidade.
+- Controle de volume, alto contraste, texto ampliado e movimento reduzido.
+- Botão de tela cheia no HUD.
+- Tecla Escape para pausar/retomar com segurança.
+- Migração automática do salvamento da Etapa 6.
+- Diagnóstico automático de mundos, questões, alternativas e práticas.
+- Tela de erro amigável caso um arquivo esteja incompleto.
+- Melhorias de foco por teclado e responsividade em celular no modo paisagem.
+- Validação automatizada dos 10 mundos e 91 desafios.
+- Testes de fumaça em navegador Chromium para desktop e celular.

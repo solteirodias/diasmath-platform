@@ -1,0 +1,35 @@
+VALIDAÇÃO TÉCNICA — ETAPA 7
+
+Data: 25/06/2026
+
+1. Validação estrutural automatizada
+- 10 mundos encontrados: OK
+- 91 desafios encontrados: OK
+- IDs únicos: OK
+- Quatro alternativas por desafio: OK
+- Resposta correta presente nas alternativas: OK
+- Representação prática compatível com cada fato multiplicativo: OK
+- Objetos visuais da prática presentes: OK
+
+2. Validação JavaScript
+- Todos os arquivos JavaScript passaram pelo verificador de sintaxe do Node.js: OK
+
+3. Teste de fumaça em Chromium
+- Menu carregado sem erro: OK
+- Tela de configurações: OK
+- Persistência e aplicação do alto contraste/volume: OK
+- Nova aventura e missão inicial: OK
+- Campo e controles carregados: OK
+- Diagnóstico interno do jogo: OK
+- Pausa e retomada pela tecla Escape: OK
+- Execução em viewport desktop (1440 × 900): OK
+- Execução em viewport móvel (390 × 844): OK
+- Erros de console ou de página durante os testes: nenhum
+
+4. Pontos que ainda dependem de teste humano
+- Jogar os dez mundos integralmente em aparelhos diferentes.
+- Conferir conforto da velocidade dos fantasmas com estudantes.
+- Testar o equilíbrio de vidas e Luzes em sala de aula.
+- Conferir áudio em navegadores e celulares de marcas diferentes.
+
+Resultado: versão candidata 1.0 tecnicamente estável para testes de uso.

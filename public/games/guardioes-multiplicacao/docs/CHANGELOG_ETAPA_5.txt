@@ -1,0 +1,32 @@
+ALTERAÇÕES DA ETAPA 5
+
+1. Foram acrescentados três mundos:
+   - Mundo 7: Serra das Confusões;
+   - Mundo 8: Cânion do Rio Poti;
+   - Mundo 9: Centro Histórico de Oeiras.
+
+2. Foram acrescentados 27 problemas contextualizados:
+   - tabuada do 7 completa;
+   - tabuada do 8 completa;
+   - tabuada do 9 completa.
+
+3. Cada mundo recebeu:
+   - missão narrativa própria;
+   - paleta visual própria;
+   - objetos e decoração regional;
+   - desafios com objetos coerentes;
+   - dificuldade progressiva;
+   - portal e transição narrativa.
+
+4. O menu agora apresenta os nove mundos principais.
+
+5. Foram adicionadas novas ilustrações de cenário:
+   - mata, neblina, aves e marcos de trilha;
+   - cânion, pontes, canoas, cachoeiras e mirantes;
+   - igrejas, casarões, luminárias, relógios e bandeirolas.
+
+6. O banco de questões agora totaliza 81 problemas escritos individualmente.
+
+7. O salvamento automático foi atualizado para a Etapa 5.
+
+8. A conclusão do Mundo 9 anuncia a futura fase extra no Castelo da Desaprendizagem.

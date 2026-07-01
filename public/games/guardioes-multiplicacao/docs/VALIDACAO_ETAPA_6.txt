@@ -1,0 +1,33 @@
+VALIDAÇÃO TÉCNICA — ETAPA 6
+
+VERIFICAÇÕES AUTOMATIZADAS EXECUTADAS
+- sintaxe de todos os arquivos JavaScript com node --check;
+- carregamento da configuração, banco de problemas, entidades e engine em ambiente de teste;
+- existência de 10 mundos;
+- existência de 9 desafios em cada mundo principal;
+- existência de 10 desafios no Castelo da Desaprendizagem;
+- total de 91 problemas;
+- resposta correta presente entre as alternativas;
+- alternativas sem repetição;
+- correspondência entre operação e representação prática;
+- ausência de perguntas diretas do tipo “quanto é 7 × 8?”;
+- correspondência entre quantidade de problemas e posições de desafios;
+- existência do chefão com 10 pontos de armadura;
+- redução da armadura após respostas corretas;
+- acionamento da vitória final após os 10 acertos;
+- gravação do progresso final com stageComplete=true;
+- verificação de IDs duplicados no HTML;
+- verificação de todos os arquivos CSS e JavaScript referenciados no index.html;
+- verificação de todos os IDs utilizados por main.js;
+- verificação de equilíbrio de chaves nos arquivos CSS.
+
+RESULTADO DOS TESTES DE LÓGICA
+- mundos: 10;
+- problemas: 91;
+- armadura final do chefão no teste completo: 0;
+- tela de vitória final acionada: sim;
+- chave de salvamento: guardioes-multiplicacao-etapa-6.
+
+RESULTADO
+As verificações automatizadas de sintaxe, estrutura, banco de problemas e lógica da batalha final foram concluídas sem erros.
+A execução visual deve ser conferida no navegador após a extração do ZIP, especialmente em diferentes tamanhos de tela.

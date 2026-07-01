@@ -1,0 +1,12 @@
+ALTERAÇÕES DA ETAPA 3
+
+1. Criado sistema de múltiplos mundos.
+2. Criadas configurações visuais próprias para Escola, Feira e Mercado.
+3. Adicionadas tabuadas do 2 e do 3.
+4. Adicionados 18 novos problemas contextualizados.
+5. Adicionados fantasmas com comportamentos patrulha, perseguição, caminhada quadrada e proteção de desafios.
+6. Criado salvamento automático com localStorage.
+7. Criado botão Continuar.
+8. Criada tela animada de Novo Mundo Descoberto.
+9. HUD e missão passam a ser atualizados automaticamente para cada mundo.
+10. Representação prática usa os objetos do próprio problema.

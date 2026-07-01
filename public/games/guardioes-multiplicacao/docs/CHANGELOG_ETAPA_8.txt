@@ -1,0 +1,12 @@
+OS GUARDIÕES DA MULTIPLICAÇÃO — ETAPA 8
+
+- Tela inicial agora rola quando necessário e se compacta em telas com pouca altura.
+- Correção do corte superior e inferior no menu, inclusive em tela cheia.
+- Nova aventura e reinício começam com 10 Bombas de Luz.
+- O Castelo garante pelo menos 10 Bombas de Luz.
+- Caixas destruídas podem revelar Bombas de Luz e Corações.
+- Algumas caixas têm Bomba de Luz garantida, evitando fases sem recarga.
+- A chance geral de encontrar Bombas de Luz foi aumentada.
+- Power-up de Luz recebeu desenho mais claro no campo.
+- Progresso antigo é migrado para o novo mínimo de 10 Bombas de Luz.
+- Menu móvel usa botões em duas colunas e mapa dos mundos compacto para evitar cortes.

@@ -1,0 +1,10 @@
+VALIDAÇÃO DA ETAPA 8
+
+Itens a conferir:
+1. Abrir o menu em 1366x768 e verificar título, botões, mundos, selo e direitos autorais.
+2. Reduzir a altura da janela; o menu deve compactar e, se necessário, permitir rolagem.
+3. Iniciar nova aventura; o HUD deve mostrar 10 Luzes.
+4. Soltar Luz com Espaço ou botão LUZ; o contador deve cair para 9.
+5. Destruir várias caixas; devem aparecer orbes +1 de Bomba de Luz e eventualmente Corações.
+6. Coletar o orbe +1; o contador deve aumentar.
+7. Validar que o botão de tela cheia continua funcionando.

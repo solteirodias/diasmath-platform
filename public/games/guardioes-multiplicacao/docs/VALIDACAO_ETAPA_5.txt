@@ -1,0 +1,23 @@
+VALIDAÇÃO TÉCNICA — ETAPA 5
+
+Verificações planejadas e executadas durante a geração:
+- sintaxe de todos os arquivos JavaScript com node --check;
+- carregamento do arquivo de configuração e do banco de problemas;
+- existência de 9 mundos;
+- existência de exatamente 9 desafios em cada mundo;
+- total de 81 problemas;
+- correspondência entre mundo e tabuada;
+- sequência completa de cada tabuada, de ×1 a ×9;
+- resposta correta presente nas alternativas;
+- alternativas sem repetição;
+- correspondência entre operação e representação prática;
+- ausência de perguntas diretas do tipo “quanto é 7 × 8?”;
+- existência de nove posições de desafios em cada mundo;
+- atualização da chave de salvamento;
+- verificação estática das referências de CSS e JavaScript presentes no index.html.
+
+RESULTADO
+As verificações automatizadas de sintaxe, estrutura e conteúdo foram concluídas sem erros. A execução visual deve ser conferida no navegador após a extração do ZIP.
+
+ESCOPO
+A Etapa 5 completa os nove mundos principais e as tabuadas de 1 a 9. A fase extra, o Castelo da Desaprendizagem e o Senhor da Confusão serão implementados na próxima etapa cumulativa.

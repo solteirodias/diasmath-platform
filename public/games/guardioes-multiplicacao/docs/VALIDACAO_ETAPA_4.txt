@@ -1,0 +1,21 @@
+VALIDAÇÃO TÉCNICA — ETAPA 4
+
+Verificações executadas:
+- sintaxe de todos os arquivos JavaScript com node --check;
+- carregamento do arquivo de configuração e do banco de problemas;
+- existência de 6 mundos;
+- existência de exatamente 9 desafios em cada mundo;
+- total de 54 problemas;
+- correspondência entre mundo e tabuada;
+- sequência completa de cada tabuada, de ×1 a ×9;
+- resposta correta presente nas alternativas;
+- correspondência entre operação e representação prática;
+- ausência de perguntas diretas do tipo “quanto é 4 × 6?”;
+- existência de nove posições de desafios em cada mundo;
+- atualização da chave de salvamento.
+
+RESULTADO
+Todas as verificações automatizadas foram concluídas sem erros.
+
+ESCOPO
+A Etapa 4 contém os Mundos 1 a 6. Os Mundos 7, 8 e 9, a fase extra e o chefão serão acrescentados nas próximas etapas cumulativas.

@@ -1,0 +1,11 @@
+VALIDAÇÃO DA ETAPA 2
+
+Verificações técnicas realizadas:
+- Todos os arquivos JavaScript passaram por validação de sintaxe.
+- O banco possui exatamente 9 questões.
+- As questões cobrem 1×1, 1×2, ..., 1×9.
+- Cada questão contém a resposta correta entre as alternativas.
+- A representação prática utiliza a mesma quantidade e os mesmos objetos descritos na situação.
+- O motor pausa durante a pergunta e a prática.
+- O portal depende dos nove desafios concluídos.
+- O mapa mantém fantasmas, vidas, Bomba de Luz, power-ups e controles móveis.

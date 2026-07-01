@@ -1,0 +1,39 @@
+.question-overlay{background:rgba(2,10,20,.82);backdrop-filter:blur(9px)}
+.question-card{width:min(780px,96vw);max-height:92vh;overflow:auto;padding:28px;border-radius:30px;background:linear-gradient(180deg,#fff,#edf7ff);color:#102337;border:4px solid #fff;box-shadow:0 28px 90px rgba(0,0,0,.5)}
+.question-heading{display:flex;align-items:center;gap:15px;margin-bottom:18px}
+.question-book{width:66px;height:66px;display:grid;place-items:center;border-radius:20px;background:linear-gradient(145deg,#dff3ff,#a9dcfb);font-size:38px;border:2px solid #fff;box-shadow:0 7px 0 rgba(12,72,113,.18)}
+.question-kicker{margin:0 0 4px;color:#176aad;font-size:11px;font-weight:950;letter-spacing:.18em}
+.question-card h2{margin:0;font-size:clamp(28px,4vw,42px);letter-spacing:-.03em}
+.question-text{margin:14px 0 20px;font-size:clamp(18px,2.3vw,23px);line-height:1.55;color:#29465e;font-weight:700}
+.question-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.answer-button{min-height:62px;border-radius:18px;padding:12px 18px;background:linear-gradient(180deg,#f7fbff,#dceef9);color:#113a5b;border:2px solid #fff;box-shadow:0 6px 0 rgba(11,62,96,.2);font-size:22px;font-weight:950;transition:transform .12s ease,filter .12s ease}
+.answer-button:hover{transform:translateY(-2px);filter:brightness(1.03)}
+.answer-button:active{transform:translateY(3px);box-shadow:0 3px 0 rgba(11,62,96,.2)}
+.answer-button:disabled{cursor:default;opacity:.75}
+.question-help{margin:18px 0 0;padding:11px 14px;border-radius:14px;background:#fff7d9;color:#6a5000;font-size:14px;line-height:1.4}
+.practice-view{text-align:center}
+.feedback-badge{display:inline-flex;align-items:center;justify-content:center;min-width:88px;height:38px;padding:0 16px;border-radius:999px;font-size:13px;font-weight:950;letter-spacing:.12em}
+.feedback-badge.correct{background:#dff9ea;color:#177246;border:2px solid #7fd7aa}
+.feedback-badge.wrong{background:#ffe5e8;color:#a52d3e;border:2px solid #f39aaa}
+.feedback-message{max-width:680px;margin:10px auto 18px;color:#4f6577;font-size:17px;line-height:1.5}
+.practice-groups{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0}
+.practice-set{padding:14px 10px;border-radius:18px;background:#edfff5;border:2px solid #8ed9b4;color:#183f32;min-height:116px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.practice-set strong{font-size:14px;color:#216247}
+.practice-set .container-icon{font-size:24px}
+.practice-items{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:28px;line-height:1.15}
+.practice-equations{display:flex;flex-direction:column;gap:7px;margin:18px 0;padding:18px;border-radius:20px;background:#0f3554;color:#fff}
+.practice-equations span{font-size:20px}.practice-equations strong{font-size:31px;color:#ffd166}
+.practice-view .game-button{width:min(360px,100%)}
+.mission-overlay{background:radial-gradient(circle at 50% 20%,rgba(68,175,235,.36),rgba(2,10,20,.9) 68%);flex-direction:column}
+.mission-scene{position:relative;width:210px;height:140px;margin-bottom:-20px;display:grid;place-items:center}
+.mission-school{font-size:100px;filter:drop-shadow(0 18px 24px rgba(0,0,0,.38))}
+.mission-crystal{position:absolute;right:20px;top:14px;color:#baf4ff;font-size:52px;filter:drop-shadow(0 0 16px #6be4ff);animation:missionFloat 2.1s ease-in-out infinite}
+.mission-card{padding-top:42px;width:min(560px,94vw)}
+.gameover-card .overlay-icon{color:#e64258}
+@keyframes missionFloat{50%{transform:translateY(-10px) rotate(12deg)}}
+@media(max-width:620px){
+  .question-card{padding:22px 16px}.question-options{grid-template-columns:1fr}.question-heading{align-items:flex-start}.question-book{width:56px;height:56px;font-size:31px}
+  .practice-groups{grid-template-columns:1fr}.practice-set{min-height:104px}
+}
+
+.mission-overlay{background:radial-gradient(circle at 50% 18%,color-mix(in srgb,var(--world-accent,#44afeb) 42%,transparent),rgba(2,10,20,.92) 68%)}

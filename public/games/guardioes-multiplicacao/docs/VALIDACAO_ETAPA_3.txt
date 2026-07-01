@@ -1,0 +1,17 @@
+VALIDAÇÃO TÉCNICA — ETAPA 3
+
+Verificações realizadas:
+[OK] Todos os arquivos JavaScript passaram na verificação de sintaxe do Node.js.
+[OK] Menu principal carregou sem erros de JavaScript.
+[OK] Nova aventura abre a tela da missão.
+[OK] Campo do jogo abre após iniciar a missão.
+[OK] Os três mundos possuem exatamente nove questões.
+[OK] Todas as questões contêm a resposta correta entre as alternativas.
+[OK] Transição do Mundo 1 para o Mundo 2 foi executada.
+[OK] O nome e a missão do Mundo 2 foram atualizados corretamente.
+[OK] Questão da Feira de Oeiras exibiu dois grupos com os objetos corretos.
+[OK] Layout foi conferido em tela de computador e em tela de celular.
+[OK] O personagem precisa atravessar o portal para concluir o mundo.
+
+Limite planejado desta entrega:
+A Etapa 3 contém os três primeiros mundos. Os Mundos 4 a 9, a fase extra e o chefão serão acrescentados nas próximas etapas cumulativas.

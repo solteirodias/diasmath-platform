@@ -1,0 +1,32 @@
+ALTERAÇÕES DA ETAPA 4
+
+1. Foram acrescentados três mundos:
+   - Mundo 4: Fazenda do Sertão;
+   - Mundo 5: Rio Canindé;
+   - Mundo 6: Serra da Capivara.
+
+2. Foram acrescentados 27 problemas contextualizados:
+   - tabuada do 4 completa;
+   - tabuada do 5 completa;
+   - tabuada do 6 completa.
+
+3. Cada mundo recebeu:
+   - missão própria;
+   - paleta visual própria;
+   - objetos do cenário;
+   - quantidade progressiva de fantasmas;
+   - transição narrativa;
+   - objeto de desafio específico.
+
+4. O menu agora apresenta seis mundos.
+
+5. Foram adicionadas novas ilustrações de cenário:
+   - fazenda, celeiro, trator, milho, galinha e cerca;
+   - canoa, rio, peixe, vegetação ribeirinha e rede;
+   - rochas, registros rupestres, caverna, lagarto e trilha.
+
+6. Foram adicionados mapas de caixas próprios para os Mundos 4, 5 e 6.
+
+7. Foi corrigida a duplicação de mensagem após a resolução de um desafio.
+
+8. O salvamento automático foi atualizado para a Etapa 4.

@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#071a2f">
+  <meta name="description" content="Aventura educacional para aprender multiplicação em mundos inspirados no Piauí.">
+  <title>Os Guardiões da Multiplicação — Versão 1.0 RC2</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/game.css">
+  <link rel="stylesheet" href="css/questions.css">
+</head>
+<body>
+  <main id="app" aria-live="polite">
+    <section id="screen-menu" class="screen active menu-screen" aria-label="Menu principal">
+      <div class="menu-glow glow-one"></div>
+      <div class="menu-glow glow-two"></div>
+      <div class="menu-shell">
+        <div class="brand-mark" aria-hidden="true"><span class="brand-crystal">✦</span></div>
+        <p class="eyebrow">AVENTURA MATEMÁTICA</p>
+        <h1>Os Guardiões da<br><span>Multiplicação</span></h1>
+        <p class="menu-intro">Explore nove mundos, domine as tabuadas de 1 a 9 e enfrente o Senhor da Confusão na fase extra do Castelo da Desaprendizagem.</p>
+
+        <div class="menu-actions">
+          <button id="btn-start" class="game-button primary"><span>▶</span> Nova aventura</button>
+          <button id="btn-continue" class="game-button continue"><span>◆</span> Continuar</button>
+          <button id="btn-learn" class="game-button secondary"><span>✦</span> Aprender</button>
+          <button id="btn-manual" class="game-button secondary"><span>?</span> Manual</button>
+          <button id="btn-settings" class="game-button ghost"><span>⚙</span> Configurações</button>
+        </div>
+
+        <div class="world-preview" aria-label="Mundos disponíveis nesta etapa">
+          <div><span>🏫</span><b>1</b><small>Escola</small></div>
+          <div><span>🧺</span><b>2</b><small>Feira</small></div>
+          <div><span>🏬</span><b>3</b><small>Mercado</small></div>
+          <div><span>🌾</span><b>4</b><small>Fazenda</small></div>
+          <div><span>🛶</span><b>5</b><small>Rio</small></div>
+          <div><span>🏞️</span><b>6</b><small>Capivara</small></div>
+          <div><span>🌳</span><b>7</b><small>Confusões</small></div>
+          <div><span>🏜️</span><b>8</b><small>Rio Poti</small></div>
+          <div><span>⛪</span><b>9</b><small>Oeiras</small></div>
+          <div class="boss-world-preview"><span>🏰</span><b>EXTRA</b><small>Chefão</small></div>
+        </div>
+
+        <div class="stage-badge"><strong>Versão 1.0 RC2:</strong> dez mundos, 91 desafios, fase extra, chefão, acessibilidade e salvamento automático.</div>
+        <footer>© 2026 Francisco Vieira Dias. Todos os direitos reservados.</footer>
+      </div>
+    </section>
+
+    <section id="screen-learn" class="screen info-screen" aria-label="Aprender multiplicação">
+      <article class="info-card">
+        <button class="close-button" data-back-menu aria-label="Voltar ao menu">×</button>
+        <p class="eyebrow dark">APRENDER</p>
+        <h2>Multiplicar é formar grupos iguais</h2>
+        <p>Observe três cestos. Em cada cesto existem quatro mangas.</p>
+        <div class="practice-demo" aria-label="Três grupos de quatro mangas">
+          <div class="practice-group"><strong>Cesto 1</strong><div>🥭 🥭 🥭 🥭</div></div>
+          <div class="practice-group"><strong>Cesto 2</strong><div>🥭 🥭 🥭 🥭</div></div>
+          <div class="practice-group"><strong>Cesto 3</strong><div>🥭 🥭 🥭 🥭</div></div>
+        </div>
+        <div class="equation"><span>4 + 4 + 4 = 12</span><strong>3 × 4 = 12</strong></div>
+        <p class="info-note">No jogo, cada problema usa os próprios objetos da história para mostrar os grupos.</p>
+        <button class="game-button primary" data-back-menu>Voltar ao menu</button>
+      </article>
+    </section>
+
+    <section id="screen-manual" class="screen info-screen" aria-label="Manual do jogo">
+      <article class="info-card">
+        <button class="close-button" data-back-menu aria-label="Voltar ao menu">×</button>
+        <p class="eyebrow dark">MANUAL</p>
+        <h2>Como jogar</h2>
+        <div class="manual-grid">
+          <div><b>Movimento</b><span>Use as setas ou WASD. No celular, use o direcional da tela.</span></div>
+          <div><b>Desafios do mundo</b><span>Aproxime-se do objeto brilhante para abrir um problema contextualizado.</span></div>
+          <div><b>Luz do Conhecimento</b><span>Pressione Espaço ou toque em LUZ. A esfera pisca e abre uma cruz luminosa.</span></div>
+          <div><b>Aprendizagem segura</b><span>Enquanto o problema e a prática estiverem abertos, fantasmas e personagem ficam pausados.</span></div>
+          <div><b>Portal</b><span>Resolva corretamente os nove desafios. Depois, caminhe até o portal e atravesse.</span></div>
+          <div><b>Novo mundo</b><span>Após atravessar, veja a missão seguinte e pressione “Entrar no mundo”.</span></div>
+          <div><b>Itens</b><span>Coração recupera uma vida. Bomba de Luz concede uma nova carga. Algumas caixas escondem recargas.</span></div>
+          <div><b>Progresso</b><span>O jogo salva automaticamente o mundo, as vidas, as Luzes e os desafios resolvidos.</span></div>
+          <div><b>Fase extra</b><span>No Castelo, resolva tabuadas misturadas. Cada acerto quebra um ponto da armadura do Senhor da Confusão.</span></div>
+          <div><b>Chefão</b><span>A Luz não causa dano direto ao chefão, mas o paralisa. Use esse tempo para alcançar os Selos do Conhecimento.</span></div>
+        </div>
+        <button class="game-button primary" data-back-menu>Entendi</button>
+      </article>
+    </section>
+
+    <section id="screen-settings" class="screen info-screen" aria-label="Configurações">
+      <article class="info-card compact">
+        <button class="close-button" data-back-menu aria-label="Voltar ao menu">×</button>
+        <p class="eyebrow dark">CONFIGURAÇÕES</p>
+        <h2>Preferências</h2>
+        <label class="setting-row"><span>Sons</span><input id="setting-sound" type="checkbox" checked></label>
+        <label class="setting-row range-row"><span>Volume</span><input id="setting-volume" type="range" min="0" max="100" step="5" value="75"><output id="setting-volume-value">75%</output></label>
+        <label class="setting-row"><span>Movimento reduzido</span><input id="setting-reduced-motion" type="checkbox"></label>
+        <label class="setting-row"><span>Alto contraste</span><input id="setting-high-contrast" type="checkbox"></label>
+        <label class="setting-row"><span>Texto ampliado</span><input id="setting-large-text" type="checkbox"></label>
+        <button class="game-button primary" data-back-menu>Salvar e voltar</button>
+      </article>
+    </section>
+
+    <section id="screen-game" class="game-screen" aria-label="Campo do jogo">
+      <header class="hud">
+        <div class="hud-cluster">
+          <div class="hud-pill"><span aria-hidden="true">❤</span><strong id="hud-lives">5</strong></div>
+          <div class="hud-pill light"><span aria-hidden="true">✦</span><strong id="hud-bombs">10</strong></div>
+        </div>
+        <div class="hud-world">
+          <small id="hud-world-kicker">MUNDO 1 · TABUADA DO 1</small>
+          <strong id="hud-world-name">Escola da Comunidade</strong>
+        </div>
+        <div class="hud-cluster right">
+          <div class="hud-pill crystal"><span aria-hidden="true">◆</span><strong id="hud-crystals">0/9</strong></div>
+          <button id="btn-fullscreen" class="hud-button" aria-label="Alternar tela cheia" title="Tela cheia">⛶</button>
+          <button id="btn-pause" class="hud-button" aria-label="Pausar" title="Pausar (Esc)">Ⅱ</button>
+        </div>
+      </header>
+
+      <div id="boss-hud" class="boss-hud" hidden aria-label="Energia do Senhor da Confusão">
+        <div class="boss-hud-title"><span>👑</span><strong>SENHOR DA CONFUSÃO</strong><small id="boss-phase">Fase 1</small></div>
+        <div class="boss-hp-track"><div id="boss-hp-fill" class="boss-hp-fill"></div></div>
+        <b id="boss-hp-text">10/10</b>
+      </div>
+
+      <div class="game-stage">
+        <canvas id="game-canvas" width="960" height="576" aria-label="Jogo Os Guardiões da Multiplicação"></canvas>
+        <div id="toast" class="toast" role="status"></div>
+      </div>
+
+      <div class="mobile-controls" aria-label="Controles móveis">
+        <div class="dpad">
+          <button class="dpad-button up" data-direction="up" aria-label="Mover para cima">▲</button>
+          <button class="dpad-button left" data-direction="left" aria-label="Mover para esquerda">◀</button>
+          <button class="dpad-button right" data-direction="right" aria-label="Mover para direita">▶</button>
+          <button class="dpad-button down" data-direction="down" aria-label="Mover para baixo">▼</button>
+        </div>
+        <button id="btn-light" class="light-action" aria-label="Ativar Luz do Conhecimento"><span>✦</span><b>LUZ</b></button>
+      </div>
+    </section>
+
+    <section id="overlay-mission" class="overlay mission-overlay" aria-label="Missão do mundo">
+      <div class="mission-scene" aria-hidden="true">
+        <div id="mission-icon" class="mission-school">🏫</div>
+        <div class="mission-crystal">◆</div>
+      </div>
+      <div class="overlay-card mission-card">
+        <p id="mission-kicker" class="eyebrow dark">MUNDO 1 · TABUADA DO 1</p>
+        <h2 id="mission-title">Os Livros Selados</h2>
+        <p id="mission-text"></p>
+        <button id="btn-begin-mission" class="game-button primary">Começar missão</button>
+      </div>
+    </section>
+
+    <section id="overlay-question" class="overlay question-overlay" aria-label="Desafio de multiplicação">
+      <article class="question-card" role="dialog" aria-modal="true" aria-labelledby="question-title">
+        <div id="question-view">
+          <div class="question-heading">
+            <div id="question-object-icon" class="question-book" aria-hidden="true">📘</div>
+            <div><p id="question-object-name" class="question-kicker">DESAFIO DO MUNDO</p><h2 id="question-title">Desafio</h2></div>
+          </div>
+          <p id="question-text" class="question-text"></p>
+          <div id="question-options" class="question-options" aria-label="Alternativas"></div>
+          <p class="question-help">Escolha uma alternativa. O jogo permanece pausado enquanto você pensa.</p>
+        </div>
+
+        <div id="practice-view" class="practice-view" hidden>
+          <div id="feedback-badge" class="feedback-badge"></div>
+          <h2 id="feedback-title"></h2>
+          <p id="feedback-message" class="feedback-message"></p>
+          <div id="practice-groups" class="practice-groups"></div>
+          <div class="practice-equations">
+            <span id="practice-addition"></span>
+            <strong id="practice-multiplication"></strong>
+          </div>
+          <button id="btn-practice-continue" class="game-button primary"></button>
+        </div>
+      </article>
+    </section>
+
+    <section id="overlay-pause" class="overlay" aria-label="Jogo pausado">
+      <div class="overlay-card">
+        <div class="overlay-icon">Ⅱ</div>
+        <h2>Jogo pausado</h2>
+        <button id="btn-resume" class="game-button primary">Continuar</button>
+        <button id="btn-restart" class="game-button secondary">Reiniciar missão</button>
+        <button id="btn-exit" class="game-button ghost dark-ghost">Voltar ao menu</button>
+      </div>
+    </section>
+
+    <section id="overlay-gameover" class="overlay" aria-label="Fim da tentativa">
+      <div class="overlay-card gameover-card">
+        <div class="overlay-icon">❤</div>
+        <p class="eyebrow dark">TENTE NOVAMENTE</p>
+        <h2>As vidas acabaram</h2>
+        <p>Aprender também é tentar outra vez. Recomece a missão e use o que descobriu nos desafios.</p>
+        <button id="btn-gameover-restart" class="game-button primary">Reiniciar missão</button>
+        <button id="btn-gameover-menu" class="game-button secondary">Voltar ao menu</button>
+      </div>
+    </section>
+
+    <section id="overlay-world" class="overlay world-overlay" aria-label="Mundo concluído">
+      <div class="world-orbit" aria-hidden="true"><div id="world-transition-icon" class="world-core">🏫</div></div>
+      <div class="overlay-card world-card">
+        <p id="world-complete-kicker" class="eyebrow">CRISTAL RECUPERADO</p>
+        <h2 id="world-complete-title">Mundo restaurado!</h2>
+        <p id="world-complete-text"></p>
+        <div id="next-world-panel" class="next-world-panel">
+          <span id="next-world-icon">🧺</span>
+          <div><small>NOVO MUNDO DESCOBERTO</small><strong id="next-world-name">Feira de Oeiras</strong></div>
+        </div>
+        <button id="btn-next-world" class="game-button primary">Entrar no novo mundo</button>
+        <button id="btn-world-menu" class="game-button secondary">Voltar ao menu</button>
+      </div>
+    </section>
+
+    <section id="overlay-final" class="overlay final-overlay" aria-label="Vitória final">
+      <div class="final-rays" aria-hidden="true"></div>
+      <article class="overlay-card final-card">
+        <div class="final-crown" aria-hidden="true">👑</div>
+        <p class="eyebrow">CRISTAL MESTRE RESTAURADO</p>
+        <h2>Guardião Supremo da Multiplicação!</h2>
+        <p>Você derrotou o Senhor da Confusão, recuperou o conhecimento das comunidades e concluiu a grande aventura.</p>
+        <div class="final-crystals" aria-hidden="true">◆ ◆ ◆ ◆ ◆ ◆ ◆ ◆ ◆ ◆</div>
+        <div class="final-stats">
+          <div><span>⭐</span><strong id="final-score">0</strong><small>Pontos</small></div>
+          <div><span>❤</span><strong id="final-lives">0</strong><small>Vidas</small></div>
+          <div><span>✦</span><strong id="final-lights">0</strong><small>Luzes</small></div>
+          <div><span>💎</span><strong id="final-crystals">91</strong><small>Desafios</small></div>
+        </div>
+        <div class="final-credit">
+          <b>Os Guardiões da Multiplicação</b>
+          <span>Idealização, autoria e direção pedagógica: Francisco Vieira Dias</span>
+          <span>Desenvolvimento realizado com apoio da inteligência artificial da OpenAI — ChatGPT.</span>
+        </div>
+        <button id="btn-final-restart" class="game-button primary">Jogar novamente</button>
+        <button id="btn-final-menu" class="game-button secondary">Voltar ao menu</button>
+        <small class="copyright">© 2026 Francisco Vieira Dias. Todos os direitos reservados.</small>
+      </article>
+    </section>
+
+    <section id="overlay-error" class="overlay" aria-label="Erro de inicialização">
+      <div class="overlay-card gameover-card">
+        <div class="overlay-icon">!</div>
+        <p class="eyebrow dark">VERIFICAÇÃO DO JOGO</p>
+        <h2>Algo precisa ser corrigido</h2>
+        <p id="error-message">O jogo encontrou um problema de configuração.</p>
+        <button id="btn-error-reload" class="game-button primary">Recarregar</button>
+        <button id="btn-error-menu" class="game-button secondary">Voltar ao menu</button>
+      </div>
+    </section>
+  </main>
+
+  <script defer src="js/config.js"></script>
+  <script defer src="js/settings.js"></script>
+  <script defer src="js/progress.js"></script>
+  <script defer src="js/audio.js"></script>
+  <script defer src="js/input.js"></script>
+  <script defer src="js/questionDatabase.js"></script>
+  <script defer src="js/diagnostics.js"></script>
+  <script defer src="js/questionEngine.js"></script>
+  <script defer src="js/entities.js"></script>
+  <script defer src="js/engine.js"></script>
+  <script defer src="js/main.js"></script>
+</body>
+</html>

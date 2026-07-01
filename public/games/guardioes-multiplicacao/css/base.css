@@ -1,0 +1,195 @@
+:root{
+  --navy:#061425;
+  --navy-2:#0a2740;
+  --blue:#1877d2;
+  --cyan:#6be4ff;
+  --gold:#ffd166;
+  --orange:#ff8f3d;
+  --green:#54d98c;
+  --white:#f8fbff;
+  --ink:#102337;
+  --muted:#5a6d80;
+  --shadow:0 24px 80px rgba(0,0,0,.42);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--navy);font-family:Inter,ui-rounded,"Segoe UI",system-ui,-apple-system,sans-serif;color:var(--white)}
+button,input{font:inherit}
+button{border:0;cursor:pointer}
+.screen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px}
+.screen.active{display:flex}
+.menu-screen{isolation:isolate;background:
+  radial-gradient(circle at 50% -10%,rgba(107,228,255,.32),transparent 36%),
+  linear-gradient(145deg,#061425 0%,#0a2945 52%,#06111f 100%)}
+.menu-screen::before{content:"";position:absolute;inset:0;z-index:-2;opacity:.38;background-image:
+  linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 85%)}
+.menu-glow{position:absolute;border-radius:50%;filter:blur(1px);opacity:.5;z-index:-1}
+.glow-one{width:420px;height:420px;left:-180px;top:8%;background:radial-gradient(circle,#1877d2,transparent 68%)}
+.glow-two{width:460px;height:460px;right:-210px;bottom:-80px;background:radial-gradient(circle,#ff8f3d,transparent 70%)}
+.menu-shell{width:min(700px,95vw);text-align:center;padding:32px 26px 24px}
+.brand-mark{width:100px;height:100px;margin:0 auto 18px;display:grid;place-items:center;border-radius:28px;background:linear-gradient(145deg,#1d8ee8,#0a4d91);border:3px solid rgba(255,255,255,.72);box-shadow:0 0 0 8px rgba(107,228,255,.1),0 22px 45px rgba(0,0,0,.35);transform:rotate(45deg)}
+.brand-crystal{font-size:54px;color:#fff7b0;filter:drop-shadow(0 0 12px #fff);transform:rotate(-45deg)}
+.eyebrow{margin:0 0 10px;letter-spacing:.24em;font-size:12px;font-weight:950;color:var(--cyan)}
+.eyebrow.dark{color:#176aad}
+.menu-shell h1{margin:0;font-size:clamp(42px,7vw,78px);line-height:.91;letter-spacing:-.055em;text-shadow:0 8px 28px rgba(0,0,0,.35)}
+.menu-shell h1 span{color:var(--gold)}
+.menu-intro{max-width:640px;margin:22px auto 24px;color:#c9d9e9;font-size:clamp(15px,2vw,19px);line-height:1.55}
+.menu-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:min(560px,100%);margin:0 auto}
+.game-button{min-height:56px;border-radius:18px;padding:13px 20px;font-weight:950;letter-spacing:.01em;transition:transform .12s ease,filter .12s ease,box-shadow .12s ease;box-shadow:0 7px 0 rgba(0,0,0,.26)}
+.game-button:hover{transform:translateY(-2px);filter:brightness(1.04)}
+.game-button:active{transform:translateY(4px);box-shadow:0 3px 0 rgba(0,0,0,.28)}
+.game-button.primary{background:linear-gradient(180deg,#ffe28a,#ffc34f);color:#4b2c00;border:2px solid #fff2ba}
+.game-button.secondary{background:linear-gradient(180deg,#f7fbff,#d9edf9);color:#123c5f;border:2px solid #fff}
+.game-button.ghost{background:rgba(255,255,255,.09);color:#eef9ff;border:2px solid rgba(255,255,255,.2)}
+.stage-badge{margin:20px auto 0;width:min(590px,100%);padding:11px 16px;border:1px solid rgba(107,228,255,.2);border-radius:999px;background:rgba(4,18,32,.48);color:#b8cadb;font-size:13px}
+.menu-shell footer{margin-top:19px;color:#8ea5ba;font-size:12px}
+.info-screen{background:radial-gradient(circle at top,#194c76,#061425 72%)}
+.info-card{position:relative;width:min(850px,96vw);max-height:92vh;overflow:auto;padding:34px;background:linear-gradient(180deg,#fff,#edf7ff);border-radius:30px;border:4px solid rgba(255,255,255,.95);color:var(--ink);box-shadow:var(--shadow)}
+.info-card.compact{width:min(560px,94vw)}
+.info-card h2{margin:0 0 14px;font-size:clamp(28px,4vw,45px);letter-spacing:-.035em}
+.info-card p{font-size:17px;line-height:1.55;color:var(--muted)}
+.close-button{position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:14px;background:#eaf2f8;color:#173b57;font-size:28px;font-weight:900}
+.practice-demo{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}
+.practice-group{padding:16px 10px;text-align:center;border:2px solid #8ed9b4;background:#edfff5;border-radius:18px;color:#183f32}
+.practice-group div{font-size:28px;margin-top:8px}
+.equation{display:flex;flex-direction:column;align-items:center;gap:6px;margin:16px 0;padding:18px;border-radius:20px;background:#0f3554;color:#fff;font-size:22px}
+.equation strong{font-size:32px;color:var(--gold)}
+.info-note{padding:12px 14px;border-radius:15px;background:#fff8d9;border:1px solid #f2d36a!important;color:#614b00!important}
+.manual-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:18px 0 22px}
+.manual-grid>div{display:flex;flex-direction:column;gap:6px;padding:17px;border-radius:18px;background:#eff8ff;border:2px solid #cfe7f8}
+.manual-grid b{color:#0e558c;font-size:18px}.manual-grid span{color:#4d6477;line-height:1.4}
+.setting-row{display:flex;justify-content:space-between;align-items:center;padding:16px;margin:12px 0;border-radius:16px;background:#eef7fd;font-weight:850}
+.setting-row input{width:24px;height:24px}
+.overlay{position:fixed;inset:0;z-index:30;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(2,10,20,.76);backdrop-filter:blur(8px)}
+.overlay.active{display:flex}
+.overlay-card{width:min(430px,94vw);padding:28px;text-align:center;border-radius:28px;background:linear-gradient(180deg,#fff,#eaf6ff);color:var(--ink);border:4px solid #fff;box-shadow:var(--shadow)}
+.overlay-card h2{font-size:34px;margin:8px 0 18px}.overlay-card p{color:var(--muted);line-height:1.55}
+.overlay-card .game-button{width:100%;margin-top:10px}.overlay-icon{font-size:44px;color:#1b6ca8}
+.world-overlay{background:radial-gradient(circle,#123e68,#020812 72%);flex-direction:column}
+.world-orbit{width:180px;height:180px;margin-bottom:-28px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(from 0deg,#65e4ff,#265bbd,#ffd166,#4dd591,#65e4ff);box-shadow:0 0 65px rgba(107,228,255,.7);animation:orbit 5s linear infinite}
+.world-core{width:106px;height:106px;border-radius:40%;display:grid;place-items:center;background:#082746;color:#fff4a9;font-size:56px;box-shadow:inset 0 0 30px rgba(255,255,255,.16);transform:rotate(45deg)}
+.world-card{padding-top:45px}
+@keyframes orbit{to{transform:rotate(360deg)}}
+@media(max-width:680px){
+  .menu-shell{padding:18px 8px}.brand-mark{width:78px;height:78px}.brand-crystal{font-size:42px}
+  .menu-actions{grid-template-columns:1fr}.game-button{min-height:52px}
+  .info-card{padding:28px 18px 22px}.practice-demo,.manual-grid{grid-template-columns:1fr}
+  .stage-badge{border-radius:18px}
+}
+
+/* Etapa 5 — nove mundos e tabuadas de 1 a 9 */
+.game-button.continue{background:linear-gradient(180deg,#9ff1ff,#50c8ec);color:#083653;border:2px solid #d9fbff}
+.game-button.disabled,.game-button:disabled{opacity:.44;filter:grayscale(.45);cursor:not-allowed;transform:none!important;box-shadow:0 4px 0 rgba(0,0,0,.2)!important}
+.dark-ghost{color:#173a55!important;background:#e5f0f7!important;border-color:#c4dae8!important}
+.world-preview{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:20px auto 0;width:min(520px,100%)}
+.world-preview>div{min-height:68px;padding:8px;border-radius:17px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.17);display:grid;grid-template-columns:auto auto;align-items:center;justify-content:center;gap:3px 7px}
+.world-preview span{font-size:26px;grid-row:1/3}.world-preview b{font-size:17px;color:#fff;text-align:left}.world-preview small{font-size:9px;color:#a9bed1;text-align:left;text-transform:uppercase;letter-spacing:.07em}
+.world-preview i{display:none}
+.next-world-panel{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px 0;padding:14px;border-radius:20px;background:#e8f7ff;border:2px solid #bce9fb;text-align:left}
+.next-world-panel[hidden]{display:none}.next-world-panel>span{font-size:42px}.next-world-panel div{display:flex;flex-direction:column;gap:3px}.next-world-panel small{font-size:10px;letter-spacing:.14em;color:#176aad;font-weight:950}.next-world-panel strong{font-size:20px;color:#163c59}
+.world-core{transform:none;font-size:52px}
+.reduced-motion *, .reduced-motion *::before, .reduced-motion *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+@media(max-width:680px){.world-preview{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.world-preview>div{min-height:62px}.next-world-panel>span{font-size:34px}}
+
+/* Etapa 6 — Castelo da Desaprendizagem e vitória final */
+.world-preview{grid-template-columns:repeat(5,minmax(0,1fr));width:min(650px,100%)}
+.world-preview .boss-world-preview{background:linear-gradient(145deg,rgba(184,92,255,.25),rgba(255,79,130,.18));border-color:rgba(218,174,255,.5);box-shadow:inset 0 0 20px rgba(184,92,255,.12)}
+.world-preview .boss-world-preview b{color:#f0ceff;font-size:12px;letter-spacing:.06em}
+.final-overlay{overflow:hidden;background:radial-gradient(circle at 50% 30%,rgba(255,218,102,.42),rgba(20,51,79,.94) 44%,#020711 78%)}
+.final-rays{position:absolute;width:min(920px,120vw);aspect-ratio:1;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(255,240,157,.22) 0 7deg,transparent 7deg 16deg);animation:finalSpin 18s linear infinite;filter:blur(1px)}
+.final-card{position:relative;width:min(680px,95vw);max-height:94vh;overflow:auto;padding:34px;background:linear-gradient(180deg,#fffef3,#e8f7ff);border-color:#fff6ba;box-shadow:0 0 70px rgba(255,221,97,.42),var(--shadow)}
+.final-card h2{font-size:clamp(30px,5vw,50px);margin:7px 0 10px;color:#173b58}.final-card>p{margin:8px auto 15px;max-width:570px}
+.final-crown{font-size:72px;filter:drop-shadow(0 0 18px rgba(255,203,62,.8));animation:crownFloat 2s ease-in-out infinite}
+.final-crystals{color:#36aee8;font-size:25px;letter-spacing:.18em;text-shadow:0 0 13px #7ce8ff;margin:12px 0}
+.final-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:18px 0}
+.final-stats>div{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 8px;border-radius:17px;background:#edf8ff;border:2px solid #c6e9fa}
+.final-stats span{font-size:24px}.final-stats strong{font-size:23px;color:#174b70}.final-stats small{font-size:10px;font-weight:900;color:#6c8193;text-transform:uppercase;letter-spacing:.08em}
+.final-credit{display:flex;flex-direction:column;gap:4px;padding:15px;margin:13px 0 7px;border-radius:17px;background:#102f4a;color:#d9ecf9;font-size:12px;line-height:1.45}.final-credit b{font-size:17px;color:#ffd166}.copyright{display:block;margin-top:15px;color:#7890a2}
+@keyframes finalSpin{to{transform:rotate(360deg)}}
+@keyframes crownFloat{50%{transform:translateY(-8px) scale(1.04)}}
+@media(max-width:680px){
+  .world-preview{grid-template-columns:repeat(2,minmax(0,1fr));width:min(440px,100%)}
+  .final-card{padding:25px 15px}.final-stats{grid-template-columns:repeat(2,1fr)}.final-crystals{font-size:18px;letter-spacing:.08em}
+}
+
+/* Etapa 7 — acessibilidade e acabamento */
+:focus-visible{outline:4px solid #ffd166;outline-offset:4px}
+.range-row{grid-template-columns:1fr minmax(120px,1.4fr) auto}.range-row input{width:100%;accent-color:#1877d2}.range-row output{min-width:48px;text-align:right;font-weight:900;color:#176aad}
+html.high-contrast{--navy:#000;--navy-2:#07111b;--cyan:#8ff3ff;--gold:#ffe45c;--white:#fff}
+html.high-contrast .game-button,html.high-contrast .hud-pill,html.high-contrast .question-card,html.high-contrast .overlay-card{border-color:#fff;box-shadow:0 0 0 2px #000,0 7px 0 #000}
+html.high-contrast #game-canvas{border-color:#fff;filter:contrast(1.12) saturate(1.08)}
+html.large-text{font-size:112.5%}html.large-text .question-text{font-size:clamp(21px,2.6vw,27px)}html.large-text .menu-intro{font-size:clamp(17px,2.2vw,21px)}
+html.reduced-motion *,html.reduced-motion *::before,html.reduced-motion *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+@media(max-width:720px) and (orientation:landscape){.hud{height:52px}.game-stage{height:calc(100vh - 52px)}.mobile-controls{bottom:4px}.dpad{transform:scale(.72);transform-origin:left bottom}.light-action{transform:scale(.72);transform-origin:right bottom}.boss-hud{top:56px}}
+
+
+/* Etapa 8 — tela inicial integral e adaptação por altura */
+.menu-screen{
+  overflow-y:auto;
+  overflow-x:hidden;
+  align-items:flex-start;
+  justify-content:center;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+}
+.menu-shell{
+  flex:0 0 auto;
+  margin:max(12px,env(safe-area-inset-top)) auto max(18px,env(safe-area-inset-bottom));
+}
+@media (max-height:840px) and (min-width:681px){
+  .screen{padding:10px 18px}
+  .menu-shell{padding:10px 20px 12px;width:min(760px,96vw)}
+  .brand-mark{width:66px;height:66px;margin-bottom:9px;border-radius:20px;box-shadow:0 0 0 5px rgba(107,228,255,.09),0 14px 30px rgba(0,0,0,.32)}
+  .brand-crystal{font-size:36px}
+  .eyebrow{margin-bottom:5px;font-size:10px}
+  .menu-shell h1{font-size:clamp(38px,7.2vh,58px);line-height:.88}
+  .menu-intro{margin:11px auto 12px;font-size:14px;line-height:1.34;max-width:690px}
+  .menu-actions{gap:8px;width:min(610px,100%)}
+  .game-button{min-height:44px;padding:8px 14px;border-radius:15px;box-shadow:0 5px 0 rgba(0,0,0,.25)}
+  .world-preview{margin-top:11px;gap:6px;width:min(680px,100%)}
+  .world-preview>div{min-height:49px;padding:5px 7px;border-radius:13px;gap:1px 5px}
+  .world-preview span{font-size:21px}.world-preview b{font-size:14px}.world-preview small{font-size:8px}
+  .stage-badge{margin-top:10px;padding:7px 12px;font-size:11px}
+  .menu-shell footer{margin-top:8px;font-size:10px}
+}
+@media (max-height:650px) and (min-width:681px){
+  .brand-mark{width:52px;height:52px;margin-bottom:6px}.brand-crystal{font-size:29px}
+  .menu-shell h1{font-size:clamp(34px,7.6vh,46px)}
+  .menu-intro{margin:7px auto 8px;font-size:12px;line-height:1.25}
+  .menu-actions{grid-template-columns:repeat(5,minmax(0,1fr));width:min(920px,98vw);gap:6px}
+  .game-button{min-height:40px;padding:6px 8px;font-size:12px}
+  .world-preview{grid-template-columns:repeat(10,minmax(0,1fr));width:min(930px,98vw);margin-top:8px}
+  .world-preview>div{min-height:43px;padding:4px;display:flex;flex-direction:column;gap:0}
+  .world-preview span{font-size:18px}.world-preview b{font-size:11px}.world-preview small{font-size:6px;text-align:center}
+  .stage-badge{margin-top:7px;padding:5px 10px;font-size:10px}
+  .menu-shell footer{margin-top:5px;font-size:9px}
+}
+@media (max-width:680px){
+  .menu-screen{padding:8px 12px;display:none}
+  .menu-screen.active{display:flex}
+  .menu-shell{width:100%;padding:12px 4px 20px}
+  .brand-mark{margin-top:2px}
+  .world-preview{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (max-width:430px) and (max-height:760px){
+  .brand-mark{width:62px;height:62px;margin-bottom:9px}.brand-crystal{font-size:34px}
+  .menu-shell h1{font-size:39px}
+  .menu-intro{font-size:13px;margin:12px auto 14px;line-height:1.35}
+  .menu-actions{gap:8px}.game-button{min-height:46px;padding:9px 13px}
+  .world-preview{margin-top:12px}.world-preview>div{min-height:54px}
+  .stage-badge{margin-top:12px;font-size:11px;padding:8px 10px}
+  .menu-shell footer{margin-top:11px}
+}
+
+@media (max-width:680px){
+  .menu-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  #btn-settings{grid-column:1/-1;width:calc(50% - 4px);justify-self:center}
+  .world-preview{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;width:100%}
+  .world-preview>div{min-height:49px;padding:4px 2px;display:flex;flex-direction:column;justify-content:center;gap:0;border-radius:11px}
+  .world-preview span{font-size:18px}.world-preview b{font-size:11px;text-align:center}.world-preview small{display:none}
+}
+@media (max-width:360px){
+  .menu-shell h1{font-size:35px}.menu-intro{font-size:12px}
+  .game-button{font-size:12px;padding-left:8px;padding-right:8px}
+  .stage-badge{font-size:10px}
+}

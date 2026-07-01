@@ -1,0 +1,19 @@
+CHANGELOG — ETAPA 6
+
+1. Adicionado o Mundo Extra: Castelo da Desaprendizagem.
+2. Adicionados 10 problemas contextualizados com tabuadas misturadas.
+3. Total do jogo ampliado para 91 desafios.
+4. Implementado o chefão Senhor da Confusão.
+5. Implementada barra de armadura com 10 pontos.
+6. Cada resposta correta retira um ponto da armadura do chefão.
+7. Implementadas três fases de comportamento do chefão.
+8. O chefão passa a teleportar e invocar novos fantasmas.
+9. A Luz do Conhecimento paralisa temporariamente o chefão.
+10. Adicionada colisão entre o personagem e o chefão.
+11. Adicionado HUD específico da batalha final.
+12. Adicionadas paisagem, paleta e elementos visuais próprios do Castelo.
+13. Adicionada tela final com animação, estatísticas, créditos e prêmio Guardião Supremo.
+14. Adicionados novos efeitos sonoros para o chefão e a vitória final.
+15. Adicionada garantia mínima de 3 vidas e 3 Luzes na fase extra.
+16. Aumentada a chance de itens no Castelo.
+17. Atualizada a chave de salvamento para a Etapa 6.
