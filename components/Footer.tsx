@@ -4,9 +4,11 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-8 text-sm text-slate-600">
         <p className="font-semibold text-slate-900">DIASMATH</p>
         <p className="mt-2">
-          Tecnologia educacional para transformar o ensino da Matemática.
+          Jogos, laboratórios digitais e tecnologia educacional para o ensino da Matemática.
         </p>
-        <p className="mt-4">© 2026 DIASMATH. Todos os direitos reservados.</p>
+        <p className="mt-4">
+          © 2026 Francisco Vieira Dias — DIASMATH. Todos os direitos reservados.
+        </p>
       </div>
     </footer>
   );
