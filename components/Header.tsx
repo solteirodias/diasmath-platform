@@ -11,22 +11,28 @@ const links = [
 
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
-        <Link href="/" className="flex items-center gap-3">
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-5 px-6 py-3">
+        <Link href="/" className="flex min-w-0 items-center gap-3" aria-label="Página inicial da DIASMATH">
           <img
             src="/brand/diasmath-icon.svg"
-            alt="DIASMATH"
-            className="h-10 w-10 rounded-xl"
+            alt=""
+            className="h-11 w-11 shrink-0 rounded-xl"
           />
-          <span className="text-xl font-black tracking-tight text-slate-950">
-            DIASMATH
-          </span>
+
+          <div className="min-w-0 leading-none">
+            <span className="block text-xl font-black tracking-tight text-slate-950">
+              DIAS<span className="text-blue-600">MATH</span>
+            </span>
+            <span className="mt-1 hidden text-[9px] font-bold tracking-[0.14em] text-slate-500 sm:block">
+              APRENDER • EXPLORAR • TRANSFORMAR
+            </span>
+          </div>
         </Link>
 
-        <nav className="hidden items-center gap-6 text-sm font-medium text-slate-700 md:flex">
+        <nav className="hidden items-center gap-6 text-sm font-semibold text-slate-700 md:flex">
           {links.map((link) => (
-            <Link key={link.href} href={link.href} className="hover:text-diasmath-blue">
+            <Link key={link.href} href={link.href} className="transition hover:text-blue-600">
               {link.label}
             </Link>
           ))}
@@ -34,7 +40,7 @@ export function Header() {
 
         <Link
           href="/login"
-          className="rounded-full bg-diasmath-blue px-5 py-2 text-sm font-semibold text-white shadow-sm hover:opacity-90"
+          className="rounded-full bg-blue-600 px-5 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700"
         >
           Entrar
         </Link>

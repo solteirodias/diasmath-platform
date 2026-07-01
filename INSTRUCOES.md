@@ -1,38 +1,37 @@
-# Atualização 07 — Prancha Trigonométrica
+# Atualização 08 — Nova identidade visual DIASMATH
 
-Esta atualização integra a Prancha Trigonométrica à DIASMATH.
+Esta atualização substitui o ícone antigo pelo novo símbolo e atualiza o cabeçalho e o favicon.
 
-## Arquivos criados
+## Arquivos incluídos
 
-- public/labs/prancha-trigonometrica/index.html
-- app/labs/page.tsx
-- app/labs/prancha-trigonometrica/page.tsx
+- public/brand/diasmath-icon.svg
+- components/Header.tsx
+- app/layout.tsx
 
-## Como aplicar no GitHub
+## Como colocar no GitHub
 
-1. Extraia este ZIP.
-2. No GitHub, clique em Add file → Upload files.
-3. Arraste as pastas:
-   - public
-   - app
-4. Confirme a substituição quando o GitHub pedir.
-5. Clique em Commit changes.
-6. Aguarde o deploy automático da Vercel.
+1. Baixe e extraia o ZIP.
+2. Abra o repositório `diasmath-platform` no GitHub.
+3. Clique em `Add file`.
+4. Clique em `Upload files`.
+5. Arraste as pastas:
+   - `public`
+   - `components`
+   - `app`
+6. O GitHub substituirá os arquivos antigos com o mesmo nome.
+7. Role para baixo.
+8. Em `Commit message`, escreva:
+   `Atualiza identidade visual da DIASMATH`
+9. Clique em `Commit changes`.
+10. Aguarde a Vercel publicar automaticamente.
 
-## Como testar
+## Resultado
 
-Após o deploy, acesse:
+- novo ícone no cabeçalho;
+- novo favicon na aba do navegador;
+- slogan no cabeçalho;
+- o novo ícone também será usado nos pontos do site que já chamam `/brand/diasmath-icon.svg`.
 
-/labs
+## Observação
 
-Clique em:
-
-Prancha Trigonométrica → Abrir laboratório
-
-Ou acesse diretamente:
-
-/labs/prancha-trigonometrica
-
-## Versão direta do laboratório
-
-/labs/prancha-trigonometrica/index.html
+A imagem grande de apresentação da marca não deve ser colocada no cabeçalho. Ela pode ser usada em publicações e materiais de divulgação. Para o site, use o SVG isolado incluído neste pacote.

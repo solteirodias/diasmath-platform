@@ -1,7 +1,70 @@
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" rx="112" fill="#1D4ED8"/>
-  <circle cx="145" cy="150" r="42" fill="#FACC15"/>
-  <circle cx="365" cy="360" r="42" fill="#16A34A"/>
-  <path d="M130 352 C190 210, 280 210, 382 132" stroke="white" stroke-width="48" stroke-linecap="round"/>
-  <path d="M126 370 L226 370 L226 270 L326 270 L326 170 L390 170" stroke="white" stroke-width="34" stroke-linecap="round" stroke-linejoin="round" opacity="0.92"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">DIASMATH</title>
+  <desc id="desc">Símbolo com a letra D, gráfico crescente, seta de progresso e barras de aprendizagem.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="70" y1="40" x2="430" y2="470" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2F75FF"/>
+      <stop offset="1" stop-color="#0B3BCB"/>
+    </linearGradient>
+
+    <linearGradient id="dStroke" x1="120" y1="100" x2="430" y2="410" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#41B8FF"/>
+      <stop offset="1" stop-color="#0868F2"/>
+    </linearGradient>
+
+    <linearGradient id="yellow" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#FFD83D"/>
+      <stop offset="1" stop-color="#FFB800"/>
+    </linearGradient>
+
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#001C6B" flood-opacity=".38"/>
+    </filter>
+
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="170%">
+      <feDropShadow dx="0" dy="8" stdDeviation="7" flood-color="#001C6B" flood-opacity=".3"/>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="116" fill="url(#bg)"/>
+
+  <g filter="url(#shadow)">
+    <!-- D estrutural -->
+    <path
+      d="M145 105H286C366 105 417 169 417 256C417 343 366 407 286 407H145"
+      fill="none"
+      stroke="url(#dStroke)"
+      stroke-width="54"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Barras de evolução -->
+    <rect x="153" y="307" width="48" height="92" rx="15" fill="#23B84D"/>
+    <rect x="220" y="262" width="48" height="137" rx="15" fill="#FFD11A"/>
+    <rect x="287" y="212" width="48" height="187" rx="15" fill="#FFB800"/>
+
+    <!-- Seta de aprendizagem -->
+    <path
+      d="M124 355C162 265 232 224 304 188C340 170 371 147 399 116"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="39"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      filter="url(#softShadow)"
+    />
+    <path
+      d="M357 118H401V162"
+      fill="none"
+      stroke="#FFFFFF"
+      stroke-width="28"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Ponto de inspiração -->
+    <circle cx="143" cy="150" r="39" fill="url(#yellow)" filter="url(#softShadow)"/>
+  </g>
 </svg>

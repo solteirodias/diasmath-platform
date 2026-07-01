@@ -2,10 +2,16 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "DIASMATH",
-  description: "Tecnologia educacional para transformar o ensino da Matemática.",
+  title: {
+    default: "DIASMATH",
+    template: "%s | DIASMATH",
+  },
+  description:
+    "Jogos, laboratórios digitais e tecnologia educacional para transformar o ensino da Matemática.",
   icons: {
     icon: "/brand/diasmath-icon.svg",
+    shortcut: "/brand/diasmath-icon.svg",
+    apple: "/brand/diasmath-icon.svg",
   },
 };
 
