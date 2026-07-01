@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0c302d">
+  <meta name="description" content="Plataforma dinâmica para investigação de ladrilhamentos com polígonos regulares.">
+  <title>GeoTessela Lab | DIASMATH LABS</title>
+
+  <style>
+    :root{
+      --forest:#0c302d;
+      --forest-2:#124b47;
+      --teal:#167b73;
+      --teal-2:#2a9d8f;
+      --gold:#d79b2d;
+      --coral:#df6f52;
+      --green:#238268;
+      --red:#c64d52;
+      --ink:#183a37;
+      --muted:#647a76;
+      --line:#d7e4df;
+      --soft:#f5f8f5;
+      --cream:#f4f1e8;
+      --white:#ffffff;
+      --shadow:0 18px 46px rgba(15,60,55,.14);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 7% 5%,rgba(42,157,143,.16),transparent 28%),
+        radial-gradient(circle at 93% 8%,rgba(215,155,45,.13),transparent 27%),
+        #eef4f1;
+    }
+
+    button,select,input{font:inherit}
+    button{cursor:pointer}
+    .shell{max-width:1600px;margin:0 auto;padding:16px}
+
+    .hero{
+      position:relative;
+      overflow:hidden;
+      border-radius:28px;
+      color:#fff;
+      padding:23px 25px;
+      background:linear-gradient(125deg,#0a2a27 0%,#12534d 55%,#227d70 100%);
+      box-shadow:var(--shadow);
+      border:1px solid rgba(255,255,255,.14);
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      width:390px;height:390px;
+      right:-115px;top:-220px;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:
+        0 0 0 42px rgba(255,255,255,.035),
+        0 0 0 92px rgba(255,255,255,.025);
+    }
+    .hero-row{
+      position:relative;z-index:1;
+      display:flex;justify-content:space-between;align-items:center;gap:22px;
+    }
+    .brand{display:flex;align-items:center;gap:16px}
+    .brand-mark{
+      width:66px;height:66px;flex:none;
+      display:grid;place-items:center;
+      border-radius:20px;font-size:34px;
+      background:linear-gradient(145deg,rgba(255,255,255,.2),rgba(255,255,255,.07));
+      border:1px solid rgba(255,255,255,.27);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
+    }
+    .eyebrow{
+      margin-bottom:5px;
+      color:#bcebe2;
+      font-size:.72rem;
+      font-weight:950;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+    h1{font-size:clamp(1.45rem,2.5vw,2.5rem);line-height:1.08;margin:0}
+    .hero p{
+      max-width:860px;
+      margin:7px 0 0;
+      color:#e0f2ee;
+      line-height:1.48;
+    }
+    .hero-actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:flex-end}
+    .badges{
+      position:relative;z-index:1;
+      display:flex;gap:8px;flex-wrap:wrap;
+      margin-top:17px;
+    }
+    .badge{
+      padding:7px 10px;
+      border-radius:999px;
+      color:#e9f8f5;
+      background:rgba(255,255,255,.09);
+      border:1px solid rgba(255,255,255,.17);
+      font-size:.78rem;
+      font-weight:850;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:minmax(330px,430px) minmax(0,1fr);
+      gap:16px;
+      margin-top:16px;
+    }
+    .card{
+      background:rgba(255,255,255,.97);
+      border:1px solid rgba(255,255,255,.92);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .sidebar{padding:20px;align-self:start;position:sticky;top:10px}
+    .main{padding:18px;min-width:0}
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin:0 0 15px;
+    }
+    .section-title h2{
+      display:flex;align-items:center;gap:8px;
+      margin:0;font-size:1.13rem;
+    }
+    .step{
+      width:29px;height:29px;
+      display:grid;place-items:center;
+      border-radius:9px;
+      color:#11665f;
+      background:#dff2ed;
+      font-size:.83rem;
+      font-weight:950;
+    }
+
+    .field{margin-bottom:16px}
+    label{
+      display:block;
+      margin-bottom:7px;
+      color:#365854;
+      font-size:.88rem;
+      font-weight:850;
+    }
+    select,input[type="text"]{
+      width:100%;
+      padding:11px 12px;
+      border:1px solid #cbded8;
+      border-radius:13px;
+      outline:none;
+      color:#173e3a;
+      background:#fcfefd;
+    }
+    select:focus,input[type="text"]:focus{
+      border-color:#2a9d8f;
+      box-shadow:0 0 0 4px rgba(42,157,143,.13);
+    }
+
+    .selectors{display:grid;gap:10px}
+    .selector{
+      display:grid;
+      grid-template-columns:42px minmax(0,1fr);
+      align-items:center;
+      gap:9px;
+    }
+    .selector-number{
+      width:42px;height:42px;
+      display:grid;place-items:center;
+      border-radius:12px;
+      color:#fff;
+      font-weight:950;
+      box-shadow:0 8px 18px rgba(15,60,55,.17);
+    }
+    .selector-content{min-width:0}
+    .angle-hint{
+      margin-top:4px;
+      padding-left:2px;
+      color:var(--muted);
+      font-size:.75rem;
+    }
+
+    .custom-box{
+      margin:18px 0 4px;
+      padding:14px;
+      border:1px solid #d9e7e2;
+      border-radius:16px;
+      background:linear-gradient(135deg,#f5faf8,#fffaf0);
+    }
+    .custom-box h3{
+      display:flex;align-items:center;gap:8px;
+      margin:0 0 6px;
+      color:#234f4a;
+      font-size:.97rem;
+    }
+    .custom-box p{
+      margin:0 0 10px;
+      color:#6a7d79;
+      font-size:.78rem;
+      line-height:1.4;
+    }
+    .custom-row{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:8px;
+    }
+
+    .button-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:9px;
+      margin-top:18px;
+    }
+    .wide{grid-column:1/-1}
+    .btn{
+      border:0;
+      border-radius:13px;
+      padding:11px 14px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:7px;
+      font-weight:900;
+      transition:transform .18s ease,box-shadow .18s ease,opacity .18s ease;
+    }
+    .btn:hover{transform:translateY(-2px)}
+    .btn:active{transform:translateY(0)}
+    .btn-primary{
+      color:#fff;
+      background:linear-gradient(135deg,#18877d,#0f615b);
+      box-shadow:0 9px 19px rgba(22,123,115,.27);
+    }
+    .btn-gold{
+      color:#fff;
+      background:linear-gradient(135deg,#d7a136,#b97b17);
+    }
+    .btn-success{
+      color:#fff;
+      background:linear-gradient(135deg,#2b9073,#1d6d59);
+    }
+    .btn-secondary{
+      color:#155f59;
+      background:#e7f4f1;
+      border:1px solid #cde4df;
+    }
+    .btn-light{
+      color:#1e514c;
+      background:#fff;
+      border:1px solid rgba(255,255,255,.72);
+    }
+    .btn-danger{
+      color:#9c3940;
+      background:#fff1f1;
+      border:1px solid #efc9ca;
+    }
+    .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+    .note{
+      margin-top:16px;
+      padding:13px;
+      border-radius:14px;
+      color:#5f7470;
+      background:linear-gradient(135deg,#f4faf8,#fffaf1);
+      border:1px solid #dce9e5;
+      font-size:.86rem;
+      line-height:1.5;
+    }
+    .note strong{color:#28534e}
+
+    .main-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:12px;
+      flex-wrap:wrap;
+    }
+    .main-head h2{margin:0;font-size:1.18rem}
+    .main-head p{margin:4px 0 0;color:var(--muted);font-size:.9rem}
+
+    .status{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:8px 12px;
+      border-radius:999px;
+      color:#667a76;
+      background:#edf3f1;
+      font-size:.82rem;
+      font-weight:950;
+    }
+    .status.success{color:#17674f;background:#e4f6ef}
+    .status.warning{color:#8b5b08;background:#fff2d8}
+    .status.danger{color:#9b3439;background:#fff0f0}
+
+    .canvas-box{
+      position:relative;
+      overflow:hidden;
+      height:550px;
+      border-radius:20px;
+      border:1px solid var(--line);
+      background:
+        linear-gradient(rgba(18,85,78,.055) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(18,85,78,.055) 1px,transparent 1px),
+        radial-gradient(circle at center,rgba(42,157,143,.065),transparent 43%),
+        #fbfdfc;
+      background-size:28px 28px,28px 28px,auto,auto;
+    }
+    canvas{width:100%;height:100%;display:block}
+    .canvas-caption{
+      position:absolute;
+      left:13px;right:13px;top:13px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:9px;
+      pointer-events:none;
+    }
+    .caption-pill{
+      padding:8px 10px;
+      border-radius:11px;
+      color:#415f5b;
+      background:rgba(255,255,255,.91);
+      border:1px solid #d7e4df;
+      box-shadow:0 5px 15px rgba(15,60,55,.06);
+      backdrop-filter:blur(8px);
+      font-size:.8rem;
+      font-weight:850;
+    }
+    .legend{
+      display:flex;
+      flex-wrap:wrap;
+      gap:9px;
+      margin:11px 2px 0;
+      color:#5f7470;
+      font-size:.8rem;
+    }
+    .legend-item{display:flex;align-items:center;gap:6px}
+    .swatch{width:11px;height:11px;border-radius:4px;display:inline-block}
+
+    .analysis-grid{
+      display:grid;
+      grid-template-columns:1.15fr .85fr .85fr;
+      gap:11px;
+      margin-top:12px;
+    }
+    .metric{
+      min-width:0;
+      padding:14px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#fbfdfc;
+    }
+    .metric-label{
+      color:#6c807c;
+      font-size:.76rem;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+    .code{
+      display:inline-block;
+      max-width:100%;
+      overflow:auto;
+      margin-top:8px;
+      padding:8px 10px;
+      border-radius:10px;
+      color:#fff;
+      background:#173f3b;
+      white-space:nowrap;
+      font:900 .96rem/1.2 Consolas,Monaco,monospace;
+    }
+    .big-number{
+      margin-top:10px;
+      font-size:1.9rem;
+      line-height:1;
+      font-weight:950;
+    }
+    .metric-text{
+      margin-top:8px;
+      color:#5f7470;
+      font-size:.86rem;
+      line-height:1.43;
+    }
+    .equation{
+      margin-top:8px;
+      padding:9px;
+      overflow:auto;
+      border-radius:10px;
+      color:#315651;
+      background:#edf5f2;
+      font:800 .84rem/1.45 Consolas,monospace;
+    }
+    .meter{
+      position:relative;
+      overflow:hidden;
+      height:12px;
+      margin-top:11px;
+      border-radius:999px;
+      background:#e3ebe8;
+    }
+    .meter-fill{
+      height:100%;
+      width:0;
+      transition:width .55s ease;
+      background:linear-gradient(90deg,#167b73,#d79b2d);
+    }
+    .meter-mark{position:absolute;right:0;top:0;bottom:0;width:3px;background:#244d48}
+
+    .theory-card{margin-top:16px;padding:18px}
+    .theory-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:11px;
+    }
+    .theory-item{
+      padding:13px;
+      border-radius:15px;
+      border:1px solid #dce8e4;
+      background:#fbfdfc;
+    }
+    .theory-item strong{display:block;margin-bottom:6px;color:#2b5651}
+    .theory-item p{margin:0;color:#627672;font-size:.82rem;line-height:1.45}
+    .formula{
+      display:block;
+      margin:7px 0;
+      padding:8px 9px;
+      border-radius:9px;
+      color:#fff;
+      background:#18433f;
+      font:800 .86rem Consolas,monospace;
+    }
+
+    .library{margin-top:16px;padding:18px}
+    .library-intro{
+      margin:-5px 0 15px;
+      color:#637773;
+      font-size:.88rem;
+      line-height:1.48;
+    }
+    .library-panel{
+      padding:16px;
+      border-radius:18px;
+      border:1px solid #dce8e4;
+      background:linear-gradient(135deg,#fbfdfc,#fffaf2);
+    }
+    .library-panel h3{margin:0 0 6px;color:#17685f;font-size:1.03rem}
+    .group-note{
+      margin:0 0 12px;
+      color:#697c78;
+      font-size:.82rem;
+      line-height:1.44;
+    }
+    .chips{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{
+      padding:8px 11px;
+      border:1px solid #bddbd3;
+      border-radius:999px;
+      color:#17665e;
+      background:#eef8f5;
+      font-weight:900;
+      transition:.18s;
+    }
+    .chip:hover{
+      transform:translateY(-2px);
+      color:#fff;
+      background:#19776f;
+      border-color:#19776f;
+    }
+
+    footer{
+      padding:22px 8px 7px;
+      text-align:center;
+      color:#596e69;
+      font-size:.9rem;
+      font-weight:800;
+    }
+
+    .toast{
+      position:fixed;
+      right:18px;bottom:18px;z-index:50;
+      max-width:410px;
+      padding:13px 15px;
+      border-radius:14px;
+      color:#fff;
+      background:#17463f;
+      box-shadow:0 18px 40px rgba(15,60,55,.27);
+      opacity:0;
+      transform:translateY(18px);
+      pointer-events:none;
+      transition:.22s;
+    }
+    .toast.show{opacity:1;transform:translateY(0)}
+
+    @media(max-width:1100px){
+      .layout{grid-template-columns:1fr}
+      .sidebar{position:static}
+      .analysis-grid{grid-template-columns:1fr 1fr}
+      .analysis-grid .metric:first-child{grid-column:1/-1}
+    }
+    @media(max-width:850px){
+      .hero-row{flex-direction:column;align-items:flex-start}
+      .hero-actions{width:100%;justify-content:flex-start}
+      .theory-grid{grid-template-columns:1fr}
+      .canvas-box{height:475px}
+    }
+    @media(max-width:560px){
+      .shell{padding:7px}
+      .hero{padding:17px;border-radius:20px}
+      .brand-mark{display:none}
+      .layout{gap:9px;margin-top:9px}
+      .sidebar,.main,.theory-card,.library{padding:13px}
+      .analysis-grid{grid-template-columns:1fr}
+      .analysis-grid .metric:first-child{grid-column:auto}
+      .button-grid{grid-template-columns:1fr}
+      .wide{grid-column:auto}
+      .custom-row{grid-template-columns:1fr}
+      .canvas-box{height:425px}
+    }
+  
+    /* ===== DIASMATH LABS — identidade profissional ===== */
+    .diasmath-labs-bar{
+      position:sticky;top:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+      padding:12px 18px;margin:-16px -16px 16px;
+      background:rgba(255,255,255,.9);
+      border-bottom:1px solid rgba(215,228,223,.9);
+      backdrop-filter:blur(14px);
+      box-shadow:0 8px 24px rgba(15,60,55,.08);
+    }
+    .diasmath-labs-brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .diasmath-labs-icon{
+      width:42px;height:42px;display:grid;place-items:center;border-radius:14px;
+      color:#fff;font-weight:950;background:linear-gradient(135deg,#1D4ED8,#16A34A);
+      box-shadow:0 10px 24px rgba(29,78,216,.18);
+    }
+    .diasmath-labs-title{line-height:1.1;min-width:0}
+    .diasmath-labs-title strong{
+      display:block;color:#0F172A;font-size:.96rem;letter-spacing:.08em;text-transform:uppercase;
+    }
+    .diasmath-labs-title span{display:block;margin-top:2px;color:#64748b;font-size:.84rem;font-weight:800}
+    .diasmath-labs-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .diasmath-labs-link{
+      display:inline-flex;align-items:center;justify-content:center;min-height:38px;
+      padding:8px 12px;border-radius:999px;color:#0F172A;background:#fff;border:1px solid #dbe7ef;
+      text-decoration:none;font-size:.82rem;font-weight:900;transition:.18s ease;
+    }
+    .diasmath-labs-link:hover{transform:translateY(-1px);border-color:#1D4ED8;color:#1D4ED8}
+    .diasmath-labs-link.primary{color:#fff;background:linear-gradient(135deg,#1D4ED8,#167b73);border-color:transparent}
+    .lab-kicker{
+      display:inline-flex;align-items:center;gap:8px;margin-bottom:8px;padding:7px 11px;border-radius:999px;
+      background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.20);
+      color:#dffaf4;font-size:.74rem;font-weight:950;letter-spacing:.12em;text-transform:uppercase;
+    }
+    .hero{
+      background:radial-gradient(circle at 95% 0%,rgba(250,204,21,.18),transparent 30%),
+      linear-gradient(125deg,#0F172A 0%,#1D4ED8 45%,#167b73 100%) !important;
+    }
+    .brand-mark{background:linear-gradient(145deg,#1D4ED8,#16A34A) !important}
+    .btn-primary{background:linear-gradient(135deg,#1D4ED8,#167b73) !important}
+    .lab-professor-note{
+      margin-top:16px;padding:14px;border-radius:18px;background:linear-gradient(135deg,#eef6ff,#f5fff8);
+      border:1px solid #dbeafe;color:#334155;font-size:.88rem;line-height:1.5;
+    }
+    .lab-professor-note strong{color:#1D4ED8}
+    @media(max-width:700px){
+      .diasmath-labs-bar{align-items:flex-start;flex-direction:column;margin:-7px -7px 10px}
+      .diasmath-labs-actions{width:100%;justify-content:flex-start}
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+
+    <nav class="diasmath-labs-bar" aria-label="Navegação DIASMATH LABS">
+      <div class="diasmath-labs-brand">
+        <div class="diasmath-labs-icon">DM</div>
+        <div class="diasmath-labs-title">
+          <strong>DIASMATH LABS</strong>
+          <span>Laboratório de Geometria · GeoTessela Lab</span>
+        </div>
+      </div>
+      <div class="diasmath-labs-actions">
+        <a class="diasmath-labs-link" href="/labs">← Voltar aos Labs</a>
+        <a class="diasmath-labs-link" href="/">DIASMATH</a>
+        <a class="diasmath-labs-link primary" href="#canvas">Iniciar investigação</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div class="hero-row">
+        <div class="brand">
+          <div class="brand-mark">⬡</div>
+          <div>
+            
+            <div class="lab-kicker">DIASMATH LABS · Laboratório de Geometria</div>
+            <h1>GeoTessela Lab</h1>
+             <p>Laboratório digital de Geometria para investigar tesselações com polígonos regulares. O ambiente permite formular conjecturas, testar códigos de vértices, visualizar encaixes, analisar somas angulares e diferenciar compatibilidade local de ladrilhamentos uniformes clássicos.</p>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <button class="btn btn-light" id="helpBtn">Guia de investigação</button>
+          <button class="btn btn-light" id="fullscreenBtn">⛶ Tela cheia</button>
+        </div>
+      </div>
+
+      <div class="badges">
+        <span class="badge">Geometria dinâmica</span>
+        <span class="badge">Análise de conjecturas</span>
+        <span class="badge">Até 4 tipos diferentes</span>
+        <span class="badge">Verificação de códigos</span>
+        <span class="badge">Funciona offline</span>
+      </div>
+    </header>
+
+    <section class="layout">
+      <aside class="card sidebar">
+        <div class="section-title">
+          <h2><span class="step">1</span> Defina a hipótese</h2>
+        </div>
+
+        <div class="field">
+          <label for="typeCount">Quantidade de tipos diferentes de polígonos</label>
+          <select id="typeCount">
+            <option value="1">1 tipo</option>
+            <option value="2" selected>2 tipos</option>
+            <option value="3">3 tipos</option>
+            <option value="4">4 tipos</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Polígonos regulares selecionados</label>
+          <div class="selectors" id="selectors"></div>
+        </div>
+
+        <div class="custom-box">
+          <h3>⌨ Digitar uma configuração</h3>
+          <p>Informe o código usando vírgulas, espaços ou hífens. Exemplos: <strong>(3, 6, 3, 6)</strong> ou <strong>4-8-8</strong>.</p>
+          <div class="custom-row">
+            <input
+              type="text"
+              id="customConfig"
+              placeholder="Ex.: (3, 4, 6, 4)"
+              autocomplete="off"
+              aria-label="Digite uma configuração de polígonos"
+            >
+            <button class="btn btn-gold" id="verifyBtn">Verificar</button>
+          </div>
+        </div>
+
+        <div class="button-grid">
+          <button class="btn btn-primary wide" id="investigateBtn">⌕ Investigar seleção</button>
+          <button class="btn btn-success" id="animateBtn">▶ Animar</button>
+          <button class="btn btn-secondary" id="pauseBtn">⏸ Pausar</button>
+          <button class="btn btn-secondary" id="nextBtn">⟳ Próxima solução</button>
+          <button class="btn btn-danger" id="clearBtn">✕ Limpar</button>
+        </div>
+
+        <div class="note">
+          <strong>Critério central:</strong> os ângulos internos que se encontram em um mesmo vértice precisam somar exatamente <strong>360°</strong>. A plataforma diferencia uma compatibilidade apenas local de um ladrilhamento uniforme clássico.
+        </div>
+
+        <div class="lab-professor-note">
+          <strong>Uso pedagógico sugerido:</strong> peça aos estudantes que formulem uma hipótese, testem o código do vértice, registrem a soma angular e justifiquem se há lacuna, sobreposição ou encaixe exato.
+        </div>
+
+      </aside>
+
+      <main class="card main">
+        <div class="main-head">
+          <div>
+            <h2>Laboratório visual</h2>
+            <p>Observe a construção progressiva das peças ao redor de um vértice comum.</p>
+          </div>
+          <div class="status" id="status">Aguardando investigação</div>
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="canvas"></canvas>
+          <div class="canvas-caption">
+            <div class="caption-pill" id="caption">Selecione os polígonos ou digite um código.</div>
+            <div class="caption-pill" id="solutionCounter">Solução 0 de 0</div>
+          </div>
+        </div>
+
+        <div class="legend" id="legend"></div>
+
+        <div class="analysis-grid">
+          <article class="metric">
+            <div class="metric-label">Código do vértice</div>
+            <div class="code" id="vertexCode">—</div>
+            <div class="equation" id="equation">Nenhuma configuração analisada.</div>
+            <div class="metric-text" id="classification">A plataforma exibirá a estrutura angular e a classificação matemática.</div>
+          </article>
+
+          <article class="metric">
+            <div class="metric-label">Soma angular</div>
+            <div class="big-number" id="angleTotal">0°</div>
+            <div class="metric-text" id="difference">Faltam 360°.</div>
+            <div class="meter">
+              <div class="meter-fill" id="meterFill"></div>
+              <div class="meter-mark"></div>
+            </div>
+          </article>
+
+          <article class="metric">
+            <div class="metric-label">Diagnóstico geométrico</div>
+            <div class="big-number" id="diagnosisSymbol">◇</div>
+            <div class="metric-text" id="diagnosis">Sem dados para análise.</div>
+          </article>
+        </div>
+      </main>
+    </section>
+
+    <section class="card theory-card">
+      <div class="section-title">
+        <h2><span class="step">2</span> Fundamentação para a investigação</h2>
+      </div>
+
+      <div class="theory-grid">
+        <article class="theory-item">
+          <strong>Ângulo interno</strong>
+          <span class="formula">αₙ = ((n − 2) · 180°) / n</span>
+          <p>A medida do ângulo interno depende da quantidade de lados do polígono regular.</p>
+        </article>
+
+        <article class="theory-item">
+          <strong>Condição no vértice</strong>
+          <span class="formula">α₁ + α₂ + ... + αₖ = 360°</span>
+          <p>Soma menor produz lacuna; soma maior produz sobreposição.</p>
+        </article>
+
+        <article class="theory-item">
+          <strong>Condição local e global</strong>
+          <p>Fechar um vértice é necessário, mas o padrão também precisa repetir-se de forma coerente nos demais vértices do plano.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="card library">
+      <div class="section-title">
+        <h2><span class="step">3</span> Configurações angulares para investigação</h2>
+      </div>
+
+      <p class="library-intro">
+        Clique em um código para carregá-lo no laboratório. Todos os exemplos abaixo apresentam soma angular igual a 360°, mas a plataforma verificará se o código corresponde a um ladrilhamento uniforme clássico ou apenas a uma compatibilidade angular local.
+      </p>
+
+      <div class="library-panel">
+        <h3>Biblioteca ampliada de códigos</h3>
+        <p class="group-note">Explore diferentes quantidades, ordens e tipos de polígonos ao redor do vértice.</p>
+        <div class="chips" id="angularExamples"></div>
+      </div>
+    </section>
+
+    <footer>© 2026 Francisco Vieira Dias. Todos os direitos reservados. </footer>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+  (() => {
+    "use strict";
+
+    const COMMON_NAMES = {
+      3:"Triângulo equilátero",
+      4:"Quadrado",
+      5:"Pentágono regular",
+      6:"Hexágono regular",
+      7:"Heptágono regular",
+      8:"Octógono regular",
+      9:"Eneágono regular",
+      10:"Decágono regular",
+      11:"Undecágono regular",
+      12:"Dodecágono regular",
+      13:"Tridecágono regular",
+      14:"Tetradecágono regular",
+      15:"Pentadecágono regular",
+      16:"Hexadecágono regular",
+      18:"Octodecágono regular",
+      20:"Icoságono regular",
+      24:"Icositetrágono regular",
+      30:"Triacontágono regular",
+      36:"Triaconta-hexágono regular",
+      42:"Polígono regular de 42 lados",
+      48:"Polígono regular de 48 lados",
+      60:"Hexacontágono regular"
+    };
+
+    const COLORS = [
+      "#e0a12e","#3e91a7","#d65a72","#34a37e","#7658b5","#df7652",
+      "#467db8","#c5629f","#4d9276","#6b64b5","#c28c38","#348f9d",
+      "#bd5363","#6c9849","#8569bd","#cb6a3f","#4a83aa","#ac558c",
+      "#758d47","#6972ae","#ad8738","#34937f","#9f6093","#72864e"
+    ];
+
+    const POLYGON_SIDES = Array.from({length:58},(_,i)=>i+3);
+
+    function polygonData(n){
+      return {
+        name:COMMON_NAMES[n] || `Polígono regular de ${n} lados`,
+        color:COLORS[(n-3)%COLORS.length]
+      };
+    }
+
+    const CLASSIC_TILINGS = [
+      [3,3,3,3,3,3],
+      [4,4,4,4],
+      [6,6,6],
+      [3,12,12],
+      [4,8,8],
+      [4,6,12],
+      [3,6,3,6],
+      [3,4,6,4],
+      [3,3,3,4,4],
+      [3,3,4,3,4],
+      [3,3,3,3,6]
+    ];
+
+    const ANGULAR_EXAMPLES = [
+      [3,7,42],
+      [3,8,24],
+      [3,9,18],
+      [3,10,15],
+      [3,12,12],
+      [12,3,12],
+      [4,5,20],
+      [4,6,12],
+      [4,12,6],
+      [4,8,8],
+      [8,4,8],
+      [5,5,10],
+      [5,10,5],
+      [6,6,6],
+      [3,3,4,12],
+      [3,4,3,12],
+      [3,4,12,3],
+      [3,12,3,4],
+      [3,3,6,6],
+      [3,6,3,6],
+      [3,6,6,3],
+      [3,4,4,6],
+      [3,4,6,4],
+      [4,3,4,6],
+      [4,4,4,4],
+      [3,3,3,3,6],
+      [3,3,3,6,3],
+      [3,6,3,3,3],
+      [3,3,3,4,4],
+      [3,3,4,3,4],
+      [3,4,3,4,3],
+      [3,3,3,3,3,3]
+    ];
+
+    const els = {
+      typeCount:document.getElementById("typeCount"),
+      selectors:document.getElementById("selectors"),
+      customConfig:document.getElementById("customConfig"),
+      verifyBtn:document.getElementById("verifyBtn"),
+      investigateBtn:document.getElementById("investigateBtn"),
+      animateBtn:document.getElementById("animateBtn"),
+      pauseBtn:document.getElementById("pauseBtn"),
+      nextBtn:document.getElementById("nextBtn"),
+      clearBtn:document.getElementById("clearBtn"),
+      helpBtn:document.getElementById("helpBtn"),
+      fullscreenBtn:document.getElementById("fullscreenBtn"),
+      status:document.getElementById("status"),
+      caption:document.getElementById("caption"),
+      solutionCounter:document.getElementById("solutionCounter"),
+      vertexCode:document.getElementById("vertexCode"),
+      equation:document.getElementById("equation"),
+      classification:document.getElementById("classification"),
+      angleTotal:document.getElementById("angleTotal"),
+      difference:document.getElementById("difference"),
+      diagnosisSymbol:document.getElementById("diagnosisSymbol"),
+      diagnosis:document.getElementById("diagnosis"),
+      meterFill:document.getElementById("meterFill"),
+      angularExamples:document.getElementById("angularExamples"),
+      legend:document.getElementById("legend"),
+      canvas:document.getElementById("canvas"),
+      toast:document.getElementById("toast")
+    };
+
+    const ctx = els.canvas.getContext("2d");
+
+    let currentConfig = [];
+    let currentResult = null;
+    let solutions = [];
+    let solutionIndex = -1;
+    let drawnCount = 0;
+    let timer = null;
+    let paused = false;
+
+    const interiorAngle = n => ((n-2)*180)/n;
+    const vertexCode = arr => `(${arr.join(", ")})`;
+    const formatNumber = value => Number(value.toFixed(2));
+    const typeKey = arr => [...new Set(arr)].sort((a,b)=>a-b).join("-");
+
+    function canonicalCycle(arr){
+      const variants = [];
+      const reversed = [...arr].reverse();
+
+      for(const sequence of [arr,reversed]){
+        for(let i=0;i<sequence.length;i++){
+          variants.push(
+            sequence.slice(i).concat(sequence.slice(0,i)).join("-")
+          );
+        }
+      }
+      return variants.sort()[0];
+    }
+
+    const CLASSIC_KEYS = new Set(CLASSIC_TILINGS.map(canonicalCycle));
+
+    function isClassicCycle(config){
+      return CLASSIC_KEYS.has(canonicalCycle(config));
+    }
+
+    function showToast(message){
+      els.toast.textContent = message;
+      els.toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(()=>els.toast.classList.remove("show"),2800);
+    }
+
+    function polygonOptions(selected){
+      return POLYGON_SIDES.map(n=>
+        `<option value="${n}" ${Number(selected)===n?"selected":""}>${polygonData(n).name} — ${formatNumber(interiorAngle(n))}°</option>`
+      ).join("");
+    }
+
+    function rebuildSelectors(values=[]){
+      const count = Number(els.typeCount.value);
+      const defaults = [3,4,6,8];
+      els.selectors.innerHTML = "";
+
+      for(let i=0;i<count;i++){
+        const n = Number(values[i] || defaults[i]);
+        const data = polygonData(n);
+        const row = document.createElement("div");
+        row.className = "selector";
+        row.innerHTML = `
+          <div class="selector-number" style="background:${data.color}">${i+1}</div>
+          <div class="selector-content">
+            <select class="polygon-select" aria-label="Polígono ${i+1}">
+              ${polygonOptions(n)}
+            </select>
+            <div class="angle-hint">Ângulo interno: <strong>${formatNumber(interiorAngle(n))}°</strong></div>
+          </div>`;
+
+        const select = row.querySelector("select");
+        const number = row.querySelector(".selector-number");
+        const hint = row.querySelector(".angle-hint");
+
+        select.addEventListener("change",()=>{
+          const side = Number(select.value);
+          number.style.background = polygonData(side).color;
+          hint.innerHTML = `Ângulo interno: <strong>${formatNumber(interiorAngle(side))}°</strong>`;
+        });
+
+        els.selectors.appendChild(row);
+      }
+    }
+
+    function getSelectedTypes(){
+      return [...document.querySelectorAll(".polygon-select")].map(s=>Number(s.value));
+    }
+
+    function validateDifferentTypes(types){
+      if(new Set(types).size !== types.length){
+        showToast("Selecione polígonos diferentes em cada campo.");
+        return false;
+      }
+      return true;
+    }
+
+    function sameTypes(config,types){
+      return typeKey(config)===typeKey(types);
+    }
+
+    function multisetKey(arr){
+      const counts = {};
+      arr.forEach(n=>counts[n]=(counts[n]||0)+1);
+      return Object.keys(counts)
+        .sort((a,b)=>a-b)
+        .map(k=>`${k}x${counts[k]}`)
+        .join("|");
+    }
+
+    function enumerateExactCombinations(types,maxPieces=10){
+      const results = [];
+      const tolerance = 1e-7;
+
+      function search(index,totalPieces,counts,totalAngle){
+        if(index===types.length){
+          const usedPieces=counts.reduce((a,b)=>a+b,0);
+          if(usedPieces!==totalPieces || counts.some(c=>c<1)) return;
+
+          if(Math.abs(totalAngle-360)<tolerance){
+            const config=[];
+            types.forEach((n,i)=>{
+              for(let k=0;k<counts[i];k++) config.push(n);
+            });
+            results.push(config);
+          }
+          return;
+        }
+
+        const remainingTypes=types.length-index-1;
+        const alreadyUsed=counts.reduce((a,b)=>a+b,0);
+        const maximum=totalPieces-alreadyUsed-remainingTypes;
+
+        for(let count=1;count<=maximum;count++){
+          const newTotal=totalAngle+count*interiorAngle(types[index]);
+          if(newTotal>360+tolerance) break;
+
+          counts.push(count);
+          search(index+1,totalPieces,counts,newTotal);
+          counts.pop();
+        }
+      }
+
+      for(let pieces=Math.max(3,types.length);pieces<=maxPieces;pieces++){
+        search(0,pieces,[],0);
+      }
+
+      const unique = new Map();
+      results.forEach(config=>unique.set(multisetKey(config),config));
+      return [...unique.values()];
+    }
+
+    function arrangeForDisplay(config){
+      const counts={};
+      config.forEach(n=>counts[n]=(counts[n]||0)+1);
+      const sides=Object.keys(counts).map(Number);
+      const output=[];
+      let last=null;
+
+      while(output.length<config.length){
+        sides.sort((a,b)=>{
+          const scoreA=counts[a]-(a===last?100:0);
+          const scoreB=counts[b]-(b===last?100:0);
+          return scoreB-scoreA;
+        });
+
+        const chosen=
+          sides.find(n=>counts[n]>0 && n!==last) ??
+          sides.find(n=>counts[n]>0);
+
+        output.push(chosen);
+        counts[chosen]--;
+        last=chosen;
+      }
+      return output;
+    }
+
+    function nearestConfiguration(types,maxPieces=10){
+      let best=null;
+
+      function search(index,totalPieces,counts,totalAngle){
+        if(index===types.length){
+          const used=counts.reduce((a,b)=>a+b,0);
+          if(used!==totalPieces || counts.some(c=>c<1)) return;
+
+          const config=[];
+          types.forEach((n,i)=>{
+            for(let k=0;k<counts[i];k++) config.push(n);
+          });
+
+          const difference=Math.abs(360-totalAngle);
+
+          if(
+            !best ||
+            difference<best.difference ||
+            (
+              Math.abs(difference-best.difference)<1e-8 &&
+              config.length<best.config.length
+            )
+          ){
+            best={config,totalAngle,difference};
+          }
+          return;
+        }
+
+        const remainingTypes=types.length-index-1;
+        const alreadyUsed=counts.reduce((a,b)=>a+b,0);
+        const maximum=totalPieces-alreadyUsed-remainingTypes;
+
+        for(let count=1;count<=maximum;count++){
+          counts.push(count);
+          search(
+            index+1,
+            totalPieces,
+            counts,
+            totalAngle+count*interiorAngle(types[index])
+          );
+          counts.pop();
+        }
+      }
+
+      for(let pieces=Math.max(3,types.length);pieces<=maxPieces;pieces++){
+        search(0,pieces,[],0);
+      }
+      return best;
+    }
+
+    function buildSolutions(types){
+      const list=[];
+      const seen=new Set();
+
+      CLASSIC_TILINGS
+        .filter(config=>sameTypes(config,types))
+        .forEach(config=>{
+          const key=canonicalCycle(config);
+          if(!seen.has(key)){
+            list.push({config:config.slice(),kind:"classic"});
+            seen.add(key);
+          }
+        });
+
+      enumerateExactCombinations(types).forEach(config=>{
+        const display=arrangeForDisplay(config);
+        const key=multisetKey(display);
+        const already=list.some(item=>multisetKey(item.config)===key);
+
+        if(!already){
+          list.push({
+            config:display,
+            kind:isClassicCycle(display)?"classic":"local"
+          });
+        }
+      });
+
+      return list.sort((a,b)=>{
+        if(a.kind!==b.kind) return a.kind==="classic"?-1:1;
+        return a.config.length-b.config.length;
+      });
+    }
+
+    function analyze(config,kind="hypothesis"){
+      const angles=config.map(interiorAngle);
+      const total=angles.reduce((a,b)=>a+b,0);
+      const delta=360-total;
+
+      return {
+        config:config.slice(),
+        angles,
+        total,
+        delta,
+        exact:Math.abs(delta)<1e-7,
+        kind
+      };
+    }
+
+    function classifyConfig(config){
+      const result=analyze(config);
+
+      if(result.exact && isClassicCycle(config)){
+        result.kind="classic";
+      }else if(result.exact){
+        result.kind="local";
+      }else{
+        result.kind="hypothesis";
+      }
+      return result;
+    }
+
+    function setStatus(result){
+      els.status.className="status";
+
+      if(result.kind==="classic"){
+        els.status.classList.add("success");
+        els.status.textContent="✓ LADRILHAMENTO UNIFORME";
+      }else if(result.exact){
+        els.status.classList.add("warning");
+        els.status.textContent="△ COMPATIBILIDADE LOCAL";
+      }else{
+        els.status.classList.add("danger");
+        els.status.textContent="✕ NÃO FECHA O VÉRTICE";
+      }
+    }
+
+    function updateSolutionCounter(){
+      if(!solutions.length){
+        els.solutionCounter.textContent="Solução 0 de 0";
+      }else{
+        els.solutionCounter.textContent=`Solução ${solutionIndex+1} de ${solutions.length}`;
+      }
+    }
+
+    function updateAnalysis(result){
+      currentResult=result;
+      currentConfig=result.config.slice();
+
+      els.vertexCode.textContent=vertexCode(result.config);
+      els.equation.textContent=
+        `${result.angles.map(a=>`${formatNumber(a)}°`).join(" + ")} = ${formatNumber(result.total)}°`;
+      els.angleTotal.textContent=`${formatNumber(result.total)}°`;
+
+      if(result.kind==="classic"){
+        els.classification.textContent=
+          "O código corresponde a um dos ladrilhamentos uniformes clássicos formados por polígonos regulares.";
+        els.difference.textContent="Soma exata: o vértice fecha em 360°.";
+        els.diagnosisSymbol.textContent="✓";
+        els.diagnosis.textContent="Encaixe local perfeito e repetição uniforme conhecida.";
+        els.caption.textContent="Configuração uniforme clássica, sem lacunas ou sobreposições.";
+      }else if(result.exact){
+        els.classification.textContent=
+          "O código apresenta compatibilidade angular local. A repetição coerente em todo o plano precisa ser investigada.";
+        els.difference.textContent="Soma exata: há compatibilidade angular local.";
+        els.diagnosisSymbol.textContent="△";
+        els.diagnosis.textContent="O vértice fecha, mas o ladrilhamento global não está confirmado.";
+        els.caption.textContent="A hipótese fecha localmente. Analise sua repetição nos demais vértices.";
+      }else if(result.delta>0){
+        els.classification.textContent=
+          "A soma angular é menor que 360°, portanto a configuração deixa uma abertura no vértice.";
+        els.difference.textContent=`Lacuna de ${formatNumber(result.delta)}°.`;
+        els.diagnosisSymbol.textContent="◔";
+        els.diagnosis.textContent=`Falta um setor angular de ${formatNumber(result.delta)}°.`;
+        els.caption.textContent=`A hipótese deixa uma lacuna de ${formatNumber(result.delta)}°.`;
+      }else{
+        els.classification.textContent=
+          "A soma angular ultrapassa 360°, portanto as peças não podem ocupar o mesmo vértice sem sobreposição.";
+        els.difference.textContent=`Sobreposição de ${formatNumber(Math.abs(result.delta))}°.`;
+        els.diagnosisSymbol.textContent="✕";
+        els.diagnosis.textContent=`As peças se sobrepõem em ${formatNumber(Math.abs(result.delta))}°.`;
+        els.caption.textContent=`A hipótese produz sobreposição de ${formatNumber(Math.abs(result.delta))}°.`;
+      }
+
+      const percent=Math.min(100,(result.total/360)*100);
+      els.meterFill.style.width=`${percent}%`;
+
+      if(result.kind==="classic"){
+        els.meterFill.style.background="linear-gradient(90deg,#167b73,#238268)";
+      }else if(result.exact){
+        els.meterFill.style.background="linear-gradient(90deg,#d79b2d,#df6f52)";
+      }else if(result.delta>0){
+        els.meterFill.style.background="linear-gradient(90deg,#d7a437,#df7652)";
+      }else{
+        els.meterFill.style.background="linear-gradient(90deg,#df6f52,#c64d52)";
+      }
+
+      setStatus(result);
+      renderLegend(result.config);
+      updateSolutionCounter();
+    }
+
+    function investigateSelection(){
+      const types=getSelectedTypes();
+      if(!validateDifferentTypes(types)) return;
+
+      solutions=buildSolutions(types);
+      solutionIndex=0;
+
+      if(solutions.length){
+        const item=solutions[0];
+        updateAnalysis(analyze(item.config,item.kind));
+        startAnimation();
+
+        if(solutions.length>1){
+          showToast(`${solutions.length} soluções encontradas. Use “Próxima solução” para compará-las.`);
+        }
+      }else{
+        const nearest=nearestConfiguration(types);
+
+        if(nearest){
+          const config=arrangeForDisplay(nearest.config);
+          solutions=[{config,kind:"hypothesis"}];
+          solutionIndex=0;
+          updateAnalysis(analyze(config,"hypothesis"));
+          startAnimation();
+
+          if(types.length===4){
+            showToast("Nenhuma soma exata: quatro tipos distintos ultrapassam 360° no mesmo vértice.");
+          }else{
+            showToast("Nenhuma soma exata foi encontrada; exibindo a aproximação mais próxima.");
+          }
+        }
+      }
+    }
+
+    function parseTypedConfig(){
+      const text=els.customConfig.value.trim();
+
+      if(!text){
+        showToast("Digite uma configuração para verificar.");
+        els.customConfig.focus();
+        return;
+      }
+
+      const matches=text.match(/\d+/g);
+
+      if(!matches || matches.length<3){
+        showToast("Informe pelo menos três polígonos. Exemplo: (4, 8, 8).");
+        return;
+      }
+
+      if(matches.length>12){
+        showToast("Use no máximo 12 polígonos em uma configuração.");
+        return;
+      }
+
+      const config=matches.map(Number);
+
+      if(config.some(n=>!Number.isInteger(n) || n<3 || n>60)){
+        showToast("Cada número deve representar um polígono regular de 3 a 60 lados.");
+        return;
+      }
+
+      const result=classifyConfig(config);
+      solutions=[{config:config.slice(),kind:result.kind}];
+      solutionIndex=0;
+      updateAnalysis(result);
+      startAnimation();
+
+      const types=[...new Set(config)].sort((a,b)=>a-b);
+      if(types.length<=4){
+        els.typeCount.value=String(types.length);
+        rebuildSelectors(types);
+      }
+
+      if(result.kind==="classic"){
+        showToast("Código verificado: ladrilhamento uniforme clássico.");
+      }else if(result.exact){
+        showToast("Código verificado: soma 360°, com compatibilidade angular local.");
+      }else if(result.delta>0){
+        showToast(`Código verificado: sobra uma lacuna de ${formatNumber(result.delta)}°.`);
+      }else{
+        showToast(`Código verificado: ocorre sobreposição de ${formatNumber(Math.abs(result.delta))}°.`);
+      }
+    }
+
+    function nextSolution(){
+      if(!solutions.length){
+        showToast("Realize uma investigação primeiro.");
+        return;
+      }
+
+      solutionIndex=(solutionIndex+1)%solutions.length;
+      const item=solutions[solutionIndex];
+      updateAnalysis(analyze(item.config,item.kind));
+      startAnimation();
+    }
+
+    function renderLegend(config){
+      const unique=[...new Set(config)];
+      els.legend.innerHTML=unique.map(n=>{
+        const data=polygonData(n);
+        return `
+          <span class="legend-item">
+            <i class="swatch" style="background:${data.color}"></i>
+            ${data.name}: ${formatNumber(interiorAngle(n))}°
+          </span>`;
+      }).join("");
+    }
+
+    function resizeCanvas(){
+      const rect=els.canvas.getBoundingClientRect();
+      const dpr=Math.max(1,window.devicePixelRatio||1);
+
+      els.canvas.width=Math.round(rect.width*dpr);
+      els.canvas.height=Math.round(rect.height*dpr);
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      redraw();
+    }
+
+    function clearCanvas(){
+      const rect=els.canvas.getBoundingClientRect();
+      ctx.clearRect(0,0,rect.width,rect.height);
+    }
+
+    function drawBackground(){
+      const rect=els.canvas.getBoundingClientRect();
+      const cx=rect.width/2;
+      const cy=rect.height/2+12;
+
+      ctx.save();
+      ctx.strokeStyle="rgba(18,85,78,.13)";
+      ctx.lineWidth=1;
+
+      for(let radius=54;radius<Math.min(rect.width,rect.height)*.48;radius+=44){
+        ctx.beginPath();
+        ctx.arc(cx,cy,radius,0,Math.PI*2);
+        ctx.stroke();
+      }
+
+      for(let degree=0;degree<360;degree+=30){
+        const a=(degree-90)*Math.PI/180;
+        ctx.beginPath();
+        ctx.moveTo(cx,cy);
+        ctx.lineTo(
+          cx+Math.cos(a)*Math.min(rect.width,rect.height)*.45,
+          cy+Math.sin(a)*Math.min(rect.width,rect.height)*.45
+        );
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function polygonPoints(n,side,startAngle,cx,cy){
+      const points=[{x:cx,y:cy}];
+      let x=cx;
+      let y=cy;
+      const exterior=2*Math.PI/n;
+
+      for(let k=0;k<n-1;k++){
+        const a=startAngle+k*exterior;
+        x+=side*Math.cos(a);
+        y+=side*Math.sin(a);
+        points.push({x,y});
+      }
+      return points;
+    }
+
+    function calculateSideLength(maxN,rect){
+      const availableRadius=Math.min(rect.width,rect.height)*0.34;
+      const geometricSide=2*availableRadius*Math.sin(Math.PI/maxN);
+      return Math.max(17,Math.min(105,geometricSide));
+    }
+
+    function drawPolygon(n,startDegree,side){
+      const rect=els.canvas.getBoundingClientRect();
+      const cx=rect.width/2;
+      const cy=rect.height/2+12;
+      const start=(startDegree-90)*Math.PI/180;
+      const points=polygonPoints(n,side,start,cx,cy);
+      const data=polygonData(n);
+
+      ctx.save();
+      ctx.beginPath();
+
+      points.forEach((point,index)=>{
+        if(index===0) ctx.moveTo(point.x,point.y);
+        else ctx.lineTo(point.x,point.y);
+      });
+
+      ctx.closePath();
+      ctx.fillStyle=`${data.color}d9`;
+      ctx.fill();
+      ctx.strokeStyle="#174640";
+      ctx.lineWidth=2;
+      ctx.stroke();
+
+      const centroid=points.reduce(
+        (acc,point)=>({
+          x:acc.x+point.x/points.length,
+          y:acc.y+point.y/points.length
+        }),
+        {x:0,y:0}
+      );
+
+      if(n<=24 || side>=28){
+        ctx.fillStyle="#123a35";
+        ctx.font="900 13px Inter,Segoe UI";
+        ctx.textAlign="center";
+        ctx.textBaseline="middle";
+        ctx.fillText(`${n}`,centroid.x,centroid.y);
+      }
+      ctx.restore();
+    }
+
+    function drawDefect(result,usedAngle){
+      if(Math.abs(result.delta)<1e-7) return;
+
+      const rect=els.canvas.getBoundingClientRect();
+      const cx=rect.width/2;
+      const cy=rect.height/2+12;
+      const radius=Math.min(116,rect.width*.15);
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(cx,cy);
+
+      if(result.delta>0){
+        const start=(usedAngle-90)*Math.PI/180;
+        const end=(360-90)*Math.PI/180;
+        ctx.arc(cx,cy,radius,start,end);
+        ctx.fillStyle="rgba(215,155,45,.36)";
+        ctx.strokeStyle="#ac7113";
+      }else{
+        const overlap=Math.abs(result.delta);
+        const start=(360-overlap-90)*Math.PI/180;
+        const end=(360-90)*Math.PI/180;
+        ctx.arc(cx,cy,radius,start,end);
+        ctx.fillStyle="rgba(198,77,82,.37)";
+        ctx.strokeStyle="#a5363c";
+      }
+
+      ctx.closePath();
+      ctx.fill();
+      ctx.lineWidth=2;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawCenter(){
+      const rect=els.canvas.getBoundingClientRect();
+      const cx=rect.width/2;
+      const cy=rect.height/2+12;
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx,cy,8,0,Math.PI*2);
+      ctx.fillStyle=currentResult?.kind==="classic"?"#238268":"#155b54";
+      ctx.fill();
+      ctx.lineWidth=4;
+      ctx.strokeStyle="#fff";
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function drawEmptyState(){
+      const rect=els.canvas.getBoundingClientRect();
+      const cx=rect.width/2;
+      const cy=rect.height/2;
+
+      ctx.save();
+      ctx.textAlign="center";
+      ctx.fillStyle="#617772";
+      ctx.font="900 22px Inter,Segoe UI";
+      ctx.fillText("Formule uma hipótese de ladrilhamento",cx,cy-8);
+      ctx.font="15px Inter,Segoe UI";
+      ctx.fillText("A construção e a análise aparecerão neste laboratório.",cx,cy+22);
+      ctx.restore();
+    }
+
+    function redraw(){
+      clearCanvas();
+      drawBackground();
+
+      if(!currentResult){
+        drawEmptyState();
+        return;
+      }
+
+      const rect=els.canvas.getBoundingClientRect();
+      const maxN=Math.max(...currentConfig);
+      const side=calculateSideLength(maxN,rect);
+      let usedAngle=0;
+
+      for(let i=0;i<Math.min(drawnCount,currentConfig.length);i++){
+        const n=currentConfig[i];
+        drawPolygon(n,usedAngle,side);
+        usedAngle+=interiorAngle(n);
+      }
+
+      if(drawnCount>=currentConfig.length){
+        drawDefect(currentResult,usedAngle);
+      }
+      drawCenter();
+    }
+
+    function stopAnimation(){
+      if(timer){
+        clearInterval(timer);
+        timer=null;
+      }
+    }
+
+    function startAnimation(){
+      if(!currentResult){
+        showToast("Realize uma investigação ou escolha um exemplo.");
+        return;
+      }
+
+      stopAnimation();
+      drawnCount=0;
+      paused=false;
+      els.pauseBtn.textContent="⏸ Pausar";
+      redraw();
+
+      timer=setInterval(()=>{
+        if(paused) return;
+
+        drawnCount++;
+        redraw();
+
+        if(drawnCount>=currentConfig.length){
+          stopAnimation();
+        }
+      },480);
+    }
+
+    function resetPlatform(){
+      stopAnimation();
+      solutions=[];
+      solutionIndex=-1;
+      currentConfig=[];
+      currentResult=null;
+      drawnCount=0;
+
+      els.customConfig.value="";
+      els.status.className="status";
+      els.status.textContent="Aguardando investigação";
+      els.caption.textContent="Selecione os polígonos ou digite um código.";
+      els.solutionCounter.textContent="Solução 0 de 0";
+      els.vertexCode.textContent="—";
+      els.equation.textContent="Nenhuma configuração analisada.";
+      els.classification.textContent="A plataforma exibirá a estrutura angular e a classificação matemática.";
+      els.angleTotal.textContent="0°";
+      els.difference.textContent="Faltam 360°.";
+      els.diagnosisSymbol.textContent="◇";
+      els.diagnosis.textContent="Sem dados para análise.";
+      els.meterFill.style.width="0%";
+      els.legend.innerHTML="";
+      redraw();
+    }
+
+    function loadExample(config){
+      const result=classifyConfig(config);
+      solutions=[{config:config.slice(),kind:result.kind}];
+      solutionIndex=0;
+      updateAnalysis(result);
+      startAnimation();
+
+      els.customConfig.value=vertexCode(config);
+
+      const types=[...new Set(config)].sort((a,b)=>a-b);
+      if(types.length<=4){
+        els.typeCount.value=String(types.length);
+        rebuildSelectors(types);
+      }
+
+      document.querySelector(".main").scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+    }
+
+    function renderAngularExamples(){
+      els.angularExamples.innerHTML=ANGULAR_EXAMPLES.map(config=>
+        `<button class="chip" data-code="${config.join("-")}">${vertexCode(config)}</button>`
+      ).join("");
+
+      els.angularExamples.querySelectorAll("button").forEach(button=>{
+        button.addEventListener("click",()=>{
+          loadExample(button.dataset.code.split("-").map(Number));
+        });
+      });
+    }
+
+    els.typeCount.addEventListener("change",()=>rebuildSelectors());
+    els.investigateBtn.addEventListener("click",investigateSelection);
+    els.verifyBtn.addEventListener("click",parseTypedConfig);
+    els.animateBtn.addEventListener("click",startAnimation);
+    els.nextBtn.addEventListener("click",nextSolution);
+
+    els.customConfig.addEventListener("keydown",event=>{
+      if(event.key==="Enter"){
+        event.preventDefault();
+        parseTypedConfig();
+      }
+    });
+
+    els.pauseBtn.addEventListener("click",()=>{
+      if(!timer){
+        showToast("A animação não está em execução.");
+        return;
+      }
+
+      paused=!paused;
+      els.pauseBtn.textContent=paused?"▶ Continuar":"⏸ Pausar";
+    });
+
+    els.clearBtn.addEventListener("click",resetPlatform);
+
+    els.helpBtn.addEventListener("click",()=>{
+      alert(
+`ROTEIRO DE INVESTIGAÇÃO
+
+PELA SELEÇÃO
+1. Escolha de 1 a 4 tipos diferentes de polígonos.
+2. Clique em “Investigar seleção”.
+3. Use “Próxima solução” quando houver mais de uma configuração.
+
+PELO CÓDIGO
+1. Digite uma configuração, como:
+   (3, 6, 3, 6)
+   4-8-8
+   3 3 4 3 4
+2. Clique em “Verificar” ou pressione Enter.
+3. Observe a soma dos ângulos e o diagnóstico.
+
+CLASSIFICAÇÕES
+• Ladrilhamento uniforme clássico.
+• Compatibilidade angular local.
+• Configuração com lacuna.
+• Configuração com sobreposição.
+
+A plataforma aceita polígonos regulares de 3 a 60 lados.`
+      );
+    });
+
+    els.fullscreenBtn.addEventListener("click",async()=>{
+      try{
+        if(!document.fullscreenElement){
+          await document.documentElement.requestFullscreen();
+        }else{
+          await document.exitFullscreen();
+        }
+      }catch(error){
+        showToast("O navegador bloqueou o modo de tela cheia.");
+      }
+    });
+
+    window.addEventListener("resize",resizeCanvas);
+
+    rebuildSelectors([3,6]);
+    renderAngularExamples();
+    requestAnimationFrame(resizeCanvas);
+  })();
+  </script>
+</body>
+</html>
