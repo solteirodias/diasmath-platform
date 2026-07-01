@@ -527,87 +527,19 @@
       .custom-row{grid-template-columns:1fr}
       .canvas-box{height:425px}
     }
-  
-    /* ===== DIASMATH LABS — identidade profissional ===== */
-    .diasmath-labs-bar{
-      position:sticky;top:0;z-index:100;
-      display:flex;align-items:center;justify-content:space-between;gap:16px;
-      padding:12px 18px;margin:-16px -16px 16px;
-      background:rgba(255,255,255,.9);
-      border-bottom:1px solid rgba(215,228,223,.9);
-      backdrop-filter:blur(14px);
-      box-shadow:0 8px 24px rgba(15,60,55,.08);
-    }
-    .diasmath-labs-brand{display:flex;align-items:center;gap:12px;min-width:0}
-    .diasmath-labs-icon{
-      width:42px;height:42px;display:grid;place-items:center;border-radius:14px;
-      color:#fff;font-weight:950;background:linear-gradient(135deg,#1D4ED8,#16A34A);
-      box-shadow:0 10px 24px rgba(29,78,216,.18);
-    }
-    .diasmath-labs-title{line-height:1.1;min-width:0}
-    .diasmath-labs-title strong{
-      display:block;color:#0F172A;font-size:.96rem;letter-spacing:.08em;text-transform:uppercase;
-    }
-    .diasmath-labs-title span{display:block;margin-top:2px;color:#64748b;font-size:.84rem;font-weight:800}
-    .diasmath-labs-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-    .diasmath-labs-link{
-      display:inline-flex;align-items:center;justify-content:center;min-height:38px;
-      padding:8px 12px;border-radius:999px;color:#0F172A;background:#fff;border:1px solid #dbe7ef;
-      text-decoration:none;font-size:.82rem;font-weight:900;transition:.18s ease;
-    }
-    .diasmath-labs-link:hover{transform:translateY(-1px);border-color:#1D4ED8;color:#1D4ED8}
-    .diasmath-labs-link.primary{color:#fff;background:linear-gradient(135deg,#1D4ED8,#167b73);border-color:transparent}
-    .lab-kicker{
-      display:inline-flex;align-items:center;gap:8px;margin-bottom:8px;padding:7px 11px;border-radius:999px;
-      background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.20);
-      color:#dffaf4;font-size:.74rem;font-weight:950;letter-spacing:.12em;text-transform:uppercase;
-    }
-    .hero{
-      background:radial-gradient(circle at 95% 0%,rgba(250,204,21,.18),transparent 30%),
-      linear-gradient(125deg,#0F172A 0%,#1D4ED8 45%,#167b73 100%) !important;
-    }
-    .brand-mark{background:linear-gradient(145deg,#1D4ED8,#16A34A) !important}
-    .btn-primary{background:linear-gradient(135deg,#1D4ED8,#167b73) !important}
-    .lab-professor-note{
-      margin-top:16px;padding:14px;border-radius:18px;background:linear-gradient(135deg,#eef6ff,#f5fff8);
-      border:1px solid #dbeafe;color:#334155;font-size:.88rem;line-height:1.5;
-    }
-    .lab-professor-note strong{color:#1D4ED8}
-    @media(max-width:700px){
-      .diasmath-labs-bar{align-items:flex-start;flex-direction:column;margin:-7px -7px 10px}
-      .diasmath-labs-actions{width:100%;justify-content:flex-start}
-    }
-
   </style>
 </head>
 
 <body>
   <div class="shell">
-
-    <nav class="diasmath-labs-bar" aria-label="Navegação DIASMATH LABS">
-      <div class="diasmath-labs-brand">
-        <div class="diasmath-labs-icon">DM</div>
-        <div class="diasmath-labs-title">
-          <strong>DIASMATH LABS</strong>
-          <span>Laboratório de Geometria · GeoTessela Lab</span>
-        </div>
-      </div>
-      <div class="diasmath-labs-actions">
-        <a class="diasmath-labs-link" href="/labs">← Voltar aos Labs</a>
-        <a class="diasmath-labs-link" href="/">DIASMATH</a>
-        <a class="diasmath-labs-link primary" href="#canvas">Iniciar investigação</a>
-      </div>
-    </nav>
-
     <header class="hero">
       <div class="hero-row">
         <div class="brand">
           <div class="brand-mark">⬡</div>
           <div>
             
-            <div class="lab-kicker">DIASMATH LABS · Laboratório de Geometria</div>
             <h1>GeoTessela Lab</h1>
-             <p>Laboratório digital de Geometria para investigar tesselações com polígonos regulares. O ambiente permite formular conjecturas, testar códigos de vértices, visualizar encaixes, analisar somas angulares e diferenciar compatibilidade local de ladrilhamentos uniformes clássicos.</p>
+             <p>Laboratório de Geometria e Tesselações é uma Plataforma dinâmica de investigação matemática desenvolvida para explorar ladrilhamentos com polígonos regulares. O ambiente permite formular conjecturas, testar diferentes códigos de vértices, visualizar o encaixe das figuras e analisar as condições angulares e geométricas necessárias para o recobrimento do plano, identificando configurações válidas, lacunas, sobreposições e possibilidades de repetição do padrão.
           </div>
         </div>
 
@@ -673,11 +605,6 @@
         <div class="note">
           <strong>Critério central:</strong> os ângulos internos que se encontram em um mesmo vértice precisam somar exatamente <strong>360°</strong>. A plataforma diferencia uma compatibilidade apenas local de um ladrilhamento uniforme clássico.
         </div>
-
-        <div class="lab-professor-note">
-          <strong>Uso pedagógico sugerido:</strong> peça aos estudantes que formulem uma hipótese, testem o código do vértice, registrem a soma angular e justifiquem se há lacuna, sobreposição ou encaixe exato.
-        </div>
-
       </aside>
 
       <main class="card main">
