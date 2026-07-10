@@ -5,12 +5,12 @@ import { ModuleCard } from "@/components/ModuleCard";
 
 const modules = [
   {
-    title: "DiasMath Play",
+    title: "DIASMATH™ Play",
     emoji: "🎮",
     description: "Jogos educativos para desenvolver habilidades matemáticas com diversão, desafios e progresso."
   },
   {
-    title: "DiasMath Labs",
+    title: "DIASMATH™ Labs",
     emoji: "🧪",
     description: "Laboratórios digitais para explorar conceitos, manipular objetos e visualizar ideias matemáticas."
   },
@@ -46,7 +46,7 @@ export default function Home() {
           <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 md:grid-cols-2 md:py-24">
             <div>
               <p className="mb-4 inline-flex rounded-full bg-blue-100 px-4 py-2 text-sm font-semibold text-diasmath-blue">
-                A plataforma DIASMATH está nascendo
+                A plataforma DIASMATH™ está nascendo
               </p>
 
               <h1 className="text-4xl font-black tracking-tight text-slate-950 md:text-6xl">
