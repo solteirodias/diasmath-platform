@@ -3,8 +3,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "DIASMATH",
-    template: "%s | DIASMATH",
+    default: "DIASMATH™",
+    template: "%s | DIASMATH™",
   },
   description:
     "Jogos, laboratórios digitais e tecnologia educacional para transformar o ensino da Matemática.",
