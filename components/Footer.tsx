@@ -2,12 +2,18 @@ export function Footer() {
   return (
     <footer className="border-t border-slate-200 bg-white">
       <div className="mx-auto max-w-7xl px-6 py-8 text-sm text-slate-600">
-        <p className="font-semibold text-slate-900">DIASMATH</p>
+        <p className="font-semibold text-slate-900">DIASMATH™</p>
+
         <p className="mt-2">
           Jogos, laboratórios digitais e tecnologia educacional para o ensino da Matemática.
         </p>
+
         <p className="mt-4">
-          © 2026 Francisco Vieira Dias — DIASMATH. Todos os direitos reservados.
+          © 2026 Francisco Vieira Dias — DIASMATH™. Todos os direitos reservados.
+        </p>
+
+        <p className="mt-2 text-xs text-slate-500">
+          DIASMATH™ é marca em processo de registro junto ao INPI.
         </p>
       </div>
     </footer>
