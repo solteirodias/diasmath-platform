@@ -1,0 +1,8 @@
+{
+  title: "Laboratório Virtual de Xadrez",
+  status: "Publicado",
+  description:
+    "Ferramenta interativa para ensinar xadrez nos anos iniciais, com setas de movimento, turnos guiados, aulas por peças e montagem personalizada do tabuleiro.",
+  href: "/labs/laboratorio-virtual-xadrez",
+  emoji: "♟️",
+}

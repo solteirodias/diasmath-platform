@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#071a2e" />
+  <meta name="description" content="Laboratório virtual interativo da DIASMATH™ para ensinar xadrez nos anos iniciais, com setas de movimento, aulas guiadas e montagem personalizada de peças." />
+  <title>Laboratório Virtual de Xadrez | DIASMATH™</title>
+  <style>
+    :root {
+      --bg: #061527;
+      --bg-2: #0b2540;
+      --panel: rgba(10, 35, 59, 0.92);
+      --panel-soft: rgba(255, 255, 255, 0.08);
+      --text: #f7fbff;
+      --muted: #b7c9da;
+      --primary: #4fd1c5;
+      --primary-2: #22c55e;
+      --accent: #ffd166;
+      --danger: #ff6b6b;
+      --light-square: #e7cf9b;
+      --dark-square: #7b5135;
+      --board-frame: #a96e37;
+      --shadow: 0 18px 60px rgba(0, 0, 0, 0.35);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: Inter, ui-rounded, "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 15%, rgba(79, 209, 197, .16), transparent 24rem),
+        radial-gradient(circle at 90% 10%, rgba(255, 209, 102, .14), transparent 25rem),
+        linear-gradient(145deg, var(--bg), var(--bg-2));
+      overflow-x: hidden;
+    }
+
+    button, select, input { font: inherit; }
+    button { color: inherit; }
+    button:focus-visible, select:focus-visible, input:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .hidden { display: none !important; }
+
+    .intro {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 26px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .intro::before,
+    .intro::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(2px);
+      opacity: .65;
+      animation: float 7s ease-in-out infinite;
+    }
+    .intro::before {
+      width: 280px; height: 280px;
+      background: rgba(79, 209, 197, .14);
+      left: -90px; top: 12%;
+    }
+    .intro::after {
+      width: 220px; height: 220px;
+      background: rgba(255, 209, 102, .13);
+      right: -60px; bottom: 8%;
+      animation-delay: -3s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0); }
+      50% { transform: translateY(-24px) rotate(5deg); }
+    }
+
+    .intro-card {
+      width: min(1080px, 100%);
+      padding: clamp(26px, 5vw, 60px);
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(160deg, rgba(8, 31, 53, .96), rgba(6, 21, 39, .90));
+      border-radius: 34px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .brand-pill {
+      display: inline-flex;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid rgba(79, 209, 197, .36);
+      background: rgba(79, 209, 197, .10);
+      border-radius: 999px;
+      padding: 9px 16px;
+      color: #c9fff9;
+      font-weight: 800;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+      font-size: .82rem;
+    }
+
+    .hero-piece {
+      width: 108px; height: 108px;
+      display: grid; place-items: center;
+      margin: 22px auto 8px;
+      font-family: "Segoe UI Symbol", "Arial Unicode MS", serif;
+      font-size: 78px;
+      color: #fff7dc;
+      border-radius: 30px;
+      background: linear-gradient(145deg, #c28a4c, #70401f);
+      box-shadow: inset 0 3px 0 rgba(255,255,255,.18), 0 18px 34px rgba(0,0,0,.34);
+      transform: rotate(-3deg);
+      animation: piecePulse 2.8s ease-in-out infinite;
+    }
+
+    @keyframes piecePulse {
+      0%, 100% { transform: rotate(-3deg) translateY(0); }
+      50% { transform: rotate(2deg) translateY(-8px); }
+    }
+
+    h1 {
+      margin: 12px 0 10px;
+      font-size: clamp(2rem, 5vw, 4.2rem);
+      line-height: 1;
+      letter-spacing: -.045em;
+    }
+    h1 span { color: var(--accent); }
+
+    .intro-subtitle {
+      max-width: 760px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      line-height: 1.65;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin: 30px 0;
+      text-align: left;
+    }
+    .feature {
+      padding: 18px;
+      border-radius: 19px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .feature strong { display: block; margin: 8px 0 5px; }
+    .feature p { margin: 0; color: var(--muted); font-size: .92rem; line-height: 1.45; }
+    .feature-icon { font-size: 1.65rem; }
+
+    .primary-btn, .secondary-btn, .soft-btn, .danger-btn {
+      border: 0;
+      border-radius: 15px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform .18s ease, filter .18s ease, background .18s ease;
+    }
+    .primary-btn:hover, .secondary-btn:hover, .soft-btn:hover, .danger-btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
+    .primary-btn:active, .secondary-btn:active, .soft-btn:active, .danger-btn:active { transform: translateY(0); }
+    .primary-btn {
+      padding: 15px 26px;
+      background: linear-gradient(135deg, var(--primary), #2dd4bf);
+      color: #05201d;
+      box-shadow: 0 10px 24px rgba(79, 209, 197, .25);
+    }
+    .secondary-btn { padding: 12px 17px; background: var(--accent); color: #2a2107; }
+    .soft-btn { padding: 11px 14px; background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.10); }
+    .danger-btn { padding: 11px 14px; background: rgba(255,107,107,.16); border: 1px solid rgba(255,107,107,.28); color: #ffd9d9; }
+
+    .credit-line {
+      margin: 23px auto 0;
+      max-width: 900px;
+      color: #94a9bc;
+      font-size: .78rem;
+      line-height: 1.5;
+    }
+
+    .app {
+      min-height: 100vh;
+      padding: 12px;
+    }
+
+    .topbar {
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-radius: 20px;
+      background: rgba(6, 24, 42, .92);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 10px 35px rgba(0,0,0,.22);
+      position: sticky;
+      top: 8px;
+      z-index: 30;
+      backdrop-filter: blur(14px);
+    }
+    .topbar-title { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .mini-logo {
+      width: 45px; height: 45px; display: grid; place-items: center;
+      border-radius: 13px; background: linear-gradient(145deg, #c28a4c, #70401f);
+      font-size: 31px; font-family: "Segoe UI Symbol", serif;
+      flex: 0 0 auto;
+    }
+    .topbar-title strong { display: block; font-size: 1.05rem; }
+    .topbar-title small { color: var(--muted); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .topbar-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+
+    .topbar-actions a.soft-btn {
+      color: inherit;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .workspace {
+      width: min(1500px, 100%);
+      margin: 12px auto 0;
+      display: grid;
+      grid-template-columns: minmax(220px, 280px) minmax(440px, 1fr) minmax(240px, 310px);
+      gap: 12px;
+      align-items: start;
+    }
+
+    .panel {
+      border-radius: var(--radius);
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 15px 45px rgba(0,0,0,.20);
+      overflow: hidden;
+    }
+    .panel-section { padding: 16px; border-bottom: 1px solid rgba(255,255,255,.08); }
+    .panel-section:last-child { border-bottom: 0; }
+    .panel-title { margin: 0 0 10px; font-size: .82rem; text-transform: uppercase; letter-spacing: .09em; color: #9edbd5; }
+
+    .lesson-list { display: grid; gap: 8px; }
+    .lesson-card {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      align-items: center;
+      text-align: left;
+      gap: 10px;
+      padding: 11px;
+      border: 1px solid transparent;
+      background: rgba(255,255,255,.055);
+      border-radius: 15px;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+    .lesson-card:hover { transform: translateX(3px); background: rgba(255,255,255,.09); }
+    .lesson-card.active { border-color: rgba(79,209,197,.70); background: rgba(79,209,197,.13); }
+    .lesson-card .lesson-icon { font-size: 27px; text-align: center; font-family: "Segoe UI Symbol", serif; }
+    .lesson-card strong { display: block; font-size: .91rem; }
+    .lesson-card small { color: var(--muted); font-size: .76rem; }
+
+    .mode-control label { display: block; color: var(--muted); font-size: .83rem; margin-bottom: 7px; }
+    .select-control {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: #0d2a47;
+      color: white;
+    }
+
+    .mini-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .mini-actions .soft-btn { font-size: .82rem; }
+
+    .center-stage { min-width: 0; }
+    .coach {
+      display: grid;
+      grid-template-columns: 58px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      border-radius: 19px;
+      background: linear-gradient(135deg, rgba(79,209,197,.16), rgba(255,255,255,.06));
+      border: 1px solid rgba(79,209,197,.25);
+    }
+    .coach-avatar {
+      width: 58px; height: 58px; border-radius: 18px;
+      display: grid; place-items: center;
+      background: rgba(255,255,255,.10);
+      font-size: 34px;
+    }
+    .coach strong { display: block; margin-bottom: 4px; }
+    .coach p { margin: 0; color: #d3e5ef; line-height: 1.4; font-size: .91rem; }
+    .voice-btn {
+      width: 42px; height: 42px; border-radius: 13px; border: 0;
+      background: rgba(255,255,255,.12); cursor: pointer; font-size: 19px;
+    }
+
+    .board-wrap {
+      width: min(78vh, 100%);
+      aspect-ratio: 1;
+      margin: 0 auto;
+      padding: clamp(8px, 1.4vw, 16px);
+      background: linear-gradient(145deg, #c28a4c, #70401f);
+      border-radius: 24px;
+      box-shadow: var(--shadow), inset 0 3px 0 rgba(255,255,255,.18);
+      position: relative;
+      user-select: none;
+    }
+    .board-shell { width: 100%; height: 100%; position: relative; border-radius: 9px; overflow: hidden; }
+    .board { width: 100%; height: 100%; display: grid; grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr); position: relative; }
+    .square {
+      position: relative;
+      display: grid;
+      place-items: center;
+      border: 0;
+      padding: 0;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .square.light { background: var(--light-square); }
+    .square.dark { background: var(--dark-square); }
+    .square:hover { filter: brightness(1.07); }
+    .square.selected::after {
+      content: ""; position: absolute; inset: 5%; border: 4px solid var(--accent); border-radius: 14px; z-index: 5;
+      box-shadow: 0 0 0 2px rgba(0,0,0,.22);
+    }
+    .square.last-from::before, .square.last-to::before {
+      content: ""; position: absolute; inset: 0; background: rgba(255, 222, 89, .28); z-index: 1;
+    }
+    .square.in-check::before {
+      content: ""; position: absolute; inset: 0; background: rgba(255, 53, 70, .48); z-index: 1; animation: checkPulse 1s infinite;
+    }
+    @keyframes checkPulse { 50% { opacity: .55; } }
+
+    .piece {
+      position: relative; z-index: 4;
+      width: 78%; height: 78%;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      font-family: "Segoe UI Symbol", "Arial Unicode MS", serif;
+      font-size: clamp(30px, 7.1vw, 70px);
+      line-height: 1;
+      transition: transform .18s ease;
+      filter: drop-shadow(0 5px 3px rgba(0,0,0,.34));
+    }
+    .square:hover .piece { transform: translateY(-3px) scale(1.03); }
+    .piece.white { color: #fff8e6; text-shadow: 0 1px 0 #4b321b, 1px 0 0 #4b321b, -1px 0 0 #4b321b, 0 -1px 0 #4b321b; }
+    .piece.black { color: #17202a; text-shadow: 0 1px 0 #e7c995, 1px 0 0 #e7c995, -1px 0 0 #e7c995, 0 -1px 0 #e7c995; }
+
+    .move-dot, .capture-ring {
+      position: absolute; z-index: 6; pointer-events: none;
+    }
+    .move-dot {
+      width: 23%; aspect-ratio: 1; border-radius: 50%;
+      background: rgba(35, 203, 116, .86);
+      box-shadow: 0 0 0 6px rgba(35,203,116,.17);
+    }
+    .capture-ring {
+      inset: 7%; border-radius: 50%; border: clamp(4px, .5vw, 8px) solid rgba(255, 91, 91, .88);
+      box-shadow: inset 0 0 14px rgba(255,0,0,.18), 0 0 14px rgba(255,0,0,.22);
+    }
+
+    .coord {
+      position: absolute; z-index: 7; font-weight: 900; font-size: clamp(8px, 1.2vw, 13px); pointer-events: none;
+      opacity: .70;
+    }
+    .coord.file { right: 4px; bottom: 1px; }
+    .coord.rank { left: 4px; top: 1px; }
+    .square.light .coord { color: #69472f; }
+    .square.dark .coord { color: #f0d9b5; }
+
+    .arrow-layer { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 3; pointer-events: none; }
+    .movement-arrow { fill: none; stroke-linecap: round; stroke-linejoin: round; opacity: .54; }
+
+    .turn-strip {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      margin: 12px auto 0; width: min(78vh, 100%);
+      padding: 11px 13px; border-radius: 16px;
+      background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.08);
+    }
+    .turn-badge { display: inline-flex; align-items: center; gap: 8px; font-weight: 900; }
+    .turn-dot { width: 17px; height: 17px; border-radius: 50%; border: 2px solid rgba(255,255,255,.65); }
+    .turn-dot.white { background: #fff8e6; }
+    .turn-dot.black { background: #17202a; }
+    .status-text { color: var(--muted); font-size: .86rem; text-align: right; }
+
+    .piece-card { text-align: center; }
+    .piece-large {
+      height: 95px; display: grid; place-items: center; font-family: "Segoe UI Symbol", serif;
+      font-size: 76px; color: #fff4d1; filter: drop-shadow(0 7px 4px rgba(0,0,0,.32));
+    }
+    .piece-card h2 { margin: 0 0 5px; }
+    .piece-card p { margin: 0; color: var(--muted); line-height: 1.5; font-size: .9rem; }
+    .piece-rule {
+      margin-top: 12px; padding: 11px; border-radius: 14px;
+      background: rgba(255,209,102,.10); border: 1px solid rgba(255,209,102,.18);
+      color: #ffe9a5; font-size: .84rem; line-height: 1.4;
+    }
+
+    .mission {
+      padding: 14px; border-radius: 16px;
+      background: linear-gradient(145deg, rgba(255,209,102,.17), rgba(255,255,255,.05));
+      border: 1px solid rgba(255,209,102,.23);
+    }
+    .mission-top { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+    .mission-top strong { color: #ffe79a; }
+    .stars { letter-spacing: 2px; }
+    .mission p { color: #f1e5bd; font-size: .88rem; line-height: 1.45; margin: 9px 0 0; }
+    .mission.done { border-color: rgba(34,197,94,.55); background: rgba(34,197,94,.14); }
+
+    .progress-list { display: grid; gap: 8px; }
+    .progress-row { display: grid; grid-template-columns: 28px 1fr auto; gap: 8px; align-items: center; color: var(--muted); font-size: .82rem; }
+    .progress-icon { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 9px; background: rgba(255,255,255,.08); }
+    .progress-row b { color: white; }
+
+    .tip-box { padding: 12px; border-radius: 15px; background: rgba(79,209,197,.09); border: 1px solid rgba(79,209,197,.18); }
+    .tip-box strong { color: #b7fff8; }
+    .tip-box p { margin: 6px 0 0; color: var(--muted); font-size: .84rem; line-height: 1.45; }
+
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 100;
+      display: grid; place-items: center;
+      padding: 18px;
+      background: rgba(1, 8, 16, .82);
+      backdrop-filter: blur(10px);
+    }
+    .modal {
+      width: min(720px, 100%); max-height: 90vh; overflow: auto;
+      border-radius: 27px;
+      background: #0b2743;
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadow);
+    }
+    .modal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 19px 20px; border-bottom: 1px solid rgba(255,255,255,.09); }
+    .modal-head h2 { margin: 0; }
+    .close-btn { width: 40px; height: 40px; border: 0; border-radius: 12px; cursor: pointer; background: rgba(255,255,255,.10); font-size: 18px; }
+    .modal-body { padding: 20px; }
+
+    .piece-picker { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0 20px; }
+    .check-card {
+      position: relative; display: grid; grid-template-columns: 42px 1fr; align-items: center; gap: 9px;
+      padding: 11px; border-radius: 15px; border: 1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.06); cursor: pointer;
+    }
+    .check-card input { position: absolute; opacity: 0; }
+    .check-card:has(input:checked) { border-color: var(--primary); background: rgba(79,209,197,.13); }
+    .check-piece { font-size: 31px; font-family: "Segoe UI Symbol", serif; text-align: center; }
+    .check-card small { color: var(--muted); display: block; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+    .form-field label { display: block; font-size: .83rem; color: var(--muted); margin-bottom: 6px; }
+
+    .manual-steps { display: grid; gap: 12px; }
+    .manual-step { display: grid; grid-template-columns: 44px 1fr; gap: 12px; padding: 13px; border-radius: 16px; background: rgba(255,255,255,.06); }
+    .step-number { width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center; background: var(--accent); color: #322500; font-weight: 1000; }
+    .manual-step h3 { margin: 0 0 4px; }
+    .manual-step p { margin: 0; color: var(--muted); font-size: .9rem; line-height: 1.45; }
+
+    .toast {
+      position: fixed; left: 50%; bottom: 24px; z-index: 200;
+      transform: translate(-50%, 20px);
+      opacity: 0; pointer-events: none;
+      min-width: min(420px, calc(100% - 30px));
+      padding: 13px 16px; border-radius: 15px;
+      background: #102f4c; border: 1px solid rgba(255,255,255,.16); box-shadow: var(--shadow);
+      text-align: center; font-weight: 800;
+      transition: .25s ease;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    .confetti { position: fixed; width: 10px; height: 16px; border-radius: 3px; z-index: 190; pointer-events: none; animation: confettiFall 1.7s ease-out forwards; }
+    @keyframes confettiFall { to { transform: translate(var(--dx), 105vh) rotate(720deg); opacity: 0; } }
+
+    .promotion-options { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; }
+    .promotion-btn { padding: 12px; border: 1px solid rgba(255,255,255,.12); border-radius: 16px; background: rgba(255,255,255,.07); cursor: pointer; }
+    .promotion-btn span { display: block; font-family: "Segoe UI Symbol", serif; font-size: 48px; }
+
+    @media (max-width: 1120px) {
+      .workspace { grid-template-columns: 235px 1fr; }
+      .right-panel { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); }
+      .right-panel .panel-section { border-bottom: 0; border-right: 1px solid rgba(255,255,255,.08); }
+      .right-panel .panel-section:last-child { border-right: 0; }
+    }
+
+    @media (max-width: 800px) {
+      .features { grid-template-columns: 1fr; }
+      .workspace { grid-template-columns: 1fr; }
+      .sidebar { order: 2; }
+      .center-stage { order: 1; }
+      .right-panel { order: 3; grid-column: auto; grid-template-columns: 1fr; }
+      .right-panel .panel-section { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+      .lesson-list { grid-template-columns: repeat(2, 1fr); }
+      .board-wrap { width: 100%; }
+      .turn-strip { width: 100%; }
+      .topbar-title small { display: none; }
+      .topbar-actions .label { display: none; }
+      .coach { grid-template-columns: 48px 1fr auto; }
+      .coach-avatar { width: 48px; height: 48px; font-size: 28px; }
+      .piece-picker { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 520px) {
+      .app { padding: 6px; }
+      .topbar { border-radius: 15px; padding: 8px; }
+      .mini-logo { width: 39px; height: 39px; }
+      .topbar-title strong { font-size: .9rem; }
+      .topbar-actions { gap: 5px; }
+      .topbar-actions button { padding: 9px; }
+      .workspace { margin-top: 7px; gap: 7px; }
+      .coach { margin-bottom: 7px; padding: 9px; border-radius: 15px; }
+      .coach p { font-size: .82rem; }
+      .board-wrap { padding: 7px; border-radius: 15px; }
+      .piece { font-size: clamp(28px, 12vw, 54px); }
+      .lesson-list { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .intro { padding: 12px; }
+      .intro-card { padding: 24px 17px; border-radius: 24px; }
+      .credit-line { font-size: .68rem; }
+    }
+  </style>
+</head>
+<body>
+  <section id="intro" class="intro">
+    <div class="intro-card">
+      <div class="brand-pill">♟ DIASMATH™ • Laboratórios Digitais</div>
+      <div class="hero-piece" aria-hidden="true">♔</div>
+      <h1>Laboratório Virtual de <span>Xadrez</span></h1>
+      <p class="intro-subtitle">
+        Aprenda brincando: escolha as peças, clique no tabuleiro, acompanhe as setas e descubra cada movimento passo a passo.
+      </p>
+
+      <div class="features">
+        <div class="feature"><div class="feature-icon">🧩</div><strong>Monte sua própria aula</strong><p>Comece somente com rei e peões ou escolha qualquer conjunto de peças.</p></div>
+        <div class="feature"><div class="feature-icon">➡️</div><strong>Setas inteligentes</strong><p>Ao tocar em uma peça, o laboratório mostra todos os movimentos possíveis.</p></div>
+        <div class="feature"><div class="feature-icon">🎯</div><strong>Missões pedagógicas</strong><p>Desafios curtos ajudam a praticar sem transformar a aula em uma explicação cansativa.</p></div>
+      </div>
+
+      <button id="enterBtn" class="primary-btn">Entrar no laboratório</button>
+      <p class="credit-line">© 2026 LABORATÓRIO VIRTUAL DE XADREZ • Francisco Vieira Dias — DIASMATH™. Desenvolvimento e revisão técnica com apoio do ChatGPT (GPT-5.5 Thinking), OpenAI.</p>
+    </div>
+  </section>
+
+  <main id="app" class="app hidden">
+    <header class="topbar">
+      <div class="topbar-title">
+        <div class="mini-logo">♔</div>
+        <div><strong>Laboratório Virtual de Xadrez</strong><small id="lessonSubtitle">Primeiros passos: rei e peões</small></div>
+      </div>
+      <div class="topbar-actions">
+        <a href="/labs" class="soft-btn" title="Voltar aos laboratórios">← <span class="label">DIASMATH™</span></a>
+        <button id="manualBtn" class="soft-btn" title="Abrir manual">📘 <span class="label">Manual</span></button>
+        <button id="fullscreenBtn" class="soft-btn" title="Tela cheia">⛶ <span class="label">Tela cheia</span></button>
+        <button id="exitBtn" class="danger-btn" title="Sair do laboratório">↩ <span class="label">Sair</span></button>
+      </div>
+    </header>
+
+    <div class="workspace">
+      <aside class="panel sidebar">
+        <section class="panel-section">
+          <h2 class="panel-title">Escolha uma aula</h2>
+          <div id="lessonList" class="lesson-list"></div>
+        </section>
+        <section class="panel-section">
+          <h2 class="panel-title">Modo de aprendizagem</h2>
+          <div class="mode-control">
+            <label for="modeSelect">Como deseja usar o tabuleiro?</label>
+            <select id="modeSelect" class="select-control">
+              <option value="explore">Explorar movimentos livremente</option>
+              <option value="guided">Partida guiada com turnos</option>
+            </select>
+          </div>
+        </section>
+        <section class="panel-section">
+          <button id="customBtn" class="secondary-btn" style="width:100%;">🧩 Montar minha aula</button>
+        </section>
+        <section class="panel-section">
+          <h2 class="panel-title">Controles do tabuleiro</h2>
+          <div class="mini-actions">
+            <button id="undoBtn" class="soft-btn">↶ Desfazer</button>
+            <button id="resetBtn" class="soft-btn">↻ Reiniciar</button>
+            <button id="flipBtn" class="soft-btn">⇅ Virar</button>
+            <button id="exampleBtn" class="soft-btn">✨ Exemplo</button>
+          </div>
+        </section>
+      </aside>
+
+      <section class="center-stage">
+        <div class="coach">
+          <div class="coach-avatar">🦉</div>
+          <div><strong id="coachTitle">Olá, enxadrista!</strong><p id="coachText">Escolha uma aula e clique em uma peça. Eu mostrarei o caminho com setas.</p></div>
+          <button id="speakBtn" class="voice-btn" title="Ouvir explicação">🔊</button>
+        </div>
+
+        <div class="board-wrap">
+          <div class="board-shell">
+            <div id="board" class="board" aria-label="Tabuleiro de xadrez interativo"></div>
+            <svg id="arrowLayer" class="arrow-layer" viewBox="0 0 800 800" preserveAspectRatio="none" aria-hidden="true">
+              <defs>
+                <marker id="arrowGreen" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#20c777"></path></marker>
+                <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#ff5757"></path></marker>
+              </defs>
+            </svg>
+          </div>
+        </div>
+
+        <div class="turn-strip">
+          <div id="turnBadge" class="turn-badge"><span class="turn-dot white"></span><span>Vez das peças brancas</span></div>
+          <div id="statusText" class="status-text">Modo exploração: mova qualquer peça.</div>
+        </div>
+      </section>
+
+      <aside class="panel right-panel">
+        <section class="panel-section piece-card">
+          <h2 class="panel-title">Peça em destaque</h2>
+          <div id="pieceLarge" class="piece-large">♙</div>
+          <h2 id="pieceName">Peão</h2>
+          <p id="pieceDescription">O peão avança para a frente e captura na diagonal.</p>
+          <div id="pieceRule" class="piece-rule">No primeiro movimento, pode avançar uma ou duas casas.</div>
+        </section>
+        <section class="panel-section">
+          <h2 class="panel-title">Missão da aula</h2>
+          <div id="missionCard" class="mission">
+            <div class="mission-top"><strong>🎯 Seu desafio</strong><span class="stars">☆☆☆</span></div>
+            <p id="missionText">Leve um peão branco até a última fileira.</p>
+          </div>
+        </section>
+        <section class="panel-section">
+          <h2 class="panel-title">Progresso desta sessão</h2>
+          <div class="progress-list">
+            <div class="progress-row"><span class="progress-icon">🖐️</span><span>Peças selecionadas</span><b id="selectedCount">0</b></div>
+            <div class="progress-row"><span class="progress-icon">➡️</span><span>Movimentos realizados</span><b id="moveCount">0</b></div>
+            <div class="progress-row"><span class="progress-icon">🎯</span><span>Missões concluídas</span><b id="missionCount">0</b></div>
+          </div>
+        </section>
+        <section class="panel-section">
+          <div class="tip-box"><strong>💡 Dica rápida</strong><p id="tipText">As peças brancas começam nas fileiras 1 e 2. As pretas começam nas fileiras 7 e 8.</p></div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <div id="customModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="customTitle">
+    <div class="modal">
+      <div class="modal-head"><h2 id="customTitle">🧩 Montar minha aula</h2><button class="close-btn" data-close="customModal">✕</button></div>
+      <div class="modal-body">
+        <p style="margin-top:0;color:var(--muted);line-height:1.5;">Marque as peças que deseja estudar. O laboratório posicionará tudo automaticamente.</p>
+        <div class="piece-picker">
+          <label class="check-card"><input type="checkbox" name="pieceType" value="king" checked><span class="check-piece">♔</span><span><b>Rei</b><small>Uma casa</small></span></label>
+          <label class="check-card"><input type="checkbox" name="pieceType" value="queen"><span class="check-piece">♕</span><span><b>Dama</b><small>Todas as direções</small></span></label>
+          <label class="check-card"><input type="checkbox" name="pieceType" value="rook"><span class="check-piece">♖</span><span><b>Torre</b><small>Linhas retas</small></span></label>
+          <label class="check-card"><input type="checkbox" name="pieceType" value="bishop"><span class="check-piece">♗</span><span><b>Bispo</b><small>Diagonais</small></span></label>
+          <label class="check-card"><input type="checkbox" name="pieceType" value="knight"><span class="check-piece">♘</span><span><b>Cavalo</b><small>Movimento em L</small></span></label>
+          <label class="check-card"><input type="checkbox" name="pieceType" value="pawn" checked><span class="check-piece">♙</span><span><b>Peões</b><small>Avançam à frente</small></span></label>
+        </div>
+        <div class="form-grid">
+          <div class="form-field"><label for="armySelect">Quais exércitos aparecerão?</label><select id="armySelect" class="select-control"><option value="both">Peças brancas e pretas</option><option value="white">Somente peças brancas</option><option value="whiteVsKing">Peças brancas e rei preto</option></select></div>
+          <div class="form-field"><label for="customMode">Modo inicial</label><select id="customMode" class="select-control"><option value="explore">Explorar livremente</option><option value="guided">Partida guiada</option></select></div>
+        </div>
+        <button id="buildCustomBtn" class="primary-btn" style="width:100%;">Criar tabuleiro da aula</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="manualModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="manualTitle">
+    <div class="modal">
+      <div class="modal-head"><h2 id="manualTitle">📘 Como usar o laboratório</h2><button class="close-btn" data-close="manualModal">✕</button></div>
+      <div class="modal-body">
+        <div class="manual-steps">
+          <div class="manual-step"><div class="step-number">1</div><div><h3>Escolha uma aula</h3><p>Comece com rei e peões ou estude torre, bispo, cavalo, dama e o exército completo.</p></div></div>
+          <div class="manual-step"><div class="step-number">2</div><div><h3>Clique em uma peça</h3><p>As setas verdes mostram as casas livres. O círculo vermelho mostra quando uma peça adversária pode ser capturada.</p></div></div>
+          <div class="manual-step"><div class="step-number">3</div><div><h3>Clique no destino</h3><p>A peça se moverá e o professor virtual explicará o que aconteceu. No modo exploração, você pode movimentar qualquer cor.</p></div></div>
+          <div class="manual-step"><div class="step-number">4</div><div><h3>Monte sua própria aula</h3><p>Use “Montar minha aula” para escolher exatamente quais peças aparecerão. É possível iniciar somente com rei e peões.</p></div></div>
+          <div class="manual-step"><div class="step-number">5</div><div><h3>Pratique com segurança</h3><p>No modo partida guiada, o laboratório controla os turnos, identifica xeque e impede movimentos que deixam o próprio rei ameaçado.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="promotionModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="promotionTitle">
+    <div class="modal" style="max-width:520px;">
+      <div class="modal-head"><h2 id="promotionTitle">🌟 Promoção do peão</h2></div>
+      <div class="modal-body"><p style="color:var(--muted);margin-top:0;">O peão chegou ao outro lado! Escolha a nova peça:</p><div id="promotionOptions" class="promotion-options"></div></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+  (() => {
+    'use strict';
+
+    const SYMBOLS = {
+      white: { king:'♔', queen:'♕', rook:'♖', bishop:'♗', knight:'♘', pawn:'♙' },
+      black: { king:'♚', queen:'♛', rook:'♜', bishop:'♝', knight:'♞', pawn:'♟' }
+    };
+
+    const PIECE_INFO = {
+      king: {
+        name:'Rei', icon:'♔',
+        description:'O rei se move uma casa por vez, em qualquer direção.',
+        rule:'Proteja o rei! Ele não pode entrar em uma casa ameaçada.',
+        tip:'O objetivo do xadrez é cercar o rei adversário com um xeque-mate.',
+        speech:'Este é o rei. Ele se move uma casa por vez, para frente, para trás, para os lados ou na diagonal.'
+      },
+      pawn: {
+        name:'Peão', icon:'♙',
+        description:'O peão avança para a frente, mas captura uma peça na diagonal.',
+        rule:'No primeiro movimento, pode avançar uma ou duas casas. Depois, somente uma.',
+        tip:'O peão nunca volta. Ao chegar ao outro lado, ele pode virar uma peça mais forte.',
+        speech:'Este é o peão. Ele anda para a frente e captura na diagonal. Em seu primeiro movimento, pode andar uma ou duas casas.'
+      },
+      rook: {
+        name:'Torre', icon:'♖',
+        description:'A torre percorre quantas casas quiser em linhas retas.',
+        rule:'Ela anda para frente, para trás e para os lados, mas não atravessa outras peças.',
+        tip:'A torre fica muito poderosa quando existem linhas e colunas abertas.',
+        speech:'Esta é a torre. Ela anda em linha reta, para frente, para trás e para os lados, quantas casas estiverem livres.'
+      },
+      bishop: {
+        name:'Bispo', icon:'♗',
+        description:'O bispo percorre quantas casas quiser pelas diagonais.',
+        rule:'Um bispo que começa em casa clara sempre ficará nas casas claras.',
+        tip:'Os dois bispos se completam: um cuida das casas claras e o outro das escuras.',
+        speech:'Este é o bispo. Ele se movimenta pelas diagonais e não pode saltar sobre outras peças.'
+      },
+      knight: {
+        name:'Cavalo', icon:'♘',
+        description:'O cavalo faz um movimento em formato de L.',
+        rule:'Anda duas casas em uma direção e uma para o lado. É a única peça que salta.',
+        tip:'O cavalo é excelente perto do centro do tabuleiro.',
+        speech:'Este é o cavalo. Ele anda em L: duas casas em uma direção e uma para o lado. Ele pode saltar sobre peças.'
+      },
+      queen: {
+        name:'Dama', icon:'♕',
+        description:'A dama combina os movimentos da torre e do bispo.',
+        rule:'Move-se em linhas retas e diagonais, quantas casas estiverem livres.',
+        tip:'A dama é muito forte. Evite colocá-la em perigo logo no começo.',
+        speech:'Esta é a dama. Ela se move em linhas retas e diagonais, quantas casas estiverem livres.'
+      }
+    };
+
+    const LESSONS = [
+      { id:'kingPawns', title:'Primeiros passos', subtitle:'Rei e peões', icon:'♔', pieces:['king','pawn'], mode:'explore', mission:'Leve um peão branco até a última fileira.', missionType:'promote', focus:'pawn' },
+      { id:'rook', title:'Caminhos retos', subtitle:'Rei, torre e peões', icon:'♖', pieces:['king','rook','pawn'], mode:'explore', mission:'Faça um movimento longo com uma torre.', missionType:'rookLong', focus:'rook' },
+      { id:'bishop', title:'Caminhos diagonais', subtitle:'Rei, bispo e peões', icon:'♗', pieces:['king','bishop','pawn'], mode:'explore', mission:'Mova um bispo por pelo menos três casas.', missionType:'bishopLong', focus:'bishop' },
+      { id:'knight', title:'O salto do cavalo', subtitle:'Rei, cavalo e peões', icon:'♘', pieces:['king','knight','pawn'], mode:'explore', mission:'Faça o cavalo saltar sobre outra peça.', missionType:'knightMove', focus:'knight' },
+      { id:'queen', title:'A poderosa dama', subtitle:'Rei, dama e peões', icon:'♕', pieces:['king','queen','pawn'], mode:'explore', mission:'Dê xeque no rei preto usando a dama.', missionType:'queenCheck', focus:'queen' },
+      { id:'complete', title:'Partida completa', subtitle:'Todas as peças', icon:'♚', pieces:['king','queen','rook','bishop','knight','pawn'], mode:'guided', mission:'Jogue com turnos e tente dar xeque-mate.', missionType:'checkmate', focus:'king' }
+    ];
+
+    const state = {
+      board: emptyBoard(),
+      selected: null,
+      legalMoves: [],
+      currentTurn: 'white',
+      mode: 'explore',
+      orientation: 'white',
+      currentLesson: LESSONS[0],
+      history: [],
+      lastMove: null,
+      stats: { selected:0, moves:0, missions:0 },
+      missionDone: false,
+      pendingPromotion: null,
+      custom: false
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const boardEl = $('board');
+    const arrowLayer = $('arrowLayer');
+    let toastTimer;
+
+    function emptyBoard() { return Array.from({length:8}, () => Array(8).fill(null)); }
+    function cloneBoard(board) { return board.map(row => row.map(p => p ? {...p} : null)); }
+    function inBounds(r,c) { return r >= 0 && r < 8 && c >= 0 && c < 8; }
+    function opposite(color) { return color === 'white' ? 'black' : 'white'; }
+    function squareName(r,c) { return 'abcdefgh'[c] + (8-r); }
+
+    function createPiece(type, color) { return { type, color, moved:false }; }
+
+    function standardPlacement(types, army='both') {
+      const b = emptyBoard();
+      const back = ['rook','knight','bishop','queen','king','bishop','knight','rook'];
+      const include = new Set(types);
+
+      function placeColor(color) {
+        const backRow = color === 'white' ? 7 : 0;
+        const pawnRow = color === 'white' ? 6 : 1;
+        back.forEach((type,c) => { if (include.has(type)) b[backRow][c] = createPiece(type,color); });
+        if (include.has('pawn')) for (let c=0;c<8;c++) b[pawnRow][c] = createPiece('pawn',color);
+      }
+
+      if (army === 'both') { placeColor('white'); placeColor('black'); }
+      if (army === 'white') placeColor('white');
+      if (army === 'whiteVsKing') {
+        placeColor('white');
+        b[0][4] = createPiece('king','black');
+      }
+      return b;
+    }
+
+    function loadLesson(lesson, announce=true) {
+      state.currentLesson = lesson;
+      state.custom = false;
+      state.board = standardPlacement(lesson.pieces, 'both');
+      state.mode = lesson.mode;
+      state.currentTurn = 'white';
+      state.selected = null;
+      state.legalMoves = [];
+      state.history = [];
+      state.lastMove = null;
+      state.missionDone = false;
+      $('modeSelect').value = state.mode;
+      $('lessonSubtitle').textContent = `${lesson.title}: ${lesson.subtitle}`;
+      $('missionText').textContent = lesson.mission;
+      $('missionCard').classList.remove('done');
+      $('missionCard').querySelector('.stars').textContent = '☆☆☆';
+      setPieceInfo(lesson.focus);
+      renderLessonList();
+      setCoach('A aula está pronta!', getLessonCoachText(lesson));
+      render();
+      if (announce) { playTone(520, .08); toast(`${lesson.title}: ${lesson.subtitle}`); }
+    }
+
+    function getLessonCoachText(lesson) {
+      const texts = {
+        kingPawns:'Comece clicando em um peão. Observe que ele avança para a frente, mas captura na diagonal.',
+        rook:'Clique em uma torre e veja as setas formando linhas retas.',
+        bishop:'Clique no bispo. As setas aparecerão somente nas diagonais livres.',
+        knight:'Clique no cavalo e observe o desenho em L. Ele pode saltar sobre outras peças!',
+        queen:'A dama combina os movimentos da torre e do bispo. Clique nela para comparar.',
+        complete:'Agora as regras de turno e proteção do rei estão ativas. As peças brancas começam.'
+      };
+      return texts[lesson.id] || 'Clique em uma peça e acompanhe as setas.';
+    }
+
+    function renderLessonList() {
+      const list = $('lessonList');
+      list.innerHTML = '';
+      LESSONS.forEach(lesson => {
+        const btn = document.createElement('button');
+        btn.className = 'lesson-card' + (!state.custom && state.currentLesson.id === lesson.id ? ' active' : '');
+        btn.innerHTML = `<span class="lesson-icon">${lesson.icon}</span><span><strong>${lesson.title}</strong><small>${lesson.subtitle}</small></span>`;
+        btn.addEventListener('click', () => loadLesson(lesson));
+        list.appendChild(btn);
+      });
+    }
+
+    function render() {
+      boardEl.innerHTML = '';
+      clearArrows();
+      const rows = state.orientation === 'white' ? [...Array(8).keys()] : [...Array(8).keys()].reverse();
+      const cols = state.orientation === 'white' ? [...Array(8).keys()] : [...Array(8).keys()].reverse();
+      const checkSquares = getCheckedKingSquares();
+
+      rows.forEach((r, visualR) => cols.forEach((c, visualC) => {
+        const sq = document.createElement('button');
+        const piece = state.board[r][c];
+        sq.className = `square ${(r+c)%2===0?'light':'dark'}`;
+        sq.dataset.r = r; sq.dataset.c = c;
+        sq.setAttribute('aria-label', `${squareName(r,c)}${piece ? ', '+PIECE_INFO[piece.type].name+' '+(piece.color==='white'?'branco':'preto') : ', casa vazia'}`);
+
+        if (state.selected && state.selected.r === r && state.selected.c === c) sq.classList.add('selected');
+        if (state.lastMove && state.lastMove.from.r === r && state.lastMove.from.c === c) sq.classList.add('last-from');
+        if (state.lastMove && state.lastMove.to.r === r && state.lastMove.to.c === c) sq.classList.add('last-to');
+        if (checkSquares.some(x => x.r===r && x.c===c)) sq.classList.add('in-check');
+
+        if (piece) {
+          const span = document.createElement('span');
+          span.className = `piece ${piece.color}`;
+          span.textContent = SYMBOLS[piece.color][piece.type];
+          sq.appendChild(span);
+        }
+
+        const move = state.legalMoves.find(m => m.r===r && m.c===c);
+        if (move) {
+          const marker = document.createElement('span');
+          marker.className = move.capture ? 'capture-ring' : 'move-dot';
+          sq.appendChild(marker);
+        }
+
+        if (visualR === 7) {
+          const file = document.createElement('span'); file.className = 'coord file'; file.textContent = 'abcdefgh'[c]; sq.appendChild(file);
+        }
+        if (visualC === 0) {
+          const rank = document.createElement('span'); rank.className = 'coord rank'; rank.textContent = 8-r; sq.appendChild(rank);
+        }
+
+        sq.addEventListener('click', () => handleSquareClick(r,c));
+        boardEl.appendChild(sq);
+      }));
+
+      if (state.selected) drawArrows(state.selected, state.legalMoves);
+      updateStatus();
+      updateStats();
+    }
+
+    function clearArrows() {
+      [...arrowLayer.querySelectorAll('.movement-arrow')].forEach(el => el.remove());
+    }
+
+    function displayCoords(r,c) {
+      return state.orientation === 'white' ? {r,c} : {r:7-r,c:7-c};
+    }
+
+    function drawArrows(from, moves) {
+      clearArrows();
+      const src = displayCoords(from.r, from.c);
+      moves.forEach(move => {
+        const dst = displayCoords(move.r, move.c);
+        const sx = src.c*100+50, sy = src.r*100+50;
+        const tx = dst.c*100+50, ty = dst.r*100+50;
+        const color = move.capture ? '#ff5757' : '#20c777';
+        const marker = move.capture ? 'url(#arrowRed)' : 'url(#arrowGreen)';
+        const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+        let d;
+        const piece = state.board[from.r][from.c];
+        if (piece && piece.type === 'knight') {
+          const dx = Math.abs(tx-sx), dy = Math.abs(ty-sy);
+          if (dx > dy) d = `M ${sx} ${sy} L ${tx} ${sy} L ${tx} ${ty}`;
+          else d = `M ${sx} ${sy} L ${sx} ${ty} L ${tx} ${ty}`;
+        } else {
+          const vx = tx-sx, vy = ty-sy, len = Math.hypot(vx,vy) || 1;
+          const trim = 23;
+          const ex = tx - vx/len*trim, ey = ty - vy/len*trim;
+          d = `M ${sx} ${sy} L ${ex} ${ey}`;
+        }
+        path.setAttribute('d', d);
+        path.setAttribute('stroke', color);
+        path.setAttribute('stroke-width', piece && piece.type==='knight' ? '11' : '10');
+        path.setAttribute('marker-end', marker);
+        path.setAttribute('class','movement-arrow');
+        arrowLayer.appendChild(path);
+      });
+    }
+
+    function handleSquareClick(r,c) {
+      const piece = state.board[r][c];
+      const chosenMove = state.legalMoves.find(m => m.r===r && m.c===c);
+
+      if (state.selected && chosenMove) {
+        performMove(state.selected, chosenMove);
+        return;
+      }
+
+      if (!piece) {
+        state.selected = null; state.legalMoves = [];
+        setCoach('Casa vazia', 'Escolha uma peça para que eu mostre os movimentos possíveis.');
+        render(); return;
+      }
+
+      if (state.mode === 'guided' && piece.color !== state.currentTurn) {
+        setCoach('Ainda não é a vez dessa cor', `Agora é a vez das peças ${state.currentTurn === 'white' ? 'brancas' : 'pretas'}.`);
+        playTone(190,.08); return;
+      }
+
+      state.selected = {r,c};
+      state.legalMoves = getLegalMoves(state.board, r,c, state.mode === 'guided');
+      state.stats.selected++;
+      setPieceInfo(piece.type, piece.color);
+      const count = state.legalMoves.length;
+      setCoach(`${PIECE_INFO[piece.type].name} selecionado!`, count ? `Encontrei ${count} ${count===1?'movimento possível':'movimentos possíveis'}. Siga as setas e escolha uma casa.` : 'Esta peça não pode se mover agora. Tente outra peça.');
+      playTone(count ? 430 : 210, .06);
+      render();
+    }
+
+    function performMove(from, move) {
+      const boardBefore = cloneBoard(state.board);
+      const turnBefore = state.currentTurn;
+      const movedPiece = state.board[from.r][from.c];
+      const captured = state.board[move.r][move.c];
+      state.history.push({ board:boardBefore, turn:turnBefore, lastMove:state.lastMove, missionDone:state.missionDone });
+
+      state.board[move.r][move.c] = {...movedPiece, moved:true};
+      state.board[from.r][from.c] = null;
+
+      if (move.castle) {
+        const rook = state.board[move.rookFrom.r][move.rookFrom.c];
+        state.board[move.rookTo.r][move.rookTo.c] = {...rook, moved:true};
+        state.board[move.rookFrom.r][move.rookFrom.c] = null;
+      }
+
+      state.lastMove = { from:{...from}, to:{r:move.r,c:move.c}, piece:movedPiece.type, color:movedPiece.color, capture:!!captured };
+      state.stats.moves++;
+      state.selected = null; state.legalMoves = [];
+
+      if (movedPiece.type === 'pawn' && (move.r === 0 || move.r === 7)) {
+        state.pendingPromotion = {r:move.r,c:move.c,color:movedPiece.color, moveMeta:{from,move,piece:movedPiece,captured}};
+        openPromotion(movedPiece.color);
+        render();
+        return;
+      }
+
+      finishMove({from, move, piece:movedPiece, captured});
+    }
+
+    function finishMove(meta) {
+      const {piece, captured, from, move} = meta;
+      if (state.mode === 'guided') state.currentTurn = opposite(state.currentTurn);
+
+      const enemy = opposite(piece.color);
+      const check = isKingInCheck(state.board, enemy);
+      let message = captured ? `${PIECE_INFO[piece.type].name} capturou ${PIECE_INFO[captured.type].name.toLowerCase()}!` : `${PIECE_INFO[piece.type].name} foi de ${squareName(from.r,from.c)} para ${squareName(move.r,move.c)}.`;
+
+      if (move.castle) message = 'Roque realizado! O rei ficou mais protegido.';
+      if (check) {
+        message += ' Xeque! O rei adversário está ameaçado.';
+        playTone(720,.14);
+      } else playTone(captured ? 610 : 480, .08);
+
+      if (state.mode === 'guided') {
+        const side = state.currentTurn;
+        const hasMoves = hasAnyLegalMove(state.board, side);
+        if (!hasMoves && isKingInCheck(state.board, side)) {
+          message = `Xeque-mate! As peças ${piece.color === 'white' ? 'brancas' : 'pretas'} venceram.`;
+          completeMission('checkmate');
+          celebrate();
+        } else if (!hasMoves) {
+          message = 'Empate por afogamento: o jogador não tem movimento legal.';
+        }
+      }
+
+      checkMission(meta, check);
+      setCoach(captured ? 'Boa captura!' : 'Movimento realizado!', message);
+      render();
+    }
+
+    function openPromotion(color) {
+      const options = $('promotionOptions');
+      options.innerHTML = '';
+      ['queen','rook','bishop','knight'].forEach(type => {
+        const btn = document.createElement('button');
+        btn.className = 'promotion-btn';
+        btn.innerHTML = `<span>${SYMBOLS[color][type]}</span><b>${PIECE_INFO[type].name}</b>`;
+        btn.addEventListener('click', () => promotePawn(type));
+        options.appendChild(btn);
+      });
+      $('promotionModal').classList.remove('hidden');
+      setCoach('O peão chegou ao final!', 'Escolha em qual peça ele será transformado.');
+    }
+
+    function promotePawn(type) {
+      const p = state.pendingPromotion;
+      if (!p) return;
+      state.board[p.r][p.c] = createPiece(type,p.color);
+      state.board[p.r][p.c].moved = true;
+      $('promotionModal').classList.add('hidden');
+      const meta = p.moveMeta;
+      state.pendingPromotion = null;
+      completeMission('promote');
+      celebrate();
+      setCoach('Promoção concluída!', `O peão se transformou em ${PIECE_INFO[type].name.toLowerCase()}.`);
+      finishMove(meta);
+    }
+
+    function getPseudoMoves(board,r,c, forAttack=false) {
+      const piece = board[r][c];
+      if (!piece) return [];
+      const moves = [];
+      const add = (rr,cc,extra={}) => {
+        if (!inBounds(rr,cc)) return false;
+        const target = board[rr][cc];
+        if (!target) { moves.push({r:rr,c:cc,capture:false,...extra}); return true; }
+        if (forAttack) {
+          // Uma casa ocupada também está protegida pela própria peça. Isso é
+          // importante para impedir que um rei capture uma peça defendida.
+          moves.push({r:rr,c:cc,capture:target.color !== piece.color,...extra});
+          return false;
+        }
+        if (target.color !== piece.color && target.type !== 'king') {
+          moves.push({r:rr,c:cc,capture:true,...extra});
+        }
+        return false;
+      };
+
+      if (piece.type === 'pawn') {
+        const dir = piece.color === 'white' ? -1 : 1;
+        if (forAttack) {
+          [-1,1].forEach(dc => { if (inBounds(r+dir,c+dc)) moves.push({r:r+dir,c:c+dc,capture:true}); });
+        } else {
+          if (inBounds(r+dir,c) && !board[r+dir][c]) {
+            moves.push({r:r+dir,c,capture:false});
+            const start = piece.color === 'white' ? 6 : 1;
+            if (r === start && !piece.moved && !board[r+2*dir][c]) moves.push({r:r+2*dir,c,capture:false,doublePawn:true});
+          }
+          [-1,1].forEach(dc => {
+            const rr=r+dir, cc=c+dc;
+            if (inBounds(rr,cc) && board[rr][cc] && board[rr][cc].color !== piece.color && board[rr][cc].type !== 'king') moves.push({r:rr,c:cc,capture:true});
+          });
+        }
+      }
+
+      if (piece.type === 'knight') {
+        [[-2,-1],[-2,1],[-1,-2],[-1,2],[1,-2],[1,2],[2,-1],[2,1]].forEach(([dr,dc]) => add(r+dr,c+dc));
+      }
+
+      if (piece.type === 'king') {
+        for (let dr=-1;dr<=1;dr++) for (let dc=-1;dc<=1;dc++) if (dr||dc) add(r+dr,c+dc);
+        if (!forAttack && !piece.moved && !isKingInCheck(board,piece.color)) {
+          const row = piece.color === 'white' ? 7 : 0;
+          if (r === row && c === 4) {
+            const rookK = board[row][7];
+            if (rookK && rookK.type==='rook' && rookK.color===piece.color && !rookK.moved && !board[row][5] && !board[row][6] && !isSquareAttacked(board,row,5,opposite(piece.color)) && !isSquareAttacked(board,row,6,opposite(piece.color))) {
+              moves.push({r:row,c:6,capture:false,castle:'king',rookFrom:{r:row,c:7},rookTo:{r:row,c:5}});
+            }
+            const rookQ = board[row][0];
+            if (rookQ && rookQ.type==='rook' && rookQ.color===piece.color && !rookQ.moved && !board[row][1] && !board[row][2] && !board[row][3] && !isSquareAttacked(board,row,3,opposite(piece.color)) && !isSquareAttacked(board,row,2,opposite(piece.color))) {
+              moves.push({r:row,c:2,capture:false,castle:'queen',rookFrom:{r:row,c:0},rookTo:{r:row,c:3}});
+            }
+          }
+        }
+      }
+
+      const dirs = [];
+      if (piece.type === 'rook' || piece.type === 'queen') dirs.push([-1,0],[1,0],[0,-1],[0,1]);
+      if (piece.type === 'bishop' || piece.type === 'queen') dirs.push([-1,-1],[-1,1],[1,-1],[1,1]);
+      dirs.forEach(([dr,dc]) => {
+        let rr=r+dr, cc=c+dc;
+        while (inBounds(rr,cc)) {
+          if (!add(rr,cc)) break;
+          rr+=dr; cc+=dc;
+        }
+      });
+      return moves;
+    }
+
+    function getLegalMoves(board,r,c, enforceKingSafety=true) {
+      const piece = board[r][c];
+      if (!piece) return [];
+      const pseudo = getPseudoMoves(board,r,c,false);
+      if (!enforceKingSafety || !findKing(board,piece.color)) return pseudo;
+      return pseudo.filter(move => {
+        const test = cloneBoard(board);
+        test[move.r][move.c] = {...test[r][c], moved:true};
+        test[r][c] = null;
+        if (move.castle) {
+          test[move.rookTo.r][move.rookTo.c] = {...test[move.rookFrom.r][move.rookFrom.c],moved:true};
+          test[move.rookFrom.r][move.rookFrom.c] = null;
+        }
+        return !isKingInCheck(test,piece.color);
+      });
+    }
+
+    function findKing(board,color) {
+      for (let r=0;r<8;r++) for (let c=0;c<8;c++) if (board[r][c]?.type==='king' && board[r][c]?.color===color) return {r,c};
+      return null;
+    }
+
+    function isSquareAttacked(board,r,c,byColor) {
+      for (let rr=0;rr<8;rr++) for (let cc=0;cc<8;cc++) {
+        const p = board[rr][cc];
+        if (!p || p.color !== byColor) continue;
+        if (getPseudoMoves(board,rr,cc,true).some(m => m.r===r && m.c===c)) return true;
+      }
+      return false;
+    }
+
+    function isKingInCheck(board,color) {
+      const king = findKing(board,color);
+      return king ? isSquareAttacked(board,king.r,king.c,opposite(color)) : false;
+    }
+
+    function getCheckedKingSquares() {
+      return ['white','black'].map(color => isKingInCheck(state.board,color) ? findKing(state.board,color) : null).filter(Boolean);
+    }
+
+    function hasAnyLegalMove(board,color) {
+      for (let r=0;r<8;r++) for (let c=0;c<8;c++) if (board[r][c]?.color===color && getLegalMoves(board,r,c,true).length) return true;
+      return false;
+    }
+
+    function setPieceInfo(type,color='white') {
+      const info = PIECE_INFO[type];
+      $('pieceLarge').textContent = SYMBOLS[color][type];
+      $('pieceName').textContent = info.name;
+      $('pieceDescription').textContent = info.description;
+      $('pieceRule').textContent = info.rule;
+      $('tipText').textContent = info.tip;
+    }
+
+    function setCoach(title,text) {
+      $('coachTitle').textContent = title;
+      $('coachText').textContent = text;
+    }
+
+    function updateStatus() {
+      const badge = $('turnBadge');
+      const status = $('statusText');
+      if (state.mode === 'explore') {
+        badge.innerHTML = `<span class="turn-dot white"></span><span>Exploração livre</span>`;
+        status.textContent = 'Você pode mover peças brancas ou pretas.';
+      } else {
+        const side = state.currentTurn === 'white' ? 'brancas' : 'pretas';
+        badge.innerHTML = `<span class="turn-dot ${state.currentTurn}"></span><span>Vez das peças ${side}</span>`;
+        status.textContent = isKingInCheck(state.board,state.currentTurn) ? 'Atenção: o rei está em xeque!' : 'Escolha uma peça da cor indicada.';
+      }
+    }
+
+    function updateStats() {
+      $('selectedCount').textContent = state.stats.selected;
+      $('moveCount').textContent = state.stats.moves;
+      $('missionCount').textContent = state.stats.missions;
+    }
+
+    function checkMission(meta, gaveCheck) {
+      if (state.missionDone || state.custom) return;
+      const t = state.currentLesson.missionType;
+      const dr = Math.abs(meta.move.r - meta.from.r), dc = Math.abs(meta.move.c - meta.from.c);
+      if (t==='rookLong' && meta.piece.type==='rook' && Math.max(dr,dc)>=3) completeMission(t);
+      if (t==='bishopLong' && meta.piece.type==='bishop' && dr>=3 && dc>=3) completeMission(t);
+      if (t==='knightMove' && meta.piece.type==='knight') completeMission(t);
+      if (t==='queenCheck' && meta.piece.type==='queen' && gaveCheck) completeMission(t);
+    }
+
+    function completeMission(type) {
+      if (state.missionDone) return;
+      const expected = state.currentLesson?.missionType;
+      if (!state.custom && type !== expected && !(expected==='promote' && type==='promote')) return;
+      state.missionDone = true;
+      state.stats.missions++;
+      $('missionCard').classList.add('done');
+      $('missionCard').querySelector('.stars').textContent = '★★★';
+      toast('Missão concluída! Você ganhou três estrelas!');
+      celebrate();
+      updateStats();
+    }
+
+    function undo() {
+      const prev = state.history.pop();
+      if (!prev) { toast('Ainda não há movimento para desfazer.'); return; }
+      state.board = prev.board;
+      state.currentTurn = prev.turn;
+      state.lastMove = prev.lastMove;
+      state.missionDone = prev.missionDone;
+      state.selected = null; state.legalMoves = [];
+      $('missionCard').classList.toggle('done',state.missionDone);
+      $('missionCard').querySelector('.stars').textContent = state.missionDone ? '★★★' : '☆☆☆';
+      state.stats.moves = Math.max(0,state.stats.moves-1);
+      setCoach('Movimento desfeito', 'Tente outra estratégia ou observe novamente as setas.');
+      playTone(330,.08); render();
+    }
+
+    function showExample() {
+      const focus = state.currentLesson?.focus || 'pawn';
+      for (let r=0;r<8;r++) for (let c=0;c<8;c++) {
+        const p=state.board[r][c];
+        if (p && p.type===focus && (state.mode==='explore' || p.color===state.currentTurn)) {
+          const moves=getLegalMoves(state.board,r,c,state.mode==='guided');
+          if (moves.length) {
+            state.selected={r,c}; state.legalMoves=moves; setPieceInfo(p.type,p.color);
+            setCoach('Observe o exemplo', `As setas mostram todos os caminhos disponíveis para ${PIECE_INFO[p.type].name.toLowerCase()}.`);
+            render(); return;
+          }
+        }
+      }
+      toast('Não encontrei uma peça livre para demonstrar.');
+    }
+
+    function buildCustom() {
+      const selectedTypes = [...document.querySelectorAll('input[name="pieceType"]:checked')].map(x=>x.value);
+      if (!selectedTypes.length) { toast('Escolha pelo menos uma peça.'); return; }
+      const army = $('armySelect').value;
+      state.board = standardPlacement(selectedTypes,army);
+      state.mode = $('customMode').value;
+      state.currentTurn='white'; state.selected=null; state.legalMoves=[]; state.history=[]; state.lastMove=null; state.missionDone=false; state.custom=true;
+      $('modeSelect').value=state.mode;
+      $('lessonSubtitle').textContent='Aula personalizada';
+      $('missionText').textContent='Explore as peças escolhidas e descubra todos os movimentos.';
+      $('missionCard').classList.remove('done'); $('missionCard').querySelector('.stars').textContent='☆☆☆';
+      renderLessonList();
+      $('customModal').classList.add('hidden');
+      setCoach('Sua aula personalizada está pronta!', 'Clique em qualquer peça para visualizar as setas de movimento.');
+      render(); toast('Tabuleiro personalizado criado!');
+    }
+
+    function resetCurrent() {
+      if (state.custom) {
+        buildCustom();
+      } else loadLesson(state.currentLesson,false);
+      toast('Tabuleiro reiniciado.');
+    }
+
+    function speakCurrent() {
+      if (!('speechSynthesis' in window)) { toast('A leitura em voz alta não está disponível neste navegador.'); return; }
+      speechSynthesis.cancel();
+      const text = `${$('coachTitle').textContent}. ${$('coachText').textContent}`;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang='pt-BR'; utter.rate=.92; utter.pitch=1.05;
+      speechSynthesis.speak(utter);
+    }
+
+    function toast(message) {
+      const el=$('toast'); el.textContent=message; el.classList.add('show');
+      clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('show'),2600);
+    }
+
+    function playTone(freq=440,duration=.08) {
+      try {
+        const AudioCtx=window.AudioContext||window.webkitAudioContext;
+        const ctx=new AudioCtx(); const osc=ctx.createOscillator(); const gain=ctx.createGain();
+        osc.frequency.value=freq; osc.type='sine'; gain.gain.setValueAtTime(.055,ctx.currentTime); gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);
+        osc.connect(gain); gain.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime+duration); osc.onended=()=>ctx.close();
+      } catch(e) {}
+    }
+
+    function celebrate() {
+      const colors=['#ffd166','#4fd1c5','#ff6b6b','#8b5cf6','#22c55e'];
+      for (let i=0;i<38;i++) {
+        const el=document.createElement('i'); el.className='confetti';
+        el.style.left=Math.random()*100+'vw'; el.style.top='-20px'; el.style.background=colors[i%colors.length]; el.style.setProperty('--dx',(Math.random()*220-110)+'px'); el.style.animationDelay=(Math.random()*.35)+'s';
+        document.body.appendChild(el); setTimeout(()=>el.remove(),2200);
+      }
+    }
+
+    async function enterLab() {
+      $('intro').classList.add('hidden'); $('app').classList.remove('hidden');
+      loadLesson(LESSONS[0],false);
+      try { if (document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen(); } catch(e) {}
+      setTimeout(()=>toast('Clique em uma peça para começar!'),300);
+    }
+
+    async function toggleFullscreen() {
+      try {
+        if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+        else await document.exitFullscreen();
+      } catch(e) { toast('O navegador não permitiu alterar a tela cheia.'); }
+    }
+
+    function leaveLab() {
+      if (document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+      $('app').classList.add('hidden'); $('intro').classList.remove('hidden');
+      if ('speechSynthesis' in window) speechSynthesis.cancel();
+    }
+
+    $('enterBtn').addEventListener('click',enterLab);
+    $('exitBtn').addEventListener('click',leaveLab);
+    $('fullscreenBtn').addEventListener('click',toggleFullscreen);
+    $('manualBtn').addEventListener('click',()=> $('manualModal').classList.remove('hidden'));
+    $('customBtn').addEventListener('click',()=> $('customModal').classList.remove('hidden'));
+    $('buildCustomBtn').addEventListener('click',buildCustom);
+    $('undoBtn').addEventListener('click',undo);
+    $('resetBtn').addEventListener('click',resetCurrent);
+    $('flipBtn').addEventListener('click',()=>{ state.orientation=state.orientation==='white'?'black':'white'; render(); });
+    $('exampleBtn').addEventListener('click',showExample);
+    $('speakBtn').addEventListener('click',speakCurrent);
+    $('modeSelect').addEventListener('change',e=>{
+      state.mode=e.target.value; state.currentTurn='white'; state.selected=null; state.legalMoves=[];
+      setCoach(state.mode==='explore'?'Exploração livre ativada':'Partida guiada ativada', state.mode==='explore'?'Movimente qualquer peça e investigue todos os caminhos.':'As peças brancas começam. O laboratório controlará os turnos e protegerá os reis.');
+      render();
+    });
+
+    document.querySelectorAll('[data-close]').forEach(btn=>btn.addEventListener('click',()=>$(btn.dataset.close).classList.add('hidden')));
+    document.querySelectorAll('.modal-backdrop').forEach(backdrop=>backdrop.addEventListener('click',e=>{ if(e.target===backdrop && backdrop.id!=='promotionModal') backdrop.classList.add('hidden'); }));
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Escape') document.querySelectorAll('.modal-backdrop:not(#promotionModal)').forEach(m=>m.classList.add('hidden'));
+      if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='z'){e.preventDefault();undo();}
+    });
+
+    renderLessonList();
+  })();
+  </script>
+</body>
+</html>
