@@ -23,6 +23,7 @@ export function Header() {
           <div className="min-w-0 leading-none">
             <span className="block text-xl font-black tracking-tight text-slate-950">
               DIAS<span className="text-blue-600">MATH</span>
+              <sup className="ml-0.5 align-super text-xs font-black">™</sup>
             </span>
             <span className="mt-1 hidden text-[9px] font-bold tracking-[0.14em] text-slate-500 sm:block">
               APRENDER • EXPLORAR • TRANSFORMAR
