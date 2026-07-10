@@ -1,44 +1,25 @@
-# Atualização 10C — Xadrez final validado
+# Atualização 10 — Laboratório Virtual de Divisão
 
-Use este pacote para corrigir a publicação do Laboratório Virtual de Xadrez.
+## Como colocar no GitHub
 
-## Arquivos incluídos
-
-```text
-app/labs/page.tsx
-app/labs/xadrez/page.tsx
-app/labs/laboratorio-virtual-xadrez/page.tsx
-public/labs/xadrez/index.html
-public/labs/laboratorio-virtual-xadrez/index.html
-ANALISE_TECNICA.md
-```
-
-## Como publicar
-
-1. Extraia este ZIP.
-2. Abra o repositório `diasmath-platform` no GitHub.
-3. Clique em `Add file`.
-4. Clique em `Upload files`.
+1. Baixe e extraia este ZIP.
+2. Abra o repositório `diasmath-platform`.
+3. Clique em **Add file**.
+4. Clique em **Upload files**.
 5. Arraste as pastas:
-   - `app`
    - `public`
-6. Em `Commit message`, escreva:
-
-```text
-Corrige e publica Laboratório Virtual de Xadrez
-```
-
-7. Clique em `Commit changes`.
-8. Aguarde a Vercel finalizar.
+   - `app`
+6. Em **Commit message**, escreva:
+   `Publica Laboratório Virtual de Divisão`
+7. Clique em **Commit changes**.
+8. Aguarde a Vercel atualizar o site.
 
 ## Links para testar
 
-```text
-https://www.diasmath.com.br/labs
-https://www.diasmath.com.br/labs/xadrez
-https://www.diasmath.com.br/labs/xadrez/index.html
-```
+- `/labs`
+- `/labs/laboratorio-virtual-divisao`
+- `/labs/laboratorio-virtual-divisao/index.html`
 
-## Importante
+## Observação
 
-Este pacote atualiza também a página `app/labs/page.tsx`, para o Xadrez aparecer no catálogo de laboratórios.
+O arquivo `app/labs/page.tsx` atualiza a página geral de laboratórios. Ele inclui o Laboratório Virtual de Divisão, GeoTessela Lab e Prancha Trigonométrica.
