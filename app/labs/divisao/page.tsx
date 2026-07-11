@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Prancha Trigonométrica | DIASMATH™",
-  description: "Prancha Trigonométrica da plataforma DIASMATH™.",
+  title: "Laboratório Virtual de Divisão | DIASMATH™",
+  description: "Laboratório Virtual de Divisão da plataforma DIASMATH™.",
 };
 
 export default function LabPage() {
@@ -14,11 +14,11 @@ export default function LabPage() {
         </Link>
 
         <p className="truncate text-center text-sm font-bold">
-          Prancha Trigonométrica
+          Laboratório Virtual de Divisão
         </p>
 
         <a
-          href="/labs/prancha-trigonometrica/index.html"
+          href="/labs/divisao/index.html"
           target="_blank"
           rel="noopener noreferrer"
           className="shrink-0 rounded-full bg-white px-4 py-2 text-sm font-bold text-slate-950"
@@ -28,8 +28,8 @@ export default function LabPage() {
       </div>
 
       <iframe
-        src="/labs/prancha-trigonometrica/index.html"
-        title="Prancha Trigonométrica"
+        src="/labs/divisao/index.html"
+        title="Laboratório Virtual de Divisão"
         className="h-[calc(100vh-56px)] w-full border-0"
         allow="fullscreen; autoplay"
         allowFullScreen

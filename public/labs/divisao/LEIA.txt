@@ -1,0 +1,3 @@
+Aqui deve ficar o arquivo index.html do Laboratório Virtual de Divisão.
+Se no GitHub já existir public/labs/divisao/index.html, não precisa fazer nada.
+Se não existir, envie novamente o HTML do laboratório de divisão para essa pasta com o nome index.html.

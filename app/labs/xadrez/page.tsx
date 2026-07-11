@@ -2,11 +2,10 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Laboratório Virtual de Xadrez | DIASMATH™",
-  description:
-    "Laboratório virtual interativo para ensinar xadrez nos anos iniciais, com setas de movimento, aulas guiadas e montagem personalizada de peças.",
+  description: "Laboratório Virtual de Xadrez da plataforma DIASMATH™.",
 };
 
-export default function XadrezLabPage() {
+export default function LabPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-white">
       <div className="flex h-14 items-center justify-between gap-3 border-b border-white/10 bg-slate-950 px-4">
