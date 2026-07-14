@@ -1,25 +1,50 @@
-# Atualização 10 — Laboratório Virtual de Divisão
+# Atualização 12 — Aba Atividades
 
-## Como colocar no GitHub
+Esta atualização adiciona a aba **Atividades** no menu superior do site DIASMATH™ e cria a página:
 
-1. Baixe e extraia este ZIP.
+```text
+/atividades
+```
+
+## Arquivos incluídos
+
+```text
+components/Header.tsx
+app/atividades/page.tsx
+```
+
+## Como publicar no GitHub
+
+1. Baixe e extraia o ZIP.
 2. Abra o repositório `diasmath-platform`.
-3. Clique em **Add file**.
-4. Clique em **Upload files**.
-5. Arraste as pastas:
-   - `public`
+3. Clique em `Add file`.
+4. Clique em `Upload files`.
+5. Envie as pastas extraídas:
+   - `components`
    - `app`
-6. Em **Commit message**, escreva:
-   `Publica Laboratório Virtual de Divisão`
-7. Clique em **Commit changes**.
-8. Aguarde a Vercel atualizar o site.
+6. Em `Commit message`, escreva:
 
-## Links para testar
+```text
+Adiciona aba Atividades
+```
 
-- `/labs`
-- `/labs/laboratorio-virtual-divisao`
-- `/labs/laboratorio-virtual-divisao/index.html`
+7. Clique em `Commit changes`.
+8. Aguarde a Vercel publicar.
 
-## Observação
+## Depois teste
 
-O arquivo `app/labs/page.tsx` atualiza a página geral de laboratórios. Ele inclui o Laboratório Virtual de Divisão, GeoTessela Lab e Prancha Trigonométrica.
+```text
+https://www.diasmath.com.br/atividades
+```
+
+## O que muda
+
+- O menu superior passa a ter:
+  `Jogos | Labs | Atividades | Professor | Aluno | Escolas | Planos`
+
+- A página `/atividades` fica pronta para organizar:
+  - atividades para imprimir;
+  - resolva e pinte;
+  - desafios matemáticos;
+  - materiais SAEB;
+  - PDFs e arquivos Word.

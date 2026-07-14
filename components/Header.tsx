@@ -3,6 +3,7 @@ import Link from "next/link";
 const links = [
   { href: "/play", label: "Jogos" },
   { href: "/labs", label: "Labs" },
+  { href: "/atividades", label: "Atividades" },
   { href: "/professor", label: "Professor" },
   { href: "/aluno", label: "Aluno" },
   { href: "/escolas", label: "Escolas" },
@@ -31,7 +32,7 @@ export function Header() {
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-6 text-sm font-semibold text-slate-700 md:flex">
+        <nav className="hidden items-center gap-5 text-sm font-semibold text-slate-700 md:flex">
           {links.map((link) => (
             <Link key={link.href} href={link.href} className="transition hover:text-blue-600">
               {link.label}
