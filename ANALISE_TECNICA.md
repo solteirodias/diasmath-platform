@@ -1,35 +1,66 @@
-# Análise técnica — Laboratório Virtual de Xadrez
+# Análise técnica — DIASMATH™ Arena da Revisão
 
-## Resultado geral
-O arquivo HTML do laboratório está estruturalmente bom e possui os recursos principais solicitados:
-- página inicial com apresentação;
-- botão para entrar no laboratório;
-- seleção de aulas por peça;
-- montagem personalizada da aula;
-- modo de exploração livre;
-- modo de partida guiada com turnos;
-- setas e marcadores de movimento;
-- manual interno;
-- tela cheia;
-- botão sair.
+## Arquivo analisado
 
-## Pontos corrigidos nesta versão
-1. A rota foi estabilizada em `/labs/xadrez`.
-2. Mantive uma rota antiga de apoio em `/labs/laboratorio-virtual-xadrez`, redirecionando para `/labs/xadrez`.
-3. Incluí o card do Xadrez na página principal `app/labs/page.tsx`, pois esse era o ponto mais provável para o laboratório não aparecer no site.
-4. O arquivo HTML foi colocado em `public/labs/xadrez/index.html`.
-5. Também foi criada uma cópia em `public/labs/laboratorio-virtual-xadrez/index.html` para evitar erro caso algum link antigo seja acessado.
-6. O crédito foi ajustado para `DIASMATH™`.
-7. A referência técnica foi ajustada para `GPT-5.5 Thinking`.
+`diasmath_arena_revisao_profissional.html`
 
-## Validação feita
-- Estrutura do pacote conferida.
-- JavaScript extraído e validado com `node --check`, sem erro de sintaxe.
-- Conferência dos caminhos internos do iframe.
-- Conferência da presença do card no catálogo de Labs.
+## Resultado da análise
 
-## Observações pedagógicas
-O laboratório é adequado para anos iniciais, pois mostra movimentos possíveis visualmente e permite começar com poucas peças. A ausência de regras avançadas como en passant não é problema para o objetivo inicial do laboratório.
+O arquivo é um game em HTML único, com CSS e JavaScript internos. Ele está adequado para publicação como arquivo estático no site.
 
-## Atenção
-Se você já tiver alterado manualmente a página `app/labs/page.tsx` no GitHub com outros laboratórios, revise antes de substituir, para não perder cards adicionados depois.
+## Estrutura encontrada
+
+- Tela inicial;
+- configuração de 5 equipes;
+- manual do professor;
+- game com 40 questões;
+- fase 1: pensar;
+- fase 2: responder;
+- fase 3: compreender;
+- ranking final;
+- conquistas;
+- estatísticas por conteúdo;
+- efeitos visuais e sonoros;
+- entrada em tela cheia.
+
+## Validação do banco de questões
+
+- Total de questões localizadas: 40
+- Alternativas inválidas encontradas: 0
+
+## Ajustes feitos
+
+1. O game foi colocado em:
+   `public/games/arena-revisao/index.html`
+
+2. Foi criada a rota:
+   `app/play/arena-revisao/page.tsx`
+
+3. A página do game terá botão:
+   `Abrir em outra aba`
+
+4. A página principal de jogos foi atualizada:
+   `app/play/page.tsx`
+
+5. O card da Arena da Revisão foi incluído no DIASMATH™ Play.
+
+6. O HTML recebeu metadescrição.
+
+7. O rodapé do game foi atualizado para:
+   `© 2026 Francisco Vieira Dias — DIASMATH™. Todos os direitos reservados.`
+
+8. Foi adicionado botão de retorno:
+   `DIASMATH PLAY`
+
+## Endereços após publicação
+
+- `/play`
+- `/play/arena-revisao`
+- `/games/arena-revisao/index.html`
+
+## Observação
+
+Para evitar erro 404, é indispensável enviar as duas pastas do pacote:
+
+- `app`
+- `public`
