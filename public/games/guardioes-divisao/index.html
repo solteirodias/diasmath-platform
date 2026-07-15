@@ -1,0 +1,3165 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#081b2c">
+<meta name="description" content="Os Guardiões da Divisão, game educativo da DIASMATH™ para aprender divisão com mundos brasileiros, fases, portais, chefes, resto e batalha final.">
+<title>Os Guardiões da Divisão — DIASMATH™</title>
+<style>
+:root{
+  --cream:#fff5d5;
+  --gold:#ffd363;
+  --orange:#ef7932;
+  --teal:#00aaa3;
+  --purple:#6b3a91;
+  --ink:#173b42;
+  --shadow:rgba(0,0,0,.36);
+}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#061827;font-family:Trebuchet MS,Arial,sans-serif;color:var(--ink);touch-action:none}
+button,select{font:inherit}
+#app{position:relative;width:100vw;height:100vh;max-width:1500px;max-height:900px;margin:auto;overflow:hidden;background:#0e2c3f;box-shadow:0 0 90px rgba(0,0,0,.75)}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block;background:#77d7ee}
+.screen{position:absolute;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:16px;background:linear-gradient(rgba(4,26,39,.15),rgba(4,26,39,.82))}
+.screen.active{display:flex}
+#titleScreen{display:flex;z-index:80;background:
+ radial-gradient(circle at 50% 35%,rgba(255,216,96,.28),transparent 0 22%,transparent 38%),
+ linear-gradient(145deg,#07283a,#101d48 58%,#3d2048);
+}
+#titleScreen:before{content:"";position:absolute;inset:0;background:
+ repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 10px,transparent 10px 22px),
+ radial-gradient(circle at 82% 22%,rgba(255,239,169,.45),transparent 0 8%,transparent 20%);
+pointer-events:none}
+.panel{
+  position:relative;
+  width:min(1060px,96vw);
+  max-height:94vh;
+  overflow:auto;
+  border:5px solid #ffe59c;
+  border-radius:30px;
+  background:linear-gradient(#fffbe7,#ffecbd);
+  box-shadow:0 18px 0 rgba(87,48,21,.40),0 34px 90px rgba(0,0,0,.52);
+  padding:24px;
+  text-align:center;
+}
+.titlePanel{background:linear-gradient(180deg,rgba(255,248,221,.96),rgba(255,226,165,.94))}
+.logo{font-size:clamp(40px,7vw,92px);line-height:.88;margin:0;color:#0aaca4;text-shadow:0 4px 0 #fff2b0,0 8px 0 #74361d,0 15px 0 rgba(0,0,0,.25);letter-spacing:-2px}
+.logo span{display:block;color:#ffbd35}
+.sub{font-weight:900;font-size:clamp(15px,2vw,23px);max-width:760px;margin:14px auto;color:#17464b}
+.menuStrip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px auto;max-width:900px}
+.menuItem{border:3px solid #e5bd62;border-radius:20px;background:#fffaf0;padding:14px;font-weight:900;box-shadow:0 7px 0 rgba(91,50,22,.22)}
+.menuItem strong{display:block;font-size:21px;color:#0a7470;margin-bottom:5px}
+.btns{display:flex;gap:11px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.btn{border:0;border-radius:17px;padding:13px 20px;min-width:165px;font-weight:900;color:#fff;cursor:pointer;background:linear-gradient(#ffa84e,#df5d2b);box-shadow:0 7px 0 #923529;transition:.12s}
+.btn:hover{filter:brightness(1.06)}.btn:active{transform:translateY(5px);box-shadow:0 2px 0 #923529}
+.btn.alt{background:linear-gradient(#20c9bf,#087e78);box-shadow:0 7px 0 #075452}
+.btn.purple{background:linear-gradient(#9d60b7,#63317d);box-shadow:0 7px 0 #3b1d4c}
+.btn.gold{background:linear-gradient(#ffd464,#d99a21);box-shadow:0 7px 0 #94621b;color:#55340d}
+.btn.small{min-width:auto;padding:10px 14px;border-radius:14px}
+.grid{display:grid;gap:14px;margin:16px 0}
+.diffGrid{grid-template-columns:repeat(3,1fr)}
+.levelGrid{grid-template-columns:repeat(3,1fr)}
+.card{border:4px solid #f0cf7a;border-radius:22px;background:#fffaf0;padding:16px;box-shadow:0 8px 0 rgba(86,48,22,.24);font-weight:900}
+.card.selected{border-color:#1cb9ae;background:#e9fffb}
+.card h3{margin:5px 0;color:#08736d;font-size:24px}
+.card .badge{font-size:38px;font-weight:900;color:#d56c2d}
+.title2{font-size:clamp(30px,5vw,52px);color:#653383;margin:8px 0}
+.problem{font-size:clamp(16px,2vw,23px);font-weight:900;max-width:860px;margin:9px auto}
+.hud{position:absolute;left:14px;right:14px;top:14px;z-index:30;display:none;grid-template-columns:1.7fr auto auto auto;gap:8px;pointer-events:none}
+.hud.active{display:grid}
+.hudbox{background:rgba(255,248,221,.94);border:3px solid #fff;border-radius:16px;box-shadow:0 6px 0 rgba(0,0,0,.25);padding:8px 12px;font-weight:900;color:#17464b}
+.missionhud{font-size:14px}
+.topBtns{position:absolute;right:14px;top:14px;z-index:34;display:flex;gap:8px}
+.iconBtn{width:46px;height:46px;border:3px solid rgba(255,255,255,.88);border-radius:15px;background:rgba(7,51,58,.82);color:white;font-size:20px;font-weight:900;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+.toast{position:absolute;left:50%;top:92px;transform:translateX(-50%);z-index:60;display:none;max-width:min(760px,92vw);padding:11px 18px;border-radius:16px;background:rgba(255,248,221,.97);border:3px solid #fff;box-shadow:0 6px 0 rgba(0,0,0,.26);font-weight:900;text-align:center}
+.toast.show{display:block}
+.controls{position:absolute;left:14px;right:14px;bottom:14px;z-index:32;display:none;justify-content:space-between;align-items:end;pointer-events:none}
+.controls.active{display:flex}
+.pad,.actpad{display:flex;gap:8px;pointer-events:auto}
+.touch{width:64px;height:64px;border-radius:50%;border:4px solid rgba(255,255,255,.88);background:rgba(5,65,73,.72);color:white;font-size:22px;font-weight:900;box-shadow:0 5px 0 rgba(0,0,0,.34);user-select:none}
+.touch.big{width:76px;height:76px;font-size:14px;background:rgba(224,84,45,.84)}
+.touch.special{background:rgba(114,54,150,.84)}
+.touch.pressed,.touch:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.28)}
+.bossbar{position:absolute;left:50%;top:76px;transform:translateX(-50%);width:min(640px,82vw);z-index:33;display:none;background:rgba(25,12,18,.86);border:3px solid #ffd35d;border-radius:14px;padding:8px;box-shadow:0 7px 0 rgba(0,0,0,.28)}
+.bossbar.active{display:block}
+.bossname{font-weight:900;color:#fff7c6;text-align:center;margin-bottom:5px}
+.bar{height:18px;background:#42212a;border-radius:10px;overflow:hidden}
+.fill{height:100%;width:100%;background:linear-gradient(90deg,#ff6546,#ffd65a)}
+.source{min-height:76px;background:#fffaf0;border:4px dashed #d69c4c;border-radius:18px;padding:8px;display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-items:center}
+.token{width:26px;height:26px;border-radius:50%;display:inline-grid;place-items:center;margin:2px;background:#f08b3a;border:2px solid #b95325;color:#fff;font-size:12px;font-weight:900}
+.token.seed{background:#9a6a38;border-color:#65401d}.token.fish{background:#4ca9c8;border-color:#2e6b80}.token.candy{background:#e85d9c;border-color:#a83266}.token.mask{background:#9451b9;border-color:#603170}.token.star{background:#f0c84d;border-color:#a47520}
+.basketGrid,.groupGrid,.miniGrid,.bossProblems{display:grid;gap:10px;margin:12px auto}
+.basketGrid{grid-template-columns:repeat(var(--cols,4),1fr)}
+.groupGrid{grid-template-columns:repeat(4,1fr)}
+.miniGrid{grid-template-columns:repeat(var(--cols,4),1fr);max-width:850px}
+.bossProblems{grid-template-columns:repeat(2,1fr)}
+.basket,.groupBox,.miniGroup,.bossProblem{background:#fff8df;border:3px dashed #d3a34a;border-radius:18px;min-height:84px;padding:8px;display:flex;flex-wrap:wrap;gap:4px;align-content:flex-start;justify-content:center;font-weight:900}
+.basket strong,.groupBox strong,.miniGroup strong{width:100%;font-size:13px;color:#714f20}
+.basket{cursor:pointer}
+.mathline{font-size:clamp(24px,4vw,40px);font-weight:900;color:#0a6967;margin:12px}
+.feedback{min-height:28px;font-weight:900;color:#a13a33}
+.answers{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.answer{border:0;border-radius:16px;background:linear-gradient(#ff9e44,#e35e2e);color:white;font-weight:900;font-size:24px;padding:12px 25px;min-width:96px;box-shadow:0 6px 0 #92382a;cursor:pointer}
+.bossProblem{display:block;text-align:left;min-height:auto;border-style:solid}
+.bossProblem select{width:100%;margin-top:8px;padding:8px;border-radius:10px;border:2px solid #d49a40;font:inherit;font-weight:900;background:white}
+.credits{line-height:1.55;text-align:left;font-weight:800;max-width:780px;margin:0 auto}
+.finalCelebration{display:none;margin:16px auto 4px;max-width:920px;text-align:center}
+.finalCelebration.active{display:block;animation:finalRise .65s ease-out}
+.victoryRibbon{padding:15px 18px;border-radius:22px;background:linear-gradient(135deg,#6f3ca0,#0aa9a1);color:#fff9cf;border:4px solid #ffe17a;box-shadow:0 8px 0 rgba(62,30,79,.34);font-size:clamp(20px,3vw,31px);font-weight:1000;text-shadow:0 3px 0 rgba(0,0,0,.22)}
+.victoryIcons{font-size:34px;letter-spacing:10px;margin:12px 0;animation:victoryPulse 1.15s ease-in-out infinite alternate}
+.endGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:13px;text-align:left}
+.endCard{background:#fff9e7;border:3px solid #e4bd61;border-radius:18px;padding:13px;box-shadow:0 6px 0 rgba(90,49,22,.18)}
+.endCard h3{margin:0 0 8px;color:#66358d;font-size:20px}
+.characterList{display:flex;flex-wrap:wrap;gap:7px}
+.characterChip{display:inline-block;padding:6px 9px;border-radius:999px;background:#efe3ff;border:2px solid #b78bd0;color:#4e2a67;font-size:13px;font-weight:900}
+.finalCreditLine{margin:6px 0;font-weight:800;line-height:1.42}
+@keyframes finalRise{from{opacity:0;transform:translateY(24px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes victoryPulse{from{transform:scale(.96);filter:brightness(.95)}to{transform:scale(1.05);filter:brightness(1.18)}}
+@media(max-width:900px){
+  .endGrid{grid-template-columns:1fr}
+  .menuStrip,.diffGrid,.levelGrid,.bossProblems{grid-template-columns:1fr}
+  .hud{grid-template-columns:1fr auto;left:8px;right:8px;top:8px}
+  .missionhud{grid-column:1/-1}.hudbox{font-size:13px}
+  .basketGrid,.groupGrid,.miniGrid{grid-template-columns:repeat(2,1fr)!important}
+  .logo{font-size:42px}.panel{padding:17px}
+}
+@media(min-width:900px) and (pointer:fine){.controls{display:none!important}}
+</style>
+</head>
+<body>
+<div id="app">
+<canvas id="game" width="1280" height="720"></canvas>
+
+<section id="titleScreen" class="screen active">
+  <div class="panel titlePanel">
+    <h1 class="logo">OS GUARDIÕES <span>DA DIVISÃO</span></h1>
+    <p class="sub">Uma aventura brasileira de plataforma em que dividir é partilhar, proteger e vencer desafios.</p>
+    <div class="menuStrip">
+      <div class="menuItem"><strong>Campanha</strong>Fases com mundos brasileiros, portais e chefes.</div>
+      <div class="menuItem"><strong>Matemática</strong>Repartição, agrupamento, quociente e resto.</div>
+          </div>
+    <div class="btns">
+      <button id="startBtn" class="btn gold">INICIAR AVENTURA</button>
+      <button id="levelsBtn" class="btn alt">SELECIONAR FASE</button>
+      <button id="difficultyBtn" class="btn purple">DIFICULDADE</button>
+      <button id="helpBtn" class="btn">COMO JOGAR</button>
+      <button id="creditsBtn" class="btn alt">CRÉDITOS</button>
+      <button class="btn purple" onclick="window.location.href='/play'">VOLTAR AO DIASMATH PLAY</button>
+    </div>
+    <p class="sub" style="font-size:13px">© 2026 Francisco Vieira Dias — DIASMATH™. Todos os direitos reservados.</p>
+  </div>
+</section>
+
+<section id="difficultyScreen" class="screen">
+  <div class="panel">
+    <h2 class="title2">Nível de dificuldade</h2>
+    <p class="problem">Escolha o ritmo do jogo. O conteúdo matemático aparece em todos os modos.</p>
+    <div id="difficultyGrid" class="grid diffGrid"></div>
+    <div class="btns"><button class="btn alt" data-screen="titleScreen">VOLTAR</button></div>
+  </div>
+</section>
+
+<section id="levelScreen" class="screen">
+  <div class="panel">
+    <h2 class="title2">Seleção de fases</h2>
+    <p class="problem">As fases estão abertas para teste e uso pedagógico.</p>
+    <div id="levelGrid" class="grid levelGrid"></div>
+    <div class="btns"><button class="btn alt" data-screen="titleScreen">VOLTAR</button></div>
+  </div>
+</section>
+
+<section id="helpScreen" class="screen">
+  <div class="panel">
+    <h2 class="title2">Como jogar</h2>
+    <p class="problem">Mover: ← → ou A/D. Pular: Espaço/W/↑. Atacar: F ou X. Dash: Shift ou C. Especial: Q ou Z. Ação: E ou Enter.</p>
+    <p class="problem">O Baú do Saber libera o Raio da Partilha. O Portal da Partilha abre a divisão na prática. A fase final exige vários problemas desafiadores.</p>
+    <div class="btns"><button class="btn alt" data-screen="titleScreen">VOLTAR</button></div>
+  </div>
+</section>
+
+<section id="creditsScreen" class="screen">
+  <div class="panel">
+    <h2 class="title2">Créditos</h2>
+    <div class="credits">
+      <p><strong>Os Guardiões da Divisão</strong></p>
+      <p>Concepção pedagógica, matemática e identidade DIASMATH™: Francisco Vieira Dias.</p>
+      <p>Objetivo: ensinar divisão como repartição, agrupamento, quociente e resto por meio de uma aventura brasileira.</p>
+      <p>© 2026 Francisco Vieira Dias — DIASMATH™.</p>
+    </div>
+    <div class="btns"><button class="btn alt" data-screen="titleScreen">VOLTAR</button></div>
+  </div>
+</section>
+
+<section id="challengeScreen" class="screen">
+  <div class="panel">
+    <h2 id="challengeTitle" class="title2">Baú do Saber</h2>
+    <p id="challengeText" class="problem"></p>
+    <div id="challengeQuestion" class="mathline"></div>
+    <div id="challengePreview"></div>
+    <div id="challengeAnswers" class="answers"></div>
+    <div id="challengeFeedback" class="feedback"></div>
+    <div class="btns"><button id="challengeBack" class="btn small alt">VOLTAR À FASE</button></div>
+  </div>
+</section>
+
+<section id="practiceScreen" class="screen">
+  <div class="panel">
+    <h2 class="title2">Portal da Partilha</h2>
+    <p id="practiceProblem" class="problem"></p>
+    <div id="source" class="source"></div>
+    <div id="practiceArea"></div>
+    <div id="remainderInfo"></div>
+    <div id="mathLine" class="mathline"></div>
+    <div id="practiceFeedback" class="feedback"></div>
+    <div id="practiceButtons" class="btns"></div>
+    <div id="practiceAnswers" class="answers"></div>
+  </div>
+</section>
+
+<section id="bossQuizScreen" class="screen">
+  <div class="panel">
+    <h2 class="title2">Desafio do Chefão</h2>
+    <p class="problem">Resolva os problemas para abrir uma brecha no Rei Desigual.</p>
+    <div id="bossQuizList" class="bossProblems"></div>
+    <div id="bossQuizFeedback" class="feedback"></div>
+    <div class="btns">
+      <button id="bossQuizCheck" class="btn">CONFERIR E ATACAR</button>
+      <button id="bossQuizBack" class="btn alt">VOLTAR À ARENA</button>
+    </div>
+  </div>
+</section>
+
+<section id="resultScreen" class="screen">
+  <div class="panel">
+    <h2 id="resultTitle" class="title2">Fase concluída!</h2>
+    <div id="resultStars" style="font-size:42px"></div>
+    <p id="resultText" class="problem"></p>
+    <div id="resultEquation" class="mathline"></div>
+    <p id="resultRelation" class="problem"></p>
+    <div id="finalCelebration" class="finalCelebration">
+      <div class="victoryRibbon">PARABÉNS! VOCÊ SE TORNOU UM GUARDIÃO DA DIVISÃO!</div>
+      <div class="victoryIcons">★ ÷ ★ ÷ ★</div>
+      <div class="endGrid">
+        <div class="endCard">
+          <h3>Personagens da aventura</h3>
+          <div class="characterList">
+            <span class="characterChip">Ari — o estudante Guardião</span>
+            <span class="characterChip">Tatu-bola</span><span class="characterChip">Cascavel</span>
+            <span class="characterChip">Carcará Guardião</span><span class="characterChip">Onça-pintada</span>
+            <span class="characterChip">Piranha</span><span class="characterChip">Boi-bumbá</span>
+            <span class="characterChip">Coruja-buraqueira</span><span class="characterChip">Sapo-cururu</span>
+            <span class="characterChip">Capivara</span><span class="characterChip">Tuiuiú</span>
+            <span class="characterChip">Jacaré-do-Pantanal</span><span class="characterChip">Mico-leão-dourado</span>
+            <span class="characterChip">Arara-azul</span><span class="characterChip">Tamanduá-bandeira</span>
+            <span class="characterChip">Sombra Desigual</span><span class="characterChip">Rei Desigual</span>
+          </div>
+        </div>
+        <div class="endCard">
+          <h3>Créditos</h3>
+          <p class="finalCreditLine"><strong>Concepção pedagógica, matemática e identidade DIASMATH™:</strong><br>Francisco Vieira Dias.</p>
+          <p class="finalCreditLine"><strong>Desenvolvimento e revisão técnica:</strong><br>com apoio do ChatGPT, OpenAI.</p>
+          <p class="finalCreditLine"><strong>Missão cumprida:</strong><br>aprender divisão como repartição, agrupamento, quociente e resto por meio de uma aventura divertida.</p>
+          <p class="finalCreditLine">© 2026 Francisco Vieira Dias — DIASMATH™. Todos os direitos reservados.</p>
+        </div>
+      </div>
+    </div>
+    <div class="btns">
+      <button id="nextBtn" class="btn">PRÓXIMA FASE</button>
+      <button id="resultLevelsBtn" class="btn alt">FASES</button>
+      <button id="resultTitleBtn" class="btn purple">TELA INICIAL</button>
+    </div>
+  </div>
+</section>
+
+<section id="gameoverScreen" class="screen">
+  <div class="panel" style="max-width:560px">
+    <h2 class="title2">Fim de jogo</h2>
+    <p class="problem">Ari perdeu todos os corações, mas todo Guardião pode tentar de novo.</p>
+    <div class="btns">
+      <button id="retryBtn" class="btn">TENTAR NOVAMENTE</button>
+      <button id="gameoverLevelsBtn" class="btn alt">FASES</button>
+    </div>
+  </div>
+</section>
+
+<div class="topBtns">
+  <button id="musicBtn" class="iconBtn" title="Música">♪</button>
+  <button id="soundBtn" class="iconBtn" title="Som">🔊</button>
+  <button id="fullBtn" class="iconBtn" title="Tela cheia">⛶</button>
+</div>
+
+<div id="hud" class="hud">
+  <div id="missionHud" class="hudbox missionhud"></div>
+  <div id="lifeHud" class="hudbox"></div>
+  <div id="itemHud" class="hudbox"></div>
+  <div id="powerHud" class="hudbox"></div>
+</div>
+
+<div id="bossBar" class="bossbar">
+  <div id="bossName" class="bossname"></div>
+  <div class="bar"><div id="bossFill" class="fill"></div></div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<div id="controls" class="controls">
+  <div class="pad">
+    <button class="touch" data-key="left">◀</button>
+    <button class="touch" data-key="right">▶</button>
+  </div>
+  <div class="actpad">
+    <button class="touch special" data-key="special">PODER</button>
+    <button class="touch" data-key="attack">ATACAR</button>
+    <button class="touch" data-key="dash">DASH</button>
+    <button class="touch" data-key="action">AÇÃO</button>
+    <button class="touch big" data-key="jump">PULAR</button>
+  </div>
+</div>
+</div>
+
+<script>
+(() => {
+"use strict";
+
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const canvas = $("#game");
+const ctx = canvas.getContext("2d");
+const W = canvas.width;
+const H = canvas.height;
+
+const DIFFICULTIES = {
+  facil: { label:"Fácil", hearts:5, enemySpeed:.72, enemyHp:.8, ammo:16, desc:"Mais vidas, mais energia e inimigos mais lentos." },
+  normal: { label:"Normal", hearts:4, enemySpeed:1, enemyHp:1, ammo:12, desc:"Equilíbrio entre aventura e aprendizagem." },
+  desafio: { label:"Desafio", hearts:3, enemySpeed:1.28, enemyHp:1.25, ammo:9, desc:"Menos recursos e monstros mais agressivos." }
+};
+
+const WORLDS = [
+  { name:"Feira do Nordeste", short:"Feira", colors:["#85d9ef","#f7d38a"], ground:"#6f4427", grass:"#70b75a", accent:"#e47b34", music:[262,330,392,440] },
+  { name:"Floresta Amazônica", short:"Amazônia", colors:["#55c98b","#143d36"], ground:"#4d3b24", grass:"#2a8b52", accent:"#25a45f", music:[220,262,330,392] },
+  { name:"Festa Junina", short:"Junina", colors:["#443d87","#171f45"], ground:"#5d3626", grass:"#d99c34", accent:"#8b4aae", music:[294,349,440,523] },
+  { name:"Pantanal", short:"Pantanal", colors:["#7fd5d2","#2b756c"], ground:"#5c4a2b", grass:"#3e9879", accent:"#287d78", music:[196,247,294,349] },
+  { name:"Carnaval do Equilíbrio", short:"Carnaval", colors:["#5c3391","#190a2b"], ground:"#51305c", grass:"#d74f8d", accent:"#d84f8b", music:[262,330,392,523] },
+  { name:"Arena Final", short:"Arena", colors:["#211746","#561d55"], ground:"#3a264f", grass:"#e0a72f", accent:"#f2c14e", music:[196,262,311,392,466] }
+];
+
+const LEVELS = [
+  { world:0, title:"Cajus na Feira", mode:"share", total:12, divisor:3, quotient:4, rest:0, collect:8, token:"caju", problem:"Distribua 12 cajus igualmente em 3 cestos.", monsters:["armadillo","snake","bird"], boss:null },
+  { world:0, title:"Barracas de Suco", mode:"share", total:24, divisor:6, quotient:4, rest:0, collect:10, token:"juice", problem:"Distribua 24 garrafas de suco igualmente em 6 barracas.", monsters:["armadillo","snake","bird"], boss:"carcara" },
+  { world:1, title:"Sementes da Floresta", mode:"group", total:28, divisor:7, quotient:4, rest:0, collect:10, token:"seed", problem:"Forme grupos com 7 sementes. Quantos grupos serão formados?", monsters:["snake","jaguar","fish"], boss:null },
+  { world:1, title:"Frutas Ribeirinhas", mode:"share", total:30, divisor:5, quotient:6, rest:0, collect:11, token:"banana", problem:"Distribua 30 frutas igualmente em 5 comunidades.", monsters:["snake","jaguar","fish"], boss:"jaguar" },
+  { world:2, title:"Doces do Arraial", mode:"share", total:36, divisor:6, quotient:6, rest:0, collect:10, token:"candy", problem:"Distribua 36 doces igualmente em 6 mesas.", monsters:["ox","owl","frog"], boss:null },
+  { world:2, title:"Milhos da Festa", mode:"share", total:40, divisor:8, quotient:5, rest:0, collect:12, token:"corn", problem:"Distribua 40 espigas igualmente em 8 cestos.", monsters:["ox","owl","frog"], boss:"ox" },
+  { world:3, title:"Rede com Resto", mode:"group", total:22, divisor:5, quotient:4, rest:2, collect:12, token:"flower", problem:"Forme grupos de 5 vitórias-régias. Quantos grupos completos e qual resto?", monsters:["capybara","stork","alligator"], boss:"alligator" },
+  { world:4, title:"Fantasias em Caixas", mode:"group", total:50, divisor:8, quotient:6, rest:2, collect:12, token:"mask", problem:"Coloque 50 fantasias em caixas com 8. Quantas caixas completas e qual resto?", monsters:["monkey","macaw","anteater"], boss:null },
+  { world:4, title:"Desfile do Equilíbrio", mode:"share", total:56, divisor:7, quotient:8, rest:0, collect:13, token:"star", problem:"Distribua 56 integrantes igualmente em 7 fileiras.", monsters:["monkey","macaw","anteater"], boss:"shadow" },
+  { world:5, title:"Arena do Rei Desigual", mode:"boss", total:0, divisor:0, quotient:0, rest:0, collect:0, token:"crystal", problem:"Resolva problemas de divisão para derrotar o Rei Desigual.", monsters:["shadow"], boss:"king", final:true }
+];
+
+const MONSTER_INFO = {
+  armadillo:{ name:"Tatu-bola", hp:2, speed:80, kind:"ground" },
+  snake:{ name:"Cascavel", hp:2, speed:92, kind:"ground" },
+  bird:{ name:"Carcará", hp:2, speed:105, kind:"fly" },
+  jaguar:{ name:"Onça-pintada", hp:3, speed:112, kind:"ground" },
+  fish:{ name:"Piranha", hp:2, speed:95, kind:"fly" },
+  ox:{ name:"Boi-bumbá", hp:3, speed:82, kind:"ground" },
+  owl:{ name:"Coruja-buraqueira", hp:2, speed:92, kind:"fly" },
+  frog:{ name:"Sapo-cururu", hp:2, speed:80, kind:"ground" },
+  capybara:{ name:"Capivara", hp:2, speed:76, kind:"ground" },
+  stork:{ name:"Tuiuiú", hp:2, speed:92, kind:"fly" },
+  alligator:{ name:"Jacaré-do-Pantanal", hp:3, speed:86, kind:"ground" },
+  monkey:{ name:"Mico-leão-dourado", hp:2, speed:108, kind:"ground" },
+  macaw:{ name:"Arara-azul", hp:2, speed:100, kind:"fly" },
+  anteater:{ name:"Tamanduá-bandeira", hp:3, speed:82, kind:"ground" },
+  shadow:{ name:"Sombra Desigual", hp:4, speed:88, kind:"ground" },
+  carcara:{ name:"Carcará Guardião", hp:9, speed:70, kind:"fly" },
+  king:{ name:"Rei Desigual", hp:28, speed:60, kind:"boss" }
+};
+
+let save = loadSave();
+let difficulty = localStorage.getItem("gd_clean_difficulty") || "normal";
+let state = "title";
+let currentLevel = 0;
+let worldWidth = 4700;
+let cameraX = 0;
+let last = 0;
+let toastTimer = 0;
+let cinematic = 0;
+let audioCtx = null;
+let musicOn = localStorage.getItem("gd_clean_music") !== "off";
+let soundOn = true;
+let musicTimer = null;
+let musicStep = 0;
+
+let platforms = [];
+let hazards = [];
+let collectibles = [];
+let crates = [];
+let enemies = [];
+let bullets = [];
+let particles = [];
+let chest = null;
+let portal = null;
+let bonusPortals = [];
+let boss = null;
+let altar = null;
+let practice = null;
+let challenge = null;
+let bossProblems = [];
+
+const player = {
+  x:80,y:420,w:54,h:82,vx:0,vy:0,facing:1,grounded:false,
+  hearts:4,maxHearts:4,inv:0,weapon:false,ammo:0,shield:0,dash:0,special:0,
+  collected:0,score:0,combo:0
+};
+const keys = { left:false, right:false };
+const queue = { jump:false, action:false, attack:false, dash:false, special:false };
+
+function loadSave(){
+  try { return JSON.parse(localStorage.getItem("gd_clean_save") || '{"unlocked":9,"stars":{},"completed":{}}'); }
+  catch(e){ return {unlocked:9,stars:{},completed:{}}; }
+}
+function persist(){ localStorage.setItem("gd_clean_save", JSON.stringify(save)); }
+function diff(){ return DIFFICULTIES[difficulty]; }
+
+function showScreen(id){
+  $$(".screen").forEach(s => s.classList.remove("active"));
+  if(id) $("#" + id).classList.add("active");
+  $("#titleScreen").style.display = id === "titleScreen" ? "flex" : "none";
+}
+function setGameUI(on){
+  $("#hud").classList.toggle("active", on);
+  const touch = matchMedia("(pointer:coarse)").matches || innerWidth < 900;
+  $("#controls").classList.toggle("active", on && touch);
+  $("#bossBar").classList.toggle("active", on && boss && !boss.dead);
+}
+function toast(text,ms=1800){
+  const t=$("#toast");
+  t.textContent=text;
+  t.classList.add("show");
+  toastTimer=ms;
+}
+function beep(freq=440,dur=.08,type="sine",gain=.055){
+  if(!soundOn) return;
+  try{
+    audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();
+    const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+    o.type=type; o.frequency.value=freq;
+    g.gain.setValueAtTime(gain,audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+dur);
+    o.connect(g).connect(audioCtx.destination);
+    o.start(); o.stop(audioCtx.currentTime+dur);
+  }catch(e){}
+}
+function stopMusic(){ if(musicTimer){ clearInterval(musicTimer); musicTimer=null; } }
+function playMusic(world){
+  stopMusic();
+  if(!musicOn) return;
+  try{
+    audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();
+    const notes = WORLDS[world].music;
+    musicStep = 0;
+    musicTimer = setInterval(() => {
+      if(state !== "playing" && state !== "boss") return;
+      const n = notes[musicStep % notes.length];
+      musicStep++;
+      const o=audioCtx.createOscillator(), g=audioCtx.createGain(), f=audioCtx.createBiquadFilter();
+      o.type="triangle"; o.frequency.value = n * (musicStep % 8 === 0 ? 2 : 1);
+      f.type="lowpass"; f.frequency.value=900;
+      g.gain.setValueAtTime(.023,audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.33);
+      o.connect(f).connect(g).connect(audioCtx.destination);
+      o.start(); o.stop(audioCtx.currentTime+.34);
+      if(musicStep % 4 === 0){
+        const b=audioCtx.createOscillator(), bg=audioCtx.createGain();
+        b.type="sine"; b.frequency.value=n/2;
+        bg.gain.setValueAtTime(.014,audioCtx.currentTime);
+        bg.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.45);
+        b.connect(bg).connect(audioCtx.destination);
+        b.start(); b.stop(audioCtx.currentTime+.45);
+      }
+    }, 390);
+  }catch(e){}
+}
+
+function renderDifficulty(){
+  const box=$("#difficultyGrid");
+  box.innerHTML="";
+  Object.entries(DIFFICULTIES).forEach(([id,d]) => {
+    const card=document.createElement("div");
+    card.className="card" + (id===difficulty ? " selected" : "");
+    card.innerHTML=`<h3>${d.label}</h3><p>${d.desc}</p><p>Corações: ${d.hearts} | Energia: ${d.ammo}</p>`;
+    card.onclick=()=>{ difficulty=id; localStorage.setItem("gd_clean_difficulty", id); renderDifficulty(); beep(620,.07,"triangle"); };
+    box.appendChild(card);
+  });
+}
+function renderLevels(){
+  const box=$("#levelGrid");
+  box.innerHTML="";
+  LEVELS.forEach((l,i)=>{
+    const w=WORLDS[l.world];
+    const card=document.createElement("div");
+    card.className="card";
+    card.innerHTML=`<div class="badge">${i+1}</div><h3>${l.title}</h3><p>${w.name}</p><p>${l.mode==="boss"?"Chefão final":l.mode==="share"?"Repartição":"Agrupamento"}${l.rest?", com resto":""}</p><button class="btn alt">JOGAR</button>`;
+    card.querySelector("button").onclick=()=>startLevel(i);
+    box.appendChild(card);
+  });
+}
+
+function startLevel(index){
+  currentLevel=index;
+  const level=LEVELS[index];
+  state = level.mode === "boss" ? "boss" : "playing";
+  showScreen(null);
+  setGameUI(true);
+  buildLevel();
+  playMusic(level.world);
+  cinematic=2;
+  toast(level.mode==="boss" ? "Arena Final: resolva problemas para vencer!" : `${WORLDS[level.world].name}: ${level.title}`, 2400);
+}
+
+function buildLevel(){
+  const level=LEVELS[currentLevel];
+  const d=diff();
+  player.maxHearts=d.hearts;
+  player.hearts=d.hearts;
+  player.x=80; player.y=420; player.vx=0; player.vy=0; player.facing=1;
+  player.inv=0; player.collected=0; player.weapon=level.mode==="boss"; player.ammo=level.mode==="boss" ? 20 : 0;
+  player.shield=0; player.dash=0; player.special=0; player.combo=0;
+  cameraX=0; bullets=[]; particles=[]; challenge=null; practice=null;
+  if(level.mode==="boss") buildBossArena(); else buildNormalLevel(level);
+  updateHUD();
+}
+function basePlatforms(){
+  return [
+    {x:0,y:620,w:620,h:100},{x:760,y:620,w:600,h:100},{x:1500,y:620,w:650,h:100},{x:2290,y:620,w:560,h:100},{x:3000,y:620,w:620,h:100},{x:3750,y:620,w:820,h:100},
+    {x:250,y:500,w:190,h:24},{x:560,y:410,w:170,h:24},{x:920,y:500,w:190,h:24},{x:1190,y:405,w:180,h:24},
+    {x:1620,y:500,w:210,h:24},{x:1930,y:395,w:190,h:24,move:true,baseY:395,t:0},
+    {x:2450,y:505,w:190,h:24},{x:2760,y:410,w:170,h:24,move:true,baseY:410,t:2},
+    {x:3260,y:500,w:210,h:24},{x:3540,y:405,w:190,h:24}
+  ];
+}
+function buildNormalLevel(level){
+  worldWidth=4700;
+  platforms=basePlatforms();
+  const spots=[[180,560],[340,440],[620,350],[965,445],[1120,560],[1280,345],[1660,438],[1790,560],[2010,335],[2210,560],[2500,445],[2810,350],[2960,560],[3290,435],[3480,560],[3610,345],[3880,560],[4040,560]];
+  collectibles=spots.slice(0,level.collect).map((p,i)=>({x:p[0],y:p[1],taken:false,bob:i*.6,token:level.token}));
+  hazards=[
+    {x:650,y:596,w:80,h:24,type:"spike"},
+    {x:1380,y:596,w:92,h:24,type:"spike"},
+    {x:2910,y:596,w:88,h:24,type:"spike"},
+    {x:3650,y:596,w:84,h:24,type:"spike"}
+  ];
+  crates=[
+    {x:720,y:560,w:50,h:50,kind:"ammo",open:false},
+    {x:2160,y:560,w:50,h:50,kind:"heart",open:false},
+    {x:3110,y:560,w:50,h:50,kind:"score",open:false}
+  ];
+  chest={x:1050,y:548,w:78,h:68,open:false};
+  portal={x:4230,y:430,w:120,h:190};
+  bonusPortals=[
+    {x:2070,y:490,w:95,h:130,kind:"life",used:false},
+    {x:3490,y:490,w:95,h:130,kind:"shield",used:false}
+  ];
+  enemies=level.monsters.map((type,i)=>{
+    const info=MONSTER_INFO[type];
+    const xs=[1370,2460,3400][i];
+    return {
+      type, name:info.name, kind:info.kind,
+      x:xs,y: info.kind==="fly" ? 460 : 548,
+      min:xs-130,max:xs+420,w:76,h:72,
+      vx:(i%2?-1:1)*info.speed*diff().enemySpeed,
+      hp:Math.ceil(info.hp*diff().enemyHp), maxHp:Math.ceil(info.hp*diff().enemyHp),
+      dead:false, phase:i*.7, shoot:0
+    };
+  });
+  boss=null;
+  if(level.boss){
+    const info=MONSTER_INFO[level.boss] || MONSTER_INFO.shadow;
+    boss={type:level.boss,name:info.name,kind:info.kind,x:3920,y:info.kind==="fly"?390:430,w:160,h:180,vx:-70*diff().enemySpeed,hp:Math.ceil(9*diff().enemyHp),maxHp:Math.ceil(9*diff().enemyHp),dead:false,t:0,shoot:0};
+  }
+}
+function buildBossArena(){
+  worldWidth=1280;
+  platforms=[{x:0,y:620,w:1280,h:100},{x:230,y:500,w:190,h:24},{x:545,y:405,w:190,h:24},{x:860,y:500,w:190,h:24}];
+  hazards=[{x:0,y:596,w:130,h:24,type:"spike"},{x:1150,y:596,w:130,h:24,type:"spike"}];
+  collectibles=[]; enemies=[]; crates=[{x:320,y:560,w:50,h:50,kind:"ammo",open:false},{x:920,y:560,w:50,h:50,kind:"heart",open:false}];
+  chest=null; portal=null; bonusPortals=[];
+  altar={x:555,y:540,w:95,h:80};
+  boss={type:"king",name:"Rei Desigual",kind:"boss",x:930,y:365,w:190,h:240,vx:0,hp:Math.ceil(28*diff().enemyHp),maxHp:Math.ceil(28*diff().enemyHp),dead:false,t:0,shoot:0};
+}
+function updateHUD(){
+  const level=LEVELS[currentLevel];
+  $("#missionHud").textContent = level.mode==="boss"
+    ? "Arena Final: use o Altar da Divisão e o Raio da Partilha para vencer."
+    : `${WORLDS[level.world].short}: colete ${level.collect} símbolos, abra o Baú do Saber e alcance o Portal da Partilha.`;
+  $("#lifeHud").textContent = "❤".repeat(player.hearts) + "♡".repeat(Math.max(0,player.maxHearts-player.hearts));
+  $("#itemHud").textContent = `${player.collected}/${level.collect}`;
+  $("#powerHud").textContent = player.weapon ? `Raio ${player.ammo}` : "Raio bloqueado";
+  $("#bossBar").classList.toggle("active", !!boss && !boss.dead && (state==="playing" || state==="boss"));
+  if(boss && !boss.dead){
+    $("#bossName").textContent=boss.name;
+    $("#bossFill").style.width=Math.max(0,boss.hp/boss.maxHp*100)+"%";
+  }
+}
+
+function overlap(a,b){ return a.x < b.x+b.w && a.x+a.w > b.x && a.y < b.y+b.h && a.y+a.h > b.y; }
+function near(a,b,p=70){ return overlap({x:a.x-p,y:a.y-p,w:a.w+p*2,h:a.h+p*2}, b); }
+function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+function addParticle(x,y,text,color="#fff2a0",life=1.2){ particles.push({x,y,text,color,life,vy:-34}); }
+
+function update(dt){
+  if(state!=="playing" && state!=="boss") return;
+
+  if(toastTimer>0){ toastTimer-=dt*1000; if(toastTimer<=0) $("#toast").classList.remove("show"); }
+  if(cinematic>0) cinematic-=dt;
+
+  player.inv=Math.max(0,player.inv-dt);
+  player.shield=Math.max(0,player.shield-dt);
+  player.dash=Math.max(0,player.dash-dt);
+  player.special=Math.max(0,player.special-dt);
+
+  platforms.forEach(p=>{ if(p.move){ p.t+=dt; p.y=p.baseY+Math.sin(p.t*1.6)*34; } });
+
+  const dir=(keys.right?1:0)-(keys.left?1:0);
+  if(dir) player.facing=dir;
+
+  if(queue.dash && player.dash<=0){
+    player.vx=player.facing*760;
+    player.dash=2.1;
+    player.inv=.18;
+    addParticle(player.x,player.y,"DASH","#9ff7ff");
+    beep(510,.06,"triangle");
+  }else{
+    player.vx=dir*350;
+  }
+  queue.dash=false;
+
+  if(queue.jump && player.grounded){
+    player.vy=-690;
+    player.grounded=false;
+    beep(310,.055);
+  }
+  queue.jump=false;
+
+  if(queue.attack){ fireWeapon(); queue.attack=false; }
+  if(queue.special){ specialPower(); queue.special=false; }
+
+  player.vy+=1720*dt;
+  player.x+=player.vx*dt;
+  player.x=clamp(player.x,0,worldWidth-player.w);
+
+  const prevBottom=player.y+player.h;
+  player.y+=player.vy*dt;
+  player.grounded=false;
+  platforms.forEach(p=>{
+    if(player.x+player.w>p.x && player.x<p.x+p.w){
+      const bottom=player.y+player.h;
+      if(player.vy>=0 && prevBottom<=p.y+12 && bottom>=p.y){
+        player.y=p.y-player.h;
+        player.vy=0;
+        player.grounded=true;
+      }
+    }
+  });
+
+  if(player.y>H+140) hurt({x:player.x-100},true);
+  hazards.forEach(h=>{ if(overlap(player,h)) hurt(h); });
+
+  collectibles.forEach(c=>{
+    c.bob+=dt*4;
+    if(!c.taken && overlap(player,{x:c.x-22,y:c.y-22,w:44,h:44})){
+      c.taken=true;
+      player.collected++;
+      player.score+=50;
+      addParticle(c.x,c.y,"+50","#fff36a");
+      beep(690,.05);
+      if(player.collected===LEVELS[currentLevel].collect) toast("Todos os símbolos foram coletados. Vá ao Portal da Partilha.",2200);
+    }
+  });
+
+  crates.forEach(c=>{
+    if(!c.open && overlap(player,c) && player.vy>0) openCrate(c);
+  });
+
+  updateEnemies(dt);
+  updateBoss(dt);
+  updateBullets(dt);
+
+  if(queue.action){ handleAction(); queue.action=false; }
+
+  const target = state==="boss" ? 0 : player.x-W*.38;
+  cameraX += (target-cameraX)*Math.min(1,dt*6);
+  cameraX=clamp(cameraX,0,Math.max(0,worldWidth-W));
+
+  updateHUD();
+}
+function hurt(source,fall=false){
+  if(player.inv>0) return;
+  if(player.shield>0 && !fall){
+    player.inv=.45;
+    addParticle(player.x,player.y,"ESCUDO","#9ff7ff");
+    beep(760,.08);
+    return;
+  }
+  player.hearts--;
+  player.inv=1.3;
+  player.vy=-420;
+  player.vx=player.x<(source.x||0)?-280:280;
+  player.combo=0;
+  beep(110,.18,"sawtooth");
+  if(player.hearts<=0){
+    state="gameover";
+    stopMusic();
+    setGameUI(false);
+    showScreen("gameoverScreen");
+  }else if(fall){
+    player.x=80; player.y=400; player.vx=0; player.vy=0;
+  }
+}
+function openCrate(c){
+  c.open=true;
+  if(c.kind==="heart") player.hearts=Math.min(player.maxHearts,player.hearts+1);
+  if(c.kind==="ammo") player.ammo+=5;
+  if(c.kind==="score") player.score+=150;
+  addParticle(c.x,c.y,c.kind==="heart"?"+VIDA":c.kind==="ammo"?"+ENERGIA":"+150");
+  beep(720,.08);
+}
+function updateEnemies(dt){
+  enemies.forEach(e=>{
+    if(e.dead) return;
+    const dist=player.x-e.x;
+    if(Math.abs(dist)<480){
+      e.vx=Math.sign(dist||1)*Math.abs(e.vx);
+      if(e.kind==="fly") e.y += clamp((player.y-35-e.y)*.05,-5,5);
+    }else{
+      if(e.x<e.min || e.x>e.max) e.vx*=-1;
+      if(e.kind==="fly") e.y=460+Math.sin(performance.now()/420+e.phase)*45;
+    }
+    e.x+=e.vx*dt;
+    if(e.x<e.min || e.x>e.max){ e.vx*=-1; e.x=clamp(e.x,e.min,e.max); }
+    e.shoot+=dt;
+    if(e.kind==="fly" && e.shoot>2.3){ e.shoot=0; enemyShoot(e); }
+    if(overlap(player,e)) hurt(e);
+  });
+}
+function enemyShoot(e){
+  bullets.push({x:e.x+e.w/2,y:e.y+e.h/2,w:16,h:16,vx:(player.x<e.x?-220:220),vy:0,enemy:true,life:3});
+}
+function updateBoss(dt){
+  if(!boss || boss.dead) return;
+  boss.t+=dt;
+  if(state==="boss"){
+    boss.x=920+Math.sin(boss.t*.8)*95;
+    if(boss.t-boss.shoot>1.15){
+      boss.shoot=boss.t;
+      bullets.push({x:boss.x+70,y:boss.y+85,w:22,h:22,vx:-260,vy:Math.sin(boss.t)*55,enemy:true,life:5});
+    }
+  }else{
+    const dist=player.x-boss.x;
+    if(Math.abs(dist)<580) boss.x+=Math.sign(dist)*75*dt;
+    if(boss.kind==="fly") boss.y=390+Math.sin(performance.now()/500)*36;
+    if(boss.t-boss.shoot>2.1){
+      boss.shoot=boss.t;
+      bullets.push({x:boss.x+boss.w/2,y:boss.y+80,w:18,h:18,vx:(player.x<boss.x?-260:260),vy:0,enemy:true,life:3.5});
+    }
+  }
+  if(overlap(player,boss)) hurt(boss);
+}
+function updateBullets(dt){
+  bullets.forEach(b=>{
+    b.x+=b.vx*dt; b.y+=(b.vy||0)*dt; b.life-=dt;
+    if(b.life<=0) b.dead=true;
+    if(b.enemy){
+      if(overlap(player,b)){ b.dead=true; hurt(b); }
+    }else{
+      enemies.forEach(e=>{
+        if(!e.dead && overlap(b,e)){
+          b.dead=true;
+          e.hp--;
+          addParticle(e.x,e.y,"-1");
+          if(e.hp<=0) defeatEnemy(e);
+        }
+      });
+      if(boss && !boss.dead && overlap(b,boss)){
+        b.dead=true;
+        boss.hp--;
+        addParticle(boss.x,boss.y,"-1","#fff36a");
+        if(boss.hp<=0) defeatBoss();
+      }
+    }
+  });
+  bullets=bullets.filter(b=>!b.dead);
+  particles.forEach(p=>{ p.y+=p.vy*dt; p.life-=dt; });
+  particles=particles.filter(p=>p.life>0);
+}
+function fireWeapon(){
+  if(!player.weapon){ toast("Abra o Baú do Saber para liberar o Raio da Partilha.",1700); return; }
+  if(player.ammo<=0){ toast("Sem energia. Procure caixas ou portais.",1500); return; }
+  player.ammo--;
+  bullets.push({x:player.x+player.w/2+player.facing*28,y:player.y+36,w:24,h:12,vx:player.facing*650,enemy:false,life:1.6});
+  beep(540,.045,"square");
+}
+function specialPower(){
+  if(!player.weapon || player.special>0) return;
+  if(player.ammo<3){ toast("O Poder do Quociente precisa de 3 energias.",1500); return; }
+  player.ammo-=3;
+  player.special=5;
+  enemies.forEach(e=>{
+    if(!e.dead && Math.abs(e.x-player.x)<360){
+      e.hp-=2;
+      if(e.hp<=0) defeatEnemy(e);
+    }
+  });
+  if(boss && !boss.dead && Math.abs(boss.x-player.x)<470){
+    boss.hp-=2;
+    if(boss.hp<=0) defeatBoss();
+  }
+  addParticle(player.x,player.y,"PODER DO QUOCIENTE","#d9a7ff",1.5);
+  beep(880,.13,"triangle");
+}
+function defeatEnemy(e){
+  e.dead=true;
+  player.ammo++;
+  player.combo++;
+  player.score+=100*player.combo;
+  addParticle(e.x,e.y,e.name+" neutralizado","#fff36a",1.6);
+  beep(760,.07);
+}
+function defeatBoss(){
+  boss.dead=true;
+  addParticle(boss.x,boss.y,"CHEFÃO VENCIDO!","#ffe762",3);
+  beep(660,.18);
+  setTimeout(()=>beep(990,.22),130);
+  if(state==="boss") setTimeout(completeLevel,900);
+}
+function handleAction(){
+  if(state==="boss"){
+    if(altar && near(player,altar,80)) openBossQuiz();
+    return;
+  }
+  if(chest && !chest.open && near(player,chest,80)){ openChallenge("weapon"); return; }
+  const bp=bonusPortals.find(p=>!p.used && near(player,p,80));
+  if(bp){ openChallenge(bp.kind,bp); return; }
+  if(portal && overlap(player,portal)){
+    const level=LEVELS[currentLevel];
+    if(player.collected<level.collect){ toast(`Ainda faltam ${level.collect-player.collected} símbolos.`,1600); return; }
+    if(boss && !boss.dead){ toast("Derrote o chefão antes de entrar no portal.",1700); return; }
+    openPractice();
+  }
+}
+
+function challengeOptions(ans){
+  const shuffle = arr => arr.map(v=>({v,r:Math.random()})).sort((a,b)=>a.r-b.r).map(o=>o.v);
+  const text = String(ans);
+  const remMatch = text.match(/^(\d+)\s*,\s*resto\s*(\d+)$/i);
+  if(remMatch){
+    const q = Number(remMatch[1]);
+    const r = Number(remMatch[2]);
+    const distractors = [
+      `${Math.max(1,q-1)}, resto ${r}`,
+      `${q+1}, resto ${r}`,
+      `${q}, resto ${Math.max(0,r-1)}`,
+      `${q}, resto ${r+1}`,
+      `${Math.max(1,q-1)}, resto ${Math.max(0,r-1)}`,
+      `${q+1}, resto ${r+1}`
+    ];
+    return shuffle([text, ...shuffle([...new Set(distractors)]).slice(0,3)]);
+  }
+  const n = Number(text);
+  if(Number.isFinite(n)){
+    const distractors = [Math.max(1,n-1), n+1, n+2, Math.max(1,n-2), n+3];
+    return shuffle([String(n), ...shuffle([...new Set(distractors.map(String))]).slice(0,3)]);
+  }
+  return [text];
+}
+function openChallenge(kind,target=null){
+  const level=LEVELS[currentLevel];
+  const divisor=level.divisor || 6;
+  const ans=Math.max(2,(level.quotient || 5) + (kind==="weapon"?0:1));
+  const total=divisor*ans;
+  challenge={kind,target,total,divisor,ans:String(ans)};
+  state="challenge";
+  setGameUI(false);
+  showScreen("challengeScreen");
+  $("#challengeTitle").textContent=kind==="weapon"?"Baú do Saber":kind==="life"?"Portal da Vida":"Portal do Escudo";
+  $("#challengeText").textContent=kind==="weapon"?"Resolva para liberar o Raio da Partilha.":"Resolva para ganhar bônus de defesa e energia.";
+  $("#challengeQuestion").textContent=`Quanto é ${total} ÷ ${divisor}?`;
+  $("#challengePreview").innerHTML=previewDivision(total,divisor,ans,level.token);
+  $("#challengeFeedback").textContent="Escolha uma das 4 alternativas.";
+  const box=$("#challengeAnswers");
+  box.innerHTML="";
+  challengeOptions(ans).forEach(v=>{
+    const b=document.createElement("button");
+    b.className="answer";
+    b.textContent=v;
+    b.onclick=()=>answerChallenge(String(v),b);
+    box.appendChild(b);
+  });
+  beep(620,.08);
+}
+function answerChallenge(v,button){
+  if(!challenge) return;
+  if(v!==challenge.ans){
+    button.disabled=true;
+    button.style.filter="grayscale(1)";
+    $("#challengeFeedback").textContent="Observe a prática e tente outra alternativa.";
+    beep(130,.12,"sawtooth");
+    return;
+  }
+  if(challenge.kind==="weapon"){
+    chest.open=true;
+    player.weapon=true;
+    player.ammo+=diff().ammo;
+    toast("Raio da Partilha liberado! Use F ou X para atacar.",2200);
+  }else{
+    if(challenge.target) challenge.target.used=true;
+    if(challenge.kind==="life") player.hearts=Math.min(player.maxHearts,player.hearts+1);
+    if(challenge.kind==="shield") player.shield=14;
+    player.ammo+=5;
+    toast("Bônus conquistado!",1600);
+  }
+  addParticle(player.x,player.y,`${challenge.total} ÷ ${challenge.divisor} = ${challenge.ans}`,"#fff36a",2);
+  challenge=null;
+  state="playing";
+  showScreen(null);
+  setGameUI(true);
+  beep(820,.1);
+}
+function previewDivision(total,divisor,ans,token,rest=0){
+  const q = Number(ans) || 0;
+  const shownGroups = Math.min(divisor,8);
+  let html=`<div class="miniGrid" style="--cols:${Math.min(divisor,4)}">`;
+  for(let i=0;i<shownGroups;i++){
+    html+=`<div class="miniGroup"><strong>Grupo ${i+1}</strong>${tokenHTML(token,Math.min(q,10))}</div>`;
+  }
+  html+=`</div>`;
+  if(rest>0){
+    html+=`<div class="miniGroup" style="max-width:240px;margin:10px auto 0 auto"><strong>Resto</strong>${tokenHTML(token,Math.min(rest,10))}</div>`;
+    html+=`<p class="problem" style="font-size:15px">${total} objetos repartidos em ${divisor} grupos: ${q} em cada grupo e restam ${rest}.</p>`;
+  }else{
+    html+=`<p class="problem" style="font-size:15px">${total} objetos repartidos em ${divisor} grupos: ${q} em cada grupo.</p>`;
+  }
+  return html;
+}
+function tokenHTML(kind,n){
+  let cls="token";
+  if(kind==="seed") cls+=" seed";
+  if(kind==="fish") cls+=" fish";
+  if(kind==="candy") cls+=" candy";
+  if(kind==="mask") cls+=" mask";
+  if(kind==="star" || kind==="crystal") cls+=" star";
+  const label={caju:"C",juice:"S",seed:"S",banana:"F",candy:"D",corn:"M",flower:"V",mask:"F",star:"E",crystal:"C"}[kind] || "•";
+  let out="";
+  const max=Math.min(n,60);
+  for(let i=0;i<max;i++) out+=`<span class="${cls}">${label}</span>`;
+  if(n>60) out+=`<span class="${cls}">+${n-60}</span>`;
+  return out;
+}
+
+function openPractice(){
+  const level=LEVELS[currentLevel];
+  practice={remaining:level.total,groups:[],history:[],cards:[],answerReady:false};
+  state="practice";
+  setGameUI(false);
+  showScreen("practiceScreen");
+  $("#practiceProblem").textContent=level.problem;
+  $("#mathLine").textContent=`${level.total} ÷ ${level.divisor} = ?`;
+  $("#practiceFeedback").style.color="#a13a33";
+  $("#practiceFeedback").textContent=level.rest?"Forme grupos completos e deixe separado apenas o resto.":"Organize todos os objetos em partes iguais.";
+  $("#practiceAnswers").innerHTML="";
+  renderPractice();
+}
+function renderPractice(){
+  const level=LEVELS[currentLevel];
+  $("#source").innerHTML=practice.remaining ? tokenHTML(level.token,practice.remaining) : "<strong>Todos os objetos foram usados.</strong>";
+  const area=$("#practiceArea");
+  const buttons=$("#practiceButtons");
+  const rem=$("#remainderInfo");
+  area.innerHTML=""; buttons.innerHTML=""; rem.innerHTML="";
+  if(level.mode==="share"){
+    if(!practice.groups.length) practice.groups=Array(level.divisor).fill(0);
+    const grid=document.createElement("div");
+    grid.className="basketGrid";
+    grid.style.setProperty("--cols",Math.min(level.divisor,6));
+    practice.groups.forEach((n,i)=>{
+      const b=document.createElement("button");
+      b.className="basket";
+      b.innerHTML=`<strong>Grupo ${i+1}: ${n}</strong>${tokenHTML(level.token,n)}`;
+      b.onclick=()=>{ if(practice.remaining>level.rest){ practice.remaining--; practice.groups[i]++; practice.history.push(i); renderPractice(); } };
+      grid.appendChild(b);
+    });
+    area.appendChild(grid);
+    const quick=document.createElement("button");
+    quick.className="btn small alt";
+    quick.textContent="DISTRIBUIR 1 EM CADA";
+    quick.onclick=()=>{
+      if(practice.remaining-level.rest>=level.divisor){
+        practice.groups=practice.groups.map(n=>n+1);
+        practice.remaining-=level.divisor;
+        practice.history.push("round");
+        renderPractice();
+      }
+    };
+    buttons.appendChild(quick);
+  }else{
+    const action=document.createElement("button");
+    action.className="btn";
+    action.textContent=`FORMAR GRUPO DE ${level.divisor}`;
+    action.disabled=practice.remaining<level.divisor;
+    action.onclick=()=>{ practice.remaining-=level.divisor; practice.cards.push(level.divisor); renderPractice(); };
+    buttons.appendChild(action);
+    const grid=document.createElement("div");
+    grid.className="groupGrid";
+    practice.cards.forEach((n,i)=>{
+      const g=document.createElement("div");
+      g.className="groupBox";
+      g.innerHTML=`<strong>Grupo ${i+1}</strong>${tokenHTML(level.token,n)}`;
+      grid.appendChild(g);
+    });
+    area.appendChild(grid);
+  }
+  const undo=document.createElement("button");
+  undo.className="btn small alt";
+  undo.textContent="DESFAZER";
+  undo.onclick=()=>{
+    if(level.mode==="share"){
+      const last=practice.history.pop();
+      if(last==="round"){ practice.groups=practice.groups.map(n=>Math.max(0,n-1)); practice.remaining+=level.divisor; }
+      else if(last!==undefined){ practice.groups[last]--; practice.remaining++; }
+    }else{
+      const n=practice.cards.pop();
+      if(n) practice.remaining+=n;
+    }
+    renderPractice();
+  };
+  const reset=document.createElement("button");
+  reset.className="btn small purple";
+  reset.textContent="REINICIAR";
+  reset.onclick=openPractice;
+  const check=document.createElement("button");
+  check.className="btn small";
+  check.textContent="CONFERIR";
+  check.onclick=checkPractice;
+  buttons.append(undo,reset,check);
+  if(level.rest){
+    rem.innerHTML=`<p class="problem" style="font-size:16px">Separados: <strong>${practice.remaining}</strong>. Resto correto: <strong>${level.rest}</strong>.</p>`;
+  }
+}
+function checkPractice(){
+  const level=LEVELS[currentLevel];
+  let ok=false;
+  if(level.mode==="share"){
+    ok=practice.groups.length===level.divisor && practice.groups.every(n=>n===level.quotient) && practice.remaining===level.rest;
+  }else{
+    ok=practice.cards.length===level.quotient && practice.remaining===level.rest;
+  }
+  if(!ok){
+    $("#practiceFeedback").style.color="#a13a33";
+    $("#practiceFeedback").textContent=level.rest?`Ainda não. Devem ser ${level.quotient} grupos completos e resto ${level.rest}.`:"Ainda não. Confira se os grupos estão corretos.";
+    beep(140,.13,"sawtooth");
+    return;
+  }
+  showPracticeAnswers();
+}
+function answerLabel(q,r){ return r ? `${q}, resto ${r}` : `${q}`; }
+function showPracticeAnswers(){
+  if(practice.answerReady) return;
+  practice.answerReady=true;
+  const level=LEVELS[currentLevel];
+  const good=answerLabel(level.quotient,level.rest);
+  const opts=[good,answerLabel(Math.max(1,level.quotient-1),level.rest),answerLabel(level.quotient+1,level.rest),answerLabel(level.quotient,Math.min(level.divisor-1,level.rest+1))];
+  $("#practiceFeedback").style.color="#0f6c55";
+  $("#practiceFeedback").textContent="Prática correta. Agora escolha o resultado da divisão.";
+  const box=$("#practiceAnswers");
+  box.innerHTML="";
+  [...new Set(opts)].sort(()=>Math.random()-.5).slice(0,4).forEach(label=>{
+    const b=document.createElement("button");
+    b.className="answer";
+    b.textContent=label;
+    b.onclick=()=>{
+      if(label===good){
+        $("#mathLine").textContent=level.rest?`${level.total} ÷ ${level.divisor} = ${level.quotient}, resto ${level.rest}`:`${level.total} ÷ ${level.divisor} = ${level.quotient}`;
+        $("#practiceFeedback").style.color="#287447";
+        $("#practiceFeedback").textContent="Excelente! Portal concluído.";
+        setTimeout(completeLevel,850);
+      }else{
+        $("#practiceFeedback").style.color="#a13a33";
+        $("#practiceFeedback").textContent="Observe os grupos e tente novamente.";
+        beep(140,.13,"sawtooth");
+      }
+    };
+    box.appendChild(b);
+  });
+}
+
+const FINAL_PROBLEMS = [
+  {q:"96 estudantes serão divididos igualmente em 8 equipes. Quantos estudantes por equipe?",a:"12",opts:["10","11","12","14"]},
+  {q:"135 instrumentos serão distribuídos em 9 alas. Quantos instrumentos por ala?",a:"15",opts:["12","14","15","16"]},
+  {q:"154 fantasias serão colocadas em caixas com 12. Quantas caixas completas e qual resto?",a:"12, resto 10",opts:["11, resto 10","12, resto 10","13, resto 2","12, resto 8"]},
+  {q:"168 cristais foram repartidos em 7 portais. Quantos cristais por portal?",a:"24",opts:["21","22","24","28"]},
+  {q:"203 cajus serão organizados em grupos de 9. Quantos grupos completos e qual resto?",a:"22, resto 5",opts:["21, resto 5","22, resto 5","22, resto 4","23, resto 4"]}
+];
+function openBossQuiz(){
+  state="bossQuiz";
+  setGameUI(false);
+  showScreen("bossQuizScreen");
+  const list=$("#bossQuizList");
+  list.innerHTML="";
+  bossProblems=[...FINAL_PROBLEMS].sort(()=>Math.random()-.5).slice(0,3);
+  bossProblems.forEach((p,i)=>{
+    const div=document.createElement("div");
+    div.className="bossProblem";
+    div.innerHTML=`<div>${i+1}. ${p.q}</div><select data-i="${i}">${[...p.opts].sort(()=>Math.random()-.5).map(o=>`<option>${o}</option>`).join("")}</select>`;
+    list.appendChild(div);
+  });
+  $("#bossQuizFeedback").textContent="";
+}
+function checkBossQuiz(){
+  let ok=true;
+  $$("#bossQuizList select").forEach(sel=>{
+    if(sel.value!==bossProblems[Number(sel.dataset.i)].a) ok=false;
+  });
+  if(!ok){
+    $("#bossQuizFeedback").textContent="Ainda há resposta incorreta. Revise as divisões.";
+    beep(140,.14,"sawtooth");
+    return;
+  }
+  showScreen(null);
+  setGameUI(true);
+  state="boss";
+  boss.hp-=7;
+  player.ammo+=5;
+  addParticle(boss.x,boss.y,"BRECHA MATEMÁTICA!","#fff36a",2);
+  beep(880,.15,"triangle");
+  if(boss.hp<=0) defeatBoss();
+}
+function completeLevel(){
+  const level=LEVELS[currentLevel];
+  save.completed[currentLevel]=true;
+  persist();
+  stopMusic();
+  state="result";
+  setGameUI(false);
+  showScreen("resultScreen");
+  $("#resultStars").textContent="★★★";
+  $("#resultTitle").textContent=level.final?"Rei Desigual derrotado!":"Fase concluída!";
+  $("#resultText").textContent=level.final?"Ari restaurou o equilíbrio da divisão.":"Ari usou a matemática para avançar com justiça.";
+  $("#resultEquation").textContent=level.mode==="boss"?"Desafios finais resolvidos":level.rest?`${level.total} ÷ ${level.divisor} = ${level.quotient}, resto ${level.rest}`:`${level.total} ÷ ${level.divisor} = ${level.quotient}`;
+  $("#resultRelation").innerHTML=level.mode==="boss"?"O conhecimento abriu a última passagem.":level.rest?`Verificação: <strong>${level.divisor} × ${level.quotient} + ${level.rest} = ${level.total}</strong>`:`Relação: <strong>${level.divisor} × ${level.quotient} = ${level.total}</strong>`;
+  $("#nextBtn").style.display=currentLevel<LEVELS.length-1?"":"none";
+}
+
+function draw(){
+  const level=LEVELS[currentLevel] || LEVELS[0];
+  const world=WORLDS[level.world];
+  const bg=ctx.createLinearGradient(0,0,0,H);
+  bg.addColorStop(0,world.colors[0]);
+  bg.addColorStop(1,world.colors[1]);
+  ctx.fillStyle=bg;
+  ctx.fillRect(0,0,W,H);
+
+  ctx.save();
+  ctx.translate(-cameraX,0);
+  drawBackground(world,level.world);
+  drawPlatforms(world);
+  drawHazards();
+  drawCrates();
+  drawChest();
+  drawBonusPortals();
+  drawCollectibles();
+  drawEnemies();
+  drawBoss();
+  drawBullets();
+  drawPortal();
+  drawAltar();
+  drawPlayer();
+  drawParticles();
+  ctx.restore();
+
+  if(cinematic>0){
+    ctx.fillStyle=`rgba(0,0,0,${Math.min(.55,cinematic/2)})`;
+    ctx.fillRect(0,0,W,80);
+    ctx.fillRect(0,H-80,W,80);
+    ctx.fillStyle="#fff4b8";
+    ctx.font="900 34px Trebuchet MS";
+    ctx.textAlign="center";
+    ctx.fillText(level.mode==="boss"?"ARENA FINAL":world.name,W/2,52);
+  }
+}
+function drawBackground(world,wi){
+  ctx.save();
+  ctx.translate(-cameraX*.18,0);
+  if(wi===0){
+    ctx.fillStyle="#4f9c5d";
+    for(let x=-100;x<worldWidth+300;x+=380){ ctx.beginPath(); ctx.moveTo(x,610); ctx.lineTo(x+150,320); ctx.lineTo(x+310,610); ctx.fill(); }
+    drawPennants();
+  }else if(wi===1){
+    ctx.fillStyle="#176c50";
+    for(let x=-80;x<worldWidth+300;x+=150){ ctx.fillRect(x+70,340,24,280); ctx.beginPath(); ctx.arc(x+82,330,90,0,7); ctx.fill(); }
+  }else if(wi===2){
+    drawPennants();
+    ctx.fillStyle="#32244d";
+    for(let x=-80;x<worldWidth+300;x+=390){ ctx.fillRect(x+60,380,130,240); ctx.beginPath(); ctx.moveTo(x+20,400); ctx.lineTo(x+125,290); ctx.lineTo(x+230,400); ctx.fill(); }
+  }else if(wi===3){
+    ctx.fillStyle="rgba(44,128,139,.55)";
+    ctx.fillRect(0,555,worldWidth,65);
+    ctx.fillStyle="#397b70";
+    for(let x=-60;x<worldWidth+300;x+=300){ ctx.fillRect(x+120,380,24,200); ctx.beginPath(); ctx.arc(x+132,360,72,0,7); ctx.fill(); }
+  }else{
+    drawPennants();
+    ctx.fillStyle="#5d256e";
+    for(let x=-80;x<worldWidth+300;x+=260){ ctx.beginPath(); ctx.arc(x+120,450,110,0,7); ctx.fill(); }
+  }
+  ctx.restore();
+}
+function drawPennants(){
+  ctx.strokeStyle="#5b3b2a"; ctx.lineWidth=4;
+  ctx.beginPath(); ctx.moveTo(0,100); ctx.lineTo(worldWidth,112); ctx.stroke();
+  const colors=["#ffd15a","#17b69b","#8c52a5","#f2673d"];
+  for(let x=0,i=0;x<worldWidth;x+=80,i++){
+    ctx.fillStyle=colors[i%4];
+    ctx.beginPath(); ctx.moveTo(x,100); ctx.lineTo(x+44,101); ctx.lineTo(x+22,140); ctx.fill();
+  }
+}
+function drawPlatforms(world){
+  platforms.forEach(p=>{
+    ctx.fillStyle=world.ground;
+    ctx.fillRect(p.x,p.y,p.w,p.h);
+    ctx.fillStyle=p.move?"#e7b84f":world.grass;
+    ctx.fillRect(p.x,p.y,p.w,10);
+    ctx.fillStyle="rgba(255,230,150,.22)";
+    for(let x=p.x+16;x<p.x+p.w;x+=55) ctx.fillRect(x,p.y+32,24,7);
+  });
+}
+function drawHazards(){
+  hazards.forEach(h=>{
+    ctx.fillStyle="#d7e2ea";
+    for(let x=h.x;x<h.x+h.w;x+=16){
+      ctx.beginPath();
+      ctx.moveTo(x,h.y+h.h);
+      ctx.lineTo(x+8,h.y);
+      ctx.lineTo(x+16,h.y+h.h);
+      ctx.fill();
+    }
+  });
+}
+function drawCrates(){
+  crates.forEach(c=>{
+    if(c.open) return;
+    ctx.fillStyle="#9b622e"; ctx.fillRect(c.x,c.y,c.w,c.h);
+    ctx.strokeStyle="#f4c66b"; ctx.lineWidth=4; ctx.strokeRect(c.x+4,c.y+4,c.w-8,c.h-8);
+    ctx.fillStyle="#ffe08a"; ctx.font="900 18px Trebuchet MS"; ctx.textAlign="center";
+    ctx.fillText(c.kind==="heart"?"VIDA":c.kind==="ammo"?"RAIO":"PTS",c.x+c.w/2,c.y+32);
+  });
+}
+function drawChest(){
+  if(!chest || chest.open) return;
+  ctx.fillStyle="#b46a28"; ctx.fillRect(chest.x,chest.y+20,chest.w,chest.h-20);
+  ctx.fillStyle="#ef3f74"; ctx.fillRect(chest.x,chest.y,chest.w,32);
+  ctx.fillStyle="#ffe06b"; ctx.fillRect(chest.x+33,chest.y+24,14,18);
+  if(near(player,chest,80)) label(chest.x-28,chest.y-35,"AÇÃO: abrir Baú do Saber");
+}
+function drawBonusPortals(){
+  bonusPortals.forEach(p=>{
+    if(p.used) return;
+    ctx.save(); ctx.translate(p.x,p.y);
+    ctx.fillStyle=p.kind==="life"?"rgba(77,238,112,.28)":"rgba(106,200,255,.28)";
+    ctx.strokeStyle=p.kind==="life"?"#62f288":"#7fd9ff";
+    ctx.lineWidth=8; ctx.shadowBlur=22; ctx.shadowColor=ctx.strokeStyle;
+    ctx.beginPath(); ctx.ellipse(48,65,38,58,0,0,7); ctx.fill(); ctx.stroke();
+    ctx.restore();
+    if(near(player,p,80)) label(p.x-50,p.y-35,p.kind==="life"?"AÇÃO: Portal da Vida":"AÇÃO: Portal do Escudo");
+  });
+}
+function drawCollectibles(){
+  collectibles.forEach(c=>{
+    if(c.taken) return;
+    drawToken(c.x,c.y+Math.sin(c.bob)*5,c.token,1.1);
+  });
+}
+function drawToken(x,y,kind,s=1){
+  ctx.save(); ctx.translate(x,y); ctx.scale(s,s);
+  if(kind==="seed"){ ctx.fillStyle="#8b5d30"; ctx.beginPath(); ctx.ellipse(0,0,11,15,.4,0,7); ctx.fill(); }
+  else if(kind==="fish"){ ctx.fillStyle="#56abc8"; ctx.beginPath(); ctx.ellipse(0,0,17,10,0,0,7); ctx.fill(); ctx.beginPath(); ctx.moveTo(-15,0); ctx.lineTo(-28,-10); ctx.lineTo(-28,10); ctx.fill(); }
+  else if(kind==="candy"){ ctx.fillStyle="#e85d9c"; ctx.fillRect(-12,-10,24,20); ctx.fillStyle="#ffe9f4"; ctx.fillRect(-3,-10,6,20); }
+  else if(kind==="mask"){ ctx.fillStyle="#8c4cb0"; ctx.beginPath(); ctx.ellipse(0,0,18,12,0,0,7); ctx.fill(); ctx.fillStyle="#fff"; ctx.beginPath(); ctx.arc(-6,-1,3,0,7); ctx.arc(6,-1,3,0,7); ctx.fill(); }
+  else if(kind==="star" || kind==="crystal"){ ctx.fillStyle="#f0c84d"; starPath(0,0,16,7); ctx.fill(); }
+  else { ctx.fillStyle="#ef8435"; ctx.beginPath(); ctx.ellipse(0,0,13,17,-.3,0,7); ctx.fill(); ctx.fillStyle="#cf4d2f"; ctx.beginPath(); ctx.arc(2,-15,8,0,7); ctx.fill(); }
+  ctx.restore();
+}
+function starPath(x,y,r1,r2){
+  ctx.beginPath();
+  for(let i=0;i<10;i++){
+    const a=-Math.PI/2+i*Math.PI/5;
+    const r=i%2?r2:r1;
+    const px=x+Math.cos(a)*r, py=y+Math.sin(a)*r;
+    if(i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+  }
+  ctx.closePath();
+}
+function drawEnemies(){
+  enemies.forEach(e=>{ if(!e.dead) drawMonster(e); });
+}
+function drawBoss(){
+  if(!boss || boss.dead) return;
+  drawMonster(boss,true);
+}
+function drawMonster(e,isBoss=false){
+  const x=e.x,y=e.y,w=e.w,h=e.h,t=performance.now()/300+(e.phase||0);
+  ctx.save();
+  ctx.translate(x+w/2,y+h/2);
+  if(e.vx<0) ctx.scale(-1,1);
+  const bob=e.kind==="fly"?Math.sin(t)*5:Math.sin(t)*2;
+  ctx.translate(0,bob);
+  if(e.type==="armadillo") drawArmadillo(w,h);
+  else if(e.type==="snake") drawSnake(w,h);
+  else if(e.type==="bird" || e.type==="carcara") drawBird(w,h,"#8b6540");
+  else if(e.type==="jaguar") drawJaguar(w,h);
+  else if(e.type==="fish") drawFishMonster(w,h);
+  else if(e.type==="ox") drawOx(w,h);
+  else if(e.type==="owl") drawOwl(w,h);
+  else if(e.type==="frog") drawFrog(w,h);
+  else if(e.type==="capybara") drawCapybara(w,h);
+  else if(e.type==="stork") drawStork(w,h);
+  else if(e.type==="alligator") drawAlligator(w,h);
+  else if(e.type==="monkey") drawMonkey(w,h);
+  else if(e.type==="macaw") drawBird(w,h,"#2877d4");
+  else if(e.type==="anteater") drawAnteater(w,h);
+  else drawShadow(w,h,isBoss);
+  ctx.restore();
+
+  ctx.fillStyle="rgba(255,248,222,.94)";
+  ctx.strokeStyle="#2e5b5b";
+  ctx.lineWidth=2;
+  roundRect(x-24,y-30,w+48,25,9,true,true);
+  ctx.fillStyle="#184d4e";
+  ctx.font="bold 12px Trebuchet MS";
+  ctx.textAlign="center";
+  ctx.fillText(e.name,x+w/2,y-13);
+
+  if(e.maxHp>1){
+    ctx.fillStyle="#3d263f";
+    ctx.fillRect(x,y+h+5,w,8);
+    ctx.fillStyle="#f0b740";
+    ctx.fillRect(x,y+h+5,w*(e.hp/e.maxHp),8);
+  }
+}
+function baseBody(color,w,h){
+  ctx.shadowBlur=12; ctx.shadowColor="rgba(0,0,0,.32)";
+  ctx.fillStyle=color;
+  ctx.beginPath(); ctx.ellipse(0,8,w*.43,h*.32,0,0,7); ctx.fill();
+  ctx.shadowBlur=0;
+}
+function eye(x,y){ ctx.fillStyle="#fff"; ctx.beginPath(); ctx.arc(x,y,6,0,7); ctx.fill(); ctx.fillStyle="#211"; ctx.beginPath(); ctx.arc(x+2,y+1,3,0,7); ctx.fill(); }
+function drawArmadillo(w,h){
+  baseBody("#b98a61",w,h);
+  ctx.strokeStyle="#6d4c35"; ctx.lineWidth=4;
+  for(let i=-2;i<=2;i++){ ctx.beginPath(); ctx.arc(i*8,6,26,Math.PI*.85,Math.PI*1.15); ctx.stroke(); }
+  ctx.fillStyle="#c79872"; ctx.beginPath(); ctx.ellipse(w*.28,-7,w*.18,h*.18,0,0,7); ctx.fill(); eye(w*.35,-12);
+}
+function drawSnake(w,h){
+  ctx.fillStyle="#c99a48";
+  for(let i=-3;i<=2;i++){ ctx.beginPath(); ctx.ellipse(i*15,6+Math.sin(i)*4,18,12,0,0,7); ctx.fill(); }
+  ctx.fillStyle="#d6ad5e"; ctx.beginPath(); ctx.ellipse(w*.25,-7,20,16,0,0,7); ctx.fill(); eye(w*.32,-12);
+  ctx.strokeStyle="#5c3b1b"; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(-w*.38,12); ctx.lineTo(-w*.52,3); ctx.stroke();
+}
+function drawBird(w,h,color){
+  baseBody(color,w,h);
+  ctx.fillStyle="rgba(255,255,255,.45)";
+  ctx.beginPath(); ctx.ellipse(-w*.18,2,w*.30,h*.16,-.55,0,7); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(w*.05,2,w*.30,h*.16,.55,0,7); ctx.fill();
+  ctx.fillStyle="#e8b23c"; ctx.beginPath(); ctx.moveTo(w*.34,-8); ctx.lineTo(w*.55,-2); ctx.lineTo(w*.34,4); ctx.fill();
+  eye(w*.25,-13);
+}
+function drawJaguar(w,h){
+  baseBody("#d6a13b",w,h);
+  ctx.fillStyle="#2f1f12";
+  for(let i=-2;i<=2;i++){ ctx.beginPath(); ctx.arc(i*12,5+(i%2)*6,3,0,7); ctx.fill(); }
+  ctx.fillStyle="#d9aa50"; ctx.beginPath(); ctx.ellipse(w*.28,-8,w*.2,h*.2,0,0,7); ctx.fill(); eye(w*.34,-13);
+}
+function drawFishMonster(w,h){
+  ctx.fillStyle="#c84c4c"; ctx.beginPath(); ctx.ellipse(0,5,w*.38,h*.26,0,0,7); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-w*.35,4); ctx.lineTo(-w*.58,-16); ctx.lineTo(-w*.58,24); ctx.fill();
+  eye(w*.25,-5);
+}
+function drawOx(w,h){
+  baseBody("#2d2b2b",w,h);
+  ctx.fillStyle="#f1f1e0"; ctx.beginPath(); ctx.moveTo(-w*.18,-16); ctx.lineTo(-w*.38,-34); ctx.lineTo(-w*.25,-8); ctx.fill(); ctx.beginPath(); ctx.moveTo(w*.18,-16); ctx.lineTo(w*.38,-34); ctx.lineTo(w*.25,-8); ctx.fill();
+  eye(w*.26,-10);
+}
+function drawOwl(w,h){
+  baseBody("#b88947",w,h);
+  ctx.fillStyle="#f6e4b7"; ctx.beginPath(); ctx.arc(-10,-8,14,0,7); ctx.arc(10,-8,14,0,7); ctx.fill();
+  eye(-10,-8); eye(10,-8);
+}
+function drawFrog(w,h){
+  baseBody("#4b9b55",w,h);
+  ctx.fillStyle="#6fcf78"; ctx.beginPath(); ctx.ellipse(0,15,w*.28,h*.14,0,0,7); ctx.fill();
+  eye(-13,-18); eye(13,-18);
+}
+function drawCapybara(w,h){
+  baseBody("#9a744c",w,h);
+  ctx.fillStyle="#aa8058"; ctx.beginPath(); ctx.ellipse(w*.3,-8,w*.22,h*.2,0,0,7); ctx.fill(); eye(w*.35,-13);
+}
+function drawStork(w,h){
+  ctx.strokeStyle="#222"; ctx.lineWidth=4; ctx.beginPath(); ctx.moveTo(-8,25); ctx.lineTo(-8,50); ctx.moveTo(8,25); ctx.lineTo(8,50); ctx.stroke();
+  baseBody("#f6f0e6",w,h);
+  ctx.fillStyle="#e23d3d"; ctx.beginPath(); ctx.moveTo(w*.28,-12); ctx.lineTo(w*.55,-5); ctx.lineTo(w*.28,1); ctx.fill();
+  eye(w*.22,-13);
+}
+function drawAlligator(w,h){
+  ctx.fillStyle="#347c41"; ctx.beginPath(); ctx.ellipse(-5,10,w*.45,h*.22,0,0,7); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(w*.25,0); ctx.lineTo(w*.55,-7); ctx.lineTo(w*.55,15); ctx.closePath(); ctx.fill();
+  ctx.fillStyle="#fff"; for(let i=0;i<4;i++){ ctx.beginPath(); ctx.moveTo(w*.28+i*8,4); ctx.lineTo(w*.32+i*8,11); ctx.lineTo(w*.36+i*8,4); ctx.fill(); }
+  eye(w*.22,-5);
+}
+function drawMonkey(w,h){
+  baseBody("#d8892e",w,h);
+  ctx.fillStyle="#f0bd65"; ctx.beginPath(); ctx.ellipse(w*.22,-8,w*.2,h*.2,0,0,7); ctx.fill(); eye(w*.28,-12);
+  ctx.strokeStyle="#d8892e"; ctx.lineWidth=5; ctx.beginPath(); ctx.arc(-w*.32,8,18,Math.PI*.2,Math.PI*1.7); ctx.stroke();
+}
+function drawAnteater(w,h){
+  baseBody("#747474",w,h);
+  ctx.fillStyle="#d7d0c8"; ctx.beginPath(); ctx.moveTo(w*.20,-8); ctx.lineTo(w*.58,0); ctx.lineTo(w*.20,12); ctx.fill(); eye(w*.25,-7);
+  ctx.strokeStyle="#333"; ctx.lineWidth=4; ctx.beginPath(); ctx.moveTo(-w*.32,20); ctx.lineTo(-w*.52,5); ctx.stroke();
+}
+function drawShadow(w,h,isBoss){
+  ctx.shadowBlur=22; ctx.shadowColor="#ba63ff";
+  ctx.fillStyle=isBoss?"#4d1c68":"#5b236e";
+  ctx.beginPath(); ctx.ellipse(0,12,w*.44,h*.36,0,0,7); ctx.fill();
+  ctx.fillStyle="#2b123d"; ctx.beginPath(); ctx.arc(0,-18,w*.28,0,7); ctx.fill();
+  ctx.shadowBlur=0; ctx.fillStyle="#ffd45e"; eye(-12,-22); eye(12,-22);
+  ctx.fillStyle="#ffcf4d"; starPath(0,-48,22,9); ctx.fill();
+}
+function drawBullets(){
+  bullets.forEach(b=>{
+    ctx.fillStyle=b.enemy?"#bf57ff":"#55f7e8";
+    ctx.shadowBlur=12; ctx.shadowColor=ctx.fillStyle;
+    ctx.beginPath(); ctx.ellipse(b.x,b.y,b.w,b.h,0,0,7); ctx.fill();
+    ctx.shadowBlur=0;
+  });
+}
+function drawPortal(){
+  if(!portal) return;
+  ctx.save(); ctx.translate(portal.x,portal.y);
+  ctx.fillStyle="rgba(89,246,202,.25)"; ctx.strokeStyle="#5df3d1"; ctx.lineWidth=9; ctx.shadowBlur=20; ctx.shadowColor="#5df3d1";
+  ctx.beginPath(); ctx.ellipse(portal.w/2,portal.h/2,portal.w*.38,portal.h*.43,0,0,7); ctx.fill(); ctx.stroke();
+  ctx.restore();
+  if(overlap(player,portal)) label(portal.x-55,portal.y-42,"AÇÃO: entrar no Portal da Partilha");
+}
+function drawAltar(){
+  if(!altar) return;
+  ctx.fillStyle="#ffe7a2"; ctx.fillRect(altar.x,altar.y,altar.w,altar.h);
+  ctx.strokeStyle="#9e7436"; ctx.lineWidth=5; ctx.strokeRect(altar.x,altar.y,altar.w,altar.h);
+  ctx.fillStyle="#18b8d8"; ctx.beginPath(); ctx.arc(altar.x+altar.w/2,altar.y+34,20,0,7); ctx.fill();
+  ctx.fillStyle="#fff"; ctx.font="900 23px Trebuchet MS"; ctx.textAlign="center"; ctx.fillText("÷",altar.x+altar.w/2,altar.y+42);
+  if(near(player,altar,90)) label(altar.x-70,altar.y-45,"AÇÃO: Desafio do Chefão");
+}
+function drawPlayer(){
+  if(player.inv>0 && Math.floor(player.inv*14)%2===0) return;
+  ctx.save(); ctx.translate(player.x+player.w/2,player.y+player.h/2);
+  if(player.shield>0){ ctx.fillStyle="rgba(119,219,255,.28)"; ctx.strokeStyle="#d8fbff"; ctx.lineWidth=4; ctx.beginPath(); ctx.ellipse(0,0,50,60,0,0,7); ctx.fill(); ctx.stroke(); }
+  ctx.scale(player.facing,1);
+  ctx.fillStyle="#144b50"; ctx.fillRect(-18,-8,36,45);
+  ctx.fillStyle="#d08b55"; ctx.beginPath(); ctx.arc(0,-28,18,0,7); ctx.fill();
+  ctx.fillStyle="#402318"; ctx.beginPath(); ctx.arc(0,-34,20,Math.PI,0); ctx.fill();
+  ctx.fillStyle="#e9aa33"; ctx.beginPath(); ctx.moveTo(-28,-48); ctx.lineTo(0,-70); ctx.lineTo(28,-48); ctx.lineTo(18,-34); ctx.lineTo(-18,-34); ctx.fill();
+  ctx.fillStyle="#f26a33"; ctx.fillRect(-28,-5,10,36); ctx.fillRect(18,-5,10,36);
+  ctx.fillStyle="#26303a"; ctx.fillRect(-15,35,12,28); ctx.fillRect(3,35,12,28);
+  eye(7,-30);
+  if(player.weapon){ ctx.fillStyle="#ffe35a"; ctx.beginPath(); ctx.arc(28,5,8,0,7); ctx.fill(); }
+  ctx.restore();
+}
+function drawParticles(){
+  particles.forEach(p=>{
+    ctx.fillStyle=p.color; ctx.font="900 18px Trebuchet MS"; ctx.textAlign="center"; ctx.fillText(p.text,p.x,p.y);
+  });
+}
+function label(x,y,text){
+  ctx.fillStyle="rgba(255,250,223,.95)"; ctx.strokeStyle="#5fcf82"; ctx.lineWidth=4;
+  roundRect(x,y,270,40,14,true,true);
+  ctx.fillStyle="#356456"; ctx.font="900 13px Trebuchet MS"; ctx.textAlign="center"; ctx.fillText(text,x+135,y+25);
+}
+function roundRect(x,y,w,h,r,fill,stroke){
+  if(typeof x==="object"){
+    const c=x; x=y; y=arguments[2]; w=arguments[3]; h=arguments[4]; r=arguments[5]; fill=arguments[6]; stroke=arguments[7];
+    c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); if(fill)c.fill(); if(stroke)c.stroke(); return;
+  }
+  ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); if(fill)ctx.fill(); if(stroke)ctx.stroke();
+}
+
+function loop(t){
+  const dt=Math.min(.033,(t-last)/1000||0);
+  last=t;
+  update(dt);
+  draw();
+  requestAnimationFrame(loop);
+}
+
+$("#startBtn").onclick=()=>{ try{ audioCtx ||= new (window.AudioContext||window.webkitAudioContext)(); audioCtx.resume&&audioCtx.resume(); }catch(e){} startLevel(0); };
+$("#levelsBtn").onclick=()=>{ renderLevels(); showScreen("levelScreen"); };
+$("#difficultyBtn").onclick=()=>{ renderDifficulty(); showScreen("difficultyScreen"); };
+$("#helpBtn").onclick=()=>showScreen("helpScreen");
+$("#creditsBtn").onclick=()=>showScreen("creditsScreen");
+$$("[data-screen]").forEach(b=>b.onclick=()=>showScreen(b.dataset.screen));
+$("#challengeBack").onclick=()=>{ challenge=null; state="playing"; showScreen(null); setGameUI(true); };
+$("#bossQuizBack").onclick=()=>{ state="boss"; showScreen(null); setGameUI(true); };
+$("#bossQuizCheck").onclick=checkBossQuiz;
+$("#nextBtn").onclick=()=>{ if(currentLevel<LEVELS.length-1) startLevel(currentLevel+1); };
+$("#resultLevelsBtn").onclick=()=>{ renderLevels(); showScreen("levelScreen"); };
+$("#resultTitleBtn").onclick=()=>{ state="title"; setGameUI(false); showScreen("titleScreen"); };
+$("#retryBtn").onclick=()=>startLevel(currentLevel);
+$("#gameoverLevelsBtn").onclick=()=>{ renderLevels(); showScreen("levelScreen"); };
+$("#musicBtn").onclick=()=>{ musicOn=!musicOn; localStorage.setItem("gd_clean_music",musicOn?"on":"off"); $("#musicBtn").textContent=musicOn?"♪":"×"; if(musicOn) playMusic(LEVELS[currentLevel].world); else stopMusic(); };
+$("#soundBtn").onclick=()=>{ soundOn=!soundOn; $("#soundBtn").textContent=soundOn?"🔊":"🔈"; if(soundOn) beep(440,.06); };
+$("#fullBtn").onclick=async()=>{ try{ if(!document.fullscreenElement) await $("#app").requestFullscreen(); else await document.exitFullscreen(); }catch(e){} };
+
+addEventListener("keydown",e=>{
+  if(["ArrowLeft","a","A"].includes(e.key)) keys.left=true;
+  if(["ArrowRight","d","D"].includes(e.key)) keys.right=true;
+  if(["ArrowUp","w","W"," "].includes(e.key)){ if(!e.repeat) queue.jump=true; e.preventDefault(); }
+  if(["e","E","Enter"].includes(e.key)) queue.action=true;
+  if(["f","F","x","X"].includes(e.key)){ queue.attack=true; e.preventDefault(); }
+  if(["Shift","c","C"].includes(e.key)){ queue.dash=true; e.preventDefault(); }
+  if(["q","Q","z","Z"].includes(e.key)){ queue.special=true; e.preventDefault(); }
+});
+addEventListener("keyup",e=>{
+  if(["ArrowLeft","a","A"].includes(e.key)) keys.left=false;
+  if(["ArrowRight","d","D"].includes(e.key)) keys.right=false;
+});
+$$(".touch").forEach(btn=>{
+  const k=btn.dataset.key;
+  const down=e=>{
+    e.preventDefault();
+    btn.classList.add("pressed");
+    if(k==="jump") queue.jump=true;
+    else if(k==="action") queue.action=true;
+    else if(k==="attack") queue.attack=true;
+    else if(k==="dash") queue.dash=true;
+    else if(k==="special") queue.special=true;
+    else keys[k]=true;
+  };
+  const up=e=>{
+    e.preventDefault();
+    btn.classList.remove("pressed");
+    if(k==="left" || k==="right") keys[k]=false;
+  };
+  btn.addEventListener("pointerdown",down);
+  btn.addEventListener("pointerup",up);
+  btn.addEventListener("pointercancel",up);
+  btn.addEventListener("pointerleave",up);
+});
+document.addEventListener("visibilitychange",()=>{ if(document.hidden) stopMusic(); else if(musicOn && (state==="playing" || state==="boss")) playMusic(LEVELS[currentLevel].world); });
+
+
+/* ===== PATCH VISUAL REALISTA v2 — menos amador, mais game 2.5D ===== */
+(() => {
+  const visualStyle = document.createElement("style");
+  visualStyle.textContent = `
+  #app{background:#071421}
+  canvas{image-rendering:auto;filter:saturate(1.04) contrast(1.02)}
+  .panel{backdrop-filter:blur(8px)}
+  .logo{text-transform:uppercase}
+  `;
+  document.head.appendChild(visualStyle);
+
+  let screenShake = 0;
+
+  function lerpColor(a,b,t){
+    const ah=parseInt(a.replace("#",""),16), ar=ah>>16&255, ag=ah>>8&255, ab=ah&255;
+    const bh=parseInt(b.replace("#",""),16), br=bh>>16&255, bg=bh>>8&255, bb=bh&255;
+    const rr=ar+(br-ar)*t, rg=ag+(bg-ag)*t, rb=ab+(bb-ab)*t;
+    return `rgb(${rr|0},${rg|0},${rb|0})`;
+  }
+
+  function softEllipse(x,y,w,h,color,alpha=1){
+    ctx.save();
+    ctx.globalAlpha=alpha;
+    ctx.fillStyle=color;
+    ctx.beginPath();
+    ctx.ellipse(x,y,w,h,0,0,Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  }
+  function strokeSoft(color,width=2){
+    ctx.strokeStyle=color;
+    ctx.lineWidth=width;
+    ctx.lineJoin="round";
+    ctx.lineCap="round";
+    ctx.stroke();
+  }
+
+  // Override draw with camera shake and richer post-light.
+  const oldDraw = draw;
+  draw = function(){
+    if(screenShake>0) screenShake*=.86;
+    const sx=(Math.random()-.5)*screenShake;
+    const sy=(Math.random()-.5)*screenShake;
+    ctx.save();
+    ctx.translate(sx,sy);
+    oldDraw();
+    ctx.restore();
+
+    const grd=ctx.createRadialGradient(W*.5,H*.44,120,W*.5,H*.55,W*.82);
+    grd.addColorStop(0,"rgba(255,255,255,0)");
+    grd.addColorStop(.7,"rgba(0,0,0,.04)");
+    grd.addColorStop(1,"rgba(0,0,0,.24)");
+    ctx.fillStyle=grd;
+    ctx.fillRect(0,0,W,H);
+  };
+
+  // Professional parallax backgrounds.
+  drawBackground = function(world,wi){
+    ctx.save();
+    // far sky texture
+    ctx.translate(-cameraX*.08,0);
+    const sunX = wi===4 ? 1040 : 980;
+    const sunY = wi===2 || wi===4 ? 105 : 92;
+    const sunGrad=ctx.createRadialGradient(sunX,sunY,10,sunX,sunY,90);
+    sunGrad.addColorStop(0,"rgba(255,247,185,.95)");
+    sunGrad.addColorStop(.55,"rgba(255,210,103,.25)");
+    sunGrad.addColorStop(1,"rgba(255,210,103,0)");
+    ctx.fillStyle=sunGrad;
+    ctx.beginPath(); ctx.arc(sunX,sunY,90,0,7); ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.translate(-cameraX*.16,0);
+
+    if(wi===0){
+      // caatinga hills
+      for(let i=0;i<14;i++){
+        const x=i*380-160;
+        ctx.fillStyle=i%2?"#3f8d5e":"#4a9c68";
+        ctx.beginPath();
+        ctx.moveTo(x,620); ctx.lineTo(x+155,310); ctx.lineTo(x+330,620); ctx.fill();
+        ctx.fillStyle="rgba(255,221,130,.16)";
+        ctx.beginPath(); ctx.moveTo(x+155,310); ctx.lineTo(x+330,620); ctx.lineTo(x+230,620); ctx.fill();
+      }
+      drawPennantsReal(70,130);
+      drawMarketStalls();
+    }else if(wi===1){
+      // amazon layers
+      for(let layer=0;layer<3;layer++){
+        ctx.fillStyle=layer===0?"#0f553f":layer===1?"#176c50":"#25815c";
+        for(let x=-120+layer*35;x<worldWidth+300;x+=145-layer*18){
+          const trunkW=18+layer*5;
+          ctx.fillRect(x+70,310-layer*22,trunkW,330);
+          ctx.beginPath();
+          ctx.ellipse(x+80,300-layer*18,78+layer*22,95+layer*10,0,0,7);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.ellipse(x+30,350-layer*18,62+layer*12,70,0,0,7);
+          ctx.fill();
+        }
+      }
+      ctx.fillStyle="rgba(48,132,108,.42)";
+      ctx.fillRect(0,560,worldWidth,55);
+    }else if(wi===2){
+      drawPennantsReal(60,118);
+      for(let x=-90;x<worldWidth+300;x+=390){
+        ctx.fillStyle="#2b2244";
+        ctx.fillRect(x+58,385,135,240);
+        ctx.fillStyle="#5a3567";
+        ctx.beginPath(); ctx.moveTo(x+20,405); ctx.lineTo(x+126,292); ctx.lineTo(x+232,405); ctx.fill();
+        ctx.fillStyle="rgba(255,204,90,.35)";
+        ctx.fillRect(x+92,450,38,55);
+      }
+    }else if(wi===3){
+      ctx.fillStyle="rgba(55,139,151,.52)";
+      ctx.fillRect(0,552,worldWidth,75);
+      ctx.fillStyle="rgba(255,255,255,.2)";
+      for(let x=0;x<worldWidth;x+=160){
+        ctx.beginPath(); ctx.ellipse(x,585,70,7,0,0,7); ctx.fill();
+      }
+      for(let x=-60;x<worldWidth+300;x+=300){
+        ctx.fillStyle="#2c705e";
+        ctx.fillRect(x+118,382,26,200);
+        ctx.beginPath(); ctx.ellipse(x+132,360,78,86,0,0,7); ctx.fill();
+        ctx.fillStyle="#4b9a7b";
+        ctx.beginPath(); ctx.ellipse(x+95,405,60,42,0,0,7); ctx.fill();
+      }
+    }else{
+      drawPennantsReal(45,112);
+      for(let x=-80;x<worldWidth+300;x+=260){
+        ctx.fillStyle=x%520===0?"#4d2161":"#602a78";
+        ctx.beginPath(); ctx.arc(x+120,455,110,0,7); ctx.fill();
+        ctx.fillStyle="rgba(255,210,120,.18)";
+        ctx.beginPath(); ctx.arc(x+120,455,70,0,7); ctx.fill();
+      }
+      // spotlights
+      ctx.globalAlpha=.16;
+      ctx.fillStyle="#fff0a0";
+      ctx.beginPath(); ctx.moveTo(300,0); ctx.lineTo(650,620); ctx.lineTo(520,620); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(960,0); ctx.lineTo(820,620); ctx.lineTo(700,620); ctx.closePath(); ctx.fill();
+      ctx.globalAlpha=1;
+    }
+    ctx.restore();
+  };
+
+  function drawPennantsReal(y1,y2){
+    ctx.strokeStyle="rgba(67,42,28,.8)";
+    ctx.lineWidth=4;
+    ctx.beginPath(); ctx.moveTo(0,y1); ctx.bezierCurveTo(worldWidth*.25,y2,worldWidth*.55,y1,worldWidth,y2); ctx.stroke();
+    const colors=["#ffd15a","#17b69b","#8c52a5","#f2673d","#f7f2d2"];
+    for(let x=0,i=0;x<worldWidth;x+=78,i++){
+      ctx.fillStyle=colors[i%colors.length];
+      ctx.beginPath();
+      ctx.moveTo(x,y1+Math.sin(x/210)*10);
+      ctx.lineTo(x+42,y1+2+Math.sin(x/210)*10);
+      ctx.lineTo(x+21,y1+38+Math.sin(x/210)*10);
+      ctx.fill();
+      ctx.strokeStyle="rgba(0,0,0,.14)";
+      ctx.lineWidth=1;
+      ctx.stroke();
+    }
+  }
+  function drawMarketStalls(){
+    for(let x=120;x<worldWidth;x+=690){
+      ctx.fillStyle="rgba(77,45,29,.65)";
+      ctx.fillRect(x,480,170,140);
+      ctx.fillStyle="#e45d3c";
+      ctx.fillRect(x-10,455,190,32);
+      ctx.fillStyle="#fff0a5";
+      for(let i=0;i<5;i++) ctx.fillRect(x-10+i*38,455,19,32);
+      ctx.fillStyle="rgba(255,255,255,.25)";
+      ctx.fillRect(x+18,500,48,42);
+    }
+  }
+
+  drawPlatforms = function(world){
+    platforms.forEach(p=>{
+      const top = p.move ? "#dca64b" : world.grass;
+      const side = world.ground;
+      const grad=ctx.createLinearGradient(0,p.y,0,p.y+p.h);
+      grad.addColorStop(0,lerpColor(side,"#ffffff",.08));
+      grad.addColorStop(1,lerpColor(side,"#000000",.24));
+      ctx.fillStyle=grad;
+      ctx.fillRect(p.x,p.y,p.w,p.h);
+      ctx.fillStyle=top;
+      ctx.fillRect(p.x,p.y,p.w,12);
+      ctx.fillStyle="rgba(255,255,255,.16)";
+      ctx.fillRect(p.x,p.y,p.w,4);
+      ctx.fillStyle="rgba(0,0,0,.12)";
+      for(let x=p.x+18;x<p.x+p.w;x+=58){
+        ctx.fillRect(x,p.y+34,25,8);
+        ctx.fillRect(x+8,p.y+62,36,8);
+      }
+      if(p.move){
+        ctx.strokeStyle="rgba(255,230,120,.55)";
+        ctx.lineWidth=3;
+        ctx.strokeRect(p.x+4,p.y+4,p.w-8,p.h-8);
+      }
+    });
+  };
+
+  // More realistic protagonist, drawn vectorially instead of blocky.
+  drawPlayer = function(){
+    if(player.inv>0 && Math.floor(player.inv*14)%2===0) return;
+    ctx.save();
+    ctx.translate(player.x+player.w/2,player.y+player.h/2);
+    if(player.shield>0){
+      const sg=ctx.createRadialGradient(0,0,20,0,0,70);
+      sg.addColorStop(0,"rgba(170,240,255,.08)");
+      sg.addColorStop(.7,"rgba(75,206,255,.22)");
+      sg.addColorStop(1,"rgba(255,255,255,.36)");
+      ctx.fillStyle=sg; ctx.strokeStyle="#d8fbff"; ctx.lineWidth=4;
+      ctx.beginPath(); ctx.ellipse(0,0,50,60,0,0,7); ctx.fill(); ctx.stroke();
+    }
+    ctx.scale(player.facing,1);
+    const run = Math.abs(player.vx)>20 ? Math.sin(performance.now()/80)*5 : 0;
+    // shadow
+    ctx.fillStyle="rgba(0,0,0,.20)";
+    ctx.beginPath(); ctx.ellipse(0,47,34,8,0,0,7); ctx.fill();
+
+    // cape
+    ctx.fillStyle="#c34c32";
+    ctx.beginPath(); ctx.moveTo(-18,-12); ctx.quadraticCurveTo(-35,12,-24,38+run); ctx.lineTo(-8,24); ctx.closePath(); ctx.fill();
+
+    // legs
+    ctx.fillStyle="#233141";
+    roundRect(-15,28+run,12,32,5,true,false);
+    roundRect(4,28-run,12,32,5,true,false);
+    ctx.fillStyle="#182430";
+    roundRect(-18,55+run,18,8,4,true,false);
+    roundRect(1,55-run,18,8,4,true,false);
+
+    // torso
+    const body=ctx.createLinearGradient(0,-18,0,30);
+    body.addColorStop(0,"#17666a");
+    body.addColorStop(1,"#0d3e47");
+    ctx.fillStyle=body;
+    roundRect(-20,-15,40,48,12,true,false);
+    ctx.fillStyle="#f0c04f";
+    ctx.fillRect(-4,-12,8,42);
+    ctx.fillStyle="rgba(255,255,255,.12)";
+    ctx.fillRect(-15,-9,10,33);
+
+    // arms
+    ctx.fillStyle="#d08b55";
+    roundRect(-30,-8,12,36,6,true,false);
+    roundRect(18,-8,12,36,6,true,false);
+    ctx.fillStyle="#ffcf66";
+    ctx.beginPath(); ctx.arc(29,10,8,0,7); ctx.fill();
+
+    // neck and face
+    ctx.fillStyle="#c87e4f";
+    roundRect(-7,-30,14,14,5,true,false);
+    const face=ctx.createRadialGradient(-4,-36,3,0,-34,28);
+    face.addColorStop(0,"#e0a16d");
+    face.addColorStop(1,"#b96b45");
+    ctx.fillStyle=face;
+    ctx.beginPath(); ctx.ellipse(0,-39,20,22,0,0,7); ctx.fill();
+
+    // hair
+    ctx.fillStyle="#2b1713";
+    ctx.beginPath(); ctx.ellipse(0,-48,23,14,0,Math.PI,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(-12,-43,10,0,7); ctx.fill();
+
+    // eyes
+    ctx.fillStyle="#fff"; ctx.beginPath(); ctx.ellipse(7,-39,4,3,0,0,7); ctx.fill();
+    ctx.fillStyle="#191919"; ctx.beginPath(); ctx.arc(8,-39,1.8,0,7); ctx.fill();
+    ctx.strokeStyle="#4e2318"; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(4,-33); ctx.quadraticCurveTo(9,-31,14,-34); ctx.stroke();
+
+    // crown / guardião hat
+    ctx.fillStyle="#f3c24d";
+    ctx.beginPath(); ctx.moveTo(-23,-58); ctx.lineTo(-8,-75); ctx.lineTo(0,-58); ctx.lineTo(10,-75); ctx.lineTo(24,-58); ctx.lineTo(18,-46); ctx.lineTo(-18,-46); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle="#8f5e1c"; ctx.lineWidth=2; ctx.stroke();
+
+    // weapon glow
+    if(player.weapon){
+      ctx.shadowBlur=14; ctx.shadowColor="#fff06a";
+      ctx.fillStyle="#ffe45a"; ctx.beginPath(); ctx.arc(31,4,8,0,7); ctx.fill();
+      ctx.shadowBlur=0;
+    }
+    ctx.restore();
+  };
+
+  // Replace monsters with less cartoonish regional creatures.
+  drawMonster = function(e,isBoss=false){
+    const x=e.x,y=e.y,w=e.w,h=e.h,t=performance.now()/300+(e.phase||0);
+    ctx.save();
+    ctx.translate(x+w/2,y+h/2);
+    if(e.vx<0) ctx.scale(-1,1);
+    const bob=e.kind==="fly"?Math.sin(t)*5:Math.sin(t)*1.6;
+    ctx.translate(0,bob);
+    ctx.fillStyle="rgba(0,0,0,.22)";
+    ctx.beginPath(); ctx.ellipse(0,h*.42,w*.38,7,0,0,7); ctx.fill();
+    if(e.type==="armadillo") realisticArmadillo(w,h);
+    else if(e.type==="snake") realisticSnake(w,h);
+    else if(e.type==="bird" || e.type==="carcara") realisticBird(w,h,"#8b6540");
+    else if(e.type==="jaguar") realisticJaguar(w,h);
+    else if(e.type==="fish") realisticFish(w,h);
+    else if(e.type==="ox") realisticOx(w,h);
+    else if(e.type==="owl") realisticOwl(w,h);
+    else if(e.type==="frog") realisticFrog(w,h);
+    else if(e.type==="capybara") realisticCapybara(w,h);
+    else if(e.type==="stork") realisticStork(w,h);
+    else if(e.type==="alligator") realisticAlligator(w,h);
+    else if(e.type==="monkey") realisticMonkey(w,h);
+    else if(e.type==="macaw") realisticMacaw(w,h);
+    else if(e.type==="anteater") realisticAnteater(w,h);
+    else realisticShadow(w,h,isBoss);
+    ctx.restore();
+
+    // label integrated like a game UI, not emoji.
+    ctx.fillStyle="rgba(8,35,42,.78)";
+    ctx.strokeStyle="rgba(255,230,160,.9)";
+    ctx.lineWidth=2;
+    roundRect(x-18,y-28,w+36,24,9,true,true);
+    ctx.fillStyle="#fff4bd";
+    ctx.font="bold 12px Trebuchet MS";
+    ctx.textAlign="center";
+    ctx.fillText(e.name,x+w/2,y-12);
+    if(e.maxHp>1){
+      ctx.fillStyle="#26172d"; ctx.fillRect(x,y+h+5,w,8);
+      ctx.fillStyle="#f0b740"; ctx.fillRect(x,y+h+5,w*(e.hp/e.maxHp),8);
+    }
+  };
+
+  function bodyGradient(c1,c2,y1,y2){
+    const g=ctx.createLinearGradient(0,y1,0,y2);
+    g.addColorStop(0,c1); g.addColorStop(1,c2);
+    return g;
+  }
+  function shinyBody(c1,c2,w,h){
+    ctx.shadowBlur=10; ctx.shadowColor="rgba(0,0,0,.25)";
+    ctx.fillStyle=bodyGradient(c1,c2,-h*.25,h*.35);
+    ctx.beginPath(); ctx.ellipse(0,8,w*.43,h*.30,0,0,7); ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.fillStyle="rgba(255,255,255,.16)";
+    ctx.beginPath(); ctx.ellipse(-w*.12,-4,w*.16,h*.08,-.3,0,7); ctx.fill();
+  }
+  function rEye(x,y,s=1){
+    ctx.fillStyle="#fff8df"; ctx.beginPath(); ctx.ellipse(x,y,5*s,4*s,0,0,7); ctx.fill();
+    ctx.fillStyle="#151515"; ctx.beginPath(); ctx.arc(x+1*s,y,2.2*s,0,7); ctx.fill();
+  }
+
+  function realisticArmadillo(w,h){
+    shinyBody("#c49a72","#7d593e",w,h);
+    ctx.strokeStyle="#5b3c29"; ctx.lineWidth=3;
+    for(let i=-3;i<=3;i++){ctx.beginPath();ctx.arc(i*8,5,30,Math.PI*.82,Math.PI*1.18);ctx.stroke()}
+    ctx.fillStyle="#b98563"; ctx.beginPath();ctx.ellipse(w*.28,-8,w*.20,h*.18,0,0,7);ctx.fill();
+    ctx.fillStyle="#8c5d43";ctx.beginPath();ctx.moveTo(w*.15,-25);ctx.lineTo(w*.22,-40);ctx.lineTo(w*.28,-22);ctx.fill();
+    rEye(w*.34,-13);
+  }
+  function realisticSnake(w,h){
+    ctx.fillStyle=bodyGradient("#d2aa54","#7e5b29",-20,30);
+    for(let i=-4;i<=2;i++){ctx.beginPath();ctx.ellipse(i*14,6+Math.sin(i)*4,18,12,0,0,7);ctx.fill()}
+    ctx.fillStyle="#d8b35f";ctx.beginPath();ctx.ellipse(w*.26,-7,22,16,0,0,7);ctx.fill();
+    ctx.fillStyle="#4d3218";for(let i=-3;i<=1;i++){ctx.beginPath();ctx.arc(i*15,2,3,0,7);ctx.fill()}
+    rEye(w*.33,-12);
+    ctx.strokeStyle="#8b1d1d";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(w*.43,-4);ctx.lineTo(w*.58,-8);ctx.moveTo(w*.43,-4);ctx.lineTo(w*.58,0);ctx.stroke();
+  }
+  function realisticBird(w,h,color){
+    shinyBody(color,"#563f2b",w,h);
+    ctx.fillStyle="rgba(255,255,255,.38)";
+    ctx.beginPath();ctx.ellipse(-w*.18,2,w*.32,h*.15,-.6,0,7);ctx.fill();
+    ctx.beginPath();ctx.ellipse(w*.02,2,w*.32,h*.15,.6,0,7);ctx.fill();
+    ctx.fillStyle="#e6a93a";ctx.beginPath();ctx.moveTo(w*.33,-9);ctx.lineTo(w*.58,-2);ctx.lineTo(w*.33,6);ctx.fill();
+    rEye(w*.24,-14);
+  }
+  function realisticJaguar(w,h){
+    shinyBody("#d6a13b","#8f6325",w,h);
+    ctx.fillStyle="#24170e";
+    for(let i=-3;i<=3;i++){ctx.beginPath();ctx.ellipse(i*10,4+(i%2)*6,3,4,0,0,7);ctx.fill()}
+    ctx.fillStyle="#d9aa50";ctx.beginPath();ctx.ellipse(w*.29,-8,w*.20,h*.19,0,0,7);ctx.fill();
+    ctx.fillStyle="#24170e";ctx.beginPath();ctx.arc(w*.14,-22,6,0,7);ctx.fill();
+    rEye(w*.35,-13);
+  }
+  function realisticFish(w,h){
+    ctx.fillStyle=bodyGradient("#d85a5a","#862e34",-20,30);
+    ctx.beginPath();ctx.ellipse(0,6,w*.40,h*.25,0,0,7);ctx.fill();
+    ctx.beginPath();ctx.moveTo(-w*.34,5);ctx.lineTo(-w*.58,-15);ctx.lineTo(-w*.58,25);ctx.fill();
+    ctx.fillStyle="rgba(255,255,255,.22)";ctx.beginPath();ctx.ellipse(6,-3,w*.18,h*.06,0,0,7);ctx.fill();
+    rEye(w*.25,-4);
+  }
+  function realisticOx(w,h){
+    shinyBody("#3a342f","#171514",w,h);
+    ctx.fillStyle="#f1e8d0";ctx.beginPath();ctx.moveTo(-w*.18,-16);ctx.lineTo(-w*.43,-36);ctx.lineTo(-w*.28,-8);ctx.fill();
+    ctx.beginPath();ctx.moveTo(w*.18,-16);ctx.lineTo(w*.43,-36);ctx.lineTo(w*.28,-8);ctx.fill();
+    ctx.fillStyle="#faf4df";ctx.beginPath();ctx.ellipse(w*.25,-6,w*.14,h*.15,0,0,7);ctx.fill();
+    rEye(w*.28,-11);
+  }
+  function realisticOwl(w,h){
+    shinyBody("#b78948","#65431f",w,h);
+    ctx.fillStyle="#f3dfad";ctx.beginPath();ctx.arc(-10,-8,14,0,7);ctx.arc(10,-8,14,0,7);ctx.fill();
+    rEye(-10,-8); rEye(10,-8);
+    ctx.fillStyle="#d59a30";ctx.beginPath();ctx.moveTo(0,-4);ctx.lineTo(-5,5);ctx.lineTo(5,5);ctx.fill();
+  }
+  function realisticFrog(w,h){
+    shinyBody("#51a85b","#246e37",w,h);
+    ctx.fillStyle="#80d785";ctx.beginPath();ctx.ellipse(0,15,w*.28,h*.13,0,0,7);ctx.fill();
+    rEye(-13,-18); rEye(13,-18);
+  }
+  function realisticCapybara(w,h){
+    shinyBody("#a27a50","#61452d",w,h);
+    ctx.fillStyle="#b98d61";ctx.beginPath();ctx.ellipse(w*.29,-8,w*.20,h*.18,0,0,7);ctx.fill();
+    ctx.fillStyle="#6d4b31";ctx.beginPath();ctx.arc(w*.20,-22,5,0,7);ctx.fill();
+    rEye(w*.35,-13);
+  }
+  function realisticStork(w,h){
+    ctx.strokeStyle="#2b2b2b";ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-9,25);ctx.lineTo(-9,52);ctx.moveTo(9,25);ctx.lineTo(9,52);ctx.stroke();
+    shinyBody("#f7f3ea","#bfc4c2",w,h);
+    ctx.fillStyle="#e83b3b";ctx.beginPath();ctx.moveTo(w*.28,-12);ctx.lineTo(w*.60,-4);ctx.lineTo(w*.28,3);ctx.fill();
+    rEye(w*.22,-13);
+  }
+  function realisticAlligator(w,h){
+    ctx.fillStyle=bodyGradient("#3b8a47","#184f28",-20,30);
+    ctx.beginPath();ctx.ellipse(-5,10,w*.46,h*.22,0,0,7);ctx.fill();
+    ctx.beginPath();ctx.moveTo(w*.22,-2);ctx.lineTo(w*.62,-10);ctx.lineTo(w*.62,18);ctx.lineTo(w*.22,14);ctx.fill();
+    ctx.fillStyle="#fff2da";for(let i=0;i<5;i++){ctx.beginPath();ctx.moveTo(w*.25+i*8,4);ctx.lineTo(w*.29+i*8,12);ctx.lineTo(w*.33+i*8,4);ctx.fill()}
+    rEye(w*.23,-7);
+  }
+  function realisticMonkey(w,h){
+    shinyBody("#d88d2f","#8f531e",w,h);
+    ctx.fillStyle="#f0bd65";ctx.beginPath();ctx.ellipse(w*.23,-8,w*.20,h*.18,0,0,7);ctx.fill();
+    ctx.strokeStyle="#d88d2f";ctx.lineWidth=6;ctx.beginPath();ctx.arc(-w*.34,8,20,Math.PI*.2,Math.PI*1.7);ctx.stroke();
+    rEye(w*.29,-12);
+  }
+  function realisticMacaw(w,h){
+    realisticBird(w,h,"#2468d4");
+    ctx.fillStyle="#f1d02d";ctx.beginPath();ctx.ellipse(-w*.22,8,w*.10,h*.18,-.3,0,7);ctx.fill();
+  }
+  function realisticAnteater(w,h){
+    shinyBody("#777","#3d3d3d",w,h);
+    ctx.fillStyle="#ddd6cd";ctx.beginPath();ctx.moveTo(w*.18,-8);ctx.lineTo(w*.62,0);ctx.lineTo(w*.18,13);ctx.fill();
+    ctx.strokeStyle="#2f2f2f";ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-w*.32,20);ctx.lineTo(-w*.55,3);ctx.stroke();
+    rEye(w*.25,-8);
+  }
+  function realisticShadow(w,h,isBoss){
+    ctx.shadowBlur=22;ctx.shadowColor="#ba63ff";
+    ctx.fillStyle=isBoss?"#4d1c68":"#5b236e";
+    ctx.beginPath();ctx.ellipse(0,12,w*.44,h*.36,0,0,7);ctx.fill();
+    ctx.fillStyle="#2b123d";ctx.beginPath();ctx.arc(0,-18,w*.28,0,7);ctx.fill();
+    ctx.shadowBlur=0;
+    rEye(-12,-22,1.1); rEye(12,-22,1.1);
+    ctx.fillStyle="#ffcf4d";starPath(0,-48,22,9);ctx.fill();
+  }
+
+  // better tokens, less toy-like
+  drawToken = function(x,y,kind,s=1){
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.scale(s,s);
+    ctx.shadowBlur=8;ctx.shadowColor="rgba(0,0,0,.22)";
+    if(kind==="seed"){ctx.fillStyle=bodyGradient("#a9743c","#5e3b1d",-12,14);ctx.beginPath();ctx.ellipse(0,0,11,15,.4,0,7);ctx.fill();}
+    else if(kind==="fish"){ctx.fillStyle=bodyGradient("#6ac2dc","#2e7891",-10,12);ctx.beginPath();ctx.ellipse(0,0,17,10,0,0,7);ctx.fill();ctx.beginPath();ctx.moveTo(-15,0);ctx.lineTo(-28,-10);ctx.lineTo(-28,10);ctx.fill();}
+    else if(kind==="candy"){ctx.fillStyle="#e85d9c";roundRect(-13,-10,26,20,5,true,false);ctx.fillStyle="#ffe9f4";ctx.fillRect(-3,-10,6,20);}
+    else if(kind==="mask"){ctx.fillStyle=bodyGradient("#9a52be","#5f2c82",-10,12);ctx.beginPath();ctx.ellipse(0,0,18,12,0,0,7);ctx.fill();ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(-6,-1,3,0,7);ctx.arc(6,-1,3,0,7);ctx.fill();}
+    else if(kind==="star"||kind==="crystal"){ctx.fillStyle=bodyGradient("#fff08a","#d49b20",-15,15);starPath(0,0,16,7);ctx.fill();}
+    else if(kind==="juice"){ctx.fillStyle="#f2cf65";roundRect(-10,-16,20,30,5,true,false);ctx.fillStyle="#e05b3d";ctx.fillRect(-9,-1,18,14);ctx.strokeStyle="#fff";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(4,-16);ctx.lineTo(12,-26);ctx.stroke();}
+    else if(kind==="corn"){ctx.fillStyle="#f0c84d";ctx.beginPath();ctx.ellipse(0,0,10,18,0,0,7);ctx.fill();ctx.fillStyle="#3f9b56";ctx.beginPath();ctx.moveTo(-8,8);ctx.lineTo(-18,20);ctx.lineTo(-3,15);ctx.fill();ctx.beginPath();ctx.moveTo(8,8);ctx.lineTo(18,20);ctx.lineTo(3,15);ctx.fill();}
+    else{ctx.fillStyle=bodyGradient("#f29841","#d04f2f",-15,18);ctx.beginPath();ctx.ellipse(0,0,13,17,-.3,0,7);ctx.fill();ctx.fillStyle="#bf3e2b";ctx.beginPath();ctx.arc(2,-15,8,0,7);ctx.fill();}
+    ctx.shadowBlur=0;
+    ctx.restore();
+  };
+
+  // add shake on damage and boss hit
+  const oldHurt = hurt;
+  hurt = function(source,fall=false){
+    screenShake = Math.max(screenShake, fall?10:7);
+    return oldHurt(source,fall);
+  };
+  const oldDefeatBoss = defeatBoss;
+  defeatBoss = function(){
+    screenShake=18;
+    return oldDefeatBoss();
+  };
+})();
+
+/* ===== EDIÇÃO DIASMATH™ v3 — plataforma pedagógica, fases únicas e jogabilidade aprimorada ===== */
+(() => {
+  const v3Style = document.createElement("style");
+  v3Style.textContent = `
+    #titleScreen{background:
+      radial-gradient(circle at 50% 12%,rgba(255,220,103,.23),transparent 0 20%),
+      linear-gradient(155deg,#031a2b 0%,#083b55 43%,#34204f 75%,#130d2a 100%)}
+    .titlePanel{border-color:#ffe28a;background:linear-gradient(180deg,rgba(255,250,228,.97),rgba(255,226,160,.95))}
+    .logo{filter:drop-shadow(0 7px 0 rgba(56,31,18,.35))}
+    .menuItem{position:relative;overflow:hidden}
+    .menuItem:before{content:"";position:absolute;inset:0 auto 0 0;width:7px;background:linear-gradient(#20c9bf,#7950a6)}
+    .hud{right:190px;grid-template-columns:minmax(240px,1.7fr) auto auto auto auto}
+    .topBtns{top:auto;bottom:14px}
+    .progressWrap{position:absolute;left:16px;right:16px;top:78px;z-index:31;height:14px;border:2px solid rgba(255,255,255,.9);border-radius:999px;background:rgba(5,32,47,.72);overflow:hidden;display:none;box-shadow:0 4px 0 rgba(0,0,0,.25)}
+    .progressWrap.active{display:block}
+    .progressFill{height:100%;width:0;background:linear-gradient(90deg,#21cbbf,#ffe16a,#ef7636);transition:width .2s ease}
+    .stageTag{position:absolute;left:17px;top:101px;z-index:31;padding:6px 11px;border-radius:11px;background:rgba(7,43,57,.82);border:2px solid rgba(255,255,255,.82);color:#fff6bd;font-size:12px;font-weight:900;display:none}
+    .stageTag.active{display:block}
+    .briefEquation{font-size:clamp(38px,7vw,76px);font-weight:1000;color:#087f79;text-shadow:0 4px 0 #d7b45a;margin:8px 0}
+    .objectiveBox{max-width:820px;margin:14px auto;padding:16px;border:3px solid #e4bd62;border-radius:18px;background:#fffaf0;text-align:left;font-weight:800;line-height:1.45}
+    .pausePanel{max-width:650px}
+    .bossbar{top:116px}
+    .levelCardMeta{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin:8px 0}
+    .chip{padding:5px 9px;border-radius:999px;background:#e8f8f3;border:2px solid #76cfc3;font-size:12px;color:#155e5b}
+    .card.complete{box-shadow:0 8px 0 rgba(39,118,87,.32);border-color:#53bf86}
+    .card .stars{min-height:24px;color:#d69818;letter-spacing:2px}
+    .resultStats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:720px;margin:14px auto}
+    .resultStat{background:#fffaf0;border:3px solid #e1bd68;border-radius:16px;padding:12px;font-weight:900}
+    .resultStat strong{display:block;font-size:25px;color:#087a75}
+    @media(max-width:1000px){
+      .hud{right:8px;top:64px;grid-template-columns:1fr auto auto}.hud .missionhud{grid-column:1/-1}
+      .topBtns{top:8px;bottom:auto}.progressWrap{top:150px}.stageTag{top:172px}.bossbar{top:206px}
+    }
+    @media(max-width:650px){
+      .resultStats{grid-template-columns:1fr}
+      .topBtns{gap:3px;right:6px}.iconBtn{width:36px;height:36px;border-width:2px;border-radius:12px;font-size:16px}
+      .hud{top:52px;left:7px;right:7px;grid-template-columns:auto auto minmax(118px,1fr);gap:4px}
+      .hud .missionhud{display:none}.hudbox{padding:5px 7px;border-width:2px;border-radius:11px;font-size:11px;box-shadow:0 3px 0 rgba(0,0,0,.22)}
+      #scoreHud{display:none}#powerHud{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .progressWrap{top:96px;left:8px;right:8px;height:11px}.stageTag{top:112px;left:8px;padding:4px 8px;font-size:10px}
+      .bossbar{top:145px;width:88vw}.toast{top:145px;font-size:12px;padding:8px 11px}
+      .controls{bottom:6px;left:5px;right:5px}.pad,.actpad{gap:4px}
+      .touch{width:46px;height:46px;border-width:3px;font-size:15px;box-shadow:0 3px 0 rgba(0,0,0,.34)}
+      .touch.big{width:50px;height:50px;font-size:16px}.touch.special{font-size:17px}
+    }
+    @media(max-height:500px){
+      .topBtns{top:6px;bottom:auto;right:6px;gap:3px}.iconBtn{width:38px;height:38px;border-width:2px;border-radius:12px;font-size:16px}
+      .hud{top:7px;left:7px;right:236px;grid-template-columns:auto auto minmax(135px,1fr);gap:4px}
+      .hud .missionhud{display:none}.hudbox{padding:5px 7px;border-width:2px;border-radius:11px;font-size:11px;box-shadow:0 3px 0 rgba(0,0,0,.22)}
+      #scoreHud{display:none}#powerHud{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .progressWrap{top:51px;left:8px;right:8px;height:9px}.stageTag{top:64px;left:8px;padding:4px 8px;font-size:10px}
+      .bossbar{top:89px;width:72vw}.toast{top:88px;font-size:12px;padding:7px 10px}
+      .controls{bottom:5px;left:6px;right:6px}.pad,.actpad{gap:4px}
+      .touch{width:48px;height:48px;border-width:3px;font-size:15px;box-shadow:0 3px 0 rgba(0,0,0,.34)}
+      .touch.big{width:54px;height:54px;font-size:16px}.touch.special{font-size:17px}
+    }
+  `;
+  document.head.appendChild(v3Style);
+
+  const progressWrap = document.createElement("div");
+  progressWrap.className = "progressWrap";
+  progressWrap.innerHTML = '<div id="stageProgressFill" class="progressFill"></div>';
+  $("#app").appendChild(progressWrap);
+
+  const stageTag = document.createElement("div");
+  stageTag.id = "stageTag";
+  stageTag.className = "stageTag";
+  $("#app").appendChild(stageTag);
+
+  const scoreHud = document.createElement("div");
+  scoreHud.id = "scoreHud";
+  scoreHud.className = "hudbox";
+  scoreHud.textContent = "★ 0";
+  $("#hud").appendChild(scoreHud);
+
+  const briefing = document.createElement("section");
+  briefing.id = "briefingScreen";
+  briefing.className = "screen";
+  briefing.innerHTML = `
+    <div class="panel">
+      <div id="briefWorld" class="chip" style="display:inline-block"></div>
+      <h2 id="briefTitle" class="title2"></h2>
+      <div id="briefEquation" class="briefEquation"></div>
+      <div class="objectiveBox">
+        <div id="briefStory"></div>
+        <div id="briefObjective" style="margin-top:8px;color:#74401f"></div>
+        <div id="briefSkill" style="margin-top:8px;color:#086a66"></div>
+      </div>
+      <div class="btns">
+        <button id="briefPlay" class="btn gold">ENTRAR NA FASE</button>
+        <button id="briefBack" class="btn alt">VOLTAR</button>
+      </div>
+    </div>`;
+  $("#app").appendChild(briefing);
+
+  const pauseScreen = document.createElement("section");
+  pauseScreen.id = "pauseScreen";
+  pauseScreen.className = "screen";
+  pauseScreen.innerHTML = `
+    <div class="panel pausePanel">
+      <h2 class="title2">Jogo pausado</h2>
+      <p class="problem">Respire, observe a fase e continue quando estiver pronto.</p>
+      <div class="btns">
+        <button id="resumeBtn" class="btn gold">CONTINUAR</button>
+        <button id="restartPauseBtn" class="btn">REINICIAR FASE</button>
+        <button id="pauseLevelsBtn" class="btn alt">SELECIONAR FASE</button>
+        <button id="pauseHomeBtn" class="btn purple">TELA INICIAL</button>
+      </div>
+    </div>`;
+  $("#app").appendChild(pauseScreen);
+
+  const pauseBtn = document.createElement("button");
+  pauseBtn.id = "pauseBtn";
+  pauseBtn.className = "iconBtn";
+  pauseBtn.title = "Pausar";
+  pauseBtn.textContent = "Ⅱ";
+  $(".topBtns").prepend(pauseBtn);
+
+  const homeBtn = document.createElement("button");
+  homeBtn.id = "homeBtn";
+  homeBtn.className = "iconBtn";
+  homeBtn.title = "Sair da fase";
+  homeBtn.textContent = "⌂";
+  $(".topBtns").appendChild(homeBtn);
+
+  const touchLabels={special:["✦","Poder do Quociente"],attack:["⚡","Atacar"],dash:["↯","Impulso"],action:["E","Ação"],jump:["↑","Pular"],left:["◀","Mover para a esquerda"],right:["▶","Mover para a direita"]};
+  $$(".touch").forEach(btn=>{const data=touchLabels[btn.dataset.key];if(data){btn.textContent=data[0];btn.title=data[1];btn.setAttribute("aria-label",data[1])}});
+
+  const STAGE_INFO = [
+    {story:"A feira abriu, mas os cajus precisam ser repartidos de forma justa antes do início das vendas.", objective:"Colete os cajus, resolva os Blocos da Divisão e distribua 12 cajus em 3 cestos.", skill:"Aprendizagem: divisão exata como repartição em partes iguais."},
+    {story:"As barracas de suco ficaram separadas por passarelas e o Carcará Guardião protege a saída.", objective:"Atravesse as barracas elevadas, conquiste o Raio da Partilha e distribua 24 sucos em 6 barracas.", skill:"Aprendizagem: relação entre divisão e multiplicação."},
+    {story:"Na floresta, as sementes só germinam quando são organizadas em grupos completos.", objective:"Use troncos e cipós, forme grupos de 7 e descubra quantos grupos cabem em 28.", skill:"Aprendizagem: divisão por agrupamento e relação 7 × 4 = 28."},
+    {story:"Uma cheia separou as comunidades ribeirinhas. As frutas devem chegar igualmente a cada uma.", objective:"Cruze pontes e plataformas sobre o rio e distribua 30 frutas em 5 comunidades.", skill:"Aprendizagem: quociente como quantidade em cada grupo."},
+    {story:"O arraial está quase pronto, mas as mesas ainda não receberam a mesma quantidade de doces.", objective:"Suba pelos telhados do arraial e distribua 36 doces em 6 mesas.", skill:"Aprendizagem: cálculo mental da divisão exata."},
+    {story:"O Boi-bumbá tomou conta do milharal e espalhou as espigas por um percurso cheio de trampolins.", objective:"Use as molas, derrote o guardião e distribua 40 espigas em 8 cestos.", skill:"Aprendizagem: fatos fundamentais da divisão."},
+    {story:"No Pantanal, nem todas as vitórias-régias formarão grupos completos. Será preciso reconhecer o resto.", objective:"Atravesse as ilhas, forme grupos de 5 com 22 itens e identifique o que sobra.", skill:"Aprendizagem: divisão não exata e significado do resto."},
+    {story:"As fantasias estão espalhadas em carros alegóricos móveis e precisam ser guardadas em caixas iguais.", objective:"Acompanhe as plataformas móveis e organize 50 fantasias em caixas com 8.", skill:"Aprendizagem: quociente e resto em situação de agrupamento."},
+    {story:"O grande desfile só começa quando cada fileira recebe exatamente o mesmo número de integrantes.", objective:"Supere o percurso mais longo e distribua 56 integrantes em 7 fileiras.", skill:"Aprendizagem: divisão exata com números maiores."},
+    {story:"O Rei Desigual reuniu todos os desafios. Agora o equilíbrio depende do conhecimento conquistado.", objective:"Ative o Altar da Divisão, resolva problemas variados e use as brechas matemáticas para vencer.", skill:"Aprendizagem: resolução de problemas, divisão exata e divisão com resto."}
+  ];
+
+  const P = (x,y,w,h=24,kind="stone",extra={}) => { if(typeof h==="string"){ extra=(kind&&typeof kind==="object")?kind:{}; kind=h; h=24; } return {x,y,w,h,kind,...extra}; };
+  const G = (x,w,kind="ground") => P(x,620,w,100,kind);
+  const HZ = (x,w,type="spike",y=596,h=24) => ({x,y,w,h,type});
+  const Q = (x,y,total,divisor,reward="energy") => ({x,y,w:56,h:56,total,divisor,answer:Math.floor(total/divisor),reward,used:false,tries:0});
+  const S = (x,y=590,power=940) => ({x,y,w:58,h:30,power});
+
+  const LAYOUTS = [
+    {
+      width:4400,
+      platforms:[G(0,790),G(930,720),G(1780,760),G(2690,710),G(3530,870),P(250,500,180),P(545,410,160,"awning"),P(1040,500,180),P(1325,395,185,"awning"),P(1880,500,180),P(2180,405,170,"awning",{moveY:true,amp:34,speed:1.4}),P(2790,505,180),P(3080,410,180),P(3650,500,190)],
+      hazards:[HZ(790,140,"spike"),HZ(1650,130,"mud"),HZ(2540,150,"spike"),HZ(3400,130,"mud")],
+      spots:[[150,555],[300,445],[600,355],[1010,555],[1110,445],[1380,340],[1860,555],[1950,445],[2230,350],[2760,555],[2850,450],[3130,355],[3610,555],[3720,445],[4050,555]],
+      enemies:[["armadillo",1120,548,1000,1500],["snake",2050,548,1850,2450],["bird",3050,430,2800,3350]],
+      chest:[1510,548],portal:[4160,430],bonuses:[[2380,490,"life"],[3370,490,"shield"]],checkpoint:[2710,540],springs:[S(1690)],questions:[Q(690,530,18,3,"score"),Q(3250,530,20,4,"energy")],decor:"market"
+    },
+    {
+      width:4750,
+      platforms:[G(0,610),G(760,570),G(1480,600),G(2240,560),G(2960,600),G(3710,1040),P(170,500,150,"crate"),P(390,395,155,"awning"),P(820,505,150),P(1030,400,155,"awning"),P(1260,310,150,"crate"),P(1570,500,160),P(1820,385,180,"awning",{moveX:true,amp:75,speed:1.1}),P(2300,500,160),P(2535,390,170,"crate"),P(3020,500,170),P(3290,395,170,"awning",{moveY:true,amp:55,speed:1.25}),P(3790,495,180),P(4070,385,190,"awning")],
+      hazards:[HZ(610,150,"spike"),HZ(1330,150,"mud"),HZ(2080,160,"spike"),HZ(2800,160,"mud"),HZ(3560,150,"spike")],
+      spots:[[120,555],[225,445],[440,340],[820,450],[1075,345],[1305,255],[1550,555],[1870,330],[2280,555],[2590,335],[3010,555],[3340,335],[3780,445],[4100,330],[4450,555]],
+      enemies:[["armadillo",890,548,780,1260],["snake",2370,548,2260,2720],["bird",3310,320,3000,3520]],
+      chest:[1410,548],portal:[4460,430],bonuses:[[2140,490,"life"],[3610,490,"shield"]],checkpoint:[2980,540],springs:[S(650),S(2860)],questions:[Q(540,530,28,7,"energy"),Q(3460,530,42,6,"score")],boss:["carcara",4050,360],decor:"juice"
+    },
+    {
+      width:4600,
+      platforms:[G(0,720,"forestGround"),G(900,620,"forestGround"),G(1680,680,"forestGround"),G(2530,600,"forestGround"),G(3300,650,"forestGround"),G(4100,500,"forestGround"),P(180,490,170,"log"),P(470,390,175,"vine",{moveY:true,amp:48,speed:1.2}),P(960,500,170,"log"),P(1210,390,180,"vine"),P(1750,500,180,"log"),P(2030,400,170,"vine",{moveX:true,amp:95,speed:1.0}),P(2590,500,170,"log"),P(2860,390,175,"vine"),P(3370,500,180,"log"),P(3650,390,180,"vine",{moveY:true,amp:45,speed:1.4}),P(4170,500,175,"log")],
+      hazards:[HZ(720,180,"thorns"),HZ(1520,160,"water"),HZ(2360,170,"thorns"),HZ(3130,170,"water"),HZ(3950,150,"thorns")],
+      spots:[[120,555],[220,435],[520,335],[940,555],[1010,445],[1260,335],[1720,555],[1810,445],[2080,345],[2580,555],[2650,445],[2910,335],[3360,555],[3430,445],[3700,335],[4160,445]],
+      enemies:[["snake",1010,548,920,1420],["jaguar",2690,548,2560,3100],["fish",3620,420,3370,3900]],
+      chest:[1570,548],portal:[4380,430],bonuses:[[2410,490,"life"],[4020,490,"shield"]],checkpoint:[2550,540],springs:[S(1580),S(3960)],questions:[Q(650,530,32,8,"score"),Q(3190,530,45,9,"energy")],decor:"forest"
+    },
+    {
+      width:4850,
+      platforms:[G(0,540,"riverBank"),G(720,400,"riverBank"),G(1320,460,"riverBank"),G(1980,430,"riverBank"),G(2610,430,"riverBank"),G(3260,480,"riverBank"),G(3970,880,"riverBank"),P(560,520,130,"lily"),P(1140,500,150,"bridge",{moveY:true,amp:34,speed:1.1}),P(1800,490,150,"boat",{moveX:true,amp:70,speed:1.0}),P(2430,500,145,"lily"),P(3050,490,150,"boat",{moveY:true,amp:42,speed:1.3}),P(3760,500,150,"bridge"),P(4200,395,170,"bridge")],
+      hazards:[HZ(540,180,"water",590,30),HZ(1120,200,"water",590,30),HZ(1780,200,"water",590,30),HZ(2410,200,"water",590,30),HZ(3040,220,"water",590,30),HZ(3740,230,"water",590,30)],
+      spots:[[110,555],[250,555],[585,465],[760,555],[990,555],[1180,445],[1360,555],[1650,555],[1830,435],[2020,555],[2300,555],[2460,445],[2650,555],[2940,555],[3090,435],[3300,555],[3650,555],[3810,445],[4100,555],[4250,340]],
+      enemies:[["snake",820,548,740,1080],["jaguar",2130,548,2000,2380],["fish",3110,420,2850,3400]],
+      chest:[1260,548],portal:[4580,430],bonuses:[[2530,490,"life"],[3890,490,"shield"]],checkpoint:[2630,540],springs:[S(650),S(3900)],questions:[Q(1040,530,35,5,"energy"),Q(3490,530,48,6,"score")],boss:["jaguar",4160,430],decor:"river"
+    },
+    {
+      width:4500,
+      platforms:[G(0,700,"festivalGround"),G(850,620,"festivalGround"),G(1630,670,"festivalGround"),G(2470,620,"festivalGround"),G(3260,1240,"festivalGround"),P(170,500,170,"roof"),P(430,390,170,"roof"),P(920,500,170,"roof"),P(1190,390,175,"roof",{moveX:true,amp:70,speed:1.2}),P(1700,500,180,"roof"),P(1990,390,180,"roof"),P(2550,500,175,"roof"),P(2820,390,170,"roof",{moveY:true,amp:45,speed:1.3}),P(3340,500,180,"roof"),P(3640,390,180,"roof"),P(3990,300,180,"roof")],
+      hazards:[HZ(700,150,"fire"),HZ(1470,160,"spike"),HZ(2300,170,"fire"),HZ(3090,170,"spike")],
+      spots:[[100,555],[210,445],[470,335],[880,555],[960,445],[1230,335],[1680,555],[1750,445],[2030,335],[2520,555],[2590,445],[2860,335],[3320,555],[3390,445],[3680,335],[4030,245]],
+      enemies:[["ox",1000,548,880,1390],["owl",2000,350,1750,2260],["frog",3500,548,3300,3890]],
+      chest:[1540,548],portal:[4260,430],bonuses:[[2350,490,"life"],[3180,490,"shield"]],checkpoint:[2490,540],springs:[S(760),S(3150)],questions:[Q(650,530,54,6,"score"),Q(3110,530,49,7,"energy")],decor:"junina"
+    },
+    {
+      width:4750,
+      platforms:[G(0,590,"cornGround"),G(770,550,"cornGround"),G(1480,560,"cornGround"),G(2210,560,"cornGround"),G(2940,590,"cornGround"),G(3700,1050,"cornGround"),P(160,485,150,"hay"),P(390,365,150,"hay"),P(825,480,155,"hay"),P(1080,355,160,"hay",{moveY:true,amp:55,speed:1.25}),P(1540,480,160,"hay"),P(1790,350,160,"hay"),P(2270,480,160,"hay"),P(2520,350,165,"hay",{moveX:true,amp:85,speed:1.15}),P(3010,480,160,"hay"),P(3290,355,170,"hay"),P(3780,480,170,"hay"),P(4100,350,180,"hay")],
+      hazards:[HZ(590,180,"fire"),HZ(1320,160,"thorns"),HZ(2040,170,"fire"),HZ(2770,170,"thorns"),HZ(3530,170,"fire")],
+      spots:[[90,555],[190,430],[430,310],[790,555],[850,425],[1120,300],[1510,555],[1580,425],[1830,295],[2250,555],[2310,425],[2560,295],[2990,555],[3050,425],[3330,300],[3770,425],[4140,295],[4460,555]],
+      enemies:[["ox",900,548,800,1280],["owl",1860,325,1600,2110],["frog",3140,548,2990,3490]],
+      chest:[1390,548],portal:[4460,430],bonuses:[[2130,490,"life"],[3600,490,"shield"]],checkpoint:[2960,540],springs:[S(650,590,980),S(1370,590,980),S(2860,590,980)],questions:[Q(720,530,56,8,"energy"),Q(3470,530,63,9,"score")],boss:["ox",4020,430],decor:"corn"
+    },
+    {
+      width:4600,
+      platforms:[G(0,500,"wetland"),G(690,360,"wetland"),G(1240,420,"wetland"),G(1850,380,"wetland"),G(2420,420,"wetland"),G(3050,400,"wetland"),G(3650,950,"wetland"),P(510,510,150,"lily"),P(1065,485,145,"lily",{moveY:true,amp:36,speed:1.2}),P(1665,500,150,"boat"),P(2240,485,145,"lily",{moveX:true,amp:70,speed:1.0}),P(2860,500,150,"boat"),P(3460,485,145,"lily",{moveY:true,amp:42,speed:1.25}),P(3900,390,175,"bridge")],
+      hazards:[HZ(500,190,"water",590,30),HZ(1050,190,"water",590,30),HZ(1660,190,"water",590,30),HZ(2230,190,"water",590,30),HZ(2840,210,"water",590,30),HZ(3450,200,"water",590,30)],
+      spots:[[90,555],[260,555],[540,455],[720,555],[930,555],[1100,430],[1270,555],[1510,555],[1690,445],[1880,555],[2140,555],[2280,430],[2450,555],[2740,555],[2890,445],[3070,555],[3340,555],[3490,430],[3690,555],[3940,335],[4300,555]],
+      enemies:[["capybara",760,548,700,990],["stork",2050,400,1850,2310],["alligator",3180,548,3060,3440]],
+      chest:[1160,548],portal:[4320,430],bonuses:[[2340,490,"life"],[3550,490,"shield"]],checkpoint:[2440,540],springs:[S(610),S(3540)],questions:[Q(1000,530,27,5,"energy"),Q(2980,530,31,6,"score")],boss:["alligator",3930,430],decor:"pantanal"
+    },
+    {
+      width:4850,
+      platforms:[G(0,600,"carnivalGround"),G(780,520,"carnivalGround"),G(1460,520,"carnivalGround"),G(2140,520,"carnivalGround"),G(2820,520,"carnivalGround"),G(3500,520,"carnivalGround"),G(4180,670,"carnivalGround"),P(150,490,170,"float"),P(430,365,175,"float",{moveY:true,amp:48,speed:1.3}),P(850,490,175,"float",{moveX:true,amp:75,speed:1.1}),P(1150,365,175,"float"),P(1530,490,175,"float"),P(1830,350,175,"float",{moveY:true,amp:55,speed:1.2}),P(2210,490,175,"float"),P(2510,350,175,"float",{moveX:true,amp:90,speed:1.0}),P(2890,490,175,"float"),P(3190,350,175,"float"),P(3570,490,175,"float",{moveY:true,amp:48,speed:1.35}),P(3870,350,175,"float"),P(4260,490,180,"float")],
+      hazards:[HZ(600,180,"confetti"),HZ(1300,160,"spike"),HZ(1980,160,"confetti"),HZ(2660,160,"spike"),HZ(3340,160,"confetti"),HZ(4020,160,"spike")],
+      spots:[[90,555],[180,435],[470,310],[810,555],[890,435],[1190,310],[1490,555],[1570,435],[1870,295],[2170,555],[2250,435],[2550,295],[2850,555],[2930,435],[3230,295],[3530,555],[3610,435],[3910,295],[4220,435],[4560,555]],
+      enemies:[["monkey",900,548,800,1250],["macaw",1900,320,1650,2110],["anteater",3000,548,2880,3300]],
+      chest:[1370,548],portal:[4570,430],bonuses:[[2070,490,"life"],[3420,490,"shield"]],checkpoint:[2830,540],springs:[S(680),S(3360)],questions:[Q(720,530,58,8,"score"),Q(4080,530,63,7,"energy")],decor:"carnival"
+    },
+    {
+      width:5200,
+      platforms:[G(0,620,"paradeGround"),G(800,560,"paradeGround"),G(1540,560,"paradeGround"),G(2280,560,"paradeGround"),G(3020,560,"paradeGround"),G(3760,560,"paradeGround"),G(4500,700,"paradeGround"),P(160,500,170,"stage"),P(430,380,170,"stage"),P(870,500,170,"stage",{moveY:true,amp:50,speed:1.2}),P(1160,365,170,"stage"),P(1610,500,175,"stage"),P(1910,350,175,"stage",{moveX:true,amp:95,speed:1.05}),P(2350,500,175,"stage"),P(2650,350,175,"stage"),P(3090,500,175,"stage",{moveY:true,amp:58,speed:1.25}),P(3390,350,175,"stage"),P(3830,500,175,"stage"),P(4130,350,175,"stage",{moveX:true,amp:80,speed:1.15}),P(4580,500,180,"stage"),P(4870,370,180,"stage")],
+      hazards:[HZ(620,180,"spike"),HZ(1360,180,"confetti"),HZ(2100,180,"spike"),HZ(2840,180,"confetti"),HZ(3580,180,"spike"),HZ(4320,180,"confetti")],
+      spots:[[90,555],[200,445],[470,325],[830,555],[910,445],[1200,310],[1570,555],[1650,445],[1950,295],[2310,555],[2390,445],[2690,295],[3050,555],[3130,445],[3430,295],[3790,555],[3870,445],[4170,295],[4540,555],[4620,445],[4910,315]],
+      enemies:[["monkey",930,548,820,1320],["macaw",2010,315,1750,2220],["anteater",3180,548,3060,3500]],
+      chest:[1460,548],portal:[4930,430],bonuses:[[2190,490,"life"],[4420,490,"shield"]],checkpoint:[3030,540],springs:[S(700),S(2860),S(4360)],questions:[Q(740,530,64,8,"energy"),Q(3660,530,72,9,"score")],boss:["shadow",4550,430],decor:"parade"
+    }
+  ];
+
+  let checkpoint = null;
+  let springs = [];
+  let questionBlocks = [];
+  let stageDecor = "";
+  let respawnX = 80;
+  let respawnY = 420;
+  let activeDash = 0;
+  let dashCooldown = 0;
+  let knockbackTimer = 0;
+  let coyoteTimer = 0;
+  let jumpBuffer = 0;
+  let damageTaken = 0;
+  let wrongAnswers = 0;
+  let stageStartTime = 0;
+  let pausedFrom = "playing";
+  let pendingBriefLevel = 0;
+
+  function showBriefing(index){
+    pendingBriefLevel = index;
+    const level = LEVELS[index];
+    const info = STAGE_INFO[index];
+    $("#briefWorld").textContent = `MUNDO ${level.world+1} • FASE ${index+1}`;
+    $("#briefTitle").textContent = level.title;
+    $("#briefEquation").textContent = level.mode === "boss" ? "DESAFIO FINAL" : level.rest ? `${level.total} ÷ ${level.divisor} = ?  resto ?` : `${level.total} ÷ ${level.divisor} = ?`;
+    $("#briefStory").textContent = info.story;
+    $("#briefObjective").innerHTML = `<strong>Missão:</strong> ${info.objective}`;
+    $("#briefSkill").innerHTML = `<strong>${info.skill}</strong>`;
+    state = "briefing";
+    setGameUI(false);
+    showScreen("briefingScreen");
+  }
+
+  function pauseGame(){
+    if(state !== "playing" && state !== "boss") return;
+    pausedFrom = state;
+    state = "paused";
+    setGameUI(false);
+    progressWrap.classList.remove("active");
+    stageTag.classList.remove("active");
+    stopMusic();
+    showScreen("pauseScreen");
+  }
+  function resumeGame(){
+    state = pausedFrom;
+    showScreen(null);
+    setGameUI(true);
+    progressWrap.classList.add("active");
+    stageTag.classList.add("active");
+    if(musicOn) playMusic(LEVELS[currentLevel].world);
+  }
+  function goHome(){
+    state="title";
+    stopMusic();
+    setGameUI(false);
+    progressWrap.classList.remove("active");
+    stageTag.classList.remove("active");
+    showScreen("titleScreen");
+  }
+
+  $("#briefPlay").onclick = () => startLevel(pendingBriefLevel);
+  $("#briefBack").onclick = () => { renderLevels(); showScreen(pendingBriefLevel===0?"titleScreen":"levelScreen"); state="title"; };
+  pauseBtn.onclick = pauseGame;
+  homeBtn.onclick = goHome;
+  $("#resumeBtn").onclick = resumeGame;
+  $("#restartPauseBtn").onclick = () => startLevel(currentLevel);
+  $("#pauseLevelsBtn").onclick = () => { state="title"; stopMusic(); renderLevels(); showScreen("levelScreen"); };
+  $("#pauseHomeBtn").onclick = goHome;
+
+  const originalStartLevelV3 = startLevel;
+  startLevel = function(index){
+    damageTaken=0; wrongAnswers=0; stageStartTime=performance.now();
+    activeDash=0; dashCooldown=0; knockbackTimer=0; coyoteTimer=0; jumpBuffer=0;
+    originalStartLevelV3(index);
+    progressWrap.classList.add("active");
+    stageTag.classList.add("active");
+    stageTag.textContent = `FASE ${index+1} • ${LEVELS[index].title}`;
+  };
+
+  buildNormalLevel = function(level){
+    const layout = LAYOUTS[currentLevel] || LAYOUTS[0];
+    worldWidth = layout.width;
+    platforms = layout.platforms.map((p,i)=>({
+      ...p,
+      baseX:p.x, baseY:p.y, t:i*.61, dx:0, dy:0,
+      move:!!(p.moveX||p.moveY)
+    }));
+    hazards = layout.hazards.map(h=>({...h}));
+    collectibles = layout.spots.slice(0,level.collect).map((p,i)=>({x:Math.max(170,p[0]),y:p[1],taken:false,bob:i*.63,token:level.token}));
+    crates = [
+      {x:Math.min(layout.width-900,layout.chest[0]+650),y:560,w:50,h:50,kind:"ammo",open:false},
+      {x:Math.min(layout.width-520,layout.portal[0]-420),y:560,w:50,h:50,kind:"heart",open:false}
+    ];
+    chest={x:layout.chest[0],y:layout.chest[1],w:78,h:68,open:false};
+    portal={x:layout.portal[0],y:layout.portal[1],w:120,h:190};
+    bonusPortals=layout.bonuses.map((b,idx)=>({x:b[0],y:b[1],w:95,h:130,kind:b[2],used:false,variant:(currentLevel+idx)%4,portalId:currentLevel*2+idx}));
+    checkpoint={x:layout.checkpoint[0],y:layout.checkpoint[1],w:48,h:80,active:false};
+    springs=layout.springs.map(s=>({...s}));
+    questionBlocks=layout.questions.map(q=>{
+      const quotient=Math.floor(q.total/q.divisor);
+      const remainder=q.total%q.divisor;
+      return {...q,quotient,remainder,answerText:remainder?`${quotient}, resto ${remainder}`:String(quotient)};
+    });
+    stageDecor=layout.decor;
+    respawnX=80; respawnY=420;
+    enemies=layout.enemies.map((data,i)=>{
+      const [type,x,y,min,max]=data;
+      const info=MONSTER_INFO[type];
+      const hp=Math.ceil(info.hp*diff().enemyHp);
+      return {type,name:info.name,kind:info.kind,x,y,min,max,w:76,h:72,vx:(i%2?-1:1)*info.speed*diff().enemySpeed,hp,maxHp:hp,dead:false,phase:i*.7,shoot:0};
+    });
+    boss=null;
+    if(layout.boss){
+      const [type,x,y]=layout.boss;
+      const info=MONSTER_INFO[type] || MONSTER_INFO.shadow;
+      const hp=Math.ceil((type==="shadow"?12:10)*diff().enemyHp);
+      boss={type,name:info.name,kind:info.kind,x,y,w:type==="shadow"?170:160,h:type==="shadow"?190:180,vx:-70*diff().enemySpeed,hp,maxHp:hp,dead:false,t:0,shoot:0};
+    }
+  };
+
+  const originalBuildBossArenaV3 = buildBossArena;
+  buildBossArena = function(){
+    originalBuildBossArenaV3();
+    checkpoint=null; springs=[S(150,590,900),S(1080,590,900)]; questionBlocks=[]; stageDecor="arena";
+    respawnX=80; respawnY=420;
+  };
+
+  const originalUpdateHUDV3 = updateHUD;
+  updateHUD = function(){
+    originalUpdateHUDV3();
+    const level=LEVELS[currentLevel];
+    $("#scoreHud").textContent=`★ ${player.score}`;
+    $("#powerHud").textContent=player.weapon?`RAIO ${player.ammo} • Q PODER`:`RAIO BLOQUEADO`;
+    $("#itemHud").textContent=level.mode==="boss"?"ALTAR ÷":`${player.collected}/${level.collect}`;
+    const pct=state==="boss"?Math.min(100,(1-(boss?boss.hp/boss.maxHp:0))*100):Math.min(100,(player.x/Math.max(1,worldWidth-player.w))*100);
+    $("#stageProgressFill").style.width=pct+"%";
+    const bossVisible=!!boss&&!boss.dead&&(state==="boss"||Math.abs(boss.x-player.x)<900);
+    $("#bossBar").classList.toggle("active",bossVisible);
+  };
+
+  const originalHurtV3 = hurt;
+  hurt = function(source,fall=false){
+    const before=player.hearts;
+    originalHurtV3(source,fall);
+    if(player.hearts<before){
+      damageTaken++;
+      knockbackTimer=.28;
+    }
+    if(fall && state!=="gameover"){
+      player.x=respawnX; player.y=respawnY; player.vx=0; player.vy=0;
+      toast(checkpoint&&checkpoint.active?"Retorno ao Marco da Partilha.":"Tente novamente a partir do início.",1300);
+    }
+  };
+
+  function updateMovingPlatforms(dt){
+    platforms.forEach(p=>{
+      p.dx=0; p.dy=0;
+      const ox=p.x, oy=p.y;
+      if(p.moveX){ p.t+=dt; p.x=p.baseX+Math.sin(p.t*p.speed)*p.amp; }
+      if(p.moveY){ p.t+=dt; p.y=p.baseY+Math.sin(p.t*p.speed)*p.amp; }
+      p.dx=p.x-ox; p.dy=p.y-oy;
+    });
+  }
+
+  function updateEnemiesV3(dt){
+    enemies.forEach(e=>{
+      if(e.dead) return;
+      const dist=player.x-e.x;
+      if(Math.abs(dist)<500){
+        e.vx=Math.sign(dist||1)*Math.abs(e.vx);
+        if(e.kind==="fly") e.y += clamp((player.y-25-e.y)*.045,-5,5);
+      }else{
+        if(e.x<e.min || e.x>e.max) e.vx*=-1;
+        if(e.kind==="fly") e.y=430+Math.sin(performance.now()/420+e.phase)*48;
+      }
+      e.x+=e.vx*dt;
+      if(e.x<e.min||e.x>e.max){e.vx*=-1;e.x=clamp(e.x,e.min,e.max)}
+      e.shoot+=dt;
+      if(e.kind==="fly"&&e.shoot>2.45){e.shoot=0;enemyShoot(e)}
+      if(overlap(player,e)){
+        const feet=player.y+player.h;
+        const stomp=player.vy>120 && feet-e.y<34 && player.y<e.y;
+        if(stomp){
+          e.hp-=2; player.vy=-470; player.grounded=false;
+          addParticle(e.x+e.w/2,e.y,"SALTO CERTO!","#fff36a",1.1);
+          beep(610,.06,"triangle");
+          if(e.hp<=0) defeatEnemy(e);
+        }else hurt(e);
+      }
+    });
+  }
+
+  update = function(dt){
+    if(state!=="playing"&&state!=="boss") return;
+    if(toastTimer>0){toastTimer-=dt*1000;if(toastTimer<=0)$("#toast").classList.remove("show")}
+    if(cinematic>0)cinematic-=dt;
+    player.inv=Math.max(0,player.inv-dt); player.shield=Math.max(0,player.shield-dt); player.special=Math.max(0,player.special-dt);
+    activeDash=Math.max(0,activeDash-dt); dashCooldown=Math.max(0,dashCooldown-dt); knockbackTimer=Math.max(0,knockbackTimer-dt);
+    jumpBuffer=Math.max(0,jumpBuffer-dt);
+    updateMovingPlatforms(dt);
+
+    const dir=(keys.right?1:0)-(keys.left?1:0);
+    if(dir)player.facing=dir;
+
+    if(queue.dash&&dashCooldown<=0){
+      activeDash=.19; dashCooldown=1.35; player.inv=Math.max(player.inv,.21); player.vx=player.facing*760;
+      addParticle(player.x,player.y,"IMPULSO!","#9ff7ff"); beep(510,.06,"triangle");
+    }
+    queue.dash=false;
+    if(queue.jump)jumpBuffer=.14;
+    queue.jump=false;
+
+    if(player.grounded)coyoteTimer=.12; else coyoteTimer=Math.max(0,coyoteTimer-dt);
+    if(jumpBuffer>0&&coyoteTimer>0){
+      player.vy=-710; player.grounded=false; coyoteTimer=0; jumpBuffer=0; beep(310,.055);
+    }
+
+    if(queue.attack){fireWeapon();queue.attack=false}
+    if(queue.special){specialPower();queue.special=false}
+
+    if(activeDash>0){player.vx=player.facing*760}
+    else if(knockbackTimer<=0){
+      const target=dir*(player.grounded?360:330);
+      const accel=player.grounded?17:8;
+      player.vx+=(target-player.vx)*Math.min(1,dt*accel);
+      if(!dir&&player.grounded)player.vx*=Math.pow(.001,dt);
+    }
+
+    player.vy=Math.min(1050,player.vy+1740*dt);
+    player.x+=player.vx*dt;
+    player.x=clamp(player.x,0,worldWidth-player.w);
+
+    const prevBottom=player.y+player.h;
+    player.y+=player.vy*dt;
+    player.grounded=false;
+    let landed=null;
+    platforms.forEach(p=>{
+      if(player.x+player.w>p.x&&player.x<p.x+p.w){
+        const bottom=player.y+player.h;
+        if(player.vy>=0&&prevBottom<=p.y+16&&bottom>=p.y){
+          player.y=p.y-player.h; player.vy=0; player.grounded=true; landed=p;
+        }
+      }
+    });
+    if(landed&&landed.move){player.x+=landed.dx;player.y+=Math.min(0,landed.dy)}
+
+    springs.forEach(s=>{
+      const feet={x:player.x+8,y:player.y+player.h-8,w:player.w-16,h:18};
+      if(overlap(feet,s)&&player.vy>=0){player.y=s.y-player.h;player.vy=-s.power;player.grounded=false;addParticle(s.x+s.w/2,s.y,"SUPER SALTO!","#ffe16a");beep(760,.08,"square")}
+    });
+
+    if(player.y>H+130)hurt({x:player.x-100},true);
+    hazards.forEach(h=>{if(overlap(player,h))hurt(h)});
+
+    if(checkpoint&&!checkpoint.active&&overlap(player,checkpoint)){
+      checkpoint.active=true;respawnX=checkpoint.x-30;respawnY=430;player.score+=250;
+      toast("Marco da Partilha ativado!",1800);addParticle(checkpoint.x,checkpoint.y,"CHECKPOINT","#7dffbd",1.8);beep(880,.12,"triangle")
+    }
+
+    collectibles.forEach(c=>{
+      c.bob+=dt*4;
+      if(!c.taken&&overlap(player,{x:c.x-22,y:c.y-22,w:44,h:44})){
+        c.taken=true;player.collected++;player.score+=50;addParticle(c.x,c.y,"+50","#fff36a");beep(690,.05);
+        const level=LEVELS[currentLevel];
+        if(player.collected===Math.ceil(level.collect/2))toast(`Metade da coleta! Pense: ${level.divisor} × ${level.quotient}${level.rest?` + ${level.rest}`:""} = ${level.total}`,2100);
+        if(player.collected===level.collect)toast("Coleta completa. Agora alcance o Portal da Partilha.",2100);
+      }
+    });
+
+    crates.forEach(c=>{if(!c.open&&overlap(player,c)&&player.vy>80)openCrate(c)});
+    updateEnemiesV3(dt); updateBoss(dt); updateBullets(dt);
+
+    if(queue.action){
+      const qb=questionBlocks.find(q=>!q.used&&near(player,q,75));
+      if(qb)openQuestionBlock(qb); else {
+        const crate=crates.find(c=>!c.open&&near(player,c,55));
+        if(crate)openCrate(crate); else handleAction();
+      }
+      queue.action=false;
+    }
+
+    const target=state==="boss"?0:player.x-W*.38;
+    cameraX+=(target-cameraX)*Math.min(1,dt*6.5);
+    cameraX=clamp(cameraX,0,Math.max(0,worldWidth-W));
+    updateHUD();
+  };
+
+  function openQuestionBlock(block){
+    const level=LEVELS[currentLevel];
+    const correctAnswer = block.answerText || String(block.answer);
+    challenge={kind:"block",target:block,total:block.total,divisor:block.divisor,ans:correctAnswer};
+    block.tries++;
+    state="challenge";setGameUI(false);progressWrap.classList.remove("active");stageTag.classList.remove("active");showScreen("challengeScreen");
+    $("#challengeTitle").textContent="Bloco da Divisão";
+    $("#challengeText").textContent="Resolva o cálculo para transformar conhecimento em vantagem no percurso.";
+    $("#challengeQuestion").textContent=`Quanto é ${block.total} ÷ ${block.divisor}?`;
+    $("#challengePreview").innerHTML=previewDivision(block.total,block.divisor,block.quotient ?? block.answer,level.token,block.remainder || 0);
+    $("#challengeFeedback").textContent="Escolha a alternativa correta.";
+    const box=$("#challengeAnswers");box.innerHTML="";
+    challengeOptions(correctAnswer).forEach(v=>{const b=document.createElement("button");b.className="answer";b.textContent=v;b.onclick=()=>answerChallenge(String(v),b);box.appendChild(b)});
+    beep(640,.08,"triangle");
+  }
+
+  answerChallenge = function(v,button){
+    if(!challenge)return;
+    if(v!==challenge.ans){
+      wrongAnswers++;button.disabled=true;button.style.filter="grayscale(1)";$("#challengeFeedback").textContent="Ainda não. Conte os grupos ou use a multiplicação para conferir.";beep(130,.12,"sawtooth");return;
+    }
+    if(challenge.kind==="weapon"){
+      chest.open=true;player.weapon=true;player.ammo+=diff().ammo;toast("Raio da Partilha liberado! Use F ou X.",2200);
+    }else if(challenge.kind==="block"){
+      const target=challenge.target;target.used=true;
+      if(target.reward==="energy")player.ammo+=5;
+      if(target.reward==="score")player.score+=300;
+      if(target.reward==="heart")player.hearts=Math.min(player.maxHearts,player.hearts+1);
+      const answerText = target.answerText || String(target.answer);
+      addParticle(target.x,target.y,`${target.total} ÷ ${target.divisor} = ${answerText}`,"#fff36a",2);
+      const rewardText = target.reward==="score" ? "Conhecimento convertido em 300 pontos!" : target.reward==="heart" ? "Conhecimento convertido em vida extra!" : "Conhecimento convertido em energia!";
+      toast(rewardText,1700);
+    }else{
+      if(challenge.target)challenge.target.used=true;
+      if(challenge.kind==="life")player.hearts=Math.min(player.maxHearts,player.hearts+1);
+      if(challenge.kind==="shield")player.shield=14;
+      player.ammo+=5;toast("Bônus conquistado!",1600);
+    }
+    challenge=null;state="playing";showScreen(null);setGameUI(true);progressWrap.classList.add("active");stageTag.classList.add("active");beep(820,.1);
+  };
+
+  const baseChallengeBackHandler = $("#challengeBack").onclick;
+  $("#challengeBack").onclick=()=>{
+    challenge=null;state="playing";showScreen(null);setGameUI(true);progressWrap.classList.add("active");stageTag.classList.add("active");
+  };
+
+  const baseDrawBackgroundV3 = drawBackground;
+  drawBackground = function(world,wi){
+    baseDrawBackgroundV3(world,wi);
+    ctx.save();ctx.translate(-cameraX*.12,0);
+    drawStageDecor(stageDecor);
+    ctx.restore();
+  };
+
+  function drawStageDecor(kind){
+    if(kind==="market"||kind==="juice"){
+      for(let x=350;x<worldWidth;x+=900){ctx.fillStyle="rgba(91,49,28,.48)";ctx.fillRect(x,500,130,120);ctx.fillStyle=kind==="juice"?"#f1c947":"#d95a3c";ctx.fillRect(x-8,475,146,28);ctx.fillStyle="rgba(255,255,255,.35)";ctx.fillRect(x+24,520,38,42)}
+    }else if(kind==="forest"){
+      ctx.strokeStyle="rgba(80,155,96,.55)";ctx.lineWidth=8;for(let x=250;x<worldWidth;x+=760){ctx.beginPath();ctx.moveTo(x,0);ctx.bezierCurveTo(x+130,180,x-70,360,x+40,620);ctx.stroke()}
+    }else if(kind==="river"||kind==="pantanal"){
+      ctx.fillStyle="rgba(255,255,255,.22)";for(let x=300;x<worldWidth;x+=680){ctx.beginPath();ctx.ellipse(x,580,85,7,0,0,7);ctx.fill()}
+    }else if(kind==="junina"||kind==="corn"){
+      ctx.fillStyle="rgba(255,201,67,.22)";for(let x=200;x<worldWidth;x+=520){ctx.beginPath();ctx.arc(x,180,65,0,7);ctx.fill()}
+    }else if(kind==="carnival"||kind==="parade"){
+      const colors=["rgba(255,86,146,.2)","rgba(71,231,214,.18)","rgba(255,220,85,.18)"];
+      for(let x=100,i=0;x<worldWidth;x+=430,i++){ctx.fillStyle=colors[i%3];ctx.beginPath();ctx.arc(x,260,95,0,7);ctx.fill()}
+    }
+  }
+
+  drawPlatforms = function(world){
+    platforms.forEach(p=>{
+      if(!Number.isFinite(Number(p.x))) p.x=0;
+      if(!Number.isFinite(Number(p.y))) p.y=Number.isFinite(Number(p.baseY))?Number(p.baseY):620;
+      if(!Number.isFinite(Number(p.w))) p.w=160;
+      if(!Number.isFinite(Number(p.h))) p.h=24;
+      p.x=Number(p.x); p.y=Number(p.y); p.w=Number(p.w); p.h=Number(p.h);
+      const kind=p.kind||"stone";
+      if(["log","vine","bridge","lily","boat","awning","roof","hay","float","stage","crate"].includes(kind)){
+        ctx.save();
+        const grad=ctx.createLinearGradient(0,p.y,0,p.y+p.h);
+        const palette={
+          log:["#9a6738","#5b371d"],vine:["#4f9d5d","#28643b"],bridge:["#bd8748","#6e4427"],lily:["#5caf70","#28704a"],boat:["#bd6d36","#68361f"],awning:["#e76848","#8e3427"],roof:["#a94d3f","#642d32"],hay:["#e1b84c","#9a6c22"],float:["#b94fa0","#613076"],stage:["#4a81b4","#274469"],crate:["#a56a32","#633b20"]
+        }[kind]||[world.grass,world.ground];
+        grad.addColorStop(0,palette[0]);grad.addColorStop(1,palette[1]);ctx.fillStyle=grad;
+        roundRect(p.x,p.y,p.w,p.h,Math.min(14,p.h/2),true,false);
+        ctx.fillStyle="rgba(255,255,255,.22)";ctx.fillRect(p.x+9,p.y+4,p.w-18,4);
+        if(kind==="lily"){ctx.fillStyle="#77c984";ctx.beginPath();ctx.ellipse(p.x+p.w/2,p.y+4,p.w*.48,18,0,0,7);ctx.fill()}
+        if(p.move){ctx.strokeStyle="#ffe578";ctx.lineWidth=3;roundRect(p.x+3,p.y+3,p.w-6,p.h-6,10,false,true)}
+        ctx.restore();
+      }else{
+        const grad=ctx.createLinearGradient(0,p.y,0,p.y+p.h);grad.addColorStop(0,world.ground);grad.addColorStop(1,"#2a2130");ctx.fillStyle=grad;ctx.fillRect(p.x,p.y,p.w,p.h);ctx.fillStyle=world.grass;ctx.fillRect(p.x,p.y,p.w,12);ctx.fillStyle="rgba(255,255,255,.16)";ctx.fillRect(p.x,p.y,p.w,4);for(let x=p.x+18;x<p.x+p.w;x+=58){ctx.fillStyle="rgba(0,0,0,.13)";ctx.fillRect(x,p.y+34,25,8)}
+      }
+    });
+    drawCheckpoint();drawSprings();drawQuestionBlocks();
+  };
+
+  drawHazards = function(){
+    hazards.forEach(h=>{
+      if(h.type==="water"){
+        const g=ctx.createLinearGradient(0,h.y,0,h.y+h.h);g.addColorStop(0,"#62d6df");g.addColorStop(1,"#236f91");ctx.fillStyle=g;ctx.fillRect(h.x,h.y,h.w,h.h);ctx.strokeStyle="#d5fbff";ctx.lineWidth=3;for(let x=h.x;x<h.x+h.w;x+=34){ctx.beginPath();ctx.arc(x+17,h.y+3,17,Math.PI,0);ctx.stroke()}
+      }else if(h.type==="mud"){
+        ctx.fillStyle="#5f3e2c";roundRect(h.x,h.y,h.w,h.h,10,true,false);ctx.fillStyle="rgba(212,147,83,.35)";for(let x=h.x+18;x<h.x+h.w;x+=35){ctx.beginPath();ctx.arc(x,h.y+9,5,0,7);ctx.fill()}
+      }else if(h.type==="fire"||h.type==="confetti"){
+        for(let x=h.x;x<h.x+h.w;x+=22){ctx.fillStyle=h.type==="fire"?"#ff8a35":"#ea4f91";ctx.beginPath();ctx.moveTo(x,h.y+h.h);ctx.quadraticCurveTo(x+9,h.y-16,x+18,h.y+h.h);ctx.fill();ctx.fillStyle=h.type==="fire"?"#ffe168":"#5ae4d1";ctx.beginPath();ctx.moveTo(x+5,h.y+h.h);ctx.quadraticCurveTo(x+10,h.y,x+15,h.y+h.h);ctx.fill()}
+      }else if(h.type==="thorns"){
+        ctx.fillStyle="#2f7a43";for(let x=h.x;x<h.x+h.w;x+=18){ctx.beginPath();ctx.moveTo(x,h.y+h.h);ctx.lineTo(x+9,h.y);ctx.lineTo(x+18,h.y+h.h);ctx.fill()}
+      }else{
+        ctx.fillStyle="#d7e2ea";for(let x=h.x;x<h.x+h.w;x+=16){ctx.beginPath();ctx.moveTo(x,h.y+h.h);ctx.lineTo(x+8,h.y);ctx.lineTo(x+16,h.y+h.h);ctx.fill()}
+      }
+    });
+  };
+
+  function drawCheckpoint(){
+    if(!checkpoint)return;
+    ctx.save();ctx.translate(checkpoint.x,checkpoint.y);
+    ctx.strokeStyle=checkpoint.active?"#74ffb5":"#f5d06b";ctx.lineWidth=6;ctx.beginPath();ctx.moveTo(10,80);ctx.lineTo(10,0);ctx.stroke();
+    ctx.fillStyle=checkpoint.active?"#2acb89":"#8c56a4";ctx.beginPath();ctx.moveTo(13,5);ctx.lineTo(52,18);ctx.lineTo(13,34);ctx.closePath();ctx.fill();
+    ctx.fillStyle="#fff";ctx.font="900 20px Trebuchet MS";ctx.fillText("÷",22,24);ctx.restore();
+  }
+  function drawSprings(){
+    springs.forEach(s=>{ctx.fillStyle="#e6494b";roundRect(s.x,s.y,s.w,s.h,8,true,false);ctx.fillStyle="#ffe05d";ctx.fillRect(s.x+6,s.y+5,s.w-12,7);ctx.strokeStyle="#e7eaf0";ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(s.x+12,s.y+s.h);ctx.lineTo(s.x+22,s.y+12);ctx.lineTo(s.x+34,s.y+s.h);ctx.lineTo(s.x+46,s.y+12);ctx.stroke()});
+  }
+  function drawQuestionBlocks(){
+    questionBlocks.forEach(q=>{
+      ctx.save();ctx.translate(q.x,q.y);ctx.globalAlpha=q.used?.45:1;const g=ctx.createLinearGradient(0,0,0,q.h);g.addColorStop(0,q.used?"#8f978f":"#ffd960");g.addColorStop(1,q.used?"#555b56":"#d98422");ctx.fillStyle=g;roundRect(0,0,q.w,q.h,10,true,false);ctx.strokeStyle="#fff0ad";ctx.lineWidth=4;roundRect(4,4,q.w-8,q.h-8,8,false,true);ctx.fillStyle="#623e1f";ctx.font="1000 35px Trebuchet MS";ctx.textAlign="center";ctx.fillText("÷",q.w/2,39);ctx.restore();if(!q.used&&near(player,q,75))label(q.x-105,q.y-47,"AÇÃO: resolver Bloco da Divisão")});
+  }
+
+  const originalDrawPortalV3 = drawPortal;
+  drawPortal = function(){
+    if(!portal)return;
+    const open=LEVELS[currentLevel].mode==="boss"||(player.collected>=LEVELS[currentLevel].collect&&(!boss||boss.dead));
+    ctx.save();ctx.translate(portal.x,portal.y);ctx.globalAlpha=open?1:.55;ctx.fillStyle=open?"rgba(89,246,202,.28)":"rgba(110,120,135,.25)";ctx.strokeStyle=open?"#5df3d1":"#9aa4af";ctx.lineWidth=9;ctx.shadowBlur=open?24:4;ctx.shadowColor=ctx.strokeStyle;ctx.beginPath();ctx.ellipse(portal.w/2,portal.h/2,portal.w*.38,portal.h*.43,0,0,7);ctx.fill();ctx.stroke();ctx.fillStyle="#fff";ctx.font="900 42px Trebuchet MS";ctx.textAlign="center";ctx.fillText("÷",portal.w/2,portal.h/2+14);ctx.restore();if(overlap(player,portal))label(portal.x-55,portal.y-42,open?"AÇÃO: Portal da Partilha":"Portal bloqueado: cumpra a missão")
+  };
+
+  const originalOpenBossQuizV3 = openBossQuiz;
+  openBossQuiz = function(){
+    originalOpenBossQuizV3();
+    $$("#bossQuizList select").forEach(sel=>sel.insertAdjacentHTML("afterbegin",'<option value="" selected disabled>Escolha uma resposta</option>'));
+  };
+  const originalCheckBossQuizV3 = checkBossQuiz;
+  checkBossQuiz = function(){
+    const unanswered=$$("#bossQuizList select").some(s=>!s.value);
+    if(unanswered){$("#bossQuizFeedback").textContent="Escolha uma resposta em todos os problemas.";beep(140,.12,"sawtooth");return}
+    const before=bossProblems.map((p,i)=>$("#bossQuizList select[data-i='"+i+"']").value===p.a).every(Boolean);
+    if(!before)wrongAnswers++;
+    originalCheckBossQuizV3();
+    if(state==="boss"){progressWrap.classList.add("active");stageTag.classList.add("active")}
+  };
+
+  completeLevel = function(){
+    const level=LEVELS[currentLevel];
+    const elapsed=Math.max(1,Math.round((performance.now()-stageStartTime)/1000));
+    const stars=1+(damageTaken<=1?1:0)+(wrongAnswers===0?1:0);
+    save.completed[currentLevel]=true;save.stars[currentLevel]=Math.max(Number(save.stars[currentLevel]||0),stars);save.unlocked=Math.max(Number(save.unlocked||0),currentLevel+1);persist();
+    stopMusic();state="result";setGameUI(false);progressWrap.classList.remove("active");stageTag.classList.remove("active");showScreen("resultScreen");
+    $("#resultStars").textContent="★".repeat(stars)+"☆".repeat(3-stars);
+    $("#resultTitle").textContent=level.final?"PARABÉNS, GUARDIÃO!":"Fase concluída!";
+    $("#resultText").textContent=level.final?"Você concluiu todos os mundos, venceu o Rei Desigual e restaurou o equilíbrio da divisão!":"A aventura e a matemática trabalharam juntas para abrir o portal.";
+    $("#resultEquation").textContent=level.mode==="boss"?"JOGO CONCLUÍDO • 10 FASES SUPERADAS":level.rest?`${level.total} ÷ ${level.divisor} = ${level.quotient}, resto ${level.rest}`:`${level.total} ÷ ${level.divisor} = ${level.quotient}`;
+    $("#resultRelation").innerHTML=level.mode==="boss"?"Você demonstrou que sabe repartir, agrupar, calcular o quociente e interpretar o resto.":level.rest?`Verificação: <strong>${level.divisor} × ${level.quotient} + ${level.rest} = ${level.total}</strong>`:`Relação inversa: <strong>${level.divisor} × ${level.quotient} = ${level.total}</strong>`;
+    $("#finalCelebration").classList.toggle("active",!!level.final);
+    let stats=$("#resultStatsV3");if(!stats){stats=document.createElement("div");stats.id="resultStatsV3";stats.className="resultStats";$("#resultEquation").insertAdjacentElement("afterend",stats)}
+    stats.innerHTML=`<div class="resultStat"><strong>${elapsed}s</strong>tempo</div><div class="resultStat"><strong>${damageTaken}</strong>danos</div><div class="resultStat"><strong>${wrongAnswers}</strong>tentativas incorretas</div>`;
+    $("#nextBtn").style.display="";
+    $("#nextBtn").textContent=level.final?"JOGAR NOVAMENTE":"PRÓXIMA FASE";
+    if(level.final){beep(660,.16,"triangle");setTimeout(()=>beep(880,.18,"triangle"),160);setTimeout(()=>beep(1100,.22,"triangle"),340)}
+    renderLevels();
+  };
+
+  renderLevels = function(){
+    const box=$("#levelGrid");box.innerHTML="";
+    LEVELS.forEach((l,i)=>{
+      const w=WORLDS[l.world];const stars=Number(save.stars[i]||0);const card=document.createElement("div");
+      card.className="card"+(save.completed[i]?" complete":"");
+      const type=l.mode==="boss"?"Chefão final":l.mode==="share"?"Repartição":"Agrupamento";
+      card.innerHTML=`<div class="badge">${i+1}</div><h3>${l.title}</h3><p>${w.name}</p><div class="levelCardMeta"><span class="chip">${type}</span>${l.rest?'<span class="chip">Com resto</span>':'<span class="chip">Divisão exata</span>'}</div><div class="stars">${"★".repeat(stars)}${"☆".repeat(3-stars)}</div><button class="btn alt">JOGAR</button>`;
+      card.querySelector("button").onclick=()=>showBriefing(i);box.appendChild(card);
+    });
+  };
+
+  $("#startBtn").onclick=()=>{try{audioCtx||=new(window.AudioContext||window.webkitAudioContext)();audioCtx.resume&&audioCtx.resume()}catch(e){}showBriefing(0)};
+  $("#nextBtn").onclick=()=>{if(currentLevel>=LEVELS.length-1)showBriefing(0);else showBriefing(currentLevel+1)};
+  $("#retryBtn").onclick=()=>startLevel(currentLevel);
+  $("#resultLevelsBtn").onclick=()=>{renderLevels();showScreen("levelScreen");state="title"};
+  $("#gameoverLevelsBtn").onclick=()=>{renderLevels();showScreen("levelScreen");state="title"};
+  $("#resultTitleBtn").onclick=goHome;
+
+  addEventListener("keydown",e=>{
+    if(e.key==="Escape"){
+      if(state==="playing"||state==="boss")pauseGame();else if(state==="paused")resumeGame();
+    }
+  });
+
+  const originalSetGameUIV3=setGameUI;
+  setGameUI=function(on){originalSetGameUIV3(on);progressWrap.classList.toggle("active",on);stageTag.classList.toggle("active",on);pauseBtn.style.display=on?"":"none";homeBtn.style.display=on?"":"none"};
+
+  // Ajustes textuais para o novo design.
+  $(".sub").textContent="Uma aventura de plataforma em mundos brasileiros: pule, explore, resolva e aprenda divisão jogando.";
+  $("#helpScreen .panel").insertAdjacentHTML("beforeend",'<p class="problem" style="font-size:15px">Dica de Guardião: pule sobre os inimigos para neutralizá-los, use molas para alcançar áreas altas, ative o checkpoint e resolva os blocos marcados com ÷.</p>');
+
+  /* ===== EDIÇÃO DIASMATH™ v4 — estudante, abaixar e mundos bônus de vidas ===== */
+  const v4Style = document.createElement("style");
+  v4Style.textContent = `
+    .menuStrip{grid-template-columns:repeat(2,minmax(0,1fr));max-width:720px}
+    .bonusHint{color:#fff4b8;font-weight:900}
+    @media(max-width:700px){.menuStrip{grid-template-columns:1fr}}
+  `;
+  document.head.appendChild(v4Style);
+
+  // O herói agora é um estudante e pode se abaixar.
+  keys.down = false;
+  player.crouching = false;
+  const STAND_H = 82;
+  const CROUCH_H = 54;
+
+  function canStandUp(){
+    const bottom = player.y + player.h;
+    const candidate = {x:player.x+4,y:bottom-STAND_H,w:player.w-8,h:STAND_H};
+    return !platforms.some(p => overlap(candidate,p));
+  }
+  function updateStudentStance(){
+    const wantsCrouch = !!keys.down && player.grounded;
+    if(wantsCrouch && !player.crouching){
+      const bottom=player.y+player.h;
+      player.h=CROUCH_H; player.y=bottom-CROUCH_H; player.crouching=true;
+    }else if((!wantsCrouch || !player.grounded) && player.crouching && canStandUp()){
+      const bottom=player.y+player.h;
+      player.h=STAND_H; player.y=bottom-STAND_H; player.crouching=false;
+    }
+  }
+
+  addEventListener("keydown",e=>{
+    if(["ArrowDown","s","S"].includes(e.key)){keys.down=true;e.preventDefault()}
+  });
+  addEventListener("keyup",e=>{
+    if(["ArrowDown","s","S"].includes(e.key)){keys.down=false;e.preventDefault()}
+  });
+
+  const actPad = $(".actpad");
+  const crouchBtn = document.createElement("button");
+  crouchBtn.className="touch";
+  crouchBtn.dataset.key="crouch";
+  crouchBtn.textContent="ABAIXAR";
+  crouchBtn.style.fontSize="11px";
+  actPad.insertBefore(crouchBtn,actPad.firstChild);
+  const crouchDown=e=>{e.preventDefault();keys.down=true;crouchBtn.classList.add("pressed")};
+  const crouchUp=e=>{e.preventDefault();keys.down=false;crouchBtn.classList.remove("pressed")};
+  ["pointerdown","touchstart"].forEach(ev=>crouchBtn.addEventListener(ev,crouchDown,{passive:false}));
+  ["pointerup","pointercancel","pointerleave","touchend","touchcancel"].forEach(ev=>crouchBtn.addEventListener(ev,crouchUp,{passive:false}));
+
+  const updateBeforeV4 = update;
+  update = function(dt){
+    if(state==="playing"||state==="boss") updateStudentStance();
+    updateBeforeV4(dt);
+    updateBonusRealm(dt);
+  };
+
+  // Estudante aventureiro: uniforme, mochila, tênis e visual de aluno.
+  drawPlayer = function(){
+    if(player.inv>0 && Math.floor(player.inv*14)%2===0) return;
+    const crouch=!!player.crouching;
+    ctx.save();
+    ctx.translate(player.x+player.w/2,player.y+player.h/2);
+    if(player.shield>0){
+      const sg=ctx.createRadialGradient(0,0,18,0,0,68);
+      sg.addColorStop(0,"rgba(170,240,255,.06)");sg.addColorStop(.72,"rgba(75,206,255,.20)");sg.addColorStop(1,"rgba(255,255,255,.38)");
+      ctx.fillStyle=sg;ctx.strokeStyle="#d8fbff";ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(0,0,49,crouch?43:60,0,0,7);ctx.fill();ctx.stroke();
+    }
+    ctx.scale(player.facing,1);
+    const run=!crouch&&Math.abs(player.vx)>20?Math.sin(performance.now()/80)*5:0;
+    const yShift=crouch?11:0;
+    ctx.fillStyle="rgba(0,0,0,.22)";ctx.beginPath();ctx.ellipse(0,crouch?23:47,crouch?36:34,8,0,0,7);ctx.fill();
+
+    // Mochila escolar.
+    ctx.fillStyle="#8b3f72";roundRect(-28,-11+yShift,18,crouch?31:43,8,true,false);
+    ctx.strokeStyle="#f0a9cf";ctx.lineWidth=3;ctx.beginPath();ctx.arc(-15,-5+yShift,14,Math.PI*.72,Math.PI*1.5);ctx.stroke();
+
+    // Pernas, bermuda e tênis.
+    ctx.fillStyle="#26384b";
+    if(crouch){
+      roundRect(-18,13,22,12,5,true,false);roundRect(1,13,22,12,5,true,false);
+      ctx.fillStyle="#f4f6f7";roundRect(-25,20,27,8,4,true,false);roundRect(3,20,27,8,4,true,false);
+    }else{
+      roundRect(-17,24+run,15,25,5,true,false);roundRect(3,24-run,15,25,5,true,false);
+      ctx.fillStyle="#f4f6f7";roundRect(-22,45+run,23,9,4,true,false);roundRect(1,45-run,23,9,4,true,false);
+      ctx.fillStyle="#ee6d3f";ctx.fillRect(-18,49+run,17,4);ctx.fillRect(3,49-run,17,4);
+    }
+
+    // Camisa de estudante DIASMATH™.
+    const shirt=ctx.createLinearGradient(0,-19+yShift,0,28+yShift);shirt.addColorStop(0,"#22aeb0");shirt.addColorStop(1,"#0c6674");
+    ctx.fillStyle=shirt;roundRect(-21,-17+yShift,43,crouch?38:47,12,true,false);
+    ctx.fillStyle="#fff6cc";ctx.font="900 10px Trebuchet MS";ctx.textAlign="center";ctx.fillText("÷",2,4+yShift);
+    ctx.fillStyle="#ffd05e";ctx.fillRect(-21,12+yShift,43,4);
+
+    // Braços.
+    ctx.fillStyle="#a96942";roundRect(-29,-9+yShift,10,crouch?28:37,5,true,false);roundRect(20,-9+yShift,10,crouch?28:37,5,true,false);
+
+    // Cabeça, orelha e cabelo.
+    ctx.fillStyle="#b9784a";ctx.beginPath();ctx.arc(1,-33+yShift,19,0,7);ctx.fill();
+    ctx.fillStyle="#3b241d";ctx.beginPath();ctx.arc(1,-39+yShift,20,Math.PI,0);ctx.quadraticCurveTo(18,-39+yShift,15,-28+yShift);ctx.lineTo(-15,-28+yShift);ctx.quadraticCurveTo(-20,-39+yShift,1,-39+yShift);ctx.fill();
+    ctx.fillStyle="#f2cf5b";ctx.beginPath();ctx.moveTo(-18,-48+yShift);ctx.quadraticCurveTo(2,-60+yShift,21,-47+yShift);ctx.lineTo(16,-40+yShift);ctx.quadraticCurveTo(1,-48+yShift,-16,-40+yShift);ctx.closePath();ctx.fill();
+    ctx.fillStyle="#18415a";ctx.fillRect(-16,-45+yShift,34,5);
+    eye(8,-33+yShift);
+    ctx.strokeStyle="#703c2a";ctx.lineWidth=2;ctx.beginPath();ctx.arc(7,-26+yShift,6,.15,1.2);ctx.stroke();
+
+    // Livro/poder matemático na mão.
+    if(player.weapon){ctx.fillStyle="#ffe35a";roundRect(27,-1+yShift,17,14,3,true,false);ctx.fillStyle="#7d5321";ctx.font="900 10px Trebuchet MS";ctx.fillText("÷",35,10+yShift)}
+    ctx.restore();
+  };
+
+  // Mundos bônus inspirados em áreas secretas de jogos de plataforma.
+  let inBonusRealm=false;
+  let bonusSnapshot=null;
+  let bonusSourcePortal=null;
+  let bonusHearts=[];
+  let bonusExit=null;
+  let bonusFound=0;
+  let bonusMathSolved=false;
+  let bonusRewardGranted=false;
+  let bonusRealmConfig=null;
+
+  function enterBonusRealm(sourcePortal){
+    if(inBonusRealm||sourcePortal.used)return;
+    bonusSnapshot={
+      worldWidth,cameraX,platforms,hazards,collectibles,crates,enemies,bullets,particles,chest,portal,bonusPortals,boss,altar,
+      checkpoint,springs,questionBlocks,stageDecor,respawnX,respawnY,
+      px:player.x,py:player.y,pvx:player.vx,pvy:player.vy
+    };
+    bonusSourcePortal=sourcePortal;inBonusRealm=true;bonusFound=0;bonusMathSolved=false;bonusRewardGranted=false;
+
+    const variant = sourcePortal.variant || 0;
+    const realms = [
+      {
+        name:"Jardim das Estrelas", bg:["#130f3d","#243c78","#0b293d"], accent:"#ff7fa8",
+        tag:"MUNDO BÔNUS • JARDIM DAS ESTRELAS",
+        toast:"Mundo secreto! Explore as plataformas, encontre os itens e supere o desafio do portal.",
+        width:2050,
+        platforms:[
+          {x:0,y:620,w:420,h:100},{x:520,y:620,w:350,h:100},{x:980,y:620,w:360,h:100},{x:1450,y:620,w:600,h:100},
+          {x:230,y:500,w:180,h:24,kind:"float"},{x:590,y:430,w:180,h:24,move:true,moveY:true,amp:45,speed:1.35,kind:"float"},
+          {x:910,y:505,w:170,h:24,kind:"float"},{x:1210,y:405,w:185,h:24,move:true,moveX:true,amp:75,speed:1.1,kind:"float"},
+          {x:1570,y:490,w:200,h:24,kind:"float"}
+        ],
+        hazards:[{x:420,y:596,w:100,h:24,type:"water"},{x:870,y:596,w:110,h:24,type:"water"},{x:1340,y:596,w:110,h:24,type:"water"}],
+        springs:[S(430,590,900),S(1360,590,920)],
+        hearts:[{x:310,y:445},{x:675,y:360},{x:1295,y:335}],
+        exit:{x:1840,y:430,w:120,h:190},spawn:{x:70,y:430}
+      },
+      {
+        name:"Trilha dos Super Saltos", bg:["#35145f","#6a2c83","#153f64"], accent:"#ffe06b",
+        tag:"MUNDO BÔNUS • TRILHA DOS SUPER SALTOS",
+        toast:"Use os super saltos, recolha os itens e resolva a divisão para liberar a saída.",
+        width:2120,
+        platforms:[
+          {x:0,y:620,w:360,h:100},{x:450,y:620,w:300,h:100},{x:850,y:620,w:260,h:100},{x:1220,y:620,w:330,h:100},{x:1660,y:620,w:460,h:100},
+          {x:180,y:520,w:150,h:24,kind:"float"},{x:520,y:455,w:145,h:24,kind:"float"},{x:780,y:355,w:145,h:24,kind:"float"},
+          {x:1080,y:450,w:160,h:24,move:true,moveY:true,amp:42,speed:1.25,kind:"float"},{x:1385,y:360,w:170,h:24,kind:"float"},
+          {x:1710,y:470,w:185,h:24,move:true,moveX:true,amp:70,speed:1.05,kind:"float"}
+        ],
+        hazards:[{x:360,y:596,w:90,h:24,type:"water"},{x:750,y:596,w:100,h:24,type:"water"},{x:1110,y:596,w:110,h:24,type:"water"},{x:1550,y:596,w:110,h:24,type:"water"}],
+        springs:[S(360,590,980),S(1115,590,980)],
+        hearts:[{x:245,y:468},{x:845,y:300},{x:1470,y:305}],
+        exit:{x:1930,y:430,w:120,h:190},spawn:{x:65,y:430}
+      },
+      {
+        name:"Ponte das Nuvens", bg:["#2a78a8","#63bfd0","#234c76"], accent:"#a8f6ff",
+        tag:"MUNDO BÔNUS • PONTE DAS NUVENS",
+        toast:"Atravesse as pontes móveis, recolha os itens e resolva o desafio do portal.",
+        width:2200,
+        platforms:[
+          {x:0,y:620,w:410,h:100},{x:520,y:620,w:320,h:100},{x:940,y:620,w:320,h:100},{x:1370,y:620,w:300,h:100},{x:1770,y:620,w:430,h:100},
+          {x:220,y:520,w:160,h:24,kind:"float"},{x:520,y:440,w:160,h:24,move:true,moveX:true,amp:75,speed:1.2,kind:"float"},
+          {x:820,y:350,w:150,h:24,kind:"float"},{x:1135,y:430,w:160,h:24,move:true,moveY:true,amp:55,speed:1.15,kind:"float"},
+          {x:1450,y:330,w:160,h:24,kind:"float"},{x:1740,y:430,w:175,h:24,move:true,moveX:true,amp:85,speed:1.05,kind:"float"}
+        ],
+        hazards:[{x:410,y:596,w:110,h:24,type:"water"},{x:840,y:596,w:100,h:24,type:"water"},{x:1260,y:596,w:110,h:24,type:"water"},{x:1670,y:596,w:100,h:24,type:"water"}],
+        springs:[S(410,590,930),S(1265,590,960)],
+        hearts:[{x:280,y:470},{x:890,y:295},{x:1515,y:275}],
+        exit:{x:1995,y:430,w:120,h:190},spawn:{x:60,y:430}
+      },
+      {
+        name:"Caverna dos Cristais", bg:["#180f2d","#34205d","#102b39"], accent:"#83e9ff",
+        tag:"MUNDO BÔNUS • CAVERNA DOS CRISTAIS",
+        toast:"Desvie dos perigos, encontre os cristais e resolva o desafio que protege a saída.",
+        width:2140,
+        platforms:[
+          {x:0,y:620,w:380,h:100},{x:500,y:620,w:320,h:100},{x:920,y:620,w:320,h:100},{x:1340,y:620,w:320,h:100},{x:1760,y:620,w:380,h:100},
+          {x:150,y:500,w:160,h:24,kind:"float"},{x:445,y:400,w:170,h:24,kind:"float"},{x:760,y:300,w:160,h:24,kind:"float"},
+          {x:1090,y:410,w:170,h:24,move:true,moveX:true,amp:55,speed:1.1,kind:"float"},{x:1400,y:320,w:165,h:24,kind:"float"},
+          {x:1710,y:430,w:180,h:24,move:true,moveY:true,amp:45,speed:1.2,kind:"float"}
+        ],
+        hazards:[{x:380,y:596,w:120,h:24,type:"spike"},{x:820,y:596,w:100,h:24,type:"water"},{x:1240,y:596,w:100,h:24,type:"spike"},{x:1660,y:596,w:100,h:24,type:"water"}],
+        springs:[S(380,590,950),S(1665,590,920)],
+        hearts:[{x:215,y:450},{x:820,y:245},{x:1460,y:265}],
+        exit:{x:1940,y:430,w:120,h:190},spawn:{x:70,y:430}
+      }
+    ];
+
+    const realm = realms[variant % realms.length];
+    bonusRealmConfig={...realm,rewardKind:sourcePortal.kind};
+    worldWidth=realm.width;cameraX=0;stageDecor="bonus";
+    platforms=realm.platforms.map((p,i)=>({
+      ...p,
+      baseX:p.x,baseY:p.y,t:i*.6,dx:0,dy:0,
+      move:!!(p.moveX||p.moveY)
+    }));
+    hazards=realm.hazards.map(h=>({...h}));
+    collectibles=[];crates=[];enemies=[];bullets=[];particles=[];chest=null;portal=null;bonusPortals=[];boss=null;altar=null;
+    checkpoint=null;springs=realm.springs.map(s=>({...s}));questionBlocks=[];
+    bonusHearts=realm.hearts.map((h,i)=>({x:h.x,y:h.y,taken:false,bob:i*1.6,itemType:sourcePortal.kind}));
+    bonusExit={...realm.exit};
+    respawnX=realm.spawn.x;respawnY=realm.spawn.y;
+    player.x=realm.spawn.x;player.y=realm.spawn.y;player.vx=0;player.vy=0;player.crouching=false;player.h=STAND_H;
+    const portalName=sourcePortal.kind==="shield"?"PORTAL DO ESCUDO":"PORTAL DAS VIDAS";
+    stageTag.textContent=`${realm.tag} • ${portalName}`;
+    toast(realm.toast,2600);
+    beep(920,.14,"triangle");setTimeout(()=>beep(1170,.13,"triangle"),120);
+  }
+
+  function collectBonusHeart(h){
+    h.taken=true;bonusFound++;player.score+=250;
+    if(h.itemType==="shield"){
+      addParticle(h.x,h.y,"FRAGMENTO DE ESCUDO!","#8eeeff",1.7);
+      beep(760,.09,"triangle");setTimeout(()=>beep(980,.1,"triangle"),90);
+    }else{
+      if(player.hearts<player.maxHearts)player.hearts++;
+      else player.score+=100;
+      addParticle(h.x,h.y,"CORAÇÃO ENCONTRADO!","#ff9fbd",1.7);
+      beep(880,.09,"triangle");setTimeout(()=>beep(1180,.1,"triangle"),90);
+    }
+    if(bonusFound===bonusHearts.length)toast("Itens encontrados! Vá ao portal e resolva o desafio final.",2300);
+  }
+
+  const BONUS_PORTAL_PROBLEMS=[
+    {total:15,divisor:3},{total:22,divisor:4},{total:28,divisor:7},{total:35,divisor:5},
+    {total:41,divisor:6},{total:48,divisor:8},{total:27,divisor:4},{total:54,divisor:9},
+    {total:32,divisor:4},{total:47,divisor:6},{total:63,divisor:7},{total:29,divisor:5},
+    {total:72,divisor:8},{total:38,divisor:6},{total:45,divisor:9},{total:31,divisor:4},
+    {total:56,divisor:7},{total:67,divisor:8}
+  ];
+
+  function openBonusGateChallenge(){
+    if(!inBonusRealm||!bonusSourcePortal)return;
+    if(bonusFound<bonusHearts.length){toast(`Ainda faltam ${bonusHearts.length-bonusFound} itens.`,1500);return}
+    const p=BONUS_PORTAL_PROBLEMS[bonusSourcePortal.portalId%BONUS_PORTAL_PROBLEMS.length];
+    const q=Math.floor(p.total/p.divisor),r=p.total%p.divisor;
+    const answer=r?`${q}, resto ${r}`:String(q);
+    challenge={kind:"bonusGate",target:bonusSourcePortal,total:p.total,divisor:p.divisor,ans:answer,quotient:q,remainder:r};
+    state="challenge";setGameUI(false);progressWrap.classList.remove("active");stageTag.classList.remove("active");showScreen("challengeScreen");
+    $("#challengeTitle").textContent=bonusSourcePortal.kind==="shield"?"Desafio do Portal do Escudo":"Desafio do Portal das Vidas";
+    $("#challengeText").textContent="Resolva a divisão para ativar a recompensa e liberar o portal de retorno.";
+    $("#challengeQuestion").textContent=`Quanto é ${p.total} ÷ ${p.divisor}?`;
+    $("#challengePreview").innerHTML=previewDivision(p.total,p.divisor,q,LEVELS[currentLevel].token,r);
+    $("#challengeFeedback").textContent=r?"Escolha o quociente e o resto corretos.":"Escolha a alternativa correta.";
+    const box=$("#challengeAnswers");box.innerHTML="";
+    challengeOptions(answer).forEach(v=>{const b=document.createElement("button");b.className="answer";b.textContent=v;b.onclick=()=>answerChallenge(String(v),b);box.appendChild(b)});
+    beep(690,.09,"triangle");
+  }
+
+  function grantBonusReward(){
+    if(bonusRewardGranted||!bonusSourcePortal)return;
+    bonusRewardGranted=true;
+    if(bonusSourcePortal.kind==="shield"){
+      player.shield=Math.max(player.shield,25);player.ammo+=6;player.score+=500;
+      toast("Escudo da Partilha ativado por 25 segundos!",2400);
+      addParticle(player.x,player.y,"ESCUDO ATIVADO!","#8eeeff",2);
+    }else{
+      if(player.maxHearts<7)player.maxHearts++;
+      player.hearts=player.maxHearts;player.score+=500;
+      toast("Vidas restauradas e coração máximo ampliado!",2400);
+      addParticle(player.x,player.y,"VIDAS RESTAURADAS!","#ff9fbd",2);
+    }
+  }
+
+  const answerChallengeBeforeBonus=answerChallenge;
+  answerChallenge=function(v,button){
+    if(challenge&&challenge.kind==="bonusGate"){
+      if(String(v)!==String(challenge.ans)){
+        wrongAnswers++;button.disabled=true;button.style.filter="grayscale(1)";
+        $("#challengeFeedback").textContent="Ainda não. Confira os grupos e lembre que o resto deve ser menor que o divisor.";
+        beep(130,.13,"sawtooth");return;
+      }
+      bonusMathSolved=true;grantBonusReward();challenge=null;state="playing";showScreen(null);setGameUI(true);progressWrap.classList.add("active");stageTag.classList.add("active");
+      toast("Desafio vencido! O portal de retorno foi liberado.",2100);beep(920,.14,"triangle");
+      return;
+    }
+    answerChallengeBeforeBonus(v,button);
+  };
+
+  function leaveBonusRealm(){
+    if(!inBonusRealm||!bonusSnapshot)return;
+    if(bonusFound<bonusHearts.length){toast(`Ainda faltam ${bonusHearts.length-bonusFound} itens.`,1500);return}
+    if(!bonusMathSolved){openBonusGateChallenge();return}
+    const rewardKind=bonusSourcePortal.kind;
+    bonusSourcePortal.used=true;
+    ({worldWidth,cameraX,platforms,hazards,collectibles,crates,enemies,bullets,particles,chest,portal,bonusPortals,boss,altar,
+      checkpoint,springs,questionBlocks,stageDecor,respawnX,respawnY}=bonusSnapshot);
+    player.x=bonusSnapshot.px+110;player.y=bonusSnapshot.py;player.vx=0;player.vy=0;player.crouching=false;player.h=STAND_H;
+    inBonusRealm=false;bonusSnapshot=null;bonusSourcePortal=null;bonusHearts=[];bonusExit=null;bonusRealmConfig=null;
+    stageTag.textContent=`FASE ${currentLevel+1} • ${LEVELS[currentLevel].title}`;
+    toast(rewardKind==="shield"?"Você voltou à fase protegido pelo Escudo da Partilha!":"Você voltou à fase com as vidas restauradas!",2300);beep(760,.12,"triangle");
+  }
+
+  function updateBonusRealm(dt){
+    if(!inBonusRealm||state!=="playing")return;
+    bonusHearts.forEach(h=>{
+      h.bob+=dt*4;
+      if(!h.taken&&overlap(player,{x:h.x-25,y:h.y-25,w:50,h:50}))collectBonusHeart(h);
+    });
+    updateHUD();
+  }
+
+  const handleActionBeforeV4=handleAction;
+  handleAction=function(){
+    if(inBonusRealm){
+      if(bonusExit&&near(player,bonusExit,55)){
+        if(bonusFound<bonusHearts.length)toast(`Ainda faltam ${bonusHearts.length-bonusFound} itens.`,1500);
+        else if(!bonusMathSolved)openBonusGateChallenge();
+        else leaveBonusRealm();
+      }else toast("Explore o mundo secreto, recolha os itens e encontre o portal de saída.",1300);
+      return;
+    }
+    const bp=bonusPortals.find(p=>!p.used&&near(player,p,80));
+    if(bp){enterBonusRealm(bp);return}
+    handleActionBeforeV4();
+  };
+
+  const updateHUDBeforeV4=updateHUD;
+  updateHUD=function(){
+    updateHUDBeforeV4();
+    if(inBonusRealm){
+      const shield=bonusSourcePortal&&bonusSourcePortal.kind==="shield";
+      const itemName=shield?"fragmentos de escudo":"corações";
+      $("#missionHud").textContent=bonusMathSolved?"Desafio concluído: volte pelo portal de saída.":`Mundo bônus: encontre 3 ${itemName} e resolva o desafio do portal.`;
+      $("#itemHud").textContent=`${shield?"⬢":"❤"} ${bonusFound}/${bonusHearts.length}`;
+      $("#powerHud").textContent=shield?"PORTAL DO ESCUDO":"PORTAL DAS VIDAS";
+      $("#stageProgressFill").style.width=`${Math.min(100,(player.x/Math.max(1,worldWidth-player.w))*100)}%`;
+      $("#bossBar").classList.remove("active");
+    }
+  };
+
+  const drawBackgroundBeforeV4=drawBackground;
+  drawBackground=function(world,wi){
+    if(!inBonusRealm){drawBackgroundBeforeV4(world,wi);return}
+    const bg=(bonusRealmConfig&&bonusRealmConfig.bg)||["#130f3d","#243c78","#0b293d"];
+    const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,bg[0]);g.addColorStop(.55,bg[1]);g.addColorStop(1,bg[2]);ctx.fillStyle=g;ctx.fillRect(cameraX,0,W+20,H);
+    ctx.save();ctx.translate(-cameraX*.12,0);
+    const accent=(bonusRealmConfig&&bonusRealmConfig.accent)||"#ffe06b";
+    for(let x=-100;x<worldWidth+300;x+=170){ctx.globalAlpha=.18;ctx.fillStyle=x%340===0?accent:"#8eeeff";ctx.beginPath();ctx.arc(x+80,130+(x%5)*37,7+(x%3)*3,0,7);ctx.fill()}
+    ctx.globalAlpha=.32;ctx.fillStyle=accent;for(let x=-120;x<worldWidth+300;x+=260){ctx.beginPath();ctx.moveTo(x,620);ctx.lineTo(x+130,265);ctx.lineTo(x+270,620);ctx.fill()}
+    ctx.globalAlpha=1;ctx.restore();
+  };
+
+  const drawCollectiblesBeforeV4=drawCollectibles;
+  drawCollectibles=function(){
+    drawCollectiblesBeforeV4();
+    if(!inBonusRealm)return;
+    bonusHearts.forEach(h=>{
+      if(h.taken)return;
+      const yy=h.y+Math.sin(h.bob)*8;
+      ctx.save();ctx.translate(h.x,yy);
+      if(h.itemType==="shield"){
+        ctx.shadowBlur=22;ctx.shadowColor="#72eaff";ctx.fillStyle="#52cce7";ctx.strokeStyle="#d9fbff";ctx.lineWidth=4;
+        ctx.beginPath();ctx.moveTo(0,-23);ctx.lineTo(23,-14);ctx.lineTo(18,10);ctx.quadraticCurveTo(0,29,-18,10);ctx.lineTo(-23,-14);ctx.closePath();ctx.fill();ctx.stroke();
+        ctx.fillStyle="#fff";ctx.font="900 18px Trebuchet MS";ctx.textAlign="center";ctx.fillText("÷",0,4);
+      }else{
+        ctx.shadowBlur=20;ctx.shadowColor="#ff7fa8";ctx.fillStyle="#ff668f";
+        ctx.beginPath();ctx.moveTo(0,19);ctx.bezierCurveTo(-30,-2,-18,-27,0,-13);ctx.bezierCurveTo(18,-27,30,-2,0,19);ctx.fill();
+        ctx.fillStyle="rgba(255,255,255,.75)";ctx.beginPath();ctx.ellipse(-7,-9,5,3,-.5,0,7);ctx.fill();
+      }
+      ctx.restore();
+    });
+  };
+
+  drawBonusPortals=function(){
+    if(inBonusRealm)return;
+    bonusPortals.forEach((p,i)=>{
+      const shield=p.kind==="shield";
+      const stroke=p.used?"#777f8c":(shield?"#80ecff":"#ff8fb6");
+      const fill=p.used?"rgba(105,110,122,.25)":(shield?"rgba(79,203,235,.22)":"rgba(255,102,153,.24)");
+      ctx.save();ctx.translate(p.x,p.y);ctx.globalAlpha=p.used?.36:1;ctx.fillStyle=fill;ctx.strokeStyle=stroke;ctx.lineWidth=7;ctx.shadowBlur=p.used?0:22;ctx.shadowColor=stroke;
+      if(shield){
+        ctx.beginPath();ctx.moveTo(p.w/2,6);ctx.lineTo(p.w-12,28);ctx.lineTo(p.w-17,p.h-28);ctx.quadraticCurveTo(p.w/2,p.h+3,17,p.h-28);ctx.lineTo(12,28);ctx.closePath();ctx.fill();ctx.stroke();
+      }else{
+        ctx.beginPath();ctx.ellipse(p.w/2,p.h/2,p.w*.38,p.h*.44,0,0,7);ctx.fill();ctx.stroke();
+      }
+      ctx.fillStyle="#fff";ctx.font="900 30px Trebuchet MS";ctx.textAlign="center";ctx.fillText(shield?"⬢":"❤",p.w/2,p.h/2+10);ctx.restore();
+      if(!p.used&&near(player,p,80))label(p.x-82,p.y-40,shield?"AÇÃO: entrar no Portal do Escudo":"AÇÃO: entrar no Portal das Vidas");
+      if(p.used&&near(player,p,70))label(p.x-75,p.y-40,"Mundo bônus já concluído");
+    });
+  };
+
+  const drawPortalBeforeV4=drawPortal;
+  drawPortal=function(){
+    if(!inBonusRealm){drawPortalBeforeV4();return}
+    if(!bonusExit)return;
+    const itemsReady=bonusFound===bonusHearts.length;
+    const open=itemsReady&&bonusMathSolved;
+    ctx.save();ctx.translate(bonusExit.x,bonusExit.y);ctx.globalAlpha=open?1:.52;ctx.fillStyle=open?"rgba(255,219,92,.25)":"rgba(100,105,125,.22)";ctx.strokeStyle=open?"#ffe36e":(itemsReady?"#b892ff":"#7c8190");ctx.lineWidth=9;ctx.shadowBlur=open?25:(itemsReady?14:0);ctx.shadowColor=ctx.strokeStyle;ctx.beginPath();ctx.ellipse(bonusExit.w/2,bonusExit.h/2,bonusExit.w*.38,bonusExit.h*.43,0,0,7);ctx.fill();ctx.stroke();ctx.fillStyle="#fff";ctx.font="900 38px Trebuchet MS";ctx.textAlign="center";ctx.fillText(open?"↩":"÷",bonusExit.w/2,bonusExit.h/2+13);ctx.restore();
+    if(near(player,bonusExit,60)){
+      const msg=!itemsReady?"Encontre todos os itens":!bonusMathSolved?"AÇÃO: resolver desafio do portal":"AÇÃO: voltar para a fase";
+      label(bonusExit.x-90,bonusExit.y-42,msg);
+    }
+  };
+
+  // Mantém a postura normal sempre que uma nova fase começa.
+  const startLevelBeforeV4=startLevel;
+  startLevel=function(index){
+    inBonusRealm=false;bonusSnapshot=null;bonusHearts=[];bonusExit=null;bonusRealmConfig=null;bonusMathSolved=false;bonusRewardGranted=false;keys.down=false;player.crouching=false;player.h=STAND_H;
+    startLevelBeforeV4(index);
+  };
+
+  const helpProblemsV4=$$("#helpScreen .problem");
+  if(helpProblemsV4[0])helpProblemsV4[0].textContent="Mover: ← → ou A/D. Abaixar: ↓ ou S. Pular: Espaço/W/↑. Atacar: F ou X. Impulso: Shift ou C. Especial: Q ou Z. Ação: E ou Enter.";
+  if(helpProblemsV4[1])helpProblemsV4[1].textContent="Os portais são diferentes: o Portal das Vidas leva a mundos de corações; o Portal do Escudo leva a mundos de cristais protetores. Em cada mundo secreto, explore um percurso próprio, recolha os itens e resolva uma divisão para liberar a saída. O Portal da Partilha, no fim da fase, conclui a missão matemática.";
+})();
+
+renderDifficulty();
+renderLevels();
+setGameUI(false);
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>

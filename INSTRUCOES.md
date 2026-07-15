@@ -1,72 +1,58 @@
-# Atualização 11 — DIASMATH™ Arena da Revisão
+# Atualização 13 — Os Guardiões da Divisão
 
-Este pacote publica o game DIASMATH™ Arena da Revisão no site.
+Este pacote ajusta o game enviado para subir no site DIASMATH™.
 
 ## Arquivos incluídos
 
 ```text
-public/games/arena-revisao/index.html
-app/play/arena-revisao/page.tsx
+public/games/guardioes-divisao/index.html
+app/play/guardioes-divisao/page.tsx
 app/play/page.tsx
 ANALISE_TECNICA.md
 ```
 
-## Por que colocar em outra aba?
-
-O game é grande, usa tela cheia, som, ranking e várias telas. Por isso o pacote oferece duas formas de abrir:
-
-```text
-/play/arena-revisao
-```
-
-Abre dentro do site com uma barra superior.
-
-```text
-/games/arena-revisao/index.html
-```
-
-Abre o game diretamente em outra aba.
-
-Na página `/play`, o card terá dois botões:
-
-```text
-Abrir no site
-Outra aba
-```
-
-## Como postar no GitHub
+## Como publicar no GitHub
 
 1. Baixe o ZIP.
 2. Extraia o ZIP.
 3. Abra o repositório `diasmath-platform`.
-4. Clique em `Add file`.
-5. Clique em `Upload files`.
-6. Arraste estas duas pastas extraídas:
+4. Fique na página inicial do repositório.
+5. Clique em `Add file`.
+6. Clique em `Upload files`.
+7. Arraste as duas pastas extraídas:
 
 ```text
 app
 public
 ```
 
-7. Em `Commit message`, escreva:
+8. Em `Commit message`, escreva:
 
 ```text
-Publica DIASMATH Arena da Revisão
+Atualiza Os Guardiões da Divisão
 ```
 
-8. Clique em `Commit changes`.
-9. Aguarde a Vercel publicar.
+9. Clique em `Commit changes`.
+10. Aguarde a Vercel publicar.
 
-## Testar depois
-
-Depois da Vercel concluir, teste:
+## Links para testar depois
 
 ```text
 https://www.diasmath.com.br/play
-https://www.diasmath.com.br/play/arena-revisao
-https://www.diasmath.com.br/games/arena-revisao/index.html
+https://www.diasmath.com.br/play/guardioes-divisao
+https://www.diasmath.com.br/games/guardioes-divisao/index.html
 ```
 
-## Importante
+## Melhor forma de usar em sala
 
-Não envie o ZIP fechado para o GitHub. Extraia e envie as pastas `app` e `public`.
+Use este link para abrir em outra aba e jogar em tela cheia:
+
+```text
+https://www.diasmath.com.br/games/guardioes-divisao/index.html
+```
+
+## Atenção
+
+Não envie o ZIP fechado para o GitHub.
+
+Extraia primeiro e envie as pastas `app` e `public`.

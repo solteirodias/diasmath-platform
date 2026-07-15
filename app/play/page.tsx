@@ -12,18 +12,16 @@ const games = [
     directHref: "/games/guardioes-multiplicacao/index.html",
     emoji: "🛡️",
     area: "Multiplicação",
-    newTab: false,
   },
   {
     title: "Os Guardiões da Divisão",
     status: "Publicado",
     description:
-      "Aventura em mundos temáticos, com missões, desafios práticos de divisão, chefes regionais e batalha final.",
+      "Aventura brasileira de plataforma para aprender divisão com repartição, agrupamento, quociente, resto, mundos bônus, chefes e batalha final.",
     href: "/play/guardioes-divisao",
     directHref: "/games/guardioes-divisao/index.html",
     emoji: "➗",
     area: "Divisão",
-    newTab: false,
   },
   {
     title: "DIASMATH™ Arena da Revisão",
@@ -34,7 +32,6 @@ const games = [
     directHref: "/games/arena-revisao/index.html",
     emoji: "🏟️",
     area: "Revisão 5º ano",
-    newTab: true,
   },
 ];
 
@@ -50,13 +47,13 @@ export default function PlayPage() {
       <Header />
 
       <main className="mx-auto max-w-7xl px-6 py-14">
-        <p className="font-bold text-diasmath-blue">DIASMATH™ Play</p>
+        <p className="font-bold text-blue-700">DIASMATH™ Play</p>
 
         <h1 className="mt-2 text-4xl font-black text-slate-950">
           Jogos educativos
         </h1>
 
-        <p className="mt-4 max-w-3xl text-lg text-slate-600">
+        <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-600">
           Aprenda Matemática por meio de desafios, missões, problemas
           contextualizados, conquistas e experiências interativas.
         </p>
