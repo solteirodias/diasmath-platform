@@ -1,58 +1,61 @@
-# Atualização 13 — Os Guardiões da Divisão
+# Atualização 13B — Corrige grupos do Bloco da Divisão
 
-Este pacote ajusta o game enviado para subir no site DIASMATH™.
+Este pacote corrige o erro visual do game **Os Guardiões da Divisão**.
 
-## Arquivos incluídos
+## O que foi corrigido
+
+Antes, em questões como:
+
+```text
+63 ÷ 9
+72 ÷ 9
+```
+
+o jogo dizia que eram 9 grupos, mas mostrava somente 8.
+
+Agora o jogo mostra todos os grupos corretamente.
+
+## Arquivo incluído
 
 ```text
 public/games/guardioes-divisao/index.html
-app/play/guardioes-divisao/page.tsx
-app/play/page.tsx
-ANALISE_TECNICA.md
 ```
 
-## Como publicar no GitHub
+## Como corrigir no GitHub
 
-1. Baixe o ZIP.
-2. Extraia o ZIP.
-3. Abra o repositório `diasmath-platform`.
-4. Fique na página inicial do repositório.
-5. Clique em `Add file`.
-6. Clique em `Upload files`.
-7. Arraste as duas pastas extraídas:
+1. Baixe e extraia este ZIP.
+2. Abra o repositório `diasmath-platform`.
+3. Vá para a página inicial do repositório.
+4. Clique em `Add file`.
+5. Clique em `Upload files`.
+6. Arraste a pasta extraída:
 
 ```text
-app
 public
 ```
 
-8. Em `Commit message`, escreva:
+7. Em `Commit message`, escreva:
 
 ```text
-Atualiza Os Guardiões da Divisão
+Corrige visualização dos grupos na divisão
 ```
 
-9. Clique em `Commit changes`.
-10. Aguarde a Vercel publicar.
+8. Clique em `Commit changes`.
+9. Aguarde a Vercel publicar.
 
-## Links para testar depois
+## Depois teste
 
-```text
-https://www.diasmath.com.br/play
-https://www.diasmath.com.br/play/guardioes-divisao
-https://www.diasmath.com.br/games/guardioes-divisao/index.html
-```
-
-## Melhor forma de usar em sala
-
-Use este link para abrir em outra aba e jogar em tela cheia:
+Abra:
 
 ```text
 https://www.diasmath.com.br/games/guardioes-divisao/index.html
 ```
 
-## Atenção
+Depois procure uma questão como:
 
-Não envie o ZIP fechado para o GitHub.
+```text
+63 ÷ 9
+72 ÷ 9
+```
 
-Extraia primeiro e envie as pastas `app` e `public`.
+Agora devem aparecer **9 grupos**.

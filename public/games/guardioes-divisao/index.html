@@ -319,6 +319,7 @@ pointer-events:none}
 </div>
 
 <script>
+/* Correção DIASMATH: previewDivision agora exibe todos os grupos do divisor, inclusive 9 grupos. */
 (() => {
 "use strict";
 
@@ -929,7 +930,7 @@ function answerChallenge(v,button){
 }
 function previewDivision(total,divisor,ans,token,rest=0){
   const q = Number(ans) || 0;
-  const shownGroups = Math.min(divisor,8);
+  const shownGroups = divisor;
   let html=`<div class="miniGrid" style="--cols:${Math.min(divisor,4)}">`;
   for(let i=0;i<shownGroups;i++){
     html+=`<div class="miniGroup"><strong>Grupo ${i+1}</strong>${tokenHTML(token,Math.min(q,10))}</div>`;
