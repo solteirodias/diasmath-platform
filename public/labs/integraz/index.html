@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#081b3d">
+<meta name="description" content="IntegraZ Lab, laboratório digital interativo da DIASMATH™ para explorar números inteiros, reta numérica, fichas de sinais, situações reais, operações e desafios alinhados à BNCC.">
+<title>IntegraZ Lab | Laboratório de Números Inteiros — DIASMATH™</title>
+<style>
+:root{
+  --navy:#071a38;--blue:#155c98;--cyan:#20c9c9;--green:#06d6a0;
+  --yellow:#ffd166;--orange:#fb8500;--pink:#ef476f;--violet:#7c3aed;
+  --ink:#102033;--muted:#607086;--paper:#ffffff;--soft:#f4f8fc;
+  --line:#dbe7f3;--shadow:0 18px 48px rgba(2,18,43,.18);--radius:24px;
+  --font-scale:1;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:Inter,Arial,Helvetica,sans-serif;color:var(--ink);
+  font-size:calc(16px * var(--font-scale));min-height:100vh;overflow-x:hidden;
+  background:
+    radial-gradient(circle at 8% 0%,rgba(32,201,201,.23),transparent 28%),
+    radial-gradient(circle at 92% 8%,rgba(255,209,102,.20),transparent 25%),
+    linear-gradient(135deg,#06152f,#155c98 55%,#087e7b);
+}
+button,input,select{font:inherit}
+button{touch-action:manipulation}
+.hidden{display:none!important}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.stars{position:fixed;inset:0;pointer-events:none;opacity:.22;background-image:radial-gradient(#fff 1px,transparent 1px);background-size:34px 34px;animation:drift 24s linear infinite}
+@keyframes drift{to{background-position:340px 230px}}
+@keyframes float{50%{transform:translateY(-12px) rotate(2deg)}}
+@keyframes pop{50%{transform:scale(1.045)}}
+@keyframes fall{to{transform:translateY(110vh) rotate(600deg);opacity:.12}}
+@keyframes pulse{50%{box-shadow:0 0 0 10px rgba(32,201,201,.12)}}
+body.high-contrast{--ink:#000;--muted:#1e293b;--paper:#fff;--soft:#fff;--line:#111;background:#000}
+body.high-contrast .card,body.high-contrast .panel,body.high-contrast .workspace,body.high-contrast .top-panel{border:3px solid #111;box-shadow:none}
+body.high-contrast .tab.active{outline:4px solid #fff}
+body.high-contrast .hint,body.high-contrast .feedback,body.high-contrast .concept-box{border:3px solid #111}
+.topbar{
+  position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;
+  gap:12px;flex-wrap:wrap;padding:12px 20px;color:#fff;
+  background:rgba(3,15,35,.76);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.15)
+}
+.brand{display:flex;align-items:center;gap:11px;font-weight:950}
+.logo{
+  width:52px;height:52px;border-radius:17px;display:grid;place-items:center;font-size:28px;
+  background:linear-gradient(135deg,var(--yellow),var(--orange));box-shadow:0 9px 22px rgba(0,0,0,.28)
+}
+.brand small{display:block;color:#ccecff;font-weight:750;margin-top:2px}
+.top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.top-btn,.btn{
+  border:0;border-radius:15px;padding:11px 15px;font-weight:900;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:.16s;
+  background:var(--yellow);color:#2d2300;box-shadow:0 7px 0 #d89d24
+}
+.top-btn{padding:9px 12px;box-shadow:none;border:1px solid rgba(255,255,255,.24);background:rgba(255,255,255,.12);color:#fff}
+.btn:hover,.top-btn:hover{transform:translateY(-2px)}
+.btn:active{transform:translateY(4px);box-shadow:0 3px 0 #d89d24}
+.btn.blue{background:#118ab2;color:#fff;box-shadow:0 7px 0 #0b607c}
+.btn.green{background:var(--green);color:#06392f;box-shadow:0 7px 0 #049873}
+.btn.pink{background:var(--pink);color:#fff;box-shadow:0 7px 0 #b62a4c}
+.btn.violet{background:var(--violet);color:#fff;box-shadow:0 7px 0 #5420a7}
+.btn.ghost{background:#eef5fb;color:#18324d;box-shadow:0 6px 0 #c9d8e6}
+.btn.small{padding:8px 11px;border-radius:12px;box-shadow:none;font-size:.9rem}
+.btn:disabled{opacity:.55;cursor:not-allowed;transform:none!important}
+.wrap{width:min(1280px,95vw);margin:0 auto}
+.landing{min-height:calc(100vh - 78px);display:grid;place-items:center;padding:28px 0}
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:26px;align-items:center;width:100%}
+.hero-copy{color:#fff}
+.eyebrow{font-weight:950;letter-spacing:.13em;text-transform:uppercase;color:#9ff3ef;font-size:.78rem}
+.mascot{font-size:88px;filter:drop-shadow(0 16px 20px rgba(0,0,0,.38));animation:float 2.4s ease-in-out infinite}
+.hero h1{font-size:clamp(2.6rem,6vw,5.8rem);line-height:.92;margin:7px 0 16px;text-shadow:0 8px 0 rgba(0,0,0,.13)}
+.hero p{font-size:1.18rem;line-height:1.55;color:#e7fbff;max-width:720px}
+.hero-panel,.panel,.card,.workspace,.top-panel{
+  background:rgba(255,255,255,.97);border-radius:var(--radius);box-shadow:var(--shadow)
+}
+.hero-panel{padding:24px}
+.feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.feature{padding:15px;border-radius:18px;border:2px solid #e2edf7;background:#f8fbff}
+.feature strong{display:block;margin-bottom:5px;color:#153f68}
+.feature span{color:var(--muted);font-size:.91rem;line-height:1.35}
+.start-row{display:flex;gap:12px;flex-wrap:wrap;align-items:end;margin-top:18px}
+.field{margin:12px 0}
+.field label{display:block;font-weight:900;margin-bottom:7px}
+.field small{color:var(--muted);font-weight:700}
+.field input,.field select{
+  width:100%;border:2px solid #d9e6f2;border-radius:14px;padding:11px 12px;background:#fff;color:var(--ink)
+}
+.field input:focus,.field select:focus{outline:4px solid rgba(32,201,201,.23);border-color:#20aeb6}
+.app{padding:18px 0 38px}
+.top-panel{padding:15px 16px;margin-bottom:14px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+.tab{
+  border:2px solid #dbe7f3;background:#f8fbff;color:#24425e;padding:10px 13px;border-radius:14px;
+  font-weight:900;cursor:pointer;transition:.15s
+}
+.tab:hover{transform:translateY(-2px)}
+.tab.active{background:linear-gradient(135deg,#123f73,#0e8f91);color:#fff;border-color:transparent;box-shadow:0 8px 18px rgba(13,96,124,.22)}
+.workspace{padding:20px;min-height:680px}
+.section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:15px}
+.section-head h2{margin:0 0 6px;font-size:clamp(1.5rem,3vw,2.2rem)}
+.section-head p{margin:0;color:var(--muted);line-height:1.45;max-width:830px}
+.badges{display:flex;gap:7px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;background:#eaf7ff;color:#0b698d;font-weight:900;padding:7px 10px;font-size:.82rem}
+.grid-2{display:grid;grid-template-columns:minmax(280px,.72fr) minmax(420px,1.28fr);gap:16px}
+.grid-equal{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{padding:18px;border:1px solid rgba(22,74,116,.08)}
+.card h3{margin:0 0 10px}
+.controls-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.controls-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.hint{background:#fff6da;border-left:6px solid var(--yellow);border-radius:15px;padding:12px;line-height:1.42;margin:12px 0}
+.concept-box{background:#ecfbff;border:2px solid #b9ecf1;border-radius:17px;padding:13px;line-height:1.47;margin:12px 0}
+.feedback{border-radius:17px;padding:14px;line-height:1.48;margin-top:12px;border:2px solid #dbe7f3;background:#f8fbff}
+.feedback.ok{background:#eafff6;border-color:#8fe6c9;color:#075b43}
+.feedback.bad{background:#fff0f4;border-color:#ffb4c5;color:#8f1737}
+.feedback.info{background:#eef7ff;border-color:#b9ddf8;color:#104f7c}
+.equation{
+  font-size:clamp(1.7rem,4vw,3.6rem);font-weight:950;text-align:center;padding:15px;border-radius:18px;
+  color:#fff;background:linear-gradient(135deg,#102a56,#0a8790);letter-spacing:.02em
+}
+.numberline-wrap{border-radius:22px;background:linear-gradient(180deg,#fbfdff,#eef8ff);border:3px solid #dcebf7;padding:12px;overflow:hidden;min-height:330px}
+.numberline-wrap svg{width:100%;height:auto;display:block}
+.legend-row{display:flex;justify-content:center;gap:13px;flex-wrap:wrap;color:var(--muted);font-weight:800;margin-top:8px}
+.legend-dot{width:13px;height:13px;border-radius:50%;display:inline-block}
+.chip-zone{min-height:480px;border:3px solid #dce9f5;border-radius:22px;background:linear-gradient(180deg,#fff,#f5faff);padding:16px}
+.chip-groups{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chip-group{border:2px dashed #cbddea;border-radius:18px;padding:12px;min-height:145px;background:#fff}
+.chip-group h4{text-align:center;margin:0 0 10px;color:#31516e}
+.chips{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
+.chip{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:950;font-size:1.22rem;box-shadow:inset -3px -4px 7px rgba(0,0,0,.16),0 4px 8px rgba(0,0,0,.13);animation:pop .25s ease}
+.chip.pos{background:radial-gradient(circle at 30% 25%,#fff 0 8%,#ffd166 10% 55%,#e0a914 85%);color:#3b2d00}
+.chip.neg{background:radial-gradient(circle at 30% 25%,#fff 0 8%,#4cc9f0 10% 55%,#116a9d 85%);color:#fff}
+.zero-pairs{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:14px 0}
+.zero-pair{display:flex;gap:3px;padding:5px;border:3px dashed var(--pink);border-radius:999px;opacity:.9}
+.context-layout{display:grid;grid-template-columns:.85fr 1.15fr;gap:16px}
+.context-stage{min-height:520px;border-radius:22px;background:linear-gradient(180deg,#eaf8ff,#fff9e8);border:3px solid #dce9f5;padding:16px;position:relative;overflow:hidden}
+.context-scene{text-align:center;font-size:72px;margin:4px 0 5px}
+.gauge{height:360px;width:150px;margin:12px auto;position:relative;border-radius:60px;background:#fff;border:5px solid #193c61;box-shadow:inset 0 0 0 8px #d9eef7}
+.gauge-line{position:absolute;top:30px;bottom:30px;left:50%;width:8px;transform:translateX(-50%);background:linear-gradient(180deg,var(--pink),var(--yellow),var(--cyan));border-radius:999px;z-index:1}
+.gauge-scale{position:absolute;inset:28px 12px 28px 12px;z-index:0}
+.gauge-tick{position:absolute;left:50%;transform:translateY(50%);width:46px;height:0;border-top:2px solid rgba(19,63,115,.22)}
+.gauge-tick.minor{width:28px;border-top:2px solid rgba(19,63,115,.14)}
+.gauge-tick-label{position:absolute;left:88px;transform:translateY(50%);font-size:.73rem;font-weight:900;color:#31516e}
+.gauge-center-label{position:absolute;left:76px;transform:translateY(50%);font-size:.8rem;font-weight:950;color:#123f73}
+.marker{position:absolute;left:50%;transform:translate(-50%,50%);width:54px;height:54px;border-radius:50%;display:grid;place-items:center;font-weight:950;color:#fff;background:#123f73;border:4px solid #fff;box-shadow:0 7px 17px rgba(0,0,0,.25);transition:bottom 1.15s cubic-bezier(.2,.8,.2,1);z-index:3}
+.marker.result{background:var(--pink);animation:pulse 1s 2}
+.sign-rules{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}
+.rule{border-radius:15px;padding:10px 8px;text-align:center;background:#102a56;color:#fff;font-weight:900;min-height:86px;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.rule span{display:block;font-size:clamp(1.15rem,2.5vw,1.45rem);color:var(--yellow);margin-bottom:3px;line-height:1.1}
+.operation-stage{min-height:410px;display:grid;place-items:center;text-align:center;border-radius:22px;background:linear-gradient(135deg,#f4fbff,#fffaf0);border:3px solid #dce9f5;padding:18px}
+.operation-question{font-size:clamp(2.3rem,7vw,5.5rem);font-weight:950;color:#123f73;margin:12px 0}
+.answer-box{width:min(270px,90%);font-size:2rem!important;text-align:center;font-weight:950}
+.steps{display:grid;gap:9px;text-align:left;margin-top:12px}
+.step{padding:12px;border-radius:14px;background:#fff;border:2px solid #dbe7f3;opacity:.42;transform:translateY(5px);transition:.22s}
+.step.show{opacity:1;border-color:#66d3d5;transform:translateY(0);animation:pop .2s ease}
+.step-controls{display:flex;gap:8px;flex-wrap:wrap;margin:13px 0}
+.micro-step{flex:1;min-width:135px;border:2px solid #dbe7f3;background:#f8fbff;border-radius:15px;padding:10px;font-weight:900;color:#31516e}
+.micro-step.active{background:#e7fbff;border-color:#20bfc4;color:#075d65;box-shadow:0 0 0 4px rgba(32,191,196,.13)}
+.micro-step.done{background:#eafff6;border-color:#5bd1aa;color:#075b43}
+.bncc-strip{margin:13px 0;padding:14px;border-radius:18px;background:linear-gradient(135deg,#eef8ff,#f4fff9);border:2px solid #bfe1ef;line-height:1.48}
+.bncc-strip strong{color:#0b698d}
+.bncc-code{display:inline-flex;align-items:center;border-radius:999px;background:#123f73;color:#fff;font-weight:950;padding:6px 10px;margin:3px 4px 3px 0;font-size:.82rem}
+.scenario-tag{display:inline-flex;align-items:center;gap:5px;border-radius:999px;background:#fff4d6;color:#765300;font-weight:900;padding:7px 10px;font-size:.82rem;border:1px solid #f0d17b}
+.challenge-home{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.challenge-card{border:3px solid #dce7f2;border-radius:22px;padding:18px;background:#fff;cursor:pointer;transition:.18s}
+.challenge-card:hover{transform:translateY(-5px);box-shadow:0 14px 28px rgba(0,0,0,.12)}
+.challenge-card .ico{font-size:52px}
+.challenge-card h3{font-size:1.25rem;margin:9px 0 6px}
+.challenge-card p{color:var(--muted);line-height:1.4}
+.challenge-shell{max-width:900px;margin:0 auto}
+.progress-wrap{height:15px;background:#e1ebf4;border-radius:999px;overflow:hidden}
+.progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--yellow),var(--pink));transition:.3s}
+.challenge-meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:10px 0}
+.challenge-prompt{font-size:clamp(1.35rem,3vw,2rem);font-weight:900;line-height:1.35;text-align:center;margin:22px auto;max-width:760px}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.option{border:3px solid #dbe7f3;background:#fff;border-radius:18px;padding:16px;font-weight:950;font-size:1.1rem;cursor:pointer;transition:.16s}
+.option:hover{transform:translateY(-2px);border-color:#75d8d8}
+.option.correct{background:#eafff6;border-color:#38c997;color:#075b43}
+.option.wrong{background:#fff0f4;border-color:#ef6685;color:#8f1737}
+.score-circle{width:170px;height:170px;border-radius:50%;display:grid;place-items:center;margin:16px auto;background:conic-gradient(var(--green) var(--score,0%),#e4edf5 0);position:relative}
+.score-circle:after{content:"";position:absolute;inset:17px;border-radius:50%;background:#fff}
+.score-circle strong{z-index:2;font-size:2.3rem}
+.report-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.metric{padding:17px;border-radius:20px;background:#fff;border:2px solid #dce7f2;text-align:center}
+.metric strong{display:block;font-size:2rem;color:#0b698d}
+.metric span{color:var(--muted);font-weight:800}
+.skill-list{display:grid;gap:11px;margin-top:13px}
+.skill-row{display:grid;grid-template-columns:180px 1fr 70px;gap:10px;align-items:center}
+.skill-name{font-weight:900}
+.skill-track{height:14px;background:#e5edf4;border-radius:999px;overflow:hidden}
+.skill-fill{height:100%;background:linear-gradient(90deg,#118ab2,#06d6a0);border-radius:999px}
+.teacher-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.teacher-item{padding:13px;border-radius:17px;background:#fbfdff;border:2px solid #dce8f3}
+.teacher-item strong{display:block;color:#123f73;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.teacher-item span{color:var(--muted);font-size:.88rem;line-height:1.4}
+.modal{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.72);display:grid;place-items:center;padding:18px}
+.modal-card{width:min(820px,96vw);max-height:90vh;overflow:auto;background:#fff;border-radius:25px;padding:23px;box-shadow:0 25px 80px rgba(0,0,0,.42)}
+.modal-card h2{margin-top:0}
+.modal-close{float:right}
+.confetti{position:fixed;top:-30px;z-index:100;font-size:24px;animation:fall 1.9s linear forwards;pointer-events:none}
+.footer-note{text-align:center;color:#d7f2ff;padding:0 0 25px;font-size:.87rem}
+@media(max-width:980px){
+  .hero,.grid-2,.context-layout{grid-template-columns:1fr}
+  .challenge-home{grid-template-columns:1fr 1fr}
+  .teacher-grid,.report-grid{grid-template-columns:1fr 1fr}
+  .workspace{min-height:unset}
+}
+@media(max-width:650px){
+  .feature-grid,.controls-grid,.grid-equal,.chip-groups,.options,.challenge-home{grid-template-columns:1fr}
+  .teacher-grid,.report-grid{grid-template-columns:1fr}
+  .skill-row{grid-template-columns:1fr}
+  .topbar{padding:10px 12px}.brand small{display:none}.logo{width:45px;height:45px}
+  .workspace{padding:13px}.card{padding:14px}.hero-panel{padding:17px}
+  .hero h1{font-size:3.2rem}.mascot{font-size:70px}.sign-rules{grid-template-columns:1fr 1fr}
+  .tabs{display:grid;grid-template-columns:1fr 1fr}.tab{font-size:.83rem;padding:9px 7px}
+}
+@media print{
+  body{background:#fff!important}.stars,.topbar,.top-panel,.btn,.tabs,.footer-note{display:none!important}
+  .app{display:block!important}.workspace{box-shadow:none}.screen-view{display:none!important}#reportScreen{display:block!important}
+}
+</style>
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo" aria-hidden="true">ℤ</div>
+    <div>DIASMATH™ · IntegraZ Lab<small>Laboratório digital de Números Inteiros</small></div>
+  </div>
+  <div class="top-actions">
+    <button class="top-btn" onclick="window.location.href='/labs'" aria-label="Voltar aos laboratórios">← Voltar aos Labs</button>
+    <button class="top-btn" onclick="toggleSound()" id="soundBtn" aria-label="Ativar ou desativar sons">🔊 Som</button>
+    <button class="top-btn" onclick="changeFont()" aria-label="Aumentar tamanho do texto">A⁺ Texto</button>
+    <button class="top-btn" onclick="toggleContrast()" aria-label="Alternar alto contraste">◐ Contraste</button>
+    <button class="top-btn" onclick="toggleFullscreen()" aria-label="Alternar tela cheia">⛶ Tela cheia</button>
+    <button class="top-btn" onclick="openModal('manual')">📘 Manual</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="landing" class="landing">
+    <div class="hero">
+      <div class="hero-copy">
+        <div class="mascot" aria-hidden="true">🧑‍🔬➕➖</div>
+        <div class="eyebrow">DIASMATH LABS · Aprender investigando</div>
+        <h1>IntegraZ Lab</h1>
+        <p>Um laboratório prático, dinâmico e interativo para compreender números inteiros por meio de deslocamentos, fichas de sinais, situações reais, operações e desafios que se ajustam ao nível do estudante.</p>
+        <div class="badges">
+          <span class="badge">🔍 Exploração livre</span>
+          <span class="badge">🧩 Representação concreta</span>
+          <span class="badge">🎯 Trilha adaptativa</span>
+          <span class="badge">📊 Relatório de aprendizagem</span>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <h2>O que será explorado?</h2>
+        <div class="feature-grid">
+          <div class="feature"><strong>📏 Reta numérica</strong><span>Sentido, ordem, oposto e deslocamentos positivos e negativos.</span></div>
+          <div class="feature"><strong>🟡 Fichas de sinais</strong><span>Pares de zero e significado das operações de adição e subtração.</span></div>
+          <div class="feature"><strong>🌡️ Situações reais</strong><span>Temperatura, elevador, altitude, profundidade e saldo financeiro.</span></div>
+          <div class="feature"><strong>⚙️ Operações</strong><span>Adição, subtração, multiplicação, divisão e expressões numéricas.</span></div>
+          <div class="feature"><strong>🧠 Desafios graduados</strong><span>Níveis iniciante, intermediário, avançado e adaptativo.</span></div>
+          <div class="feature"><strong>🏆 Missão final</strong><span>Avaliação formativa com feedback e relatório por habilidade.</span></div>
+        </div>
+        <div class="field">
+          <label for="studentName">Nome do estudante <small>(opcional)</small></label>
+          <input id="studentName" maxlength="50" placeholder="Digite o nome">
+        </div>
+        <div class="start-row">
+          <button class="btn green" onclick="startLab()">▶️ Entrar no laboratório</button>
+          <button class="btn ghost" onclick="openModal('teacher')">👩‍🏫 Sugestão pedagógica</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="app" class="app hidden">
+    <div class="top-panel">
+      <nav class="tabs" aria-label="Áreas do laboratório">
+        <button class="tab active" data-screen="lineScreen" onclick="showScreen('lineScreen',this)">📏 Reta numérica</button>
+        <button class="tab" data-screen="chipsScreen" onclick="showScreen('chipsScreen',this)">🟡 Fichas de sinais</button>
+        <button class="tab" data-screen="contextScreen" onclick="showScreen('contextScreen',this)">🌡️ Situações reais</button>
+        <button class="tab" data-screen="operationsScreen" onclick="showScreen('operationsScreen',this)">⚙️ Operações</button>
+        <button class="tab" data-screen="challengeScreen" onclick="showScreen('challengeScreen',this)">🎯 Desafios</button>
+        <button class="tab" data-screen="reportScreen" onclick="showScreen('reportScreen',this);renderReport()">📊 Relatório</button>
+      </nav>
+    </div>
+
+    <section id="lineScreen" class="workspace screen-view">
+      <div class="section-head">
+        <div><h2>📏 Explorador da reta numérica</h2><p>Escolha um ponto de partida e uma operação. Observe para qual lado o personagem se desloca e como o resultado é construído.</p></div>
+        <div class="badges"><span class="badge">Ordem</span><span class="badge">Oposto</span><span class="badge">Adição e subtração</span></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Monte o deslocamento</h3>
+          <div class="controls-grid">
+            <div class="field"><label for="lineStart">Ponto de partida</label><input id="lineStart" type="number" min="-30" max="30" value="-4"></div>
+            <div class="field"><label for="lineOp">Operação</label><select id="lineOp"><option value="+">Adicionar</option><option value="-">Subtrair</option></select></div>
+            <div class="field"><label for="lineOperand">Número da operação</label><input id="lineOperand" type="number" min="-20" max="20" value="7"></div>
+            <div class="field"><label for="lineSpeed">Velocidade</label><select id="lineSpeed"><option value="1.6">Lenta</option><option value="1" selected>Normal</option><option value=".45">Rápida</option></select></div>
+          </div>
+          <div class="step-controls" aria-label="Etapas da animação da reta numérica">
+            <button class="micro-step active" id="lineStep1" onclick="prepareNumberLine()">1. Preparar a reta</button>
+            <button class="micro-step" id="lineStep2" onclick="numberLineDirection()" disabled>2. Descobrir o sentido</button>
+            <button class="micro-step" id="lineStep3" onclick="numberLineMove()" disabled>3. Animar o movimento</button>
+            <button class="micro-step" id="lineStep4" onclick="numberLineFinish()" disabled>4. Concluir</button>
+          </div>
+          <div class="controls-row">
+            <button class="btn ghost" onclick="randomizeLine()">🎲 Novo exemplo</button>
+            <button class="btn small ghost" onclick="speakText(document.getElementById('lineFeedback').innerText)">🔈 Ler explicação</button>
+          </div>
+          <div class="concept-box"><b>Ideia central:</b> na reta numérica, mover-se para a direita aumenta o valor; mover-se para a esquerda diminui o valor. Subtrair um número negativo provoca um movimento para a direita.</div>
+          <div id="lineFeedback" class="feedback info" aria-live="polite">Etapa 1: escolha os valores e clique em <b>Preparar a reta</b>.</div>
+        </div>
+        <div class="numberline-wrap">
+          <div id="lineEquation" class="equation">−4 + 7 = ?</div>
+          <svg id="numberLineSvg" viewBox="0 0 1000 285" role="img" aria-label="Reta numérica interativa"></svg>
+          <div class="legend-row"><span><i class="legend-dot" style="background:#118ab2"></i> partida</span><span><i class="legend-dot" style="background:#ef476f"></i> chegada</span><span>➡ direita: aumenta</span><span>⬅ esquerda: diminui</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="chipsScreen" class="workspace screen-view hidden">
+      <div class="section-head">
+        <div><h2>🟡 Laboratório das fichas de sinais</h2><p>Uma ficha positiva e uma ficha negativa formam um par de zero. Combine, cancele os pares e descubra o resultado.</p></div>
+        <div class="badges"><span class="badge">Modelo concreto</span><span class="badge">Pares de zero</span><span class="badge">Significado da subtração</span></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Escolha os números</h3>
+          <div class="controls-grid">
+            <div class="field"><label for="chipA">Primeiro número</label><input id="chipA" type="number" min="-15" max="15" value="-3"></div>
+            <div class="field"><label for="chipOp">Operação</label><select id="chipOp"><option value="+">Adicionar</option><option value="-">Subtrair</option></select></div>
+            <div class="field"><label for="chipB">Segundo número</label><input id="chipB" type="number" min="-15" max="15" value="5"></div>
+            <div class="field"><label>Legenda</label><div class="controls-row"><span class="chip pos" style="width:34px;height:34px">+</span><b>+1</b><span class="chip neg" style="width:34px;height:34px">−</span><b>−1</b></div></div>
+          </div>
+          <div class="controls-row">
+            <button class="btn blue" onclick="prepareChips()">1. Representar</button>
+            <button class="btn violet" id="combineBtn" onclick="combineChips()" disabled>2. Combinar</button>
+            <button class="btn pink" id="cancelBtn" onclick="cancelPairs()" disabled>3. Formar pares de zero</button>
+          </div>
+          <div id="chipFeedback" class="feedback info" aria-live="polite">Comece representando os dois números.</div>
+          <div class="hint"><b>Atenção:</b> subtrair um número significa adicionar o seu oposto. Exemplo: 4 − (−3) transforma-se em 4 + 3.</div>
+        </div>
+        <div class="chip-zone">
+          <div id="chipEquation" class="equation">−3 + 5 = ?</div>
+          <div id="chipStage" style="margin-top:14px"><div class="feedback info">As fichas aparecerão aqui.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contextScreen" class="workspace screen-view hidden">
+      <div class="section-head">
+        <div><h2>🌡️ Números inteiros em situações reais</h2><p>Explore como os sinais representam posições acima e abaixo de uma referência, aumentos, reduções, créditos e dívidas.</p></div>
+        <div class="badges"><span class="badge">Modelagem</span><span class="badge">Interpretação</span><span class="badge">Resolução de problemas</span></div>
+      </div>
+      <div class="context-layout">
+        <div class="card">
+          <div class="field"><label for="contextType">Situação</label>
+            <select id="contextType" onchange="updateContextLabels()">
+              <option value="temperature">🌡️ Temperatura</option>
+              <option value="elevator">🛗 Elevador</option>
+              <option value="ocean">🌊 Nível do mar</option>
+              <option value="finance">💰 Saldo financeiro</option>
+            </select>
+          </div>
+          <div class="controls-grid">
+            <div class="field"><label id="contextStartLabel" for="contextStart">Temperatura inicial</label><input id="contextStart" type="number" min="-30" max="30" value="-6"></div>
+            <div class="field"><label id="contextChangeLabel" for="contextChange">Variação</label><input id="contextChange" type="number" min="-30" max="30" value="11"></div>
+          </div>
+          <div class="step-controls" aria-label="Etapas da situação contextualizada">
+            <button class="micro-step active" id="contextStep1" onclick="prepareContext()">1. Ler a situação</button>
+            <button class="micro-step" id="contextStep2" onclick="contextStartStep()" disabled>2. Marcar o início</button>
+            <button class="micro-step" id="contextStep3" onclick="contextMoveStep()" disabled>3. Animar a mudança</button>
+            <button class="micro-step" id="contextStep4" onclick="contextFinishStep()" disabled>4. Concluir</button>
+          </div>
+          <div class="controls-row"><button class="btn ghost" onclick="randomContext()">🎲 Nova situação</button></div>
+          <div id="contextProblem" class="concept-box">A temperatura era de −6 °C e aumentou 11 °C. Qual é a nova temperatura?</div>
+          <div id="contextFeedback" class="feedback info">Etapa 1: clique em <b>Ler a situação</b>.</div>
+        </div>
+        <div class="context-stage">
+          <div class="context-scene" id="contextEmoji">🌡️</div>
+          <div id="contextTitle" class="equation" style="font-size:1.7rem">−6 + 11 = ?</div>
+          <div class="gauge" id="gauge">
+            <div id="gaugeScale" class="gauge-scale" aria-hidden="true"></div>
+            <div class="gauge-line"></div>
+            <div class="marker" id="contextMarker" style="bottom:50%">−6</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="operationsScreen" class="workspace screen-view hidden">
+      <div class="section-head">
+        <div><h2>⚙️ Oficina de operações</h2><p>Pratique operações com feedback passo a passo. Ajuste a dificuldade para trabalhar desde os conceitos básicos até expressões numéricas.</p></div>
+        <div class="badges"><span class="badge">Feedback imediato</span><span class="badge">Passo a passo</span><span class="badge">Autonomia</span></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="controls-grid">
+            <div class="field"><label for="operationType">Tipo</label>
+              <select id="operationType">
+                <option value="add">Adição</option><option value="sub">Subtração</option>
+                <option value="mul">Multiplicação</option><option value="div">Divisão</option>
+                <option value="expr">Expressão numérica</option><option value="mixed">Misturar</option>
+              </select>
+            </div>
+            <div class="field"><label for="operationLevel">Dificuldade</label>
+              <select id="operationLevel"><option value="1">Iniciante</option><option value="2" selected>Intermediário</option><option value="3">Avançado</option></select>
+            </div>
+          </div>
+          <button class="btn blue" onclick="newOperation()">🎲 Gerar operação</button>
+          <div class="sign-rules">
+            <div class="rule"><span>+ × +</span>resultado +</div>
+            <div class="rule"><span>+ × −</span>resultado −</div>
+            <div class="rule"><span>− × +</span>resultado −</div>
+            <div class="rule"><span>− × −</span>resultado +</div>
+          </div>
+          <div class="hint"><b>Regra de sinais na multiplicação e na divisão:</b> sinais iguais produzem resultado positivo; sinais diferentes produzem resultado negativo.</div>
+          <div id="operationFeedback" class="feedback info">Gere uma operação e resolva sem pressa.</div>
+        </div>
+        <div class="operation-stage">
+          <div style="width:100%">
+            <div class="badge" id="operationSkill">Adição</div>
+            <div id="operationQuestion" class="operation-question">−7 + 12 = ?</div>
+            <input id="operationAnswer" class="answer-box" type="number" inputmode="numeric" placeholder="?">
+            <div class="controls-row" style="justify-content:center;margin-top:13px">
+              <button class="btn green" onclick="checkOperation()">✅ Conferir</button>
+              <button class="btn ghost" onclick="showOperationHint()">💡 Dica</button>
+              <button class="btn violet" id="operationNextStep" onclick="revealOperationStep()" disabled>👣 Mostrar próximo passo</button>
+              <button class="btn small ghost" onclick="speakText(document.getElementById('operationQuestion').innerText)">🔈 Ler</button>
+            </div>
+            <div id="operationSteps" class="steps"><div class="feedback info">Os passos serão revelados um de cada vez, após a conferência.</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="challengeScreen" class="workspace screen-view hidden">
+      <div id="challengeHome">
+        <div class="section-head">
+          <div><h2>🎯 Trilhas contextualizadas pela BNCC</h2><p>As questões apresentam números inteiros em situações de temperatura, saldo, altitude, elevador, jogos, linha do tempo e variações sucessivas.</p></div>
+        </div>
+        <div class="bncc-strip">
+          <span class="bncc-code">EF07MA03</span> <strong>Comparar e ordenar números inteiros</strong> em diferentes contextos, associá-los à reta numérica e utilizá-los em situações de adição e subtração.<br>
+          <span class="bncc-code">EF07MA04</span> <strong>Resolver e elaborar problemas</strong> que envolvam operações com números inteiros.
+        </div>
+        <div class="challenge-home">
+          <div class="challenge-card" onclick="startChallenge('beginner')"><div class="ico">🌱</div><h3>Trilha Iniciante</h3><p>Temperaturas, andares, altitudes e saldos para comparar, ordenar, localizar e realizar pequenos deslocamentos.</p><span class="bncc-code">EF07MA03</span><span class="badge">10 questões</span></div>
+          <div class="challenge-card" onclick="startChallenge('intermediate')"><div class="ico">🚀</div><h3>Trilha Intermediária</h3><p>Problemas de ganhos, perdas, variações térmicas, elevador, mergulho e pontuação em jogos.</p><span class="bncc-code">EF07MA03</span><span class="bncc-code">EF07MA04</span><span class="badge">10 questões</span></div>
+          <div class="challenge-card" onclick="startChallenge('advanced')"><div class="ico">🧠</div><h3>Trilha Avançada</h3><p>Variações repetidas, expressões numéricas e escolha da representação matemática adequada ao problema.</p><span class="bncc-code">EF07MA04</span><span class="badge">10 questões</span></div>
+          <div class="challenge-card" onclick="startChallenge('adaptive')"><div class="ico">🎛️</div><h3>Trilha Adaptativa</h3><p>Situações contextualizadas que mudam de complexidade conforme as respostas do estudante.</p><span class="bncc-code">EF07MA03</span><span class="bncc-code">EF07MA04</span><span class="badge">12 questões</span></div>
+          <div class="challenge-card" onclick="startChallenge('mission')"><div class="ico">🏆</div><h3>Missão Final</h3><p>Avaliação mista com interpretação, modelagem e operações, sem pistas automáticas.</p><span class="bncc-code">EF07MA03</span><span class="bncc-code">EF07MA04</span><span class="badge">15 questões</span></div>
+          <div class="challenge-card" onclick="showScreen('reportScreen',document.querySelector('[data-screen=reportScreen]'));renderReport()"><div class="ico">📊</div><h3>Meu progresso</h3><p>Consulte acertos, tentativas, tempo de estudo e habilidades praticadas.</p><span class="badge">Relatório</span></div>
+        </div>
+      </div>
+      <div id="challengeArea" class="challenge-shell hidden">
+        <div class="challenge-meta">
+          <span class="badge" id="challengeMode">Modo adaptativo</span>
+          <span class="badge" id="challengeLevel">Nível 2</span>
+          <span class="badge" id="challengeCount">Questão 1 de 12</span>
+          <span class="badge" id="challengeScore">0 acertos</span>
+        </div>
+        <div class="progress-wrap"><div id="challengeProgress" class="progress-bar"></div></div>
+        <div class="card" style="margin-top:16px">
+          <div class="controls-row">
+            <div id="challengeSkill" class="badge">Adição</div>
+            <div id="challengeBNCC" class="bncc-code">EF07MA04</div>
+            <div id="challengeContext" class="scenario-tag">🌡️ Temperatura</div>
+          </div>
+          <div id="challengePrompt" class="challenge-prompt"></div>
+          <div id="challengeOptions" class="options"></div>
+          <div class="controls-row" style="justify-content:center;margin-top:14px">
+            <button class="btn small ghost" onclick="readChallenge()">🔈 Ler enunciado</button>
+            <button class="btn small ghost" id="challengeHintBtn" onclick="challengeHint()">💡 Pista</button>
+          </div>
+          <div id="challengeFeedback" class="feedback info">Selecione uma resposta.</div>
+          <div class="controls-row" style="justify-content:center;margin-top:12px">
+            <button id="nextChallengeBtn" class="btn blue hidden" onclick="nextChallenge()">Próxima questão ➜</button>
+            <button class="btn small pink" onclick="endChallenge(true)">Encerrar</button>
+          </div>
+        </div>
+      </div>
+      <div id="challengeResult" class="challenge-shell hidden"></div>
+    </section>
+
+    <section id="reportScreen" class="workspace screen-view hidden">
+      <div class="section-head">
+        <div><h2>📊 Relatório de aprendizagem</h2><p>O relatório registra somente o desempenho realizado neste navegador. Ele pode ser impresso ou exportado em arquivo de texto.</p></div>
+        <div class="controls-row"><button class="btn blue" onclick="window.print()">🖨️ Imprimir</button><button class="btn green" onclick="downloadReport()">⬇️ Baixar relatório</button><button class="btn pink" onclick="resetProgress()">🗑️ Zerar dados</button></div>
+      </div>
+      <div id="reportContent"></div>
+    </section>
+
+    <section class="teacher-grid">
+      <div class="teacher-item"><strong>Explorar</strong><span>Permita que o estudante teste valores e formule hipóteses antes de apresentar regras.</span></div>
+      <div class="teacher-item"><strong>Representar</strong><span>Relacione reta, fichas, linguagem verbal, situações reais e escrita matemática.</span></div>
+      <div class="teacher-item"><strong>Explicar</strong><span>Peça que o estudante justifique o sentido do deslocamento e o sinal do resultado.</span></div>
+      <div class="teacher-item"><strong>Acompanhar</strong><span>Use o relatório por habilidade para propor retomadas e novos desafios.</span></div>
+    </section>
+  </section>
+</main>
+
+<div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+  <div class="modal-card">
+    <button class="btn small pink modal-close" onclick="closeModal()">Fechar ✕</button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<div class="footer-note">© 2026 Francisco Vieira Dias — DIASMATH™. Todos os direitos reservados.</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+const rand=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+const choice=arr=>arr[Math.floor(Math.random()*arr.length)];
+const fmt=n=>n<0?'−'+Math.abs(n):String(n);
+const signWrap=n=>n<0?'('+fmt(n)+')':fmt(n);
+const skillNames={
+  comparison:'Comparação e ordem',opposite:'Oposto e simétrico',add:'Adição',
+  subtract:'Subtração',multiply:'Multiplicação',divide:'Divisão',
+  expressions:'Expressões numéricas',contexts:'Situações reais'
+};
+let audioCtx=null,soundOn=true,fontStep=0;
+let operationCurrent=null,operationStepIndex=-1,chipData=null,challenge=null,lineData=null,contextData=null;
+let session={
+  student:'Estudante',started:Date.now(),attempts:0,correct:0,
+  skills:{comparison:[0,0],opposite:[0,0],add:[0,0],subtract:[0,0],multiply:[0,0],divide:[0,0],expressions:[0,0],contexts:[0,0]},
+  missions:0,bestMission:0
+};
+
+function loadSession(){
+  try{
+    const saved=JSON.parse(localStorage.getItem('diasmath-integraz-session')||'null');
+    if(saved&&saved.skills){session={...session,...saved,started:Date.now()}}
+  }catch(e){}
+}
+function saveSession(){try{localStorage.setItem('diasmath-integraz-session',JSON.stringify(session))}catch(e){}}
+function record(skill,ok){
+  session.attempts++; if(ok)session.correct++;
+  if(!session.skills[skill])session.skills[skill]=[0,0];
+  session.skills[skill][1]++; if(ok)session.skills[skill][0]++;
+  saveSession();
+}
+function startLab(){
+  initAudio();
+  const name=$('studentName').value.trim();
+  if(name)session.student=name;
+  session.started=Date.now();
+  $('landing').classList.add('hidden');$('app').classList.remove('hidden');
+  document.documentElement.requestFullscreen?.().catch(()=>{});
+  resetNumberLine();resetChips();resetContext();resetOperation();renderReport();
+  beep(440,.08);setTimeout(()=>beep(660,.1),110);
+}
+function showScreen(id,btn){
+  document.querySelectorAll('.screen-view').forEach(el=>el.classList.add('hidden'));
+  $(id).classList.remove('hidden');
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function initAudio(){if(!audioCtx)try{audioCtx=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}
+function beep(freq=440,dur=.08){
+  if(!soundOn)return;initAudio();if(!audioCtx)return;
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.type='sine';o.frequency.value=freq;g.gain.value=.04;o.connect(g);g.connect(audioCtx.destination);
+  o.start();g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+dur);o.stop(audioCtx.currentTime+dur);
+}
+function toggleSound(){soundOn=!soundOn;$('soundBtn').textContent=soundOn?'🔊 Som':'🔇 Som';if(soundOn)beep(520,.08)}
+function changeFont(){fontStep=(fontStep+1)%3;document.documentElement.style.setProperty('--font-scale',[1,1.1,1.2][fontStep])}
+function toggleContrast(){document.body.classList.toggle('high-contrast')}
+function toggleFullscreen(){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()}
+function speakText(text){
+  if(!('speechSynthesis'in window)||!text)return;
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text.replace(/−/g,'menos '));
+  u.lang='pt-BR';u.rate=.92;speechSynthesis.speak(u);
+}
+function celebrate(){
+  ['🎉','✨','⭐','ℤ','👏','💡'].forEach((c,j)=>{for(let i=0;i<3;i++){
+    const el=document.createElement('div');el.className='confetti';el.textContent=c;
+    el.style.left=rand(2,97)+'vw';el.style.animationDelay=(j*.04+i*.08)+'s';
+    document.body.appendChild(el);setTimeout(()=>el.remove(),2200)
+  }});
+}
+function openModal(type){
+  let html='';
+  if(type==='manual')html=`<h2>📘 Manual do IntegraZ Lab</h2>
+  <p><b>1. Reta numérica:</b> explore posição, ordem, oposto e deslocamentos. A animação está dividida em quatro comandos, e somente avança quando o estudante clica.</p>
+  <p><b>2. Fichas de sinais:</b> represente os números, combine as fichas e cancele os pares de zero. Na subtração, observe a transformação em adição do oposto.</p>
+  <p><b>3. Situações reais:</b> interprete positivos e negativos em temperatura, elevador, nível do mar e saldo, seguindo as etapas: ler, marcar, animar e concluir.</p>
+  <p><b>4. Operações:</b> escolha o tipo e a dificuldade. O feedback mostra a estratégia de resolução.</p>
+  <p><b>5. Desafios:</b> as trilhas são contextualizadas e alinhadas às habilidades EF07MA03 e EF07MA04 da BNCC. A Missão Final reúne interpretação, modelagem e operações.</p>
+  <p><b>6. Relatório:</b> consulte acertos, tentativas e habilidades. Os dados ficam apenas no navegador usado.</p>
+  <div class="hint"><b>Inclusão:</b> use aumento de texto, alto contraste, leitura em voz alta e velocidade lenta nas animações. Permita que o estudante retorne às representações concretas sempre que necessário.</div>`;
+  if(type==='teacher')html=`<h2>👩‍🏫 Organização pedagógica sugerida</h2>
+  <h3>Para estudantes em nível inicial</h3><p>Comece pela reta numérica e pelas fichas. Trabalhe a EF07MA03 com comparação, oposto, localização e deslocamentos entre −10 e 10.</p>
+  <h3>Para estudantes em nível intermediário</h3><p>Relacione as representações às situações reais e avance da EF07MA03 para a EF07MA04, com problemas de adição, subtração, multiplicação e divisão.</p>
+  <h3>Para estudantes em nível avançado</h3><p>Proponha expressões, justificativas sobre regras de sinais e a Missão Final. Peça diferentes estratégias de solução.</p>
+  <h3>Roteiro de duas aulas</h3><p><b>Aula 1:</b> exploração em duplas, registro de descobertas e socialização. <b>Aula 2:</b> trilha adaptativa, intervenção por habilidade e missão final.</p>`;
+  if(type==='credits')html=`<h2>⭐ Créditos</h2><p><b>IntegraZ Lab — Laboratório de Números Inteiros</b></p><p>Idealização pedagógica: <b>Francisco Vieira Dias</b>.</p><p>Desenvolvimento: <b>DIASMATH™</b>.</p><p>© 2026 Francisco Vieira Dias — DIASMATH™. Todos os direitos reservados.</p>`;
+  $('modalContent').innerHTML=html;$('modal').classList.remove('hidden')
+}
+function closeModal(){$('modal').classList.add('hidden')}
+
+/* RETA NUMÉRICA */
+function setStepGroup(prefix,active){
+  for(let i=1;i<=4;i++){
+    const el=$(prefix+'Step'+i);if(!el)continue;
+    el.classList.toggle('active',i===active);
+    el.classList.toggle('done',i<active);
+  }
+}
+function resetNumberLine(){
+  lineData=null;
+  ['lineStep2','lineStep3','lineStep4'].forEach(id=>$(id).disabled=true);
+  setStepGroup('line',1);
+  $('lineEquation').textContent=`${fmt(parseInt($('lineStart').value)||0)} ${$('lineOp').value} ${signWrap(parseInt($('lineOperand').value)||0)} = ?`;
+  $('numberLineSvg').innerHTML=`<rect x="20" y="35" width="960" height="210" rx="28" fill="#f7fbff" stroke="#dcebf7" stroke-width="3"/>
+  <text x="500" y="125" text-anchor="middle" font-size="31" font-weight="900" fill="#31516e">A animação começará quando você clicar.</text>
+  <text x="500" y="172" text-anchor="middle" font-size="23" font-weight="750" fill="#607086">Etapa 1: prepare a reta numérica.</text>`;
+  $('lineFeedback').innerHTML='Etapa 1: escolha os valores e clique em <b>Preparar a reta</b>.';
+}
+function randomizeLine(){
+  $('lineStart').value=rand(-12,12);
+  $('lineOperand').value=choice([-9,-8,-7,-6,-5,-4,-3,-2,-1,1,2,3,4,5,6,7,8,9]);
+  $('lineOp').value=Math.random()<.5?'+':'-';
+  resetNumberLine();
+}
+function getLineData(){
+  const start=clamp(parseInt($('lineStart').value)||0,-30,30);
+  const operand=clamp(parseInt($('lineOperand').value)||0,-20,20);
+  const op=$('lineOp').value,delta=op==='+'?operand:-operand,result=start+delta;
+  const min=Math.min(-10,start,result)-2,max=Math.max(10,start,result)+2;
+  return{start,operand,op,delta,result,min,max};
+}
+function drawNumberLine(stage=1){
+  if(!lineData)return;
+  const {start,operand,op,result,min,max}=lineData,svg=$('numberLineSvg');
+  const left=55,right=945,y=175,map=n=>left+(n-min)/(max-min)*(right-left);
+  let ticks='',range=max-min,step=range>45?5:range>28?2:1;
+  for(let n=Math.ceil(min/step)*step;n<=max;n+=step){
+    const x=map(n);ticks+=`<line x1="${x}" y1="${y-13}" x2="${x}" y2="${y+13}" stroke="#31516e" stroke-width="2"/>
+    <text x="${x}" y="${y+38}" text-anchor="middle" font-size="18" font-weight="800" fill="#31516e">${fmt(n)}</text>`;
+  }
+  const xs=map(start),xr=map(result),arc=Math.max(42,Math.min(105,Math.abs(xr-xs)*.22));
+  const showDirection=stage>=2,showResult=stage>=4;
+  svg.innerHTML=`<defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="4" orient="auto"><path d="M0,0 L0,8 L10,4 z" fill="#ef476f"/></marker></defs>
+  <line x1="${left}" y1="${y}" x2="${right}" y2="${y}" stroke="#163d62" stroke-width="7" stroke-linecap="round"/>
+  <path d="M ${left} ${y} l 18 -10 l 0 20 z" fill="#163d62"/><path d="M ${right} ${y} l -18 -10 l 0 20 z" fill="#163d62"/>
+  ${ticks}
+  <path id="jumpArc" d="M ${xs} ${y-25} Q ${(xs+xr)/2} ${y-25-arc} ${xr} ${y-25}" fill="none" stroke="#ef476f" stroke-width="6" stroke-dasharray="9 7" marker-end="url(#arrow)" opacity="${showDirection?1:0}"/>
+  <circle cx="${xs}" cy="${y-25}" r="15" fill="#118ab2" stroke="#fff" stroke-width="5"/>
+  <text x="${xs}" y="${y-58}" text-anchor="middle" font-size="21" font-weight="950" fill="#0b698d">partida ${fmt(start)}</text>
+  <g id="walker" style="transition:transform ${$('lineSpeed').value}s cubic-bezier(.2,.8,.2,1)"><circle cx="${xs}" cy="${y-25}" r="22" fill="#ffd166" stroke="#6e5200" stroke-width="4"/><text x="${xs}" y="${y-18}" text-anchor="middle" font-size="25">🧑‍🔬</text></g>
+  <circle id="resultPoint" cx="${xr}" cy="${y-25}" r="17" fill="#ef476f" stroke="#fff" stroke-width="5" opacity="${showResult?1:0}"/>
+  <text id="resultText" x="${xr}" y="${y-58}" text-anchor="middle" font-size="21" font-weight="950" fill="#a51d42" opacity="${showResult?1:0}">chegada ${fmt(result)}</text>`;
+}
+function prepareNumberLine(){
+  lineData=getLineData();
+  $('lineEquation').textContent=`${fmt(lineData.start)} ${lineData.op} ${signWrap(lineData.operand)} = ?`;
+  drawNumberLine(1);
+  $('lineStep2').disabled=false;$('lineStep3').disabled=true;$('lineStep4').disabled=true;
+  setStepGroup('line',2);
+  $('lineFeedback').innerHTML=`<b>Passo 1:</b> o ponto de partida é ${fmt(lineData.start)}. Agora descubra para qual lado o movimento deve acontecer.`;
+  beep(470,.08);
+}
+function numberLineDirection(){
+  if(!lineData)return;
+  drawNumberLine(2);
+  const d=lineData.delta>=0?'direita':'esquerda';
+  let reason='';
+  if(lineData.op==='+'&&lineData.operand>=0)reason=`Adicionar ${fmt(lineData.operand)} aumenta o valor.`;
+  if(lineData.op==='+'&&lineData.operand<0)reason=`Adicionar ${fmt(lineData.operand)} diminui o valor.`;
+  if(lineData.op==='-'&&lineData.operand>=0)reason=`Subtrair ${fmt(lineData.operand)} diminui o valor.`;
+  if(lineData.op==='-'&&lineData.operand<0)reason=`Subtrair ${fmt(lineData.operand)} equivale a adicionar ${fmt(Math.abs(lineData.operand))}.`;
+  $('lineFeedback').innerHTML=`<b>Passo 2:</b> ${reason} Portanto, o deslocamento será para a <b>${d}</b>, em ${Math.abs(lineData.delta)} unidade(s).`;
+  $('lineStep3').disabled=false;setStepGroup('line',3);beep(540,.08);
+}
+function numberLineMove(){
+  if(!lineData)return;
+  drawNumberLine(2);
+  const {start,result,min,max}=lineData,left=55,right=945,map=n=>left+(n-min)/(max-min)*(right-left);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    const walker=$('walker');if(walker)walker.style.transform=`translateX(${map(result)-map(start)}px)`;
+  }));
+  $('lineFeedback').innerHTML=`<b>Passo 3:</b> acompanhe o personagem saindo de ${fmt(start)} e percorrendo ${Math.abs(lineData.delta)} unidade(s).`;
+  $('lineStep3').disabled=true;
+  setTimeout(()=>{$('lineStep4').disabled=false;setStepGroup('line',4);beep(620,.09)},parseFloat($('lineSpeed').value)*1000);
+}
+function numberLineFinish(){
+  if(!lineData)return;
+  drawNumberLine(4);
+  const {start,operand,op,result}=lineData;
+  $('lineEquation').textContent=`${fmt(start)} ${op} ${signWrap(operand)} = ${fmt(result)}`;
+  $('lineFeedback').innerHTML=`<b>Passo 4 — conclusão:</b> partimos de ${fmt(start)} e chegamos a <b>${fmt(result)}</b>. Logo, ${fmt(start)} ${op} ${signWrap(operand)} = <b>${fmt(result)}</b>.`;
+  $('lineStep4').disabled=true;setStepGroup('line',5);beep(720,.1);celebrate();
+}
+
+/* FICHAS */
+function resetChips(){
+  chipData=null;$('combineBtn').disabled=true;$('cancelBtn').disabled=true;
+  $('chipEquation').textContent=`${fmt(parseInt($('chipA').value)||0)} ${$('chipOp').value} ${signWrap(parseInt($('chipB').value)||0)} = ?`;
+  $('chipStage').innerHTML='<div class="feedback info">Clique em <b>1. Representar</b>. As fichas só serão animadas após cada comando.</div>';
+  $('chipFeedback').innerHTML='Etapa 1: represente os dois números.';
+}
+function chipsHTML(n){
+  if(n===0)return '<span class="badge">0 não possui fichas</span>';
+  return Array.from({length:Math.min(Math.abs(n),15)},()=>`<span class="chip ${n>0?'pos':'neg'}">${n>0?'+':'−'}</span>`).join('');
+}
+function prepareChips(){
+  const a=clamp(parseInt($('chipA').value)||0,-15,15),b=clamp(parseInt($('chipB').value)||0,-15,15),op=$('chipOp').value;
+  const transformed=op==='+'?b:-b;chipData={a,b,op,transformed,result:a+transformed};
+  $('chipEquation').textContent=`${fmt(a)} ${op} ${signWrap(b)} = ?`;
+  $('chipStage').innerHTML=`<div class="chip-groups">
+    <div class="chip-group"><h4>Primeiro número: ${fmt(a)}</h4><div class="chips">${chipsHTML(a)}</div></div>
+    <div class="chip-group"><h4>${op==='+'?'Número adicionado':'Oposto que será adicionado'}: ${fmt(transformed)}</h4><div class="chips">${chipsHTML(transformed)}</div></div>
+  </div>`;
+  $('combineBtn').disabled=false;$('cancelBtn').disabled=true;
+  $('chipFeedback').innerHTML=op==='+'?`Representamos ${fmt(a)} e ${fmt(b)}. Agora combine todas as fichas.`:`Para calcular ${fmt(a)} − ${signWrap(b)}, trocamos a subtração por adição do oposto: <b>${fmt(a)} + ${signWrap(-b)}</b>.`;
+}
+function combineChips(){
+  if(!chipData)return;const {a,transformed}=chipData;
+  const pos=Math.max(a,0)+Math.max(transformed,0),neg=Math.max(-a,0)+Math.max(-transformed,0);
+  $('chipStage').innerHTML=`<div class="chip-group"><h4>Todas as fichas reunidas</h4><div class="chips">${chipsHTML(pos)}${chipsHTML(-neg)}</div></div>
+  <div class="concept-box">Há <b>${pos}</b> ficha(s) positiva(s) e <b>${neg}</b> ficha(s) negativa(s). Cada combinação de +1 com −1 vale zero.</div>`;
+  $('cancelBtn').disabled=false;$('combineBtn').disabled=true;
+  $('chipFeedback').innerHTML=`As fichas foram combinadas. Agora forme pares de zero.`;
+}
+function cancelPairs(){
+  if(!chipData)return;const {a,transformed,result,op,b}=chipData;
+  const pos=Math.max(a,0)+Math.max(transformed,0),neg=Math.max(-a,0)+Math.max(-transformed,0),pairs=Math.min(pos,neg),left=Math.abs(pos-neg);
+  const pairHtml=Array.from({length:pairs},()=>`<span class="zero-pair"><span class="chip pos" style="width:34px;height:34px">+</span><span class="chip neg" style="width:34px;height:34px">−</span></span>`).join('');
+  $('chipStage').innerHTML=`<h3 style="text-align:center">Pares de zero cancelados</h3><div class="zero-pairs">${pairHtml||'<span class="badge">Não foi necessário formar pares</span>'}</div>
+  <div class="chip-group"><h4>Fichas restantes: ${fmt(result)}</h4><div class="chips">${chipsHTML(result)}</div></div>
+  <div class="equation" style="margin-top:13px">${fmt(a)} ${op} ${signWrap(b)} = ${fmt(result)}</div>`;
+  $('chipFeedback').innerHTML=`Foram formados <b>${pairs}</b> par(es) de zero. Restaram <b>${left}</b> ficha(s) de sinal ${result>0?'positivo':result<0?'negativo':'nenhum'}, portanto o resultado é <b>${fmt(result)}</b>.`;
+  $('cancelBtn').disabled=true;beep(700,.1);celebrate();
+}
+
+/* CONTEXTOS */
+const contexts={
+ temperature:{emoji:'🌡️',label:'Temperatura',start:'Temperatura inicial',change:'Variação',unit:'°C',
+ story:(a,b)=>`A temperatura era de ${fmt(a)} °C e ${b>=0?'aumentou':'diminuiu'} ${Math.abs(b)} °C. Qual é a nova temperatura?`,
+ explain:(r)=>`A nova temperatura é ${fmt(r)} °C.`},
+ elevator:{emoji:'🛗',label:'Elevador',start:'Andar inicial',change:'Deslocamento',unit:'º andar',
+ story:(a,b)=>`O elevador estava no andar ${fmt(a)} e ${b>=0?'subiu':'desceu'} ${Math.abs(b)} andar(es). Em qual andar chegou?`,
+ explain:(r)=>`O elevador chegou ao andar ${fmt(r)}.`},
+ ocean:{emoji:'🌊',label:'Nível do mar',start:'Posição inicial',change:'Deslocamento',unit:'m',
+ story:(a,b)=>`Um mergulhador estava a ${fmt(a)} m em relação ao nível do mar e ${b>=0?'subiu':'desceu'} ${Math.abs(b)} m. Qual é sua nova posição?`,
+ explain:(r)=>`A nova posição é ${fmt(r)} m em relação ao nível do mar.`},
+ finance:{emoji:'💰',label:'Saldo financeiro',start:'Saldo inicial',change:'Movimentação',unit:'reais',
+ story:(a,b)=>`Uma conta tinha saldo de ${fmt(a)} reais e recebeu uma movimentação de ${fmt(b)} reais. Qual é o novo saldo?`,
+ explain:(r)=>r>=0?`O novo saldo é um crédito de ${r} reais.`:`O novo saldo é uma dívida de ${Math.abs(r)} reais.`}
+};
+function renderGaugeScale(){
+  const scale=$('gaugeScale'); if(!scale) return;
+  let html='';
+  for(let v=30; v>=-30; v-=5){
+    const pct=((v+30)/60)*100;
+    const major = v % 10 === 0;
+    const cls = major ? 'gauge-tick' : 'gauge-tick minor';
+    const label = major ? `<div class="${v===0?'gauge-center-label':'gauge-tick-label'}" style="bottom:${pct}%">${fmt(v)}</div>` : '';
+    html += `<div class="${cls}" style="bottom:${pct}%"></div>${label}`;
+  }
+  scale.innerHTML = html;
+}
+
+function resetContext(){
+  contextData=null;
+  renderGaugeScale();
+  ['contextStep2','contextStep3','contextStep4'].forEach(id=>$(id).disabled=true);
+  setStepGroup('context',1);updateContextPreview();
+  const marker=$('contextMarker');marker.classList.remove('result');marker.style.transition='none';marker.style.bottom='50%';marker.textContent='?';marker.style.opacity=.45;
+  $('contextFeedback').innerHTML='Etapa 1: clique em <b>Ler a situação</b>.';
+}
+function updateContextLabels(){
+  const c=contexts[$('contextType').value];$('contextStartLabel').textContent=c.start;$('contextChangeLabel').textContent=c.change;$('contextEmoji').textContent=c.emoji;resetContext();
+}
+function updateContextPreview(){
+  const c=contexts[$('contextType').value],a=parseInt($('contextStart').value)||0,b=parseInt($('contextChange').value)||0;
+  $('contextProblem').textContent=c.story(a,b);$('contextTitle').textContent=`${fmt(a)} + ${signWrap(b)} = ?`;
+}
+function randomContext(){
+  $('contextType').value=choice(Object.keys(contexts));$('contextStart').value=rand(-15,15);$('contextChange').value=choice([-12,-10,-8,-6,-5,-4,-3,-2,2,3,4,5,6,8,10,12]);
+  const c=contexts[$('contextType').value];$('contextStartLabel').textContent=c.start;$('contextChangeLabel').textContent=c.change;$('contextEmoji').textContent=c.emoji;
+  resetContext();
+}
+function prepareContext(){
+  const c=contexts[$('contextType').value],a=clamp(parseInt($('contextStart').value)||0,-30,30),b=clamp(parseInt($('contextChange').value)||0,-30,30);
+  contextData={c,a,b,r:a+b};
+  $('contextProblem').textContent=c.story(a,b);$('contextTitle').textContent=`${fmt(a)} + ${signWrap(b)} = ?`;
+  $('contextFeedback').innerHTML=`<b>Passo 1:</b> identifique a referência inicial (${fmt(a)}) e a variação (${fmt(b)}). O sinal positivo indica aumento/subida/crédito; o negativo indica redução/descida/débito.`;
+  $('contextStep2').disabled=false;setStepGroup('context',2);beep(470,.08);
+}
+function contextStartStep(){
+  if(!contextData)return;
+  const marker=$('contextMarker'),pct=n=>(clamp(n,-30,30)+30)/60*100;
+  marker.style.transition='bottom .75s cubic-bezier(.2,.8,.2,1), opacity .2s';
+  marker.style.opacity=1;marker.style.bottom=pct(contextData.a)+'%';marker.textContent=fmt(contextData.a);
+  $('contextFeedback').innerHTML=`<b>Passo 2:</b> o marcador foi colocado no valor inicial ${fmt(contextData.a)}.`;
+  $('contextStep3').disabled=false;$('contextStep2').disabled=true;setStepGroup('context',3);beep(540,.08);
+}
+function contextMoveStep(){
+  if(!contextData)return;
+  const marker=$('contextMarker'),pct=n=>(clamp(n,-30,30)+30)/60*100;
+  marker.style.transition='bottom 1.15s cubic-bezier(.2,.8,.2,1)';
+  marker.style.bottom=pct(contextData.r)+'%';marker.textContent=fmt(contextData.r);marker.classList.add('result');
+  $('contextFeedback').innerHTML=`<b>Passo 3:</b> a variação de ${fmt(contextData.b)} desloca o marcador até ${fmt(contextData.r)}. Observe a animação antes de concluir.`;
+  $('contextStep3').disabled=true;
+  setTimeout(()=>{$('contextStep4').disabled=false;setStepGroup('context',4);beep(620,.09)},1150);
+}
+function contextFinishStep(){
+  if(!contextData)return;
+  const {c,a,b,r}=contextData;
+  $('contextTitle').textContent=`${fmt(a)} + ${signWrap(b)} = ${fmt(r)}`;
+  $('contextFeedback').innerHTML=`<b>Passo 4 — conclusão:</b> ${c.explain(r)}<br>Sentença matemática: <b>${fmt(a)} + ${signWrap(b)} = ${fmt(r)}</b>.`;
+  $('contextStep4').disabled=true;setStepGroup('context',5);record('contexts',true);beep(720,.1);celebrate();
+}
+
+/* OPERAÇÕES */
+function signed(max,allowZero=true){let n=rand(-max,max);if(!allowZero&&n===0)n=choice([-1,1])*rand(1,max);return n}
+function operationObject(type,level){
+  const m=[9,20,45][level-1];
+  if(type==='mixed')type=choice(level===1?['add','sub']:level===2?['add','sub','mul','div']:['add','sub','mul','div','expr']);
+  if(type==='add'){const a=signed(m),b=signed(m);return{display:`${fmt(a)} + ${signWrap(b)}`,answer:a+b,skill:'add',hint:'Na reta, o sinal do segundo número indica o sentido do deslocamento.',steps:[`Comece em ${fmt(a)}.`,b>=0?`Avance ${b} unidade(s) para a direita.`:`Volte ${Math.abs(b)} unidade(s) para a esquerda.`,`Resultado: ${fmt(a+b)}.`]}}
+  if(type==='sub'){const a=signed(m),b=signed(m);return{display:`${fmt(a)} − ${signWrap(b)}`,answer:a-b,skill:'subtract',hint:'Transforme a subtração em adição do oposto.',steps:[`${fmt(a)} − ${signWrap(b)} = ${fmt(a)} + ${signWrap(-b)}.`,`Agora some ${fmt(a)} com ${fmt(-b)}.`,`Resultado: ${fmt(a-b)}.`]}}
+  if(type==='mul'){const lim=level===1?6:level===2?10:15,a=signed(lim,false),b=signed(lim,false),r=a*b;return{display:`${fmt(a)} × ${signWrap(b)}`,answer:r,skill:'multiply',hint:'Sinais iguais: positivo. Sinais diferentes: negativo.',steps:[`${a>0===b>0?'Os sinais são iguais':'Os sinais são diferentes'}.`,`Multiplique os módulos: ${Math.abs(a)} × ${Math.abs(b)} = ${Math.abs(r)}.`,`Resultado: ${fmt(r)}.`]}}
+  if(type==='div'){const lim=level===1?6:level===2?10:15,b=signed(lim,false),q=signed(lim,false),a=b*q;return{display:`${fmt(a)} ÷ ${signWrap(b)}`,answer:q,skill:'divide',hint:'Determine o sinal e depois divida os módulos.',steps:[`${a>0===b>0?'Os sinais são iguais':'Os sinais são diferentes'}.`,`Divida os módulos: ${Math.abs(a)} ÷ ${Math.abs(b)} = ${Math.abs(q)}.`,`Resultado: ${fmt(q)}.`]}}
+  const a=signed(level===3?15:9),b=signed(9),c=signed(7,false),pattern=rand(1,3);
+  if(pattern===1){const r=(a+b)-c;return{display:`(${fmt(a)} + ${signWrap(b)}) − ${signWrap(c)}`,answer:r,skill:'expressions',hint:'Resolva primeiro o que está dentro dos parênteses.',steps:[`Parênteses: ${fmt(a)} + ${signWrap(b)} = ${fmt(a+b)}.`,`Depois: ${fmt(a+b)} − ${signWrap(c)} = ${fmt(r)}.`,`Resultado: ${fmt(r)}.`]}}
+  if(pattern===2){const r=a-(b+c);return{display:`${fmt(a)} − (${fmt(b)} + ${signWrap(c)})`,answer:r,skill:'expressions',hint:'Resolva primeiro a soma dentro dos parênteses.',steps:[`Parênteses: ${fmt(b)} + ${signWrap(c)} = ${fmt(b+c)}.`,`Depois: ${fmt(a)} − ${signWrap(b+c)} = ${fmt(r)}.`,`Resultado: ${fmt(r)}.`]}}
+  const r=a+b*c;return{display:`${fmt(a)} + ${signWrap(b)} × ${signWrap(c)}`,answer:r,skill:'expressions',hint:'A multiplicação deve ser resolvida antes da adição.',steps:[`Multiplicação primeiro: ${fmt(b)} × ${signWrap(c)} = ${fmt(b*c)}.`,`Depois: ${fmt(a)} + ${signWrap(b*c)} = ${fmt(r)}.`,`Resultado: ${fmt(r)}.`]}
+}
+function resetOperation(){
+  operationCurrent=null;operationStepIndex=-1;
+  $('operationQuestion').textContent='Clique em “Gerar operação”';
+  $('operationAnswer').value='';$('operationAnswer').disabled=true;
+  $('operationNextStep').disabled=true;
+  $('operationSteps').innerHTML='<div class="feedback info">Os passos serão revelados um de cada vez, após a conferência.</div>';
+  $('operationFeedback').className='feedback info';$('operationFeedback').textContent='Gere uma operação e resolva sem pressa.';
+}
+function newOperation(){
+  operationCurrent=operationObject($('operationType').value,parseInt($('operationLevel').value));
+  operationStepIndex=-1;
+  $('operationQuestion').textContent=operationCurrent.display+' = ?';$('operationSkill').textContent=skillNames[operationCurrent.skill];
+  $('operationAnswer').disabled=false;$('operationAnswer').value='';$('operationAnswer').focus();
+  $('operationSteps').innerHTML=operationCurrent.steps.map((s,i)=>`<div class="step" id="opStep${i}"><b>Passo ${i+1}:</b> ${s}</div>`).join('');
+  $('operationNextStep').disabled=true;
+  $('operationFeedback').className='feedback info';$('operationFeedback').textContent='Resolva e clique em Conferir. Depois, revele a resolução passo a passo.'
+}
+function checkOperation(){
+  if(!operationCurrent){$('operationFeedback').textContent='Primeiro, gere uma operação.';return}
+  const raw=$('operationAnswer').value;if(raw===''){$('operationFeedback').textContent='Digite uma resposta antes de conferir.';return}
+  const ans=Number(raw),ok=ans===operationCurrent.answer;record(operationCurrent.skill,ok);
+  $('operationFeedback').className='feedback '+(ok?'ok':'bad');
+  $('operationFeedback').innerHTML=ok?`✅ <b>Muito bem!</b> Sua resposta está correta. Clique em <b>Mostrar próximo passo</b> para acompanhar a estratégia.`:`Sua resposta foi ${fmt(ans)}. Clique em <b>Mostrar próximo passo</b> para localizar a dificuldade sem revelar tudo de uma vez.`;
+  $('operationNextStep').disabled=false;
+  if(ok)beep(720,.1);else beep(220,.15)
+}
+function revealOperationStep(){
+  if(!operationCurrent)return;
+  operationStepIndex++;
+  const el=$('opStep'+operationStepIndex);
+  if(el){el.classList.add('show');el.scrollIntoView({behavior:'smooth',block:'nearest'});beep(520+operationStepIndex*70,.08)}
+  if(operationStepIndex>=operationCurrent.steps.length-1){
+    $('operationNextStep').disabled=true;
+    $('operationFeedback').className='feedback ok';
+    $('operationFeedback').innerHTML=`Resolução concluída: o resultado é <b>${fmt(operationCurrent.answer)}</b>. Explique com suas palavras por que o sinal do resultado faz sentido.`;
+    celebrate();
+  }else{
+    $('operationNextStep').textContent=`👣 Mostrar passo ${operationStepIndex+2}`;
+  }
+}
+function showOperationHint(){if(operationCurrent)$('operationFeedback').innerHTML=`💡 <b>Dica:</b> ${operationCurrent.hint}`}
+
+
+/* DESAFIOS */
+function shuffle(a){return a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1])}
+function choicesFor(answer,spread=8){
+  const set=new Set([answer]);while(set.size<4){let d=choice([-spread,-spread+1,-4,-3,-2,-1,1,2,3,4,spread-1,spread]);set.add(answer+d)}
+  return shuffle([...set])
+}
+function challengeQuestion(level){
+  const types=level===1
+    ?['compare','opposite','move','balance']
+    :level===2
+      ?['temperature','elevator','ocean','balance','game','repeated','compare']
+      :['repeated','rate','expression','model','history','balance','game'];
+  const type=choice(types);
+
+  if(type==='compare'){
+    const contextsCompare=[
+      {label:'🌡️ Temperatura',unit:'°C',make:(a,b)=>`Em duas cidades, as temperaturas são ${fmt(a)} °C e ${fmt(b)} °C. Qual símbolo compara corretamente esses valores?`},
+      {label:'🌊 Profundidade',unit:'m',make:(a,b)=>`Dois mergulhadores estão nas posições ${fmt(a)} m e ${fmt(b)} m em relação ao nível do mar. Qual comparação é verdadeira?`},
+      {label:'💰 Saldo',unit:'reais',make:(a,b)=>`As contas de Ana e Bruno apresentam saldos de ${fmt(a)} e ${fmt(b)} reais. Complete a comparação.`}
+    ];
+    let a=signed(level===1?10:30),b=signed(level===1?10:30);if(a===b)b+=1;
+    const ans=a<b?'<':a>b?'>':'=',ctx=choice(contextsCompare);
+    return{prompt:`${ctx.make(a,b)}  ${fmt(a)} ___ ${fmt(b)}`,answer:ans,choices:['<','>','='],skill:'comparison',bncc:'EF07MA03',context:ctx.label,
+      hint:'Na reta numérica, o número que está mais à direita é o maior.',explanation:`${fmt(a)} ${ans} ${fmt(b)}. A comparação considera a posição dos números na reta.`};
+  }
+
+  if(type==='opposite'){
+    const a=signed(12,false),ans=-a;
+    return{prompt:`Em um mapa de altitudes, um ponto está em ${fmt(a)} m. Qual número representa o ponto simétrico em relação ao nível zero?`,
+      answer:ans,choices:choicesFor(ans,6),skill:'opposite',bncc:'EF07MA03',context:'⛰️ Altitude',
+      hint:'O simétrico tem a mesma distância até zero e sinal contrário.',explanation:`O simétrico de ${fmt(a)} é ${fmt(ans)}, pois ${fmt(a)} + ${signWrap(ans)} = 0.`};
+  }
+
+  if(type==='move'){
+    const a=signed(8),b=choice([-6,-5,-4,-3,3,4,5,6]),ans=a+b;
+    return{prompt:`Um elevador estava no andar ${fmt(a)} e ${b>0?'subiu':'desceu'} ${Math.abs(b)} andar(es). Em qual andar chegou?`,
+      answer:ans,choices:choicesFor(ans,6),skill:b>=0?'add':'subtract',bncc:'EF07MA03',context:'🛗 Elevador',
+      hint:'Represente o andar inicial na reta e faça o deslocamento indicado.',explanation:`A situação é representada por ${fmt(a)} + ${signWrap(b)} = ${fmt(ans)}.`};
+  }
+
+  if(type==='temperature'){
+    const a=signed(15),b=choice([-10,-8,-6,-4,-3,3,4,6,8,10]),ans=a+b;
+    return{prompt:`Ao amanhecer, a temperatura era ${fmt(a)} °C. Durante a manhã, ela ${b>0?'aumentou':'diminuiu'} ${Math.abs(b)} °C. Qual passou a ser a temperatura?`,
+      answer:ans,choices:choicesFor(ans,7),skill:'contexts',bncc:'EF07MA03',context:'🌡️ Temperatura',
+      hint:'Some o valor inicial com a variação, mantendo o sinal da mudança.',explanation:`${fmt(a)} + ${signWrap(b)} = ${fmt(ans)} °C.`};
+  }
+
+  if(type==='elevator'){
+    const a=signed(12),b=choice([-9,-7,-5,4,6,8]),ans=a+b;
+    return{prompt:`Em um edifício com subsolos, o elevador saiu do andar ${fmt(a)} e realizou um deslocamento de ${fmt(b)} andares. Qual foi o andar de chegada?`,
+      answer:ans,choices:choicesFor(ans,8),skill:'contexts',bncc:'EF07MA03',context:'🛗 Elevador',
+      hint:'Deslocamento positivo é subida; deslocamento negativo é descida.',explanation:`${fmt(a)} + ${signWrap(b)} = ${fmt(ans)}.`};
+  }
+
+  if(type==='ocean'){
+    const a=-rand(2,20),b=choice([-10,-8,-5,4,6,9]),ans=a+b;
+    return{prompt:`Um submarino estava a ${fmt(a)} m em relação ao nível do mar e alterou sua posição em ${fmt(b)} m. Qual é a nova posição?`,
+      answer:ans,choices:choicesFor(ans,9),skill:'contexts',bncc:'EF07MA03',context:'🌊 Nível do mar',
+      hint:'O nível do mar é zero. Descer produz variação negativa e subir produz variação positiva.',explanation:`${fmt(a)} + ${signWrap(b)} = ${fmt(ans)} m.`};
+  }
+
+  if(type==='balance'){
+    const a=signed(level===1?12:30),b=choice([-18,-12,-8,-5,5,8,12,18]),ans=a+b;
+    return{prompt:`Uma carteira digital apresentava saldo de ${fmt(a)} reais. Depois, ocorreu uma movimentação de ${fmt(b)} reais. Qual é o novo saldo?`,
+      answer:ans,choices:choicesFor(ans,10),skill:'contexts',bncc:level===1?'EF07MA03':'EF07MA04',context:'💰 Educação financeira',
+      hint:'Crédito é positivo e débito é negativo.',explanation:`O novo saldo é ${fmt(a)} + ${signWrap(b)} = ${fmt(ans)} reais.`};
+  }
+
+  if(type==='game'){
+    const start=signed(20),gain=choice([-12,-9,-6,6,9,12]),ans=start+gain;
+    return{prompt:`Em um jogo, uma equipe tinha ${fmt(start)} pontos e, na rodada seguinte, recebeu uma alteração de ${fmt(gain)} pontos. Com quantos pontos ficou?`,
+      answer:ans,choices:choicesFor(ans,10),skill:'add',bncc:'EF07MA04',context:'🎮 Pontuação',
+      hint:'Perda de pontos é representada por número negativo.',explanation:`${fmt(start)} + ${signWrap(gain)} = ${fmt(ans)} pontos.`};
+  }
+
+  if(type==='repeated'){
+    const times=rand(3,6),change=choice([-8,-6,-5,-4,4,5,6,8]),ans=times*change;
+    return{prompt:`Durante ${times} rodadas, uma equipe teve a mesma variação de ${fmt(change)} pontos em cada rodada. Qual foi a variação total?`,
+      answer:ans,choices:choicesFor(ans,12),skill:'multiply',bncc:'EF07MA04',context:'🎮 Variação repetida',
+      hint:'Uma variação repetida pode ser representada por uma multiplicação.',explanation:`${times} × ${signWrap(change)} = ${fmt(ans)} pontos.`};
+  }
+
+  if(type==='rate'){
+    const hours=choice([3,4,5,6]),rate=choice([-8,-6,-5,-4,4,5,6,8]),total=hours*rate;
+    return{prompt:`Em ${hours} horas, uma câmara térmica apresentou variação total de ${fmt(total)} °C, sempre à mesma taxa. Qual foi a variação por hora?`,
+      answer:rate,choices:choicesFor(rate,7),skill:'divide',bncc:'EF07MA04',context:'🧪 Câmara térmica',
+      hint:'Divida a variação total pela quantidade de horas e analise o sinal.',explanation:`${fmt(total)} ÷ ${hours} = ${fmt(rate)} °C por hora.`};
+  }
+
+  if(type==='history'){
+    const a=-rand(8,40),b=rand(2,15),ans=a+b;
+    return{prompt:`Em uma linha do tempo didática, um evento está na posição ${fmt(a)}. Avançando ${b} unidades no tempo, em qual posição chegamos?`,
+      answer:ans,choices:choicesFor(ans,8),skill:'comparison',bncc:'EF07MA03',context:'🗓️ Linha do tempo',
+      hint:'Avançar na linha do tempo corresponde a mover-se para a direita.',explanation:`${fmt(a)} + ${b} = ${fmt(ans)}.`};
+  }
+
+  if(type==='model'){
+    const start=signed(15),rounds=rand(2,5),loss=rand(3,8),ans=start-rounds*loss;
+    const correct=`${fmt(start)} + ${rounds} × (${fmt(-loss)})`;
+    const opts=shuffle([correct,`${fmt(start)} − ${rounds} + ${loss}`,`${fmt(start)} + ${rounds} × ${loss}`,`(${fmt(start)} − ${rounds}) × ${loss}`]);
+    return{prompt:`Uma equipe começou com ${fmt(start)} pontos e perdeu ${loss} pontos em cada uma de ${rounds} rodadas. Qual expressão representa corretamente a pontuação final?`,
+      answer:correct,choices:opts,skill:'expressions',bncc:'EF07MA04',context:'🧩 Modelagem',
+      hint:'Perder pontos em cada rodada é multiplicar a quantidade de rodadas por uma variação negativa.',explanation:`A expressão é ${correct}, cujo valor é ${fmt(ans)}.`};
+  }
+
+  const start=signed(15),rounds=rand(2,4),change=choice([-7,-5,-4,4,5,7]),bonus=choice([-8,-5,5,8]),ans=start+rounds*change+bonus;
+  return{prompt:`Uma equipe iniciou com ${fmt(start)} pontos, teve variação de ${fmt(change)} pontos em cada uma de ${rounds} rodadas e, ao final, recebeu uma alteração extra de ${fmt(bonus)} pontos. Qual foi a pontuação final?`,
+    answer:ans,choices:choicesFor(ans,15),skill:'expressions',bncc:'EF07MA04',context:'🏆 Desafio combinado',
+    hint:'Resolva primeiro a multiplicação e depois efetue as adições.',explanation:`${fmt(start)} + ${rounds} × ${signWrap(change)} + ${signWrap(bonus)} = ${fmt(ans)}.`};
+}
+function startChallenge(mode){
+  const total=mode==='adaptive'?12:mode==='mission'?15:10;
+  const level=mode==='beginner'?1:mode==='intermediate'?2:mode==='advanced'?3:2;
+  challenge={mode,total,index:0,score:0,level,streak:0,wrongStreak:0,answered:false,current:null,results:[],started:Date.now()};
+  $('challengeHome').classList.add('hidden');$('challengeResult').classList.add('hidden');$('challengeArea').classList.remove('hidden');
+  nextChallenge(true)
+}
+function modeLabel(m){return({beginner:'Trilha Iniciante',intermediate:'Trilha Intermediária',advanced:'Trilha Avançada',adaptive:'Trilha Adaptativa',mission:'Missão Final'})[m]}
+function nextChallenge(first=false){
+  if(!challenge)return;
+  if(!first)challenge.index++;
+  if(challenge.index>=challenge.total){endChallenge(false);return}
+  challenge.answered=false;challenge.current=challengeQuestion(challenge.level);
+  $('challengeMode').textContent=modeLabel(challenge.mode);$('challengeLevel').textContent='Nível '+challenge.level;
+  $('challengeCount').textContent=`Questão ${challenge.index+1} de ${challenge.total}`;$('challengeScore').textContent=`${challenge.score} acerto(s)`;
+  $('challengeProgress').style.width=(challenge.index/challenge.total*100)+'%';
+  $('challengeSkill').textContent=skillNames[challenge.current.skill];$('challengeBNCC').textContent=challenge.current.bncc||'EF07MA04';$('challengeContext').textContent=challenge.current.context||'Situação-problema';$('challengePrompt').textContent=challenge.current.prompt;
+  $('challengeOptions').innerHTML=challenge.current.choices.map(v=>`<button class="option" onclick="answerChallenge(this,'${String(v).replace(/'/g,"\\'")}')">${typeof v==='number'?fmt(v):v}</button>`).join('');
+  $('challengeFeedback').className='feedback info';$('challengeFeedback').textContent='Selecione uma resposta.';
+  $('nextChallengeBtn').classList.add('hidden');$('challengeHintBtn').disabled=challenge.mode==='mission';
+}
+function answerChallenge(btn,value){
+  if(!challenge||challenge.answered)return;challenge.answered=true;
+  const expected=challenge.current.answer,parsed=typeof expected==='number'?Number(value):value,ok=parsed===expected;
+  document.querySelectorAll('#challengeOptions .option').forEach(b=>{
+    const txt=b.textContent.replace('−','-');const val=typeof expected==='number'?Number(txt):b.textContent;
+    if(val===expected)b.classList.add('correct')
+  });
+  if(!ok)btn.classList.add('wrong');
+  record(challenge.current.skill,ok);challenge.results.push({skill:challenge.current.skill,ok});
+  if(ok){challenge.score++;challenge.streak++;challenge.wrongStreak=0;beep(720,.1)}else{challenge.streak=0;challenge.wrongStreak++;beep(220,.15)}
+  if(challenge.mode==='adaptive'){
+    if(challenge.streak>=2&&challenge.level<3){challenge.level++;challenge.streak=0}
+    if(challenge.wrongStreak>=2&&challenge.level>1){challenge.level--;challenge.wrongStreak=0}
+  }
+  $('challengeScore').textContent=`${challenge.score} acerto(s)`;
+  $('challengeFeedback').className='feedback '+(ok?'ok':'bad');
+  $('challengeFeedback').innerHTML=(ok?'✅ <b>Correto!</b> ':'❌ <b>Vamos revisar.</b> ')+challenge.current.explanation;
+  $('nextChallengeBtn').classList.remove('hidden');
+  if(ok&&challenge.score%4===0)celebrate()
+}
+function challengeHint(){if(challenge&&!challenge.answered)$('challengeFeedback').innerHTML=`💡 <b>Pista:</b> ${challenge.current.hint}`}
+function readChallenge(){if(challenge)speakText(challenge.current.prompt)}
+function endChallenge(interrupted){
+  if(!challenge)return;
+  const answered=challenge.results.length,score=challenge.score,pct=answered?Math.round(score/answered*100):0;
+  if(challenge.mode==='mission'&&!interrupted){session.missions++;session.bestMission=Math.max(session.bestMission,pct);saveSession()}
+  $('challengeArea').classList.add('hidden');$('challengeResult').classList.remove('hidden');
+  const message=pct>=90?'Desempenho excelente!':pct>=70?'Muito bom! Continue avançando.':pct>=50?'Você está construindo a aprendizagem. Retome as habilidades com menor acerto.':'Volte às representações visuais e tente novamente com números menores.';
+  $('challengeResult').innerHTML=`<div class="card" style="text-align:center">
+    <h2>${interrupted?'Sessão encerrada':'🏁 Desafio concluído!'}</h2>
+    <div class="score-circle" style="--score:${pct}%"><strong>${pct}%</strong></div>
+    <h3>${score} acerto(s) em ${answered} questão(ões)</h3><p>${message}</p>
+    <div class="controls-row" style="justify-content:center"><button class="btn blue" onclick="backChallengeHome()">Escolher outra trilha</button><button class="btn green" onclick="showScreen('reportScreen',document.querySelector('[data-screen=reportScreen]'));renderReport()">Ver relatório</button></div>
+  </div>`;
+  if(pct>=70)celebrate();challenge=null
+}
+function backChallengeHome(){$('challengeResult').classList.add('hidden');$('challengeHome').classList.remove('hidden')}
+
+/* RELATÓRIO */
+function elapsedMinutes(){return Math.max(1,Math.round((Date.now()-session.started)/60000))}
+function renderReport(){
+  const pct=session.attempts?Math.round(session.correct/session.attempts*100):0;
+  const rows=Object.entries(session.skills).map(([k,v])=>{
+    const p=v[1]?Math.round(v[0]/v[1]*100):0;
+    return`<div class="skill-row"><div class="skill-name">${skillNames[k]||k}</div><div class="skill-track"><div class="skill-fill" style="width:${p}%"></div></div><div><b>${p}%</b><br><small>${v[0]}/${v[1]}</small></div></div>`
+  }).join('');
+  $('reportContent').innerHTML=`<div class="card">
+    <h3>Estudante: ${escapeHTML(session.student)}</h3>
+    <div class="report-grid">
+      <div class="metric"><strong>${session.correct}</strong><span>acertos</span></div>
+      <div class="metric"><strong>${session.attempts}</strong><span>tentativas</span></div>
+      <div class="metric"><strong>${pct}%</strong><span>aproveitamento</span></div>
+      <div class="metric"><strong>${elapsedMinutes()} min</strong><span>tempo nesta sessão</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:15px"><h3>Desempenho por habilidade</h3><div class="skill-list">${rows}</div></div>
+  <div class="card" style="margin-top:15px"><h3>Missão Final</h3><p>Missões concluídas: <b>${session.missions}</b> · Melhor resultado: <b>${session.bestMission}%</b>.</p><div class="hint"><b>Interpretação pedagógica:</b> habilidades com poucas tentativas precisam de novas oportunidades; percentuais menores indicam conteúdos que devem ser retomados com as representações da reta, fichas ou situações reais.</div></div>`
+}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'})[m])}
+function downloadReport(){
+  const pct=session.attempts?Math.round(session.correct/session.attempts*100):0;
+  let text=`DIASMATH™ — IntegraZ Lab\nRelatório de aprendizagem\n\nEstudante: ${session.student}\nAcertos: ${session.correct}\nTentativas: ${session.attempts}\nAproveitamento: ${pct}%\nTempo da sessão: ${elapsedMinutes()} min\nMissões concluídas: ${session.missions}\nMelhor missão: ${session.bestMission}%\n\nHABILIDADES\n`;
+  Object.entries(session.skills).forEach(([k,v])=>{const p=v[1]?Math.round(v[0]/v[1]*100):0;text+=`${skillNames[k]||k}: ${v[0]}/${v[1]} (${p}%)\n`});
+  text+=`\n© 2026 Francisco Vieira Dias — DIASMATH™.`;
+  const blob=new Blob([text],{type:'text/plain;charset=utf-8'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download='relatorio_integraz_lab.txt';a.click();URL.revokeObjectURL(a.href)
+}
+function resetProgress(){
+  if(!confirm('Deseja apagar todos os dados de desempenho deste navegador?'))return;
+  session={student:session.student,started:Date.now(),attempts:0,correct:0,skills:{comparison:[0,0],opposite:[0,0],add:[0,0],subtract:[0,0],multiply:[0,0],divide:[0,0],expressions:[0,0],contexts:[0,0]},missions:0,bestMission:0};
+  saveSession();renderReport()
+}
+
+/* INICIALIZAÇÃO */
+loadSession();
+$('studentName').value=session.student==='Estudante'?'':session.student;
+$('lineEquation').textContent='−4 + 7 = ?';
+resetNumberLine();resetChips();resetContext();resetOperation();
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&!$('modal').classList.contains('hidden'))closeModal();
+  if(e.key==='Enter'&&!$('operationsScreen').classList.contains('hidden'))checkOperation()
+});
+window.addEventListener('beforeunload',saveSession);
+</script>
+</body>
+</html>

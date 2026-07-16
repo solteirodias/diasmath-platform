@@ -9,6 +9,7 @@ const labs = [
     description:
       "Experimente a divisão com bolinhas, caixas, partilha visual, resto e método da chave passo a passo.",
     href: "/labs/divisao",
+    directHref: "/labs/divisao/index.html",
     emoji: "🧪➗",
     area: "Divisão",
   },
@@ -18,6 +19,7 @@ const labs = [
     description:
       "Laboratório digital para explorar pavimentações, mosaicos, polígonos, padrões geométricos e composição de figuras.",
     href: "/labs/geotessela",
+    directHref: "/labs/geotessela/index.html",
     emoji: "🔷",
     area: "Geometria",
   },
@@ -27,6 +29,7 @@ const labs = [
     description:
       "Laboratório visual para investigar ângulos, relações trigonométricas e representações no círculo trigonométrico.",
     href: "/labs/prancha-trigonometrica",
+    directHref: "/labs/prancha-trigonometrica/index.html",
     emoji: "📐",
     area: "Trigonometria",
   },
@@ -36,8 +39,19 @@ const labs = [
     description:
       "Ferramenta interativa para ensinar xadrez nos anos iniciais, com setas de movimento, turnos guiados, aulas por peças e montagem personalizada do tabuleiro.",
     href: "/labs/xadrez",
+    directHref: "/labs/xadrez/index.html",
     emoji: "♟️",
     area: "Raciocínio lógico",
+  },
+  {
+    title: "IntegraZ Lab",
+    status: "Publicado",
+    description:
+      "Laboratório digital de números inteiros com reta numérica, fichas de sinais, situações reais, operações, trilhas contextualizadas pela BNCC e relatório de aprendizagem.",
+    href: "/labs/integraz",
+    directHref: "/labs/integraz/index.html",
+    emoji: "ℤ",
+    area: "Números inteiros",
   },
 ];
 
@@ -63,7 +77,7 @@ export default function LabsPage() {
           experiência investigativa.
         </p>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {labs.map((lab) => (
             <article
               key={lab.title}
@@ -91,12 +105,23 @@ export default function LabsPage() {
                 {lab.description}
               </p>
 
-              <Link
-                href={lab.href}
-                className="mt-7 inline-flex rounded-full bg-slate-950 px-5 py-2.5 text-sm font-black text-white transition hover:bg-blue-700"
-              >
-                Abrir laboratório
-              </Link>
+              <div className="mt-7 flex flex-wrap gap-3">
+                <Link
+                  href={lab.href}
+                  className="inline-flex rounded-full bg-slate-950 px-5 py-2.5 text-sm font-black text-white transition hover:bg-blue-700"
+                >
+                  Abrir laboratório
+                </Link>
+
+                <a
+                  href={lab.directHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex rounded-full border border-slate-300 px-5 py-2.5 text-sm font-black text-slate-950 transition hover:border-blue-600 hover:text-blue-700"
+                >
+                  Outra aba
+                </a>
+              </div>
             </article>
           ))}
         </div>
