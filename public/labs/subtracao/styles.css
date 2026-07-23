@@ -1,0 +1,208 @@
+:root{
+  --navy:#0b2d4f;
+  --blue:#176fbe;
+  --blue-dark:#0e4f8c;
+  --cyan:#25bfd0;
+  --green:#27a36b;
+  --green-dark:#13774b;
+  --yellow:#ffd75a;
+  --orange:#f29b38;
+  --red:#d84b57;
+  --purple:#7557c8;
+  --ink:#21384d;
+  --muted:#64798c;
+  --line:#d9e6ef;
+  --surface:#ffffff;
+  --surface-soft:#f5f9fc;
+  --shadow:0 18px 52px rgba(13,55,91,.12);
+  --radius:26px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"Nunito",Arial,sans-serif;color:var(--ink);background:
+  radial-gradient(circle at 10% 5%,rgba(37,191,208,.12),transparent 28%),
+  radial-gradient(circle at 90% 2%,rgba(255,215,90,.17),transparent 26%),
+  linear-gradient(180deg,#f7fbff 0%,#eef6fb 100%);min-height:100vh}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app-shell{min-height:100vh;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:90;height:78px;padding:12px clamp(16px,4vw,54px);display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.9);backdrop-filter:blur(18px);border-bottom:1px solid rgba(205,222,235,.9)}
+.brand{display:flex;align-items:center;gap:12px;border:0;background:transparent;color:var(--navy);text-align:left}
+.brand-symbol{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,var(--blue),var(--navy));color:white;font:800 27px "Baloo 2","Trebuchet MS",Arial,sans-serif;box-shadow:0 8px 18px rgba(23,111,190,.25)}
+.brand strong{display:block;font:800 21px/1 "Baloo 2","Trebuchet MS",Arial,sans-serif}.brand small{display:block;margin-top:4px;color:var(--muted);font-weight:800}
+.top-actions{display:flex;gap:8px}.icon-button{width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:white;color:var(--navy);font-weight:900;font-size:20px;box-shadow:0 7px 18px rgba(13,55,91,.06)}
+.icon-button:hover{transform:translateY(-2px);border-color:#a9cbe2}
+main{flex:1}.screen{display:none;width:100%;padding:clamp(28px,4vw,58px) clamp(15px,4vw,58px) 70px}.screen.active{display:block}
+.home-screen,.app-screen{max-width:1600px;margin:0 auto}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;color:var(--blue);font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+h1,h2,h3{font-family:"Baloo 2","Trebuchet MS",Arial,sans-serif}
+.primary-button,.secondary-button,.ghost-button,.control-button,.info-button{border:0;border-radius:14px;font-weight:900;transition:.2s}
+.primary-button{min-height:54px;padding:0 24px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));color:white;box-shadow:0 12px 26px rgba(23,111,190,.24)}
+.primary-button:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(23,111,190,.3)}
+.primary-button.compact{min-height:46px;padding:0 18px}
+.primary-button span{margin-left:12px}.secondary-button,.ghost-button{min-height:46px;padding:0 17px;background:white;color:var(--navy);border:1px solid var(--line)}
+.secondary-button:hover,.ghost-button:hover{transform:translateY(-2px);border-color:#9cc3df}
+
+/* Home */
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(420px,.95fr);gap:38px;align-items:center;min-height:560px}
+.hero-copy h1{font:800 clamp(48px,6vw,82px)/.97 "Baloo 2","Trebuchet MS",Arial,sans-serif;letter-spacing:-.04em;color:var(--navy);margin:18px 0 20px;max-width:850px}.hero-copy h1 span{color:var(--blue)}
+.hero-copy>p{max-width:730px;color:var(--muted);font-size:19px;font-weight:700;line-height:1.65;margin:0 0 24px}
+.student-field{display:block;max-width:420px;margin-bottom:16px}.student-field span{display:block;font-weight:900;color:var(--navy);margin-bottom:7px}.student-field input{width:100%;height:54px;border:2px solid var(--line);border-radius:15px;padding:0 16px;background:white;color:var(--navy);font-weight:800;outline:none}.student-field input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(23,111,190,.1)}
+.hero-mascot{min-height:500px;position:relative;display:grid;place-items:center}
+.hero-mascot::before,.hero-mascot::after{content:"";position:absolute;border-radius:50%;border:2px dashed rgba(23,111,190,.16);animation:spin 24s linear infinite}.hero-mascot::before{width:455px;height:455px}.hero-mascot::after{width:345px;height:345px;animation-direction:reverse;animation-duration:18s}@keyframes spin{to{transform:rotate(360deg)}}
+.mascot-bubble{position:absolute;z-index:5;right:1%;top:8%;max-width:230px;padding:16px 18px;border-radius:22px 22px 5px 22px;background:var(--navy);color:white;font-weight:800;line-height:1.4;box-shadow:0 14px 28px rgba(11,45,79,.22);animation:float 3.2s ease-in-out infinite}
+.floating-equation{position:absolute;z-index:6;bottom:5%;left:50%;transform:translateX(-50%);white-space:nowrap;background:var(--yellow);border:7px solid white;padding:13px 24px;border-radius:999px;color:var(--navy);font:800 30px "Baloo 2","Trebuchet MS",Arial,sans-serif;box-shadow:0 12px 26px rgba(11,45,79,.16)}
+@keyframes float{50%{transform:translateY(-10px)}}
+
+/* Nerdsmart */
+.nerdsmart{position:relative;z-index:3;filter:drop-shadow(0 22px 25px rgba(12,55,91,.2))}.nerdsmart.large{width:250px;height:330px}.nerdsmart.small{width:92px;height:122px;filter:drop-shadow(0 10px 12px rgba(12,55,91,.16))}
+.antenna{position:absolute;left:50%;transform:translateX(-50%);top:0;width:8px;height:44px;background:var(--navy);border-radius:8px}.antenna i{position:absolute;left:50%;top:-8px;transform:translateX(-50%);width:24px;height:24px;border-radius:50%;background:var(--yellow);box-shadow:0 0 0 7px rgba(255,215,90,.25);animation:pulse 1.7s ease-in-out infinite}@keyframes pulse{50%{box-shadow:0 0 0 12px rgba(255,215,90,0)}}
+.robot-head{position:absolute;left:25px;top:38px;width:200px;height:150px;border-radius:46px;background:linear-gradient(145deg,#f8fbff,#cfe4f4);border:8px solid var(--navy);box-shadow:inset 0 -12px 0 rgba(12,55,91,.06)}
+.robot-screen{position:absolute;left:26px;right:26px;top:28px;height:78px;border-radius:26px;background:linear-gradient(180deg,#173e61,#0b2946);overflow:hidden}.robot-screen::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 25%,rgba(255,255,255,.12) 40%,transparent 55%)}
+.robot-eye{position:absolute;top:25px;width:25px;height:30px;border-radius:50%;background:var(--cyan);box-shadow:0 0 15px rgba(37,191,208,.65);animation:blink 4s infinite}.robot-eye.left{left:27px}.robot-eye.right{right:27px}@keyframes blink{0%,46%,50%,100%{transform:scaleY(1)}48%{transform:scaleY(.1)}}
+.robot-smile{position:absolute;left:50%;top:52px;transform:translateX(-50%);width:48px;height:18px;border-bottom:5px solid var(--yellow);border-radius:0 0 50px 50px}
+.robot-ear{position:absolute;top:52px;width:22px;height:48px;border-radius:12px;background:var(--purple);border:5px solid var(--navy)}.robot-ear.left{left:-22px}.robot-ear.right{right:-22px}.goggle-bridge{position:absolute;left:50%;top:66px;transform:translateX(-50%);width:24px;height:5px;background:var(--yellow)}
+.robot-body{position:absolute;left:48px;top:190px;width:154px;height:125px;border-radius:34px 34px 46px 46px;background:linear-gradient(145deg,var(--purple),#5039a6);border:7px solid var(--navy)}
+.robot-badge{position:absolute;left:50%;top:22px;transform:translateX(-50%);width:52px;height:52px;border-radius:18px;background:var(--yellow);display:grid;place-items:center;color:var(--navy);font:900 39px/1 "Baloo 2","Trebuchet MS",Arial,sans-serif;box-shadow:inset 0 -5px rgba(154,112,0,.12)}
+.robot-arm{position:absolute;top:215px;width:72px;height:25px;border-radius:20px;background:var(--cyan);border:6px solid var(--navy);transform-origin:center}.robot-arm.left{left:4px;transform:rotate(25deg);animation:waveLeft 2.8s ease-in-out infinite}.robot-arm.right{right:4px;transform:rotate(-25deg);animation:waveRight 2.8s ease-in-out infinite}@keyframes waveLeft{50%{transform:rotate(5deg)}}@keyframes waveRight{50%{transform:rotate(-50deg)}}
+.nerdsmart.small .antenna{height:18px;width:4px}.nerdsmart.small .antenna i{width:10px;height:10px;top:-4px;box-shadow:0 0 0 3px rgba(255,215,90,.25)}.nerdsmart.small .robot-head{left:11px;top:16px;width:72px;height:56px;border-width:3px;border-radius:18px}.nerdsmart.small .robot-screen{left:9px;right:9px;top:10px;height:30px;border-radius:10px}.nerdsmart.small .robot-eye{top:9px;width:9px;height:11px}.nerdsmart.small .robot-eye.left{left:10px}.nerdsmart.small .robot-eye.right{right:10px}.nerdsmart.small .robot-smile{top:19px;width:18px;height:7px;border-width:2px}.nerdsmart.small .robot-body{left:20px;top:75px;width:54px;height:42px;border-width:3px;border-radius:13px}.nerdsmart.small .robot-badge{top:7px;width:19px;height:19px;border-radius:6px;font-size:15px}.nerdsmart.small .robot-arm{top:82px;width:28px;height:10px;border-width:3px}.nerdsmart.small .robot-arm.left{left:1px}.nerdsmart.small .robot-arm.right{right:1px}
+
+.module-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:24px}.module-card{position:relative;min-height:245px;padding:24px;text-align:left;border:1px solid var(--line);border-radius:26px;background:rgba(255,255,255,.92);box-shadow:var(--shadow);color:var(--ink);overflow:hidden;transition:.22s}.module-card::after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;right:-85px;bottom:-90px;opacity:.12}.module-card.experimental::after{background:var(--blue)}.module-card.examples::after{background:var(--orange)}.module-card.challenges::after{background:var(--purple)}.module-card:hover{transform:translateY(-7px);box-shadow:0 24px 58px rgba(13,55,91,.16)}.module-number{position:absolute;right:20px;top:15px;font:800 34px "Baloo 2","Trebuchet MS",Arial,sans-serif;color:#dce9f2}.module-icon{font-size:43px;display:block}.module-card strong{display:block;margin-top:16px;font:800 27px "Baloo 2","Trebuchet MS",Arial,sans-serif;color:var(--navy)}.module-card p{color:var(--muted);font-weight:700;line-height:1.5;max-width:380px}.module-card em{display:block;margin-top:18px;color:var(--blue);font-style:normal;font-weight:900}
+
+/* App / navigation */
+.app-screen{padding-top:26px}.module-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:9px;background:rgba(255,255,255,.85);border:1px solid var(--line);border-radius:20px;box-shadow:0 10px 30px rgba(13,55,91,.08);position:sticky;top:88px;z-index:70}.module-tab{min-height:56px;border:0;border-radius:14px;background:transparent;color:var(--muted);font-weight:900;font-size:16px}.module-tab span{font-size:21px;margin-right:7px}.module-tab.active{background:var(--navy);color:white;box-shadow:0 8px 18px rgba(11,45,79,.2)}
+.module-panel{display:none;padding-top:30px}.module-panel.active{display:block}.module-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:20px}.module-heading h2{font:800 clamp(34px,4vw,56px)/1.05 "Baloo 2","Trebuchet MS",Arial,sans-serif;color:var(--navy);margin:10px 0 0;max-width:1000px}
+
+/* Experiment */
+.experiment-config{display:grid;grid-template-columns:auto 1fr;align-items:end;gap:24px;padding:18px;background:white;border:1px solid var(--line);border-radius:22px;box-shadow:0 10px 30px rgba(13,55,91,.07)}
+.config-group{display:flex;align-items:flex-end;gap:12px}.config-group label,.digits-control{display:block}.config-group label span,.digits-control span{display:block;margin-bottom:6px;color:var(--muted);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.05em}.config-group input{width:120px;height:58px;border:2px solid var(--line);border-radius:14px;text-align:center;font:800 32px "Baloo 2","Trebuchet MS",Arial,sans-serif;color:var(--navy);outline:none}.config-group input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(23,111,190,.09)}.operation-sign{font:800 38px "Baloo 2","Trebuchet MS",Arial,sans-serif;color:var(--red);padding-bottom:4px}.config-actions{display:flex;justify-content:flex-end;align-items:end;gap:9px;flex-wrap:wrap}.digits-control select,.speed-control select{height:46px;border:1px solid var(--line);border-radius:12px;background:white;color:var(--navy);font-weight:900;padding:0 12px}.form-error{grid-column:1/-1;color:var(--red);font-weight:900;min-height:20px;margin:0}
+.learning-track{position:relative;overflow:hidden;margin:18px 0;padding:13px 18px;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;background:#dfeaf2;border-radius:15px;color:#526a7c;font-size:11px;font-weight:900;text-transform:uppercase;text-align:center}.learning-track span{position:relative;z-index:2}.track-fill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--cyan),var(--blue));transition:.55s ease}.learning-track.progressed span{color:white}
+.experiment-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(420px,.8fr);gap:18px}.panel{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;min-height:590px}.panel-heading{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:14px}.panel-kicker{color:var(--blue);font-size:10px;font-weight:900;letter-spacing:.1em}.panel-heading h3{margin:2px 0 0;font:800 27px "Baloo 2","Trebuchet MS",Arial,sans-serif;color:var(--navy)}.legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;color:var(--muted);font-size:11px;font-weight:900}.legend span{display:flex;align-items:center;gap:5px}.legend i{width:12px;height:12px;border-radius:3px;display:inline-block}.legend .h{background:var(--blue)}.legend .t{background:var(--green)}.legend .u{background:var(--orange)}
+.material-stage{position:relative;min-height:445px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px;border-radius:21px;background:linear-gradient(180deg,#f7fbfe,#edf5fa);border:1px solid #dce9f2;overflow:hidden}.place-column{position:relative;min-width:0;border:2px dashed #c7dbe9;border-radius:17px;background:rgba(255,255,255,.76);transition:.25s}.place-column.active{border-color:var(--yellow);background:#fffbed;box-shadow:0 0 0 4px rgba(255,215,90,.18)}.place-title{min-height:58px;padding:8px;display:grid;grid-template-columns:auto 1fr auto;gap:6px;align-items:center;border-bottom:1px solid #dbe7ef}.place-title span{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--navy);color:white;font:800 17px "Baloo 2","Trebuchet MS",Arial,sans-serif}.place-title strong{font-size:11px;text-transform:uppercase;color:var(--muted)}.place-title b{min-width:30px;height:30px;border-radius:10px;background:#e9f4fb;display:grid;place-items:center;color:var(--blue);font:800 18px "Baloo 2","Trebuchet MS",Arial,sans-serif}.blocks-area{min-height:365px;padding:15px;display:flex;align-content:flex-start;align-items:flex-start;justify-content:center;flex-wrap:wrap;gap:7px;overflow:auto}.base-block{position:relative;animation:blockIn .35s ease both}@keyframes blockIn{from{opacity:0;transform:translateY(-10px) scale(.7)}}.hundred-block{width:72px;height:72px;border-radius:7px;background:repeating-linear-gradient(0deg,transparent 0 6px,rgba(255,255,255,.34) 6px 7px),repeating-linear-gradient(90deg,transparent 0 6px,rgba(255,255,255,.34) 6px 7px),linear-gradient(145deg,#3b9bea,var(--blue));box-shadow:inset 0 0 0 3px #0d60aa,0 6px 12px rgba(23,111,190,.16)}.ten-block{width:21px;height:91px;border-radius:6px;background:repeating-linear-gradient(0deg,var(--green) 0 7px,#76cf9f 7px 9px);box-shadow:inset 0 0 0 3px var(--green-dark),0 5px 10px rgba(39,163,107,.14)}.unit-block{width:27px;height:27px;border-radius:6px;background:linear-gradient(145deg,#ffb657,var(--orange));box-shadow:inset 0 0 0 3px #cc7420,0 4px 8px rgba(242,155,56,.15)}.base-block.to-remove{box-shadow:0 0 0 4px rgba(216,75,87,.22),inset 0 0 0 3px var(--red);animation:removePulse .65s ease-in-out infinite alternate}@keyframes removePulse{to{transform:translateY(-5px)}}.base-block.removing{opacity:0;transform:translateY(-20px) scale(.25);transition:.45s}.base-block.new-piece{animation:newPiece .6s cubic-bezier(.2,.8,.2,1.25) both}@keyframes newPiece{from{opacity:0;transform:translateY(-35px) scale(.35)}to{opacity:1;transform:none}}
+.animation-layer{position:absolute;inset:0;z-index:30;pointer-events:none}.moving-block{position:absolute;z-index:4;transition:transform var(--move-duration,1.3s) cubic-bezier(.2,.7,.15,1),opacity .35s}.conversion-label{position:absolute;z-index:6;padding:10px 13px;background:var(--navy);color:white;border-radius:13px;font-weight:900;box-shadow:0 10px 24px rgba(11,45,79,.23);animation:labelPop .45s ease both}@keyframes labelPop{from{opacity:0;transform:scale(.65)}}.spark{position:absolute;width:85px;height:85px;border-radius:50%;background:radial-gradient(circle,var(--yellow) 0 18%,rgba(255,215,90,.45) 19% 35%,transparent 36%);animation:spark .7s ease-out both}@keyframes spark{from{transform:scale(.2);opacity:1}to{transform:scale(1.8);opacity:0}}.flying-piece{position:absolute;z-index:5;animation:pieceBurst .75s cubic-bezier(.2,.7,.2,1) both}@keyframes pieceBurst{from{opacity:0;transform:translate(0,0) scale(.2)}to{opacity:1;transform:translate(var(--dx),var(--dy)) scale(1)}}
+.material-footer{min-height:68px;display:grid;grid-template-columns:auto 1fr;gap:15px;align-items:center;margin-top:12px}.material-footer>div{padding:9px 14px;border-radius:14px;background:#edf7fd}.material-footer span{display:block;color:var(--muted);font-size:10px;font-weight:900;text-transform:uppercase}.material-footer strong{font:800 28px "Baloo 2","Trebuchet MS",Arial,sans-serif;color:var(--blue)}.material-footer p{margin:0;color:var(--ink);font-weight:800;line-height:1.4}
+.info-button{min-height:37px;padding:0 12px;background:#eaf5fc;color:var(--blue)}.algorithm-workspace{display:grid;grid-template-columns:minmax(150px,190px) 1fr;gap:16px;align-items:start}.mascot-guide{padding:13px 12px;border-radius:20px;background:linear-gradient(180deg,#f0ecff,#fff);border:1px solid #ded5fa;text-align:center;display:grid;justify-items:center;gap:8px}.mascot-guide strong{display:block;color:var(--purple);font:800 16px "Baloo 2","Trebuchet MS",Arial,sans-serif}.mascot-guide p{margin:2px 0 0;color:#52657a;font-weight:800;line-height:1.35;font-size:14px}.vertical-algorithm{position:relative;width:min(390px,100%);margin:8px auto 0;padding:7px 22px 14px}.algorithm-row{display:grid;grid-auto-flow:column;grid-auto-columns:72px;justify-content:end;text-align:center}.place-labels{min-height:31px}.place-label{display:grid;place-items:center;color:#8598a8;font-size:11px;font-weight:900}.digit-cell{position:relative;width:72px;min-height:84px;display:grid;place-items:end center;padding-bottom:7px;border-radius:12px;font:800 48px/1 "Baloo 2","Trebuchet MS",Arial,sans-serif;color:var(--navy);transition:.3s}.digit-cell.active{background:#fff6c9;box-shadow:0 0 0 3px rgba(255,215,90,.45)}.top-row .digit-cell{min-height:105px}.number-current{position:relative;z-index:2}.number-old{position:absolute;bottom:8px;color:#55697b}.number-old::after{content:"";position:absolute;left:-6px;right:-6px;top:48%;height:4px;background:var(--red);border-radius:5px;transform:rotate(-17deg)}.number-rewrite{position:absolute;top:1px;left:50%;transform:translateX(-50%);color:var(--blue);font-size:27px;z-index:4;animation:rewritePop .55s ease both}.number-rewrite::after{content:"";position:absolute;left:50%;bottom:-7px;transform:translateX(-50%);width:7px;height:7px;border-radius:50%;background:var(--yellow)}@keyframes rewritePop{from{opacity:0;transform:translate(-50%,-18px) scale(.6)}}.history-mini{position:absolute;right:1px;top:35px;font-size:10px;color:var(--red);font-family:"Nunito";font-weight:900}.bottom-row .digit-cell{min-height:66px}.result-row .digit-cell{min-height:72px;color:var(--green-dark)}.result-value{animation:resultPop .55s ease both}@keyframes resultPop{from{opacity:0;transform:translateY(-15px) scale(.5)}}.result-placeholder{opacity:0}.algorithm-line{height:4px;background:var(--navy);border-radius:99px;margin-left:15px}.algorithm-minus{position:absolute;left:11px;top:154px;color:var(--red);font:800 42px "Baloo 2","Trebuchet MS",Arial,sans-serif}.changed-cell{animation:cellFlash .85s ease}@keyframes cellFlash{35%{background:#dff5ff;box-shadow:0 0 0 5px rgba(37,191,208,.25)}}
+.step-explanation{margin-top:18px;padding:16px;border-radius:17px;background:#f3f8fb;border:1px solid #dce9f1}.step-explanation span{color:var(--blue);font-size:11px;font-weight:900;letter-spacing:.08em}.step-explanation p{margin:5px 0 0;font-weight:800;line-height:1.45;color:#4c6274}
+.experiment-controls{position:sticky;bottom:10px;z-index:60;margin:18px auto 0;max-width:1080px;padding:10px;display:grid;grid-template-columns:auto auto 1fr auto auto;gap:9px;align-items:center;background:rgba(11,45,79,.96);backdrop-filter:blur(12px);border-radius:20px;color:white;box-shadow:0 16px 38px rgba(11,45,79,.25)}.step-count{padding:0 10px}.step-count span{display:block;color:#a8c3d7;font-size:9px;font-weight:900}.step-count strong{font:800 22px "Baloo 2","Trebuchet MS",Arial,sans-serif}.control-button{min-height:46px;padding:0 15px;color:white;background:rgba(255,255,255,.12)}.control-button:hover:not(:disabled){background:rgba(255,255,255,.22)}.control-button:disabled{opacity:.35;cursor:not-allowed}.control-button.auto{justify-self:center;background:var(--yellow);color:var(--navy);min-width:150px}.control-button.next{background:var(--blue)}.speed-control{display:flex;align-items:center;gap:7px;color:#b9cfde;font-size:11px;font-weight:900}.speed-control select{height:38px}
+
+/* Examples */
+.meaning-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}.meaning-grid article{display:flex;align-items:flex-start;gap:13px;padding:18px;background:white;border:1px solid var(--line);border-radius:20px;box-shadow:0 10px 26px rgba(13,55,91,.07)}.meaning-grid article>span{font-size:34px}.meaning-grid h3{margin:0;color:var(--navy);font:800 23px "Baloo 2","Trebuchet MS",Arial,sans-serif}.meaning-grid p{margin:3px 0 0;color:var(--muted);font-weight:700;line-height:1.5}.examples-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}.example-card{display:flex;flex-direction:column;min-height:310px;background:white;border:1px solid var(--line);border-radius:23px;padding:21px;box-shadow:var(--shadow);position:relative;overflow:hidden}.example-card::after{content:"";position:absolute;width:140px;height:140px;border-radius:50%;right:-70px;top:-65px;background:var(--accent);opacity:.1}.example-icon{font-size:42px}.example-type{align-self:flex-start;margin:9px 0 3px;padding:5px 9px;border-radius:999px;background:#edf6fb;color:var(--blue);font-size:10px;font-weight:900;text-transform:uppercase}.example-card h3{margin:5px 0 8px;color:var(--navy);font:800 24px "Baloo 2","Trebuchet MS",Arial,sans-serif}.example-card p{margin:0;color:var(--muted);font-weight:700;line-height:1.5}.example-equation{margin:17px 0;padding:9px 13px;border-radius:12px;background:#f4f8fb;color:var(--navy);font:800 27px "Baloo 2","Trebuchet MS",Arial,sans-serif;width:max-content}.example-card button{margin-top:auto;align-self:flex-start}
+
+/* Challenges */
+.score-card{min-width:112px;padding:12px 16px;border-radius:17px;background:var(--navy);color:white;text-align:center}.score-card span{display:block;font-size:9px;letter-spacing:.1em;color:#a8c6db;font-weight:900}.score-card strong{font:800 31px "Baloo 2","Trebuchet MS",Arial,sans-serif}.challenge-layout{display:grid;grid-template-columns:300px 1fr;gap:18px}.challenge-map,.challenge-card{background:white;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}.challenge-map{padding:20px;align-self:start;position:sticky;top:168px}.challenge-map h3{margin:0 0 14px;color:var(--navy);font:800 24px "Baloo 2","Trebuchet MS",Arial,sans-serif}.challenge-buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.challenge-step{height:48px;border:2px solid var(--line);border-radius:13px;background:white;color:var(--navy);font-weight:900;position:relative}.challenge-step.current{border-color:var(--blue);background:#eaf5fc}.challenge-step.correct::after{content:"✓";position:absolute;right:3px;top:1px;width:17px;height:17px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:white;font-size:11px}.challenge-step.level-1{box-shadow:inset 0 -5px #8ed3a9}.challenge-step.level-2{box-shadow:inset 0 -5px #ffd46c}.challenge-step.level-3{box-shadow:inset 0 -5px #c9aff6}.level-legend{display:grid;gap:7px;margin-top:17px;color:var(--muted);font-size:11px;font-weight:900}.level-legend span{display:flex;align-items:center;gap:7px}.level-legend i{width:15px;height:7px;border-radius:5px}.level-one{background:#8ed3a9}.level-two{background:#ffd46c}.level-three{background:#c9aff6}.challenge-card{padding:clamp(24px,4vw,48px);text-align:center;min-height:590px}.challenge-topline{display:flex;justify-content:space-between;gap:10px;color:var(--blue);font-size:11px;font-weight:900;letter-spacing:.08em}.challenge-icon{font-size:62px;margin-top:18px}.challenge-card h3{margin:7px 0 10px;color:var(--navy);font:800 clamp(30px,4vw,45px) "Baloo 2","Trebuchet MS",Arial,sans-serif}.challenge-card>p{max-width:720px;margin:0 auto;color:var(--muted);font-size:19px;line-height:1.55;font-weight:700}.challenge-equation{width:max-content;max-width:100%;margin:24px auto 18px;padding:12px 24px;border-radius:18px;background:#f2f7fa;color:var(--navy);display:flex;align-items:center;gap:13px;font:800 39px "Baloo 2","Trebuchet MS",Arial,sans-serif}.challenge-equation b{color:var(--red)}.challenge-equation strong{color:var(--blue)}.answer-field{display:block;max-width:210px;margin:0 auto}.answer-field span{display:block;margin-bottom:6px;color:var(--muted);font-size:12px;font-weight:900}.answer-field input{width:100%;height:61px;border:2px solid var(--line);border-radius:15px;text-align:center;color:var(--navy);font:800 32px "Baloo 2","Trebuchet MS",Arial,sans-serif;outline:none}.answer-field input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(23,111,190,.1)}.challenge-feedback{min-height:27px;margin:12px 0;font-weight:900}.challenge-feedback.good{color:var(--green-dark)}.challenge-feedback.bad{color:var(--red)}.challenge-actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:11px}
+
+/* Dialog/footer */
+footer{padding:18px 24px;text-align:center;color:#7890a3;font-size:12px;font-weight:700}footer span{margin-left:8px}.app-dialog{width:min(760px,calc(100% - 26px));border:0;border-radius:27px;padding:30px;color:var(--ink);box-shadow:0 25px 80px rgba(11,45,79,.36)}.app-dialog::backdrop{background:rgba(5,22,38,.68);backdrop-filter:blur(4px)}.dialog-close{position:absolute;right:14px;top:14px;width:40px;height:40px;border:0;border-radius:12px;background:#edf4f8;color:var(--navy);font-size:25px}.app-dialog h2{font:800 36px "Baloo 2","Trebuchet MS",Arial,sans-serif;color:var(--navy);margin:12px 0 20px}.manual-list{display:grid;gap:10px}.manual-list article{display:grid;grid-template-columns:auto 1fr;gap:13px;padding:14px;border-radius:16px;background:#f5f9fc}.manual-list b{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:var(--blue);color:white}.manual-list h3{margin:0;color:var(--navy);font:800 19px "Baloo 2","Trebuchet MS",Arial,sans-serif}.manual-list p{margin:2px 0 0;color:var(--muted);line-height:1.45}.small-dialog{max-width:520px}
+
+@media(max-width:1150px){
+  .hero{grid-template-columns:1fr}.hero-mascot{min-height:430px}.module-grid{grid-template-columns:1fr 1fr}.module-card:last-child{grid-column:1/-1}
+  .experiment-grid{grid-template-columns:1fr}.panel{min-height:auto}.algorithm-panel{min-height:550px}.meaning-grid,.examples-grid{grid-template-columns:1fr 1fr}.challenge-layout{grid-template-columns:1fr}.challenge-map{position:relative;top:auto}.challenge-buttons{grid-template-columns:repeat(9,1fr)}
+}
+@media(max-width:760px){
+  .topbar{height:67px;padding:9px 12px}.brand small{display:none}.brand-symbol{width:40px;height:40px}.screen{padding:23px 11px 55px}.hero-copy h1{font-size:48px}.hero-copy>p{font-size:16px}.hero-mascot{transform:scale(.83);margin:-30px -40px;min-height:395px}.module-grid,.meaning-grid,.examples-grid{grid-template-columns:1fr}.module-card:last-child{grid-column:auto}.module-tabs{top:75px;grid-template-columns:1fr;padding:7px}.module-tab{min-height:45px}.module-heading{align-items:flex-start;flex-direction:column}.experiment-config{grid-template-columns:1fr}.config-group{justify-content:center}.config-actions{justify-content:center}.learning-track{font-size:8px;padding:11px 4px}.panel{padding:13px}.panel-heading{flex-direction:column}.legend{justify-content:flex-start}.material-stage{min-height:390px;padding:6px;gap:5px}.place-title{grid-template-columns:auto 1fr;padding:5px}.place-title strong{font-size:8px}.place-title b{position:absolute;right:5px;top:36px;width:24px;height:24px;font-size:14px}.blocks-area{min-height:326px;padding:7px;gap:4px}.hundred-block{width:52px;height:52px}.ten-block{width:15px;height:70px}.unit-block{width:21px;height:21px}.material-footer{grid-template-columns:1fr}.algorithm-workspace{grid-template-columns:1fr}.mascot-guide{grid-template-columns:auto 1fr;text-align:left;justify-items:start;align-items:center}.vertical-algorithm{max-width:340px}.algorithm-row{grid-auto-columns:61px}.digit-cell{width:61px;font-size:43px}.algorithm-minus{left:2px}.experiment-controls{grid-template-columns:1fr 1fr;bottom:5px}.step-count,.speed-control{grid-column:1/-1;justify-content:center;text-align:center}.control-button.auto{min-width:0}.challenge-buttons{grid-template-columns:repeat(5,1fr)}.challenge-card{padding:22px 13px}.challenge-topline{font-size:9px}.challenge-card>p{font-size:16px}.challenge-equation{font-size:32px;padding:10px 16px}footer span{display:block;margin:5px 0 0}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+
+/* --- v3: abas, exemplos práticos e desafios --- */
+.lab-tabbar { display:flex; flex-wrap:wrap; gap:10px; margin: 18px 0 20px; }
+.lab-tab { min-height:48px; padding:0 18px; border-radius:16px; border:1px solid var(--line); background:#fff; color:var(--navy); font-weight:900; }
+.lab-tab.active { background:#eaf5ff; border-color:var(--blue); box-shadow: inset 0 0 0 2px rgba(21,115,209,.08); }
+.lab-panel { display:none; }
+.lab-panel.active { display:block; }
+.panel-intro { margin:-4px 0 18px; color:var(--muted); font-weight:700; line-height:1.55; }
+.examples-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.example-item { background:#f7fbff; border:1px solid #ddebf5; border-radius:20px; padding:18px; display:grid; gap:10px; }
+.example-icon { width:52px; height:52px; border-radius:16px; display:grid; place-items:center; background:#fff; box-shadow:0 8px 20px rgba(8,42,74,.06); font-size:28px; }
+.example-item h4 { margin:0; font:800 21px "Baloo 2"; color:var(--navy); }
+.example-item p { margin:0; color:#4f5f6f; font-weight:700; line-height:1.5; }
+.example-math { display:flex; align-items:center; gap:10px; flex-wrap:wrap; font:800 26px "Baloo 2"; color:var(--navy); }
+.example-math strong { color:var(--green); }
+.example-tip { font-size:13px; color:#7c8b98; font-weight:800; }
+.challenge-score { display:grid; grid-template-columns:repeat(2,minmax(0,220px)); gap:14px; margin-bottom:18px; }
+.challenge-score > div { background:#eef8ff; border:1px solid #d7e8f4; border-radius:16px; padding:12px 14px; }
+.challenge-score span { display:block; color:var(--muted); font-size:11px; font-weight:900; text-transform:uppercase; }
+.challenge-score strong { font:800 28px "Baloo 2"; color:var(--blue); }
+.challenges-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.challenge-item { background:#fffaf0; border:1px solid #f2e2b0; border-radius:20px; padding:18px; display:grid; gap:12px; }
+.challenge-item h4 { margin:0; font:800 22px "Baloo 2"; color:var(--navy); }
+.challenge-item p { margin:0; color:#4f5f6f; font-weight:700; line-height:1.55; }
+.challenge-form { display:flex; gap:8px; align-items:center; }
+.challenge-form input { min-width:0; width:120px; height:44px; border:2px solid #e8d184; border-radius:12px; text-align:center; font:800 24px "Baloo 2"; background:#fff; }
+.challenge-feedback { min-height:20px; font-weight:900; }
+.challenge-item.done { border-color:#7bd4ac; background:#f3fff8; }
+.teacher-bubble { max-width: 200px; }
+.teacher-sidekick { background:linear-gradient(180deg,#eef8ff 0%, #ffffff 100%); border-color:#cfe2f1; }
+.coach-dialogue span { color:var(--blue); }
+
+.digit-original { position:relative; z-index:1; }
+.digit-cell.changed-digit { overflow:visible; }
+.digit-cell.changed-digit .digit-original { text-decoration: line-through; text-decoration-thickness: 3px; text-decoration-color: var(--red); opacity:.82; }
+.digit-rewrite { position:absolute; top:-12px; right:6px; font:800 23px/1 "Baloo 2"; color:var(--red); background:#fff; padding:0 2px; border-radius:6px; }
+.borrow-row .digit-cell { align-items:flex-end; padding-bottom:4px; }
+.borrow-row .digit-cell.borrowed-value { color:var(--red); font-size:23px; }
+
+@media (max-width: 1100px) {
+  .examples-grid, .challenges-grid { grid-template-columns:1fr; }
+}
+@media (max-width: 750px) {
+  .lab-tabbar { gap:8px; }
+  .lab-tab { flex:1 1 100%; }
+  .challenge-score { grid-template-columns:1fr; }
+  .challenge-form { flex-wrap:wrap; }
+  .challenge-form input { width:100%; }
+}
+
+
+/* --- Aprimoramento: visual de laboratório virtual --- */
+.lab-identity{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:18px 0 20px}
+.lab-card{background:linear-gradient(180deg,#ffffff,#f6fbff);border:1px solid var(--line);border-radius:22px;padding:18px 18px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}.lab-card::after{content:"";position:absolute;right:-18px;top:-18px;width:74px;height:74px;border-radius:50%;background:rgba(37,191,208,.08)}
+.lab-card.highlight{background:linear-gradient(180deg,#eef8ff,#ffffff);border-color:#cfe7f7}
+.lab-card-kicker{display:inline-block;color:var(--blue);font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.lab-card h3{margin:8px 0 6px;color:var(--navy);font:800 24px "Baloo 2","Trebuchet MS",Arial,sans-serif}
+.lab-card p{margin:0;color:var(--muted);font-weight:700;line-height:1.55}
+
+.step-explanation{display:grid;gap:12px}
+.connection-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:6px}
+.connection-grid article{background:#f6fbff;border:1px solid #d9e8f3;border-radius:18px;padding:14px 14px 12px;min-height:108px}
+.connection-grid span{display:block;color:var(--blue);font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.connection-grid p{margin:0;color:#495f72;font-weight:800;line-height:1.45}
+
+.material-footer p,.step-explanation p{line-height:1.55}
+.track-fill{background:linear-gradient(90deg,#3fd0dd,var(--blue),#6e56cf)}
+.control-button.auto,.control-button.next{box-shadow:0 10px 24px rgba(13,55,91,.08)}
+.exchange-label{font-weight:900;letter-spacing:.01em}
+.new-from-exchange{animation:bornBlock .65s ease both}
+@keyframes bornBlock{from{opacity:.2;transform:scale(.6)}}
+
+@media (max-width: 990px){
+  .lab-identity,.connection-grid{grid-template-columns:1fr}
+}
+
+
+/* --- Publicação no site DIASMATH™ --- */
+.site-link{
+  min-height:44px;
+  padding:0 14px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:#ffffff;
+  color:var(--navy);
+  font-weight:900;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 7px 18px rgba(13,55,91,.06);
+}
+.site-link:hover{
+  transform:translateY(-2px);
+  border-color:#a9cbe2;
+}
+@media(max-width:760px){
+  .site-link{
+    min-height:40px;
+    padding:0 10px;
+    font-size:13px;
+  }
+}

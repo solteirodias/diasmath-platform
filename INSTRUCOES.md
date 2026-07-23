@@ -1,61 +1,63 @@
-# Atualização 13B — Corrige grupos do Bloco da Divisão
+# Atualização 15 — Laboratório de Subtração
 
-Este pacote corrige o erro visual do game **Os Guardiões da Divisão**.
+Este pacote publica o **Laboratório de Subtração** na aba Labs do site DIASMATH™.
 
-## O que foi corrigido
-
-Antes, em questões como:
+## Arquivos incluídos
 
 ```text
-63 ÷ 9
-72 ÷ 9
+public/labs/subtracao/index.html
+public/labs/subtracao/app.js
+public/labs/subtracao/styles.css
+public/labs/subtracao/README.md
+app/labs/subtracao/page.tsx
+app/labs/page.tsx
+ANALISE_TECNICA.md
 ```
 
-o jogo dizia que eram 9 grupos, mas mostrava somente 8.
+## Como publicar no GitHub
 
-Agora o jogo mostra todos os grupos corretamente.
-
-## Arquivo incluído
-
-```text
-public/games/guardioes-divisao/index.html
-```
-
-## Como corrigir no GitHub
-
-1. Baixe e extraia este ZIP.
-2. Abra o repositório `diasmath-platform`.
-3. Vá para a página inicial do repositório.
-4. Clique em `Add file`.
-5. Clique em `Upload files`.
-6. Arraste a pasta extraída:
+1. Baixe o ZIP.
+2. Extraia o ZIP.
+3. Abra o repositório `diasmath-platform`.
+4. Fique na página inicial do repositório.
+5. Clique em `Add file`.
+6. Clique em `Upload files`.
+7. Arraste as duas pastas extraídas:
 
 ```text
+app
 public
 ```
 
-7. Em `Commit message`, escreva:
+8. Em `Commit message`, escreva:
 
 ```text
-Corrige visualização dos grupos na divisão
+Publica Laboratório de Subtração
 ```
 
-8. Clique em `Commit changes`.
-9. Aguarde a Vercel publicar.
+9. Clique em `Commit changes`.
+10. Aguarde a Vercel publicar.
 
-## Depois teste
-
-Abra:
+## Testar depois
 
 ```text
-https://www.diasmath.com.br/games/guardioes-divisao/index.html
+https://www.diasmath.com.br/labs
+https://www.diasmath.com.br/labs/subtracao
+https://www.diasmath.com.br/labs/subtracao/index.html
 ```
 
-Depois procure uma questão como:
+## Melhor forma de usar em sala
+
+Use o link direto:
 
 ```text
-63 ÷ 9
-72 ÷ 9
+https://www.diasmath.com.br/labs/subtracao/index.html
 ```
 
-Agora devem aparecer **9 grupos**.
+Assim o laboratório pode abrir em outra aba e entrar em tela cheia com mais facilidade.
+
+## Atenção
+
+Não envie o ZIP fechado para o GitHub.
+
+Extraia o ZIP e envie as pastas `app` e `public`.

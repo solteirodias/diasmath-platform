@@ -4,6 +4,16 @@ import { Footer } from "@/components/Footer";
 
 const labs = [
   {
+    title: "Laboratório de Subtração",
+    status: "Publicado",
+    description:
+      "Laboratório com Material Dourado, troca animada, conta armada sincronizada, exemplos práticos e desafios para aprender subtração com compreensão.",
+    href: "/labs/subtracao",
+    directHref: "/labs/subtracao/index.html",
+    emoji: "🤖➖",
+    area: "Subtração",
+  },
+  {
     title: "Laboratório Virtual de Divisão",
     status: "Publicado",
     description:

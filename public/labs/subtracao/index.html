@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b2d4f" />
+  <meta name="description" content="Laboratório de Subtração da DIASMATH™: material dourado, trocas animadas, conta armada sincronizada, exemplos práticos e desafios para aprender subtração com compreensão." />
+  <title>Laboratório de Subtração | DIASMATH™ Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="brand" data-action="home" aria-label="Voltar ao início">
+        <span class="brand-symbol">D</span>
+        <span><strong>DIASMATH™</strong><small>Laboratório de Subtração</small></span>
+      </button>
+      <div class="top-actions">
+        <a class="site-link" href="/labs" aria-label="Voltar aos laboratórios">← Voltar aos Labs</a>
+        <button class="icon-button" data-action="manual" aria-label="Abrir manual" title="Manual">?</button>
+        <button class="icon-button" data-action="fullscreen" aria-label="Tela cheia" title="Tela cheia">⛶</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="homeScreen" class="screen active home-screen">
+        <div class="hero">
+          <div class="hero-copy">
+            <span class="eyebrow">OBSERVAR • TROCAR • REGISTRAR • APLICAR</span>
+            <h1>A subtração precisa ser <span>compreendida</span>, não decorada.</h1>
+            <p>O estudante vê o número com o Material Dourado, acompanha cada troca e observa a mesma transformação aparecer corretamente na conta armada.</p>
+            <label class="student-field">
+              <span>Nome do estudante</span>
+              <input id="studentName" maxlength="24" placeholder="Digite o nome" autocomplete="off" />
+            </label>
+            <button class="primary-button" data-action="openModule" data-module="experiment">Entrar no laboratório <span>→</span></button>
+          </div>
+
+          <div class="hero-mascot" aria-label="Nerdsmart, o mascote do laboratório">
+            <div class="mascot-bubble">Oi! Eu sou o <strong>Nerdsmart</strong>. Vamos investigar a subtração?</div>
+            <div class="nerdsmart large" aria-hidden="true">
+              <div class="antenna"><i></i></div>
+              <div class="robot-head">
+                <span class="robot-ear left"></span><span class="robot-ear right"></span>
+                <div class="robot-screen">
+                  <span class="robot-eye left"></span><span class="robot-eye right"></span>
+                  <span class="robot-smile"></span>
+                </div>
+                <span class="goggle-bridge"></span>
+              </div>
+              <div class="robot-body"><span class="robot-badge">−</span></div>
+              <span class="robot-arm left"></span><span class="robot-arm right"></span>
+            </div>
+            <div class="floating-equation">52 − 28 = ?</div>
+          </div>
+        </div>
+
+        <div class="module-grid" aria-label="Áreas do laboratório">
+          <button class="module-card experimental" data-action="openModule" data-module="experiment">
+            <span class="module-number">01</span><span class="module-icon">🧪</span>
+            <strong>Parte experimental</strong>
+            <p>Manipule o Material Dourado e acompanhe a conta armada passo a passo.</p>
+            <em>Experimentar →</em>
+          </button>
+          <button class="module-card examples" data-action="openModule" data-module="examples">
+            <span class="module-number">02</span><span class="module-icon">🛒</span>
+            <strong>Exemplos práticos</strong>
+            <p>Descubra onde usamos a subtração para retirar, comparar e completar.</p>
+            <em>Ver aplicações →</em>
+          </button>
+          <button class="module-card challenges" data-action="openModule" data-module="challenges">
+            <span class="module-number">03</span><span class="module-icon">🎯</span>
+            <strong>Desafios</strong>
+            <p>Resolva situações-problema e leve qualquer desafio para o experimento.</p>
+            <em>Começar desafios →</em>
+          </button>
+        </div>
+      </section>
+
+      <section id="appScreen" class="screen app-screen">
+        <nav class="module-tabs" aria-label="Navegação do laboratório">
+          <button class="module-tab active" data-action="switchModule" data-module="experiment"><span>🧪</span> Experimentar</button>
+          <button class="module-tab" data-action="switchModule" data-module="examples"><span>🛒</span> Exemplos práticos</button>
+          <button class="module-tab" data-action="switchModule" data-module="challenges"><span>🎯</span> Desafios</button>
+        </nav>
+
+        <section id="experimentModule" class="module-panel active">
+          <div class="module-heading">
+            <div>
+              <span class="eyebrow">PARTE EXPERIMENTAL</span>
+              <h2>Veja a troca acontecer e aparecer na conta.</h2>
+            </div>
+            <button class="ghost-button" data-action="home">← Página inicial</button>
+          </div>
+
+          <div class="experiment-config">
+            <div class="config-group">
+              <label><span>Minuendo</span><input id="minuendInput" inputmode="numeric" maxlength="3" value="52" /></label>
+              <span class="operation-sign">−</span>
+              <label><span>Subtraendo</span><input id="subtrahendInput" inputmode="numeric" maxlength="3" value="28" /></label>
+            </div>
+            <div class="config-actions">
+              <label class="digits-control"><span>Ordens</span><select id="digitsSelect"><option value="2">D e U</option><option value="3">C, D e U</option></select></label>
+              <button class="secondary-button" data-action="randomProblem">🎲 Sortear</button>
+              <button class="primary-button compact" data-action="prepareExperiment">Preparar experimento</button>
+            </div>
+            <p id="configError" class="form-error" aria-live="polite"></p>
+          </div>
+
+          <div class="lab-identity">
+            <article class="lab-card">
+              <span class="lab-card-kicker">MISSÃO</span>
+              <h3>Laboratório virtual de subtração</h3>
+              <p>Investigar a subtração com o Material Dourado e compreender como cada transformação aparece corretamente na conta armada.</p>
+            </article>
+            <article class="lab-card">
+              <span class="lab-card-kicker">MATERIAIS</span>
+              <h3>Bancada experimental</h3>
+              <p>Material Dourado, conta armada, trilha de observação e conexões entre o concreto e o simbólico.</p>
+            </article>
+            <article class="lab-card highlight">
+              <span class="lab-card-kicker">REGRA DE OURO</span>
+              <h3>Primeiro no material. Depois na conta.</h3>
+              <p>O estudante observa, faz a troca com calma, retira os blocos e só então registra a mesma ação no algoritmo.</p>
+            </article>
+          </div>
+
+          <div class="learning-track">
+            <div id="trackFill" class="track-fill"></div>
+            <span>Representar</span><span>Comparar</span><span>Trocar</span><span>Retirar</span><span>Concluir</span>
+          </div>
+
+          <div class="experiment-grid">
+            <section class="panel material-panel">
+              <div class="panel-heading">
+                <div><span class="panel-kicker">ESTAÇÃO DE EXPERIMENTAÇÃO</span><h3>Bancada do Material Dourado</h3></div>
+                <div class="legend"><span><i class="h"></i>Centena</span><span><i class="t"></i>Dezena</span><span><i class="u"></i>Unidade</span></div>
+              </div>
+
+              <div id="materialStage" class="material-stage">
+                <div class="place-column" data-place="hundreds">
+                  <div class="place-title"><span>C</span><strong>Centenas</strong><b id="hundredsCount">0</b></div>
+                  <div id="hundredsBlocks" class="blocks-area hundreds-area"></div>
+                </div>
+                <div class="place-column" data-place="tens">
+                  <div class="place-title"><span>D</span><strong>Dezenas</strong><b id="tensCount">5</b></div>
+                  <div id="tensBlocks" class="blocks-area tens-area"></div>
+                </div>
+                <div class="place-column" data-place="units">
+                  <div class="place-title"><span>U</span><strong>Unidades</strong><b id="unitsCount">2</b></div>
+                  <div id="unitsBlocks" class="blocks-area units-area"></div>
+                </div>
+                <div id="animationLayer" class="animation-layer" aria-hidden="true"></div>
+              </div>
+
+              <div class="material-footer">
+                <div><span>Valor representado</span><strong id="materialTotal">52</strong></div>
+                <p id="materialMessage">O número 52 é formado por 5 dezenas e 2 unidades.</p>
+              </div>
+            </section>
+
+            <section class="panel algorithm-panel">
+              <div class="panel-heading">
+                <div><span class="panel-kicker">ESTAÇÃO DE REGISTRO</span><h3>Conta armada conectada</h3></div>
+                <button class="info-button" data-action="placeInfo">C • D • U</button>
+              </div>
+
+              <div class="algorithm-workspace">
+                <aside class="mascot-guide">
+                  <div class="nerdsmart small" aria-hidden="true">
+                    <div class="antenna"><i></i></div>
+                    <div class="robot-head"><div class="robot-screen"><span class="robot-eye left"></span><span class="robot-eye right"></span><span class="robot-smile"></span></div></div>
+                    <div class="robot-body"><span class="robot-badge">−</span></div>
+                    <span class="robot-arm left"></span><span class="robot-arm right"></span>
+                  </div>
+                  <div><strong>Nerdsmart</strong><p id="guideText">Primeiro representamos o minuendo.</p></div>
+                </aside>
+
+                <div id="verticalAlgorithm" class="vertical-algorithm" aria-label="Conta armada de subtração">
+                  <div id="placeLabels" class="algorithm-row place-labels"></div>
+                  <div id="topRow" class="algorithm-row top-row"></div>
+                  <div id="bottomRow" class="algorithm-row bottom-row"></div>
+                  <div class="algorithm-line"></div>
+                  <div id="resultRow" class="algorithm-row result-row"></div>
+                  <span class="algorithm-minus">−</span>
+                </div>
+              </div>
+
+              <div class="step-explanation">
+                <span id="stepTag">ETAPA 1</span>
+                <p id="stepExplanation">Observe como o minuendo foi organizado em dezenas e unidades.</p>
+                <div class="connection-grid">
+                  <article>
+                    <span>O que observar</span>
+                    <p id="labObservation">Vamos identificar as ordens e a quantidade que temos em cada uma.</p>
+                  </article>
+                  <article>
+                    <span>No material</span>
+                    <p id="labAction">Organize as dezenas e unidades na bancada experimental.</p>
+                  </article>
+                  <article>
+                    <span>Na conta</span>
+                    <p id="labRecord">A conta armada mostra o mesmo número representado no material.</p>
+                  </article>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="experiment-controls">
+            <div class="step-count"><span>ETAPA</span><strong><b id="currentStep">1</b>/<b id="totalSteps">1</b></strong></div>
+            <button id="backButton" class="control-button" data-action="previousStep" disabled>← Voltar</button>
+            <button id="autoButton" class="control-button auto" data-action="toggleAuto">▶ Reproduzir</button>
+            <button id="nextButton" class="control-button next" data-action="nextStep">Próxima etapa →</button>
+            <label class="speed-control"><span>Velocidade</span><select id="speedSelect"><option value="2400">Muito lenta</option><option value="1800" selected>Lenta</option><option value="1100">Normal</option></select></label>
+          </div>
+        </section>
+
+        <section id="examplesModule" class="module-panel">
+          <div class="module-heading">
+            <div><span class="eyebrow">APLICABILIDADE</span><h2>Onde usamos a subtração?</h2></div>
+            <button class="ghost-button" data-action="home">← Página inicial</button>
+          </div>
+
+          <div class="meaning-grid">
+            <article><span>📤</span><div><h3>Retirar</h3><p>Descobrir quanto sobra quando uma parte é retirada de uma quantidade.</p></div></article>
+            <article><span>⚖️</span><div><h3>Comparar</h3><p>Descobrir a diferença entre duas quantidades: quanto uma tem a mais ou a menos.</p></div></article>
+            <article><span>🧩</span><div><h3>Completar</h3><p>Descobrir quanto falta para alcançar uma quantidade desejada.</p></div></article>
+          </div>
+
+          <div id="examplesGrid" class="examples-grid"></div>
+        </section>
+
+        <section id="challengesModule" class="module-panel">
+          <div class="module-heading">
+            <div><span class="eyebrow">DESAFIOS PRÁTICOS</span><h2>Resolva, explique e depois confira no laboratório.</h2></div>
+            <div class="score-card"><span>PONTOS</span><strong id="scoreValue">0</strong></div>
+          </div>
+
+          <div class="challenge-layout">
+            <aside class="challenge-map">
+              <h3>Trilha de desafios</h3>
+              <div id="challengeButtons" class="challenge-buttons"></div>
+              <div class="level-legend"><span><i class="level-one"></i>Sem troca</span><span><i class="level-two"></i>Uma troca</span><span><i class="level-three"></i>Trocas sucessivas</span></div>
+            </aside>
+
+            <section class="challenge-card">
+              <div class="challenge-topline"><span id="challengeLevel">NÍVEL 1</span><strong id="challengeMeaning">RETIRAR</strong></div>
+              <div id="challengeIcon" class="challenge-icon">🎈</div>
+              <h3 id="challengeTitle">Balões da festa</h3>
+              <p id="challengePrompt">Havia 46 balões. Durante a brincadeira, 13 estouraram. Quantos balões sobraram?</p>
+              <div class="challenge-equation"><span id="challengeA">46</span><b>−</b><span id="challengeB">13</span><b>=</b><strong>?</strong></div>
+              <label class="answer-field"><span>Sua resposta</span><input id="challengeAnswer" inputmode="numeric" maxlength="3" placeholder="?" /></label>
+              <p id="challengeFeedback" class="challenge-feedback" aria-live="polite"></p>
+              <div class="challenge-actions">
+                <button class="primary-button compact" data-action="checkChallenge">Verificar resposta</button>
+                <button class="secondary-button" data-action="challengeToLab">Ver no laboratório</button>
+                <button class="ghost-button" data-action="nextChallenge">Próximo desafio →</button>
+              </div>
+            </section>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer>© 2026 Francisco Vieira Dias — DIASMATH™. Todos os direitos reservados. <span>Desenvolvido com apoio de inteligência artificial.</span></footer>
+  </div>
+
+  <dialog id="manualDialog" class="app-dialog">
+    <button class="dialog-close" data-action="closeDialog" aria-label="Fechar">×</button>
+    <span class="eyebrow">MANUAL DO PROFESSOR</span>
+    <h2>Como conduzir a experiência</h2>
+    <div class="manual-list">
+      <article><b>1</b><div><h3>Comece pelo significado</h3><p>Apresente uma situação de retirar, comparar ou completar antes de mostrar o algoritmo.</p></div></article>
+      <article><b>2</b><div><h3>Represente o minuendo</h3><p>Peça à criança que identifique centenas, dezenas e unidades no Material Dourado.</p></div></article>
+      <article><b>3</b><div><h3>Antecipe a necessidade da troca</h3><p>Antes de avançar, pergunte se os elementos daquela ordem são suficientes para retirar a quantidade indicada.</p></div></article>
+      <article><b>4</b><div><h3>Observe a sequência correta</h3><p>Primeiro ocorre a transformação no material. Somente depois a mesma transformação é registrada na conta armada.</p></div></article>
+      <article><b>5</b><div><h3>Volte ao contexto</h3><p>Ao concluir, peça ao estudante que explique o resultado usando a situação prática escolhida.</p></div></article>
+    </div>
+  </dialog>
+
+  <dialog id="placeDialog" class="app-dialog small-dialog">
+    <button class="dialog-close" data-action="closeDialog" aria-label="Fechar">×</button>
+    <h2>Como ler a conta armada</h2>
+    <p><strong>C</strong> representa centenas, <strong>D</strong> representa dezenas e <strong>U</strong> representa unidades. Quando há troca, o valor anterior é riscado e o novo valor é escrito acima, sem alterar o valor total do número.</p>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
