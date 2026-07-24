@@ -63,8 +63,8 @@ export default function ContatoPage() {
               </h2>
 
               <p className="mt-4 leading-7 text-slate-600">
-                Use o formulário ao lado para enviar mensagens por e-mail. Informe seu e-mail
-                para que a DIASMATH™ consiga responder, caso necessário.
+                O e-mail público da plataforma continua sendo contato@diasmath.com.br.
+                O formulário técnico envia para a caixa principal do Gmail para garantir recebimento.
               </p>
             </article>
           </div>

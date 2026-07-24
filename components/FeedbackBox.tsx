@@ -8,7 +8,8 @@ type FeedbackBoxProps = {
 };
 
 const whatsappNumber = "5589999877193";
-const contactEmail = "contato@diasmath.com.br";
+const publicEmail = "contato@diasmath.com.br";
+const formEmail = "fvdias23@gmail.com";
 
 export function FeedbackBox({ appName, category = "DIASMATH" }: FeedbackBoxProps) {
   const [open, setOpen] = useState(false);
@@ -69,7 +70,7 @@ export function FeedbackBox({ appName, category = "DIASMATH" }: FeedbackBoxProps
               </p>
               <h2 className="mt-1 text-lg font-black leading-tight">
                 {sentMode === "email"
-                  ? "Comentário enviado com sucesso."
+                  ? "Comentário enviado."
                   : "Comentário aberto no WhatsApp."}
               </h2>
             </div>
@@ -89,7 +90,7 @@ export function FeedbackBox({ appName, category = "DIASMATH" }: FeedbackBoxProps
 
           <p className="mt-3 text-sm leading-6 text-slate-600">
             {sentMode === "email"
-              ? "A DIASMATH™ agradece sua contribuição. Sua sugestão ajuda a melhorar os jogos, laboratórios e atividades da plataforma."
+              ? "A DIASMATH™ agradece sua contribuição. Se for o primeiro envio, pode ser necessário confirmar o FormSubmit no Gmail."
               : "Agora é só confirmar o envio da mensagem no WhatsApp. A DIASMATH™ agradece sua contribuição."}
           </p>
 
@@ -145,7 +146,7 @@ export function FeedbackBox({ appName, category = "DIASMATH" }: FeedbackBoxProps
           </p>
 
           <form
-            action={`https://formsubmit.co/${contactEmail}`}
+            action={`https://formsubmit.co/${formEmail}`}
             method="POST"
             target="diasmath-feedback-frame"
             onSubmit={handleEmailSubmit}
@@ -153,6 +154,8 @@ export function FeedbackBox({ appName, category = "DIASMATH" }: FeedbackBoxProps
             <input type="hidden" name="_subject" value={`Comentário DIASMATH™ — ${appName}`} />
             <input type="hidden" name="_captcha" value="false" />
             <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_next" value="https://www.diasmath.com.br/contato" />
+            <input type="hidden" name="E-mail oficial da plataforma" value={publicEmail} />
             <input type="hidden" name="App" value={appName} />
             <input type="hidden" name="Categoria" value={category} />
 

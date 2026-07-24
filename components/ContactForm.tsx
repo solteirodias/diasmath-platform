@@ -3,7 +3,8 @@
 import { FormEvent, useMemo, useState } from "react";
 
 const whatsappNumber = "5589999877193";
-const contactEmail = "contato@diasmath.com.br";
+const publicEmail = "contato@diasmath.com.br";
+const formEmail = "fvdias23@gmail.com";
 
 export function ContactForm() {
   const [name, setName] = useState("");
@@ -63,13 +64,13 @@ export function ContactForm() {
 
         <h2 className="mt-2 text-3xl font-black text-slate-950">
           {sentMode === "email"
-            ? "Mensagem enviada com sucesso."
+            ? "Mensagem enviada."
             : "Mensagem aberta no WhatsApp."}
         </h2>
 
         <p className="mt-4 leading-7 text-slate-600">
           {sentMode === "email"
-            ? "A DIASMATH™ agradece seu contato. Sua sugestão ajuda a melhorar a plataforma."
+            ? "A DIASMATH™ agradece seu contato. Se for o primeiro envio, pode ser necessário confirmar o FormSubmit no Gmail."
             : "Agora é só confirmar o envio no WhatsApp. A DIASMATH™ agradece seu contato."}
         </p>
 
@@ -99,7 +100,7 @@ export function ContactForm() {
       </p>
 
       <form
-        action={`https://formsubmit.co/${contactEmail}`}
+        action={`https://formsubmit.co/${formEmail}`}
         method="POST"
         target="diasmath-contact-frame"
         onSubmit={handleEmailSubmit}
@@ -108,6 +109,8 @@ export function ContactForm() {
         <input type="hidden" name="_subject" value="Contato pelo site DIASMATH™" />
         <input type="hidden" name="_captcha" value="false" />
         <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_next" value="https://www.diasmath.com.br/contato" />
+        <input type="hidden" name="E-mail oficial da plataforma" value={publicEmail} />
 
         <label className="block">
           <span className="text-xs font-black uppercase text-slate-500">Nome</span>
