@@ -1,32 +1,26 @@
-# Atualização 18 — Confirmação da caixa de comentários
+# Atualização 19 — Formulário de contato com e-mail do remetente
 
-Esta atualização corrige a caixa de comentários da DIASMATH™.
+Esta atualização corrige a página de contato e a caixa de comentários dos apps.
 
-## Problema anterior
+## O que foi corrigido
 
-O botão `Enviar e-mail` usava `mailto:`. Esse tipo de link depende do navegador e do aplicativo de e-mail do visitante. Em muitos computadores ele apenas abre uma aba ou não envia nada.
+1. O botão antigo de e-mail da página Contato foi substituído por um formulário real.
+2. A página Contato agora tem campos:
+   - Nome
+   - Seu e-mail
+   - Tipo de mensagem
+   - Mensagem
+3. A caixa de comentários dos apps agora tem o campo:
+   - Seu e-mail
+4. Após enviar, aparece mensagem de agradecimento.
+5. O WhatsApp continua funcionando como opção principal.
 
-## Correção feita
-
-Agora o botão `Enviar e-mail` usa um formulário direto para:
-
-```text
-contato@diasmath.com.br
-```
-
-Depois de clicar em enviar, aparece uma mensagem de agradecimento:
-
-```text
-Comentário enviado com sucesso.
-A DIASMATH™ agradece sua contribuição.
-```
-
-O botão de WhatsApp continua funcionando e também mostra mensagem de agradecimento.
-
-## Arquivo incluído
+## Arquivos incluídos
 
 ```text
 components/FeedbackBox.tsx
+components/ContactForm.tsx
+app/contato/page.tsx
 ```
 
 ## Como publicar no GitHub
@@ -36,16 +30,17 @@ components/FeedbackBox.tsx
 3. Abra o repositório `diasmath-platform`.
 4. Clique em `Add file`.
 5. Clique em `Upload files`.
-6. Envie a pasta extraída:
+6. Envie as pastas extraídas:
 
 ```text
 components
+app
 ```
 
 7. Em `Commit message`, escreva:
 
 ```text
-Corrige envio e confirmação de comentários
+Corrige formulário de contato e comentários
 ```
 
 8. Clique em `Commit changes`.
@@ -53,32 +48,19 @@ Corrige envio e confirmação de comentários
 
 ## Testar depois
 
-Abra um app, por exemplo:
-
 ```text
+https://www.diasmath.com.br/contato
 https://www.diasmath.com.br/play/guardioes-divisao
 ```
 
-Clique em:
+## Atenção importante
 
-```text
-Comentar este app
-```
-
-Escreva um comentário e clique em:
-
-```text
-Enviar e-mail
-```
-
-Deve aparecer uma caixa agradecendo o comentário.
-
-## Atenção
-
-Na primeira vez, o serviço de formulário pode enviar uma confirmação para o e-mail:
+O formulário usa o serviço FormSubmit para enviar mensagens para:
 
 ```text
 contato@diasmath.com.br
 ```
 
-Se chegar algum e-mail de confirmação, confirme para liberar os próximos envios.
+Na primeira tentativa, pode chegar um e-mail de confirmação do FormSubmit no seu Gmail, encaminhado pelo contato@diasmath.com.br.
+
+Você precisa abrir esse e-mail e clicar em confirmar. Depois disso, os envios passam a chegar normalmente.

@@ -13,22 +13,25 @@ const contactEmail = "contato@diasmath.com.br";
 export function FeedbackBox({ appName, category = "DIASMATH" }: FeedbackBoxProps) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
+  const [senderEmail, setSenderEmail] = useState("");
   const [comment, setComment] = useState("");
   const [sentMode, setSentMode] = useState<"email" | "whatsapp" | null>(null);
 
   const cleanName = name.trim() || "Visitante";
+  const cleanEmail = senderEmail.trim();
   const cleanComment = comment.trim();
 
   const message = useMemo(
     () =>
-      `Olá, DIASMATH! Tenho uma sugestão/comentário.\n\nApp: ${appName}\nCategoria: ${category}\nNome: ${cleanName}\nComentário: ${cleanComment}`,
-    [appName, category, cleanName, cleanComment]
+      `Olá, DIASMATH! Tenho uma sugestão/comentário.\n\nApp: ${appName}\nCategoria: ${category}\nNome: ${cleanName}\nE-mail: ${cleanEmail || "Não informado"}\nComentário: ${cleanComment}`,
+    [appName, category, cleanName, cleanEmail, cleanComment]
   );
 
   const whatsappHref = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
   function resetBox() {
     setName("");
+    setSenderEmail("");
     setComment("");
   }
 
@@ -160,6 +163,18 @@ export function FeedbackBox({ appName, category = "DIASMATH" }: FeedbackBoxProps
                 value={name}
                 onChange={(event) => setName(event.target.value)}
                 placeholder="Digite seu nome"
+                className="mt-1 w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
+              />
+            </label>
+
+            <label className="mt-3 block">
+              <span className="text-xs font-black uppercase text-slate-500">Seu e-mail</span>
+              <input
+                name="email"
+                type="email"
+                value={senderEmail}
+                onChange={(event) => setSenderEmail(event.target.value)}
+                placeholder="seuemail@exemplo.com"
                 className="mt-1 w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-600 focus:ring-4 focus:ring-blue-100"
               />
             </label>
