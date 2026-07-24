@@ -8,6 +8,7 @@ const links = [
   { href: "/aluno", label: "Aluno" },
   { href: "/escolas", label: "Escolas" },
   { href: "/planos", label: "Planos" },
+  { href: "/contato", label: "Contato" },
 ];
 
 export function Header() {
@@ -40,12 +41,12 @@ export function Header() {
           ))}
         </nav>
 
-        <Link
-          href="/login"
+        <a
+          href="mailto:contato@diasmath.com.br"
           className="rounded-full bg-blue-600 px-5 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700"
         >
-          Entrar
-        </Link>
+          Entrar em contato
+        </a>
       </div>
     </header>
   );
