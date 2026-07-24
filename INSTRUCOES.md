@@ -1,36 +1,32 @@
-# Atualização 17 — Comentários + WhatsApp DIASMATH™
+# Atualização 18 — Confirmação da caixa de comentários
 
-Esta atualização adiciona o WhatsApp oficial e uma caixa flutuante de comentários nos jogos e laboratórios.
+Esta atualização corrige a caixa de comentários da DIASMATH™.
+
+## Problema anterior
+
+O botão `Enviar e-mail` usava `mailto:`. Esse tipo de link depende do navegador e do aplicativo de e-mail do visitante. Em muitos computadores ele apenas abre uma aba ou não envia nada.
+
+## Correção feita
+
+Agora o botão `Enviar e-mail` usa um formulário direto para:
 
 ```text
-WhatsApp oficial: (89) 99987-7193
-Número internacional: 5589999877193
-E-mail oficial: contato@diasmath.com.br
+contato@diasmath.com.br
 ```
 
-## Arquivos principais
+Depois de clicar em enviar, aparece uma mensagem de agradecimento:
+
+```text
+Comentário enviado com sucesso.
+A DIASMATH™ agradece sua contribuição.
+```
+
+O botão de WhatsApp continua funcionando e também mostra mensagem de agradecimento.
+
+## Arquivo incluído
 
 ```text
 components/FeedbackBox.tsx
-components/Header.tsx
-components/Footer.tsx
-app/contato/page.tsx
-app/labs/page.tsx
-app/play/page.tsx
-```
-
-## Rotas com caixa de comentário
-
-```text
-/labs/subtracao
-/labs/divisao
-/labs/geotessela
-/labs/prancha-trigonometrica
-/labs/xadrez
-/labs/integraz
-/play/guardioes-multiplicacao
-/play/guardioes-divisao
-/play/arena-revisao
 ```
 
 ## Como publicar no GitHub
@@ -40,17 +36,16 @@ app/play/page.tsx
 3. Abra o repositório `diasmath-platform`.
 4. Clique em `Add file`.
 5. Clique em `Upload files`.
-6. Envie as pastas extraídas:
+6. Envie a pasta extraída:
 
 ```text
 components
-app
 ```
 
 7. Em `Commit message`, escreva:
 
 ```text
-Adiciona comentários e WhatsApp
+Corrige envio e confirmação de comentários
 ```
 
 8. Clique em `Commit changes`.
@@ -58,14 +53,32 @@ Adiciona comentários e WhatsApp
 
 ## Testar depois
 
+Abra um app, por exemplo:
+
 ```text
-https://www.diasmath.com.br/contato
-https://www.diasmath.com.br/labs/subtracao
-https://www.diasmath.com.br/play/arena-revisao
+https://www.diasmath.com.br/play/guardioes-divisao
 ```
 
-Ao clicar em `Comentar este app`, o visitante poderá escrever um comentário e enviar pelo WhatsApp ou por e-mail.
+Clique em:
 
-## Observação
+```text
+Comentar este app
+```
 
-Nesta versão, os comentários não ficam salvos no site. Eles são enviados diretamente para você por WhatsApp ou e-mail.
+Escreva um comentário e clique em:
+
+```text
+Enviar e-mail
+```
+
+Deve aparecer uma caixa agradecendo o comentário.
+
+## Atenção
+
+Na primeira vez, o serviço de formulário pode enviar uma confirmação para o e-mail:
+
+```text
+contato@diasmath.com.br
+```
+
+Se chegar algum e-mail de confirmação, confirme para liberar os próximos envios.
