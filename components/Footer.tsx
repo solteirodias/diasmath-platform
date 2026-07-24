@@ -6,21 +6,12 @@ export function Footer() {
       <div className="mx-auto grid max-w-7xl gap-8 px-6 py-10 text-sm text-slate-600 md:grid-cols-[1.4fr_1fr_1fr]">
         <div>
           <p className="text-lg font-black text-slate-950">DIASMATH™</p>
-
           <p className="mt-3 max-w-xl leading-7">
-            Jogos, laboratórios digitais e atividades pedagógicas para transformar
-            a aprendizagem da Matemática com tecnologia, criatividade e dados.
+            Jogos, laboratórios digitais e atividades pedagógicas para transformar a aprendizagem da Matemática com tecnologia, criatividade e dados.
           </p>
-
-          <p className="mt-5 font-semibold text-slate-900">
-            © 2026 Francisco Vieira Dias — DIASMATH™. Todos os direitos reservados.
-          </p>
-
-          <p className="mt-2 text-xs text-slate-500">
-            DIASMATH™ é marca em processo de registro junto ao INPI.
-          </p>
+          <p className="mt-5 font-semibold text-slate-900">© 2026 Francisco Vieira Dias — DIASMATH™. Todos os direitos reservados.</p>
+          <p className="mt-2 text-xs text-slate-500">DIASMATH™ é marca em processo de registro junto ao INPI.</p>
         </div>
-
         <div>
           <p className="font-black text-slate-950">Navegação</p>
           <div className="mt-3 grid gap-2">
@@ -30,19 +21,11 @@ export function Footer() {
             <Link href="/contato" className="hover:text-blue-700">Contato</Link>
           </div>
         </div>
-
         <div>
           <p className="font-black text-slate-950">Contato</p>
-          <p className="mt-3 leading-7">
-            Para dúvidas, sugestões, parcerias ou suporte:
-          </p>
-
-          <a
-            href="mailto:contato@diasmath.com.br"
-            className="mt-3 inline-flex font-black text-blue-700 hover:text-blue-900"
-          >
-            contato@diasmath.com.br
-          </a>
+          <p className="mt-3 leading-7">Envie sugestões, necessidades pedagógicas, dúvidas ou parcerias.</p>
+          <a href="mailto:contato@diasmath.com.br" className="mt-3 block font-black text-blue-700 hover:text-blue-900">contato@diasmath.com.br</a>
+          <a href="https://wa.me/5589999877193?text=Ol%C3%A1%2C%20DIASMATH%21%20Tenho%20uma%20sugest%C3%A3o." target="_blank" rel="noopener noreferrer" className="mt-2 block font-black text-green-700 hover:text-green-900">WhatsApp (89) 99987-7193</a>
         </div>
       </div>
     </footer>
