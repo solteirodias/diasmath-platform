@@ -31,37 +31,25 @@ export async function POST(request: Request) {
 
     if (!apiKey) {
       return Response.json(
-        {
-          ok: false,
-          error:
-            "RESEND_API_KEY não configurada na Vercel. Configure em Settings → Environment Variables.",
-        },
+        { ok: false, error: "RESEND_API_KEY não configurada na Vercel. Configure em Settings → Environment Variables e faça Redeploy." },
         { status: 500 }
       );
     }
 
     const payload = (await request.json()) as FeedbackPayload;
-
-    const source = clean(payload.source, "app");
-    const appName = clean(payload.appName, "Contato DIASMATH");
-    const category = clean(payload.category, source === "contact" ? "Contato" : "App");
+    const source = clean(payload.source, "contact");
+    const appName = clean(payload.appName, "Página de contato");
+    const category = clean(payload.category, "Contato");
     const name = clean(payload.name, "Visitante");
     const senderEmail = clean(payload.senderEmail, "Não informado");
-    const topic = clean(payload.topic, "Comentário");
+    const topic = clean(payload.topic, "Mensagem");
     const message = clean(payload.message);
 
     if (!message) {
-      return Response.json(
-        { ok: false, error: "A mensagem não pode ficar vazia." },
-        { status: 400 }
-      );
+      return Response.json({ ok: false, error: "A mensagem não pode ficar vazia." }, { status: 400 });
     }
 
-    const subject =
-      source === "contact"
-        ? `Contato DIASMATH™ — ${topic}`
-        : `Comentário DIASMATH™ — ${appName}`;
-
+    const subject = source === "contact" ? `Contato DIASMATH™ — ${topic}` : `Comentário DIASMATH™ — ${appName}`;
     const text = [
       "Novo contato/comentário recebido pelo site DIASMATH™",
       "",
@@ -74,7 +62,8 @@ export async function POST(request: Request) {
       "",
       "Mensagem:",
       message,
-    ].join("\n");
+    ].join("
+");
 
     const html = `
       <div style="font-family:Arial,sans-serif;line-height:1.6;color:#0f172a">
@@ -91,52 +80,23 @@ export async function POST(request: Request) {
         </table>
         <h3 style="margin:18px 0 8px">Mensagem</h3>
         <div style="white-space:pre-wrap;border:1px solid #e2e8f0;border-radius:12px;padding:14px;background:#f8fafc">${escapeHtml(message)}</div>
-      </div>
-    `;
+      </div>`;
 
-    const body: Record<string, unknown> = {
-      from,
-      to,
-      subject,
-      html,
-      text,
-    };
-
-    if (senderEmail !== "Não informado") {
-      body.reply_to = senderEmail;
-    }
+    const body: Record<string, unknown> = { from, to, subject, html, text };
+    if (senderEmail !== "Não informado") body.reply_to = senderEmail;
 
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
 
     const result = await response.json().catch(() => null);
-
     if (!response.ok) {
-      return Response.json(
-        {
-          ok: false,
-          error: "A API de e-mail recusou o envio.",
-          details: result,
-        },
-        { status: 500 }
-      );
+      return Response.json({ ok: false, error: "A API de e-mail recusou o envio.", details: result }, { status: 500 });
     }
-
     return Response.json({ ok: true, result });
   } catch (error) {
-    return Response.json(
-      {
-        ok: false,
-        error: "Erro inesperado ao enviar mensagem.",
-        details: error instanceof Error ? error.message : String(error),
-      },
-      { status: 500 }
-    );
+    return Response.json({ ok: false, error: "Erro inesperado ao enviar mensagem.", details: error instanceof Error ? error.message : String(error) }, { status: 500 });
   }
 }
