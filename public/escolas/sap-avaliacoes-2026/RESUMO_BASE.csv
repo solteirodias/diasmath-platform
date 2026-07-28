@@ -1,0 +1,79 @@
+﻿Tipo;Aplicação;Série;Disciplina;Escolas;Participações;Média;Percentual
+Avaliação Diagnóstica;0;9º Ano;Língua Portuguesa;3;31;3,08;30,6
+Avaliação Diagnóstica;0;9º Ano;Matemática;3;31;2,83;27,9
+Avaliação Diagnóstica;0;1ª Série;Língua Portuguesa;21;875;4,92;49,2
+Avaliação Diagnóstica;0;1ª Série;Matemática;21;875;3,76;37,5
+Avaliação Diagnóstica;0;1ª Série;Ciências da Natureza;21;854;3,94;39,5
+Avaliação Diagnóstica;0;1ª Série;Ciências Humanas;21;854;3,54;35,5
+Avaliação Diagnóstica;0;2ª Série;Língua Portuguesa;21;942;5,32;53,3
+Avaliação Diagnóstica;0;2ª Série;Matemática;21;942;4,26;42,5
+Avaliação Diagnóstica;0;2ª Série;Ciências da Natureza;21;926;3,98;39,8
+Avaliação Diagnóstica;0;2ª Série;Ciências Humanas;21;926;4,55;45,5
+Avaliação Diagnóstica;0;3ª Série;Língua Portuguesa;21;835;5,47;54,7
+Avaliação Diagnóstica;0;3ª Série;Matemática;21;835;3,77;37,8
+Avaliação Diagnóstica;0;3ª Série;Ciências da Natureza;21;805;4,2;42,0
+Avaliação Diagnóstica;0;3ª Série;Ciências Humanas;21;805;3,77;37,6
+Minitestes;1;9º Ano;Língua Portuguesa;3;32;7,16;71,4
+Minitestes;1;9º Ano;Matemática;3;31;6,9;69,1
+Minitestes;1;1ª Série;Língua Portuguesa;20;806;5,42;54,2
+Minitestes;1;1ª Série;Matemática;19;826;3,46;34,6
+Minitestes;1;2ª Série;Língua Portuguesa;20;912;6,46;64,4
+Minitestes;1;2ª Série;Matemática;20;932;5,64;56,4
+Minitestes;1;3ª Série;Língua Portuguesa;21;860;7,09;70,9
+Minitestes;1;3ª Série;Matemática;21;852;5,99;59,8
+Minitestes;2;9º Ano;Língua Portuguesa;3;31;7,46;74,5
+Minitestes;2;9º Ano;Matemática;3;29;6,77;67,5
+Minitestes;2;1ª Série;Língua Portuguesa;21;865;6,04;60,4
+Minitestes;2;1ª Série;Matemática;21;855;5,65;56,6
+Minitestes;2;2ª Série;Língua Portuguesa;21;952;6,74;67,4
+Minitestes;2;2ª Série;Matemática;21;929;5,63;56,3
+Minitestes;2;3ª Série;Língua Portuguesa;21;841;6,74;67,4
+Minitestes;2;3ª Série;Matemática;21;850;7,11;71,0
+Minitestes;3;9º Ano;Língua Portuguesa;3;29;7,38;73,9
+Minitestes;3;9º Ano;Matemática;3;29;7,06;70,7
+Minitestes;3;1ª Série;Língua Portuguesa;21;892;4,94;49,4
+Minitestes;3;1ª Série;Matemática;21;879;4,56;45,5
+Minitestes;3;2ª Série;Língua Portuguesa;21;952;6,72;67,3
+Minitestes;3;2ª Série;Matemática;21;959;4,95;49,6
+Minitestes;3;3ª Série;Língua Portuguesa;21;854;6,51;65,1
+Minitestes;3;3ª Série;Matemática;21;864;5,75;57,4
+Minitestes;4;9º Ano;Língua Portuguesa;3;30;7,46;74,7
+Minitestes;4;9º Ano;Matemática;3;29;6,93;69,0
+Minitestes;4;1ª Série;Língua Portuguesa;21;849;5,71;57,1
+Minitestes;4;1ª Série;Matemática;21;844;5,07;50,6
+Minitestes;4;2ª Série;Língua Portuguesa;21;934;6,68;66,8
+Minitestes;4;2ª Série;Matemática;21;927;5,57;55,8
+Minitestes;4;3ª Série;Língua Portuguesa;21;837;5,92;59,3
+Minitestes;4;3ª Série;Matemática;21;821;5,5;55,1
+Simula+;1;9º Ano;Língua Portuguesa;2;20;6,18;61,7
+Simula+;1;9º Ano;Matemática;2;20;6,05;60,6
+Simula+;1;1ª Série;Língua Portuguesa;19;796;5,48;54,7
+Simula+;1;1ª Série;Matemática;19;796;3,74;37,3
+Simula+;1;1ª Série;Ciências da Natureza;21;848;2,74;27,3
+Simula+;1;1ª Série;Ciências Humanas;21;848;3,5;35,1
+Simula+;1;2ª Série;Língua Portuguesa;21;902;5,43;54,3
+Simula+;1;2ª Série;Matemática;21;902;3,64;36,4
+Simula+;1;2ª Série;Ciências da Natureza;21;896;3,48;34,7
+Simula+;1;2ª Série;Ciências Humanas;21;896;4,14;41,3
+Simula+;1;3ª Série;Língua Portuguesa;21;810;4,74;47,3
+Simula+;1;3ª Série;Matemática;21;810;3,56;35,6
+Simula+;1;3ª Série;Ciências da Natureza;21;824;3,8;38,1
+Simula+;1;3ª Série;Ciências Humanas;21;824;4,75;47,5
+Simula+;2;9º Ano;Língua Portuguesa;3;29;5,09;50,5
+Simula+;2;9º Ano;Matemática;3;29;4,27;42,7
+Simula+;2;1ª Série;Língua Portuguesa;20;861;5,17;51,7
+Simula+;2;1ª Série;Matemática;20;861;4,17;41,6
+Simula+;2;1ª Série;Ciências da Natureza;20;849;3,18;31,8
+Simula+;2;1ª Série;Ciências Humanas;20;849;3,67;36,7
+Simula+;2;2ª Série;Língua Portuguesa;16;850;5,62;56,2
+Simula+;2;2ª Série;Matemática;16;850;3,9;39,1
+Simula+;2;2ª Série;Ciências da Natureza;20;920;4,69;46,8
+Simula+;2;2ª Série;Ciências Humanas;20;920;3,69;36,9
+Simula+;2;3ª Série;Língua Portuguesa;18;787;5,64;56,3
+Simula+;2;3ª Série;Matemática;18;787;3,87;38,8
+Simula+;2;3ª Série;Ciências da Natureza;19;810;3,6;36,1
+Simula+;2;3ª Série;Ciências Humanas;19;810;3,97;39,8
+Simula+;3;2ª Série;Língua Portuguesa;16;875;5,7;57,1
+Simula+;3;2ª Série;Matemática;16;875;5,17;41,8
+Simula+;3;3ª Série;Língua Portuguesa;19;823;4,79;47,9
+Simula+;3;3ª Série;Matemática;19;823;3,87;38,6

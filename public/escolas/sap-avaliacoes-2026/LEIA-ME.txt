@@ -1,0 +1,37 @@
+SAP — Avaliações 2026 — Versão 4
+
+Novidades:
+- título principal simplificado para “Avaliações 2026”;
+- Mapa de dependências ampliado com as ocorrências da habilidade em outras avaliações e minitestes;
+- comparação do desempenho da escola com a média da 8ª GRE em cada ocorrência;
+- identificação de dificuldades recorrentes;
+- sequência de intervenção atualizada.
+
+Abra index.html após extrair toda a pasta.
+ATUALIZAÇÃO — VERSÃO 5
+- O cabeçalho e a página principal não exibem identificação da 8ª GRE.
+- As referências comparativas aparecem como “média geral”.
+- O Mapa de dependências foi reorganizado em três etapas:
+  1. habilidades anteriores já trabalhadas e conhecimentos prévios;
+  2. habilidade em foco;
+  3. desdobramentos posteriores.
+- As habilidades anteriores e posteriores são retiradas das avaliações reais da base,
+  considerando a mesma série, a mesma disciplina e a trajetória das aplicações.
+- Cada cartão mostra a aplicação em que a habilidade apareceu e o percentual disponível.
+
+ATUALIZAÇÃO — VERSÃO 6
+- A coluna esquerda do Mapa de dependências passou a se chamar “Habilidades prévias”.
+- As habilidades prévias são habilidades de sustentação necessárias para destravar a habilidade em foco.
+- A seleção não depende de a habilidade ter aparecido antes em outra aplicação.
+- A própria habilidade em foco é excluída por código, código equivalente e descrição, evitando repetições.
+- O quadro “Onde esta habilidade já foi trabalhada” foi retirado do Mapa de dependências.
+- A observação sobre credenciais e servidor seguro foi removida da tela de login.
+
+ATUALIZAÇÃO — VERSÃO 7
+- Foram retirados da tela de análise das questões:
+  • Comentário pedagógico do caderno;
+  • Resolução comentada;
+  • Análise dos distratores.
+- A imagem original da questão foi mantida.
+- Permanecem os percentuais, a habilidade, os conhecimentos prévios e a sugestão para devolutiva.
+- Foi retirado da Visão Geral o aviso “Dados individuais”.
