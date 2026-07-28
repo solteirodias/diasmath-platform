@@ -184,5 +184,6 @@ function renderAll(){$('statusline').textContent=currentLabel()+` • ${selected
 function exportCSV(){const rows=schoolRanking(selectedGroups());downloadCSV('sap_escolas.csv',[['Posição','INEP','Escola','Participações','Média','Percentual'],...rows.map((r,i)=>[i+1,r.inep,r.school,r.students,fmt(r.mean,1),fmt(r.pct,1)])])}function exportSkills(){const rows=skillData(selectedGroups());downloadCSV('sap_habilidades.csv',[['Habilidade','Descrição','Itens','Percentual','Nível'],...rows.map(r=>[r.code,r.description,r.items,fmt(r.pct,1),level(r.pct).name])])}function downloadCSV(name,rows){const csv='\ufeff'+rows.map(r=>r.map(x=>'"'+String(x??'').replaceAll('"','""')+'"').join(';')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=name;a.click();URL.revokeObjectURL(a.href)}
 const saved=JSON.parse(store.get('sap8session')||'null');if(saved){session=saved;openApp()}
 </script>
+  <script src="./sap-v8-pedagogica.js"></script>
 </body>
 </html>
