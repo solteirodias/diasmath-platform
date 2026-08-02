@@ -1,1 +1,0 @@
-export function Assessments(){return <h2>Avaliações</h2>}

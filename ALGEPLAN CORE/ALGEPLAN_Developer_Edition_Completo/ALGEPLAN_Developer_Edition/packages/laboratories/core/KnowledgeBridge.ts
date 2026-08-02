@@ -1,1 +1,0 @@
-export class KnowledgeBridge{resolve(skillId:string){return {skillId};}}

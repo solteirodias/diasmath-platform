@@ -1,1 +1,0 @@
-export function Modal({children}:any){return <dialog open>{children}</dialog>}

@@ -1,1 +1,0 @@
-export enum Lifecycle{Created='created',Started='started',Stopped='stopped'}

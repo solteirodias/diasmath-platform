@@ -1,1 +1,0 @@
-export class CommandBus{handlers=new Map();register(n:string,h:any){this.handlers.set(n,h)}execute(n:string,p:any){return this.handlers.get(n)?.(p)}}

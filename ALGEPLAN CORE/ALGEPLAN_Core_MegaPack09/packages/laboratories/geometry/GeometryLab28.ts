@@ -1,1 +1,0 @@
-export class GeometryLab28 { start(){return true} stop(){return true} }

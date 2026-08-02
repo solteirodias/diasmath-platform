@@ -1,1 +1,0 @@
-export interface Enrollment{studentId:string;classroomId:string;active:boolean;}

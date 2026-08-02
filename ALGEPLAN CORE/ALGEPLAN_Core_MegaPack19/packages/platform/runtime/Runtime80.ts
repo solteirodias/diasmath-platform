@@ -1,1 +1,0 @@
-export class Runtime80 { initialize(){return true} shutdown(){return true} }

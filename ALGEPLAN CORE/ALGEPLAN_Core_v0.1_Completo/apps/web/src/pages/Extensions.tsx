@@ -1,1 +1,0 @@
-export function Extensions(){return <h2>Extensões</h2>}

@@ -1,1 +1,0 @@
-# ResearchSpec 70

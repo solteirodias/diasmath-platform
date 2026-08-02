@@ -1,1 +1,0 @@
-export class Telemetry21 { execute(input?:unknown){return input ?? true} }

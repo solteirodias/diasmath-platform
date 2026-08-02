@@ -1,1 +1,0 @@
-export class NotificationService{send(msg:string){return {sent:true,message:msg}}}

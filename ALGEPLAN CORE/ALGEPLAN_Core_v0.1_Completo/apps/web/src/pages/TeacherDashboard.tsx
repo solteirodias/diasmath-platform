@@ -1,1 +1,0 @@
-export function TeacherDashboard(){return <h2>Painel do Professor</h2>}

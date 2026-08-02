@@ -1,1 +1,0 @@
-export class GraphSerializer{toJSON(graph:any){return JSON.stringify(graph);}}

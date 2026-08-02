@@ -1,1 +1,0 @@
-export class TutorAgent{answer(q:string){return `Pergunta recebida: ${q}`;}}

@@ -1,1 +1,0 @@
-export function Panel({title,children}:any){return <section><h3>{title}</h3>{children}</section>}

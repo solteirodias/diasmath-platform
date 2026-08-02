@@ -1,1 +1,0 @@
-export function Table(){return <table><tbody></tbody></table>}

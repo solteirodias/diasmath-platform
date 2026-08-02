@@ -1,1 +1,0 @@
-export function Badge({label}:any){return <span>{label}</span>}

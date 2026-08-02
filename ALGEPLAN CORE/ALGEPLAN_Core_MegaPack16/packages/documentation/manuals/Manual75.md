@@ -1,3 +1,0 @@
-# Manual 75
-
-Conteúdo de documentação.

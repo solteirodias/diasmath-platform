@@ -1,1 +1,0 @@
-export interface SkillReport{skillId:string;accuracy:number;attempts:number;}

@@ -1,1 +1,0 @@
-export interface LabRecommendation{labId:string;skillId:string;priority:number;}

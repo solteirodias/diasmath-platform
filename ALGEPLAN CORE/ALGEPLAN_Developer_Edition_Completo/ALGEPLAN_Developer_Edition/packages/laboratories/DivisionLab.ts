@@ -1,1 +1,0 @@
-export const divisionDemo=(a:number,b:number)=>a/b;

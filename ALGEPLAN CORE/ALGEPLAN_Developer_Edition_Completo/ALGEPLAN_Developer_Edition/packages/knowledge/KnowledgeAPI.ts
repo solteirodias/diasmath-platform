@@ -1,1 +1,0 @@
-export class KnowledgeAPI{search(term:string){return [];}}

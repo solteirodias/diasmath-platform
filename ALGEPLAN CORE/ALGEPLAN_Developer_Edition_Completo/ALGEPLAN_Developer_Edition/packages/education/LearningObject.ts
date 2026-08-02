@@ -1,1 +1,0 @@
-export interface LearningObject{id:string;title:string;type:string;skills:string[];}

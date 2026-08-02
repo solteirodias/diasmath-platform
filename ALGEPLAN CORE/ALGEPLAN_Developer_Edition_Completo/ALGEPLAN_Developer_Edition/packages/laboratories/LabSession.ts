@@ -1,1 +1,0 @@
-export interface LabSession{id:string;lab:string;studentId:string;startedAt:string;}

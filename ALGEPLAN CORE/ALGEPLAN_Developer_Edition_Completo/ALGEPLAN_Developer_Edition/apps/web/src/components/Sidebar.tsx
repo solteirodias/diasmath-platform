@@ -1,1 +1,0 @@
-export function Sidebar(){return <nav><ul><li>Laboratórios</li><li>Games</li><li>IA</li><li>Analytics</li></ul></nav>}

@@ -1,1 +1,0 @@
-export function Menu({children}:any){return <ul>{children}</ul>}

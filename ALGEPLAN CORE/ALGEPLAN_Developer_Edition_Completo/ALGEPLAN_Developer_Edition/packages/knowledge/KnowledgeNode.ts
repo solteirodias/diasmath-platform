@@ -1,1 +1,0 @@
-export interface KnowledgeNode{id:string;label:string;relations:string[];}

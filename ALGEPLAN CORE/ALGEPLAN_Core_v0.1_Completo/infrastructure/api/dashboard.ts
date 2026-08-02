@@ -1,1 +1,0 @@
-export const dashboard={teacher:{},student:{},admin:{}};

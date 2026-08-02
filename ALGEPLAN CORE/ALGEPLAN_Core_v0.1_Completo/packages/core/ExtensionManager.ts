@@ -1,1 +1,0 @@
-export class ExtensionManager{extensions=[];register(e){this.extensions.push(e)}}

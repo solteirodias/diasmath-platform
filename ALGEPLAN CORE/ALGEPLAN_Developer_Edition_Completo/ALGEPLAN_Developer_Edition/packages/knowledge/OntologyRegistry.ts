@@ -1,1 +1,0 @@
-export class OntologyRegistry{items:any[]=[];register(o:any){this.items.push(o);}}

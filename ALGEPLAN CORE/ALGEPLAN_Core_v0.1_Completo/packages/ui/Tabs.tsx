@@ -1,1 +1,0 @@
-export function Tabs({children}:any){return <div>{children}</div>}

@@ -1,1 +1,0 @@
-export function Metrics(){return <h2>Métricas</h2>}

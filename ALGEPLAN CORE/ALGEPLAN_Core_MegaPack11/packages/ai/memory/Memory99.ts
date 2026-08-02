@@ -1,1 +1,0 @@
-export class Memory99 { execute(input?:unknown){return input ?? true} }

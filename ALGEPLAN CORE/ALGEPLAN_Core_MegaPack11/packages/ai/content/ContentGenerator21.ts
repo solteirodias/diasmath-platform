@@ -1,1 +1,0 @@
-export class ContentGenerator21 { execute(input?:unknown){return input ?? true} }

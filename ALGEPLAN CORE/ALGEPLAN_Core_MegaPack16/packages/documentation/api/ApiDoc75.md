@@ -1,3 +1,0 @@
-# ApiDoc 75
-
-Conteúdo de documentação.

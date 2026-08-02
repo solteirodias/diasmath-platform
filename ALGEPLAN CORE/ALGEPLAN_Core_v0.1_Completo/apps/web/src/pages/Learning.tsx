@@ -1,1 +1,0 @@
-export function Learning(){return <h2>Aprendizagem Adaptativa</h2>}

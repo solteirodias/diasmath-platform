@@ -1,1 +1,0 @@
-export function MetricCard({title,value}:any){return <article><h4>{title}</h4><strong>{value}</strong></article>}

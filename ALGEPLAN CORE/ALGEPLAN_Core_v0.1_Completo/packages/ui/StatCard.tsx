@@ -1,1 +1,0 @@
-export function StatCard({title,value}:any){return <div><strong>{title}</strong><p>{value}</p></div>}

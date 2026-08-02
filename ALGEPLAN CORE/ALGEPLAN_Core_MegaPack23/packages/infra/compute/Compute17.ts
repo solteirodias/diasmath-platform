@@ -1,1 +1,0 @@
-export class Compute17{ start(){return true} stop(){return true} }

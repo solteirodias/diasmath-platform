@@ -1,1 +1,0 @@
-export function App(){return <div><h1>ALGEPLAN</h1><p>Developer Edition - Parte 03</p></div>}

@@ -1,1 +1,0 @@
-export class EventLogger{events:any[]=[];log(e:any){this.events.push(e);}}

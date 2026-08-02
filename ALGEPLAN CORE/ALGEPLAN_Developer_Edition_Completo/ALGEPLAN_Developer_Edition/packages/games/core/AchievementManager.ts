@@ -1,1 +1,0 @@
-export class AchievementManager{items:any[]=[];unlock(a:any){this.items.push(a);}}

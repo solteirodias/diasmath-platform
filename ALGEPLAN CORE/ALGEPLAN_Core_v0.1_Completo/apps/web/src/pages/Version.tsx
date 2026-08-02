@@ -1,1 +1,0 @@
-export function VersionPage(){return <h2>Versão 0.1.0</h2>}

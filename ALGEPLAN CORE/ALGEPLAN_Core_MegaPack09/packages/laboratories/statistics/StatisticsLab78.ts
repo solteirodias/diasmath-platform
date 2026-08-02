@@ -1,1 +1,0 @@
-export class StatisticsLab78 { start(){return true} stop(){return true} }

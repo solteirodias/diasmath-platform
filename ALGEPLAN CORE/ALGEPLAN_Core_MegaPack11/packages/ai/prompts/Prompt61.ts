@@ -1,1 +1,0 @@
-export class Prompt61 { execute(input?:unknown){return input ?? true} }

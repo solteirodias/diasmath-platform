@@ -1,1 +1,0 @@
-export class AuditLog{entries=[];record(e){this.entries.push({...e,date:new Date().toISOString()})}}

@@ -1,1 +1,0 @@
-export class Inventory{items:any[]=[];add(i:any){this.items.push(i);}}

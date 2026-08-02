@@ -1,1 +1,0 @@
-export class Template97 { install(){return true} uninstall(){return true} }

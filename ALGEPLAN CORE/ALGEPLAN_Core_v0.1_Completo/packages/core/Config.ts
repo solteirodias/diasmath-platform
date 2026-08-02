@@ -1,1 +1,0 @@
-export const Config={appName:'ALGEPLAN',version:'0.1.0'};

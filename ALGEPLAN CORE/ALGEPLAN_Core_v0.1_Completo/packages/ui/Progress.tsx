@@ -1,1 +1,0 @@
-export function Progress({value}:any){return <progress value={value} max='100'/>}

@@ -1,1 +1,0 @@
-export class Workspace{constructor(public id='default'){} }

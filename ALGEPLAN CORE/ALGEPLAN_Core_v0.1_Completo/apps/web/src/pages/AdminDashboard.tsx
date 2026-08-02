@@ -1,1 +1,0 @@
-export function AdminDashboard(){return <h2>Painel do Gestor</h2>}

@@ -1,1 +1,0 @@
-export interface LaboratoryPlugin{id:string;activate():void;}

@@ -1,1 +1,0 @@
-export class QueryBus{handlers=new Map();register(n:string,h:any){this.handlers.set(n,h)}query(n:string,p:any){return this.handlers.get(n)?.(p)}}

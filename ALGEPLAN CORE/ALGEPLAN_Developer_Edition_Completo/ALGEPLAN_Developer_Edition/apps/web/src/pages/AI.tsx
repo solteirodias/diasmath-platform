@@ -1,1 +1,0 @@
-export function AI(){return <h1>Inteligência Artificial</h1>}

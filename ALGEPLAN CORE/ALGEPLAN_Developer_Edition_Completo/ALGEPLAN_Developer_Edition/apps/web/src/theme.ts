@@ -1,1 +1,0 @@
-export const theme={mode:'light',primary:'#2563eb'};

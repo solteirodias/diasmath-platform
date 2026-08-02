@@ -1,1 +1,0 @@
-export interface Question{id:string;statement:string;skillId:string;}

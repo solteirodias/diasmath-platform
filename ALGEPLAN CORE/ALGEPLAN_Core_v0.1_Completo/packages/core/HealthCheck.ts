@@ -1,1 +1,0 @@
-export const healthCheck=()=>({status:'ok',service:'core'});

@@ -1,1 +1,0 @@
-export function Select({children}:any){return <select>{children}</select>}

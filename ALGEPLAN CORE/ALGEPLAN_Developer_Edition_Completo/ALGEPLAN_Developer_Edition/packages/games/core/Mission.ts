@@ -1,1 +1,0 @@
-export interface Mission{id:string;title:string;objective:string;}

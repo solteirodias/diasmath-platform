@@ -1,1 +1,0 @@
-export class Compute50{ start(){return true} stop(){return true} }

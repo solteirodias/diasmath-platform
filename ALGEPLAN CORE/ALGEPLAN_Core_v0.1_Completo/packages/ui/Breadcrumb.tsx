@@ -1,1 +1,0 @@
-export function Breadcrumb(){return <nav>Home / Dashboard</nav>}

@@ -1,1 +1,0 @@
-export class ContentGenerator64 { execute(input?:unknown){return input ?? true} }

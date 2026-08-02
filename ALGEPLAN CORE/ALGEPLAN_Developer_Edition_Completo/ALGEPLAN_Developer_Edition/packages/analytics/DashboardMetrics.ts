@@ -1,1 +1,0 @@
-export const metrics={students:0,teachers:0,schools:0};

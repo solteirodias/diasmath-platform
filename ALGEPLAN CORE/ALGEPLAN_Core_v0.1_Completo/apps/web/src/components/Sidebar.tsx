@@ -1,1 +1,0 @@
-export function Sidebar(){return <aside><ul><li>Dashboard</li><li>Laboratórios</li><li>Jogos</li></ul></aside>}

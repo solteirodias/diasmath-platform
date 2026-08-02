@@ -1,1 +1,0 @@
-export function Page({title,children}:any){return <section><h1>{title}</h1>{children}</section>}

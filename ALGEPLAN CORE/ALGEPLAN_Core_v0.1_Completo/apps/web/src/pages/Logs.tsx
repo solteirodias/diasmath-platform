@@ -1,1 +1,0 @@
-export function Logs(){return <h2>Logs</h2>}

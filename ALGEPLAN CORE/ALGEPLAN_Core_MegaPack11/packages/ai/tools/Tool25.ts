@@ -1,1 +1,0 @@
-export class Tool25 { execute(input?:unknown){return input ?? true} }

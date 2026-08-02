@@ -1,1 +1,0 @@
-type H=(p:any)=>void; export class EventBus{m=new Map<string,H[]>();on(e:string,h:H){this.m.set(e,[...(this.m.get(e)||[]),h])}emit(e:string,p:any){(this.m.get(e)||[]).forEach(f=>f(p))}}

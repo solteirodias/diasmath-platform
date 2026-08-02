@@ -1,1 +1,0 @@
-export interface Relation{source:string;target:string;type:string;}
