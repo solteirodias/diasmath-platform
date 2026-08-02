@@ -1,1 +1,0 @@
-export function App(){return <h1>ALGEPLAN Core v0.1</h1>}
