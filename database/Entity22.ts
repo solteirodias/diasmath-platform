@@ -1,1 +1,0 @@
-export interface Entity22 {id:string}

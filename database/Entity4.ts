@@ -1,1 +1,0 @@
-export interface Entity4 {id:string}

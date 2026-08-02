@@ -1,1 +1,0 @@
-export interface Entity24 {id:string}
