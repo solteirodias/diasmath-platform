@@ -1,1 +1,0 @@
-V14: coleta local de respostas e listagem. Próxima: gráficos e Firebase.

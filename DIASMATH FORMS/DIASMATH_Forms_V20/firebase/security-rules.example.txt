@@ -1,4 +1,0 @@
-// Exemplo conceitual
-// Professores autenticados podem gravar seus próprios formulários.
-// Participantes podem enviar respostas sem editar formulários.
-// Ajuste as regras conforme seu projeto.

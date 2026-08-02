@@ -1,1 +1,0 @@
-Componentes previstos: GridQuestion, UploadQuestion, ThemeSelector.

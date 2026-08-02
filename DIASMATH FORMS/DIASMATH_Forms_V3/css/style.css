@@ -1,9 +1,0 @@
-
-body{font-family:Arial;margin:0;background:#eef3f9}
-header{background:#123f73;color:#fff;padding:14px}
-.container{max-width:1200px;margin:auto;padding:20px}
-.card{background:#fff;padding:18px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.12);margin-bottom:16px}
-.grid{display:grid;grid-template-columns:260px 1fr;gap:18px}
-.menu a{display:block;padding:10px;text-decoration:none;color:#123f73;border-bottom:1px solid #ddd}
-input,textarea,select,button{width:100%;padding:10px;margin:6px 0;box-sizing:border-box}
-button{background:#123f73;color:#fff;border:none;border-radius:6px}

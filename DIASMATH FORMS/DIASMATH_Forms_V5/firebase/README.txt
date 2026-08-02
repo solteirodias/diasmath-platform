@@ -1,1 +1,0 @@
-Adicione aqui a configuração do Firebase Authentication e Firestore.

@@ -1,8 +1,0 @@
-{
-  "titulo":"Avaliação da Formação",
-  "descricao":"Exemplo",
-  "perguntas":[
-    {"tipo":"texto","titulo":"Seu nome"},
-    {"tipo":"multipla","titulo":"Avalie o encontro","opcoes":["Ótimo","Bom","Regular","Ruim"]}
-  ]
-}

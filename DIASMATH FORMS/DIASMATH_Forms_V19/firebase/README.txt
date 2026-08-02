@@ -1,1 +1,0 @@
-Crie um projeto Firebase, habilite Authentication (Email/Senha) e Firestore antes da integração.
