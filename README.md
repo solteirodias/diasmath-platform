@@ -1,3 +1,1 @@
-# ALGEPLAN Core v0.1
-
-Pacote inicial funcional.
+# ALGEPLAN Core Mega Pack 01
