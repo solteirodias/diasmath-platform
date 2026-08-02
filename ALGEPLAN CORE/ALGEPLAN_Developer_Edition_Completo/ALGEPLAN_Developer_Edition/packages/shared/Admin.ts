@@ -1,0 +1,1 @@
+import {User} from './User'; export interface Admin extends User{permissions:string[];}

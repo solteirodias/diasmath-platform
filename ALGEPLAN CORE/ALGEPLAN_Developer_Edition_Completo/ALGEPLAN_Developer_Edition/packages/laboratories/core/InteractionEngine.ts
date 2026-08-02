@@ -1,0 +1,1 @@
+export class InteractionEngine{dispatch(event:any){return event;}}

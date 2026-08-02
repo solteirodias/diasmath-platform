@@ -1,0 +1,1 @@
+export class LaboratoryEngine{load(lab:any){return lab;}}

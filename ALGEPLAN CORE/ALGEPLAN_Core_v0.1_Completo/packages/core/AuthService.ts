@@ -1,0 +1,1 @@
+export class AuthService{login(u:string,p:string){return !!u&&!!p}}

@@ -1,0 +1,1 @@
+export class Scheduler{queue:any[]=[];schedule(task:any){this.queue.push(task)}}

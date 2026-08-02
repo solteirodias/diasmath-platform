@@ -1,0 +1,1 @@
+export class Importer32 { install(){return true} uninstall(){return true} }

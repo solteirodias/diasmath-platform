@@ -1,0 +1,1 @@
+export class AdaptiveEngine{recommend(profile:any){return [];}}

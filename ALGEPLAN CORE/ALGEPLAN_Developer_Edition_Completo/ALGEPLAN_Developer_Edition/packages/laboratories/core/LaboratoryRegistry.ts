@@ -1,0 +1,1 @@
+export class LaboratoryRegistry{plugins:any[]=[];register(p:any){this.plugins.push(p);}}

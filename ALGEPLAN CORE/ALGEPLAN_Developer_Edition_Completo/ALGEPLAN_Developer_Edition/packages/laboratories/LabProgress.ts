@@ -1,0 +1,1 @@
+export interface LabProgress{sessionId:string;completed:number;}

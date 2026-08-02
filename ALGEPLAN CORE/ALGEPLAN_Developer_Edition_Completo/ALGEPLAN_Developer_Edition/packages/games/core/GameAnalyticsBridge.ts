@@ -1,0 +1,1 @@
+export class GameAnalyticsBridge{track(event:any){return event;}}

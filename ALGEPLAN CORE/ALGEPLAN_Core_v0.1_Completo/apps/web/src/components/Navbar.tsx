@@ -1,0 +1,1 @@
+export function Navbar(){return <header>ALGEPLAN</header>}

@@ -1,0 +1,1 @@
+export interface Ontology{id:string;name:string;version:string;}

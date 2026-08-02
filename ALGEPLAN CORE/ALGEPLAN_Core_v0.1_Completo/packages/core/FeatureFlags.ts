@@ -1,0 +1,1 @@
+export class FeatureFlags{flags=new Map<string,boolean>();enable(k:string){this.flags.set(k,true)}isEnabled(k:string){return this.flags.get(k)===true}}

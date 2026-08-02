@@ -1,0 +1,1 @@
+export class GameKnowledgeBridge{resolve(skillId:string){return {skillId};}}

@@ -1,0 +1,1 @@
+export class LicenseManager55{ run(){return true} status(){return 'ok'} }

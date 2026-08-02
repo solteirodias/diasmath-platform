@@ -1,0 +1,1 @@
+export class KnowledgeGraph{nodes:KnowledgeNode[]=[];add(node:any){this.nodes.push(node);}}

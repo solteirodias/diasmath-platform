@@ -1,0 +1,1 @@
+export function Knowledge(){return <h2>Knowledge Graph</h2>}

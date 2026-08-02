@@ -1,0 +1,1 @@
+export interface LearningEvolution{studentId:string;timeline:any[];}

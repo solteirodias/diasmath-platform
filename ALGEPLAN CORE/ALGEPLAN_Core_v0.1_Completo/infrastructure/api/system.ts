@@ -1,0 +1,1 @@
+export const system={version:'0.1.0'};

@@ -1,0 +1,1 @@
+export function Courses(){return <h2>Cursos</h2>}

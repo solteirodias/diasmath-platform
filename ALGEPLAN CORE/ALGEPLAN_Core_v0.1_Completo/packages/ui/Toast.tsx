@@ -1,0 +1,1 @@
+export function Toast({message}:any){return <div>{message}</div>}

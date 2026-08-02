@@ -1,0 +1,1 @@
+export class Assessment69 { start(){return true} stop(){return true} }

@@ -1,0 +1,1 @@
+export class EducationExtension89{ enable(){return true} disable(){return true} }

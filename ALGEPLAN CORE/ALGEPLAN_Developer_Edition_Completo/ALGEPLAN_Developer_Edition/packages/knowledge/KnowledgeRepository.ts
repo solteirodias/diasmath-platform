@@ -1,0 +1,1 @@
+export class KnowledgeRepository{concepts:any[]=[];relations:any[]=[];}

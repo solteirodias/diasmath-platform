@@ -1,0 +1,1 @@
+export function LaboratoryHub(){return <h2>Laboratórios</h2>}

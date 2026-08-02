@@ -1,0 +1,1 @@
+export class KnowledgeQueryService{findConcept(name:string){return null;}}

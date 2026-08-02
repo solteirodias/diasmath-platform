@@ -1,0 +1,1 @@
+export function Laboratories(){return <h1>Laboratórios</h1>}

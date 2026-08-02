@@ -1,0 +1,1 @@
+export function Reports(){return <h2>Relatórios</h2>}

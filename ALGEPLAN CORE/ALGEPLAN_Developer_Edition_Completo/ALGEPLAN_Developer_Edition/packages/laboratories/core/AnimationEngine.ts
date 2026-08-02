@@ -1,0 +1,1 @@
+export class AnimationEngine{play(name:string){return name;}}

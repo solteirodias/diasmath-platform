@@ -1,0 +1,1 @@
+export class ApiClient{async get(url:string){return fetch(url).then(r=>r.json())}}

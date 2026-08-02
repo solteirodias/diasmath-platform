@@ -1,0 +1,1 @@
+export class Profile66{ start(){return true} stop(){return true} }

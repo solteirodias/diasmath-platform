@@ -1,0 +1,1 @@
+export interface PlayerProfile{id:string;nickname:string;xp:number;level:number;}

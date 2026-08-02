@@ -1,0 +1,1 @@
+export function FormField({label,children}:any){return <label>{label}{children}</label>}

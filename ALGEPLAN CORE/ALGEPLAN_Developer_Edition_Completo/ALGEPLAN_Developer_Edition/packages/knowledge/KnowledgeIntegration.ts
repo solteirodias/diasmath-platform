@@ -1,0 +1,1 @@
+export class KnowledgeIntegration{link(skillId:string,nodeId:string){return {skillId,nodeId};}}

@@ -1,0 +1,1 @@
+export class Cache{store=new Map();set(k,v){this.store.set(k,v)}get(k){return this.store.get(k)}}

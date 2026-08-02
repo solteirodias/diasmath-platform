@@ -1,0 +1,1 @@
+export interface LearnerProfile{id:string;masteredSkills:string[];currentLevel:number;}

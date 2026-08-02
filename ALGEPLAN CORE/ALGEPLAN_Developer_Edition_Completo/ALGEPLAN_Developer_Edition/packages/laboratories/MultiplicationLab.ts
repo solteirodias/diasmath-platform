@@ -1,0 +1,1 @@
+export const multiplicationDemo=(a:number,b:number)=>a*b;

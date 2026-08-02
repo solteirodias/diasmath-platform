@@ -1,0 +1,1 @@
+export function Pagination(){return <nav>1 2 3</nav>}

@@ -1,0 +1,1 @@
+export function Skills(){return <h2>Habilidades</h2>}

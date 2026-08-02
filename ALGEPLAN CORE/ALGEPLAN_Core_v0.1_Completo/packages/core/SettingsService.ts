@@ -1,0 +1,1 @@
+export class SettingsService{settings={};load(){return this.settings}}

@@ -1,0 +1,1 @@
+export const middleware=(req:any,res:any,next:any)=>next();

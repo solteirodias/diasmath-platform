@@ -1,0 +1,1 @@
+export type Role='admin'|'teacher'|'student'; export const can=(r:Role,p:string)=>true;

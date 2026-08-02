@@ -1,0 +1,1 @@
+export class TaskQueue{tasks=[];push(t){this.tasks.push(t)}pop(){return this.tasks.shift()}}

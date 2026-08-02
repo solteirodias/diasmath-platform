@@ -1,0 +1,1 @@
+export interface Attempt{studentId:string;assessmentId:string;score:number;}

@@ -1,0 +1,1 @@
+export function additionDemo(a:number,b:number){return a+b;}

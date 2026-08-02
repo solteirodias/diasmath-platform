@@ -1,0 +1,1 @@
+export interface SkillDependency{parent:string;child:string;} export class SkillDependencyGraph{dependencies:SkillDependency[]=[];}

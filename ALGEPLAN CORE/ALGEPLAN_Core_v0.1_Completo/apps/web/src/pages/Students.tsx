@@ -1,0 +1,1 @@
+export function Students(){return <h2>Alunos</h2>}

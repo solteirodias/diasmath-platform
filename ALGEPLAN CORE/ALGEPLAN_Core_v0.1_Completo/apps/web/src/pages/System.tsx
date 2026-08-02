@@ -1,0 +1,1 @@
+export function System(){return <h2>Sistema</h2>}

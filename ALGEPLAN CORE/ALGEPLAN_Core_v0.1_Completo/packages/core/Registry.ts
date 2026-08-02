@@ -1,0 +1,1 @@
+export class Registry{items=new Map();add(k,v){this.items.set(k,v)}get(k){return this.items.get(k)}}

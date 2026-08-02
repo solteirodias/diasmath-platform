@@ -1,0 +1,1 @@
+export interface Recommendation{id:string;type:string;targetId:string;reason:string;}

@@ -1,0 +1,1 @@
+export interface Exercise{id:string;statement:string;skillId:string;}

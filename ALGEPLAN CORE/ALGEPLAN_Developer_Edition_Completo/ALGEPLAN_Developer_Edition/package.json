@@ -1,0 +1,10 @@
+{
+  "name":"algeplan",
+  "version":"0.2.0",
+  "private":true,
+  "workspaces":["apps/*","packages/*"],
+  "scripts":{
+    "dev":"echo Configure Vite na próxima etapa",
+    "build":"echo Build pendente"
+  }
+}

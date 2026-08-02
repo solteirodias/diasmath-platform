@@ -1,0 +1,1 @@
+export class AutoGrader{grade(expected:any,received:any){return expected===received;}}

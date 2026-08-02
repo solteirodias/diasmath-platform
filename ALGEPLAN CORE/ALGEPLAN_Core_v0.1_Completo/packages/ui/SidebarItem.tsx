@@ -1,0 +1,1 @@
+export function SidebarItem({label}:any){return <li>{label}</li>}

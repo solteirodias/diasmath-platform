@@ -1,0 +1,1 @@
+export class SessionManager{sessions=new Map();create(id,u){this.sessions.set(id,u)}get(id){return this.sessions.get(id)}}

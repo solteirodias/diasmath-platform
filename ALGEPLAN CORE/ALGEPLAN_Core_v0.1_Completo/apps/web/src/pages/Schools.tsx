@@ -1,0 +1,1 @@
+export function Schools(){return <h2>Escolas</h2>}

@@ -1,0 +1,1 @@
+export interface Assessment{id:string;title:string;skills:string[];}

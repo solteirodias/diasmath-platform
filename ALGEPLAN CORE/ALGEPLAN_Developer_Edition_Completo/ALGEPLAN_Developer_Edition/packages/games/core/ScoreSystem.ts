@@ -1,0 +1,1 @@
+export class ScoreSystem{score=0;add(v:number){this.score+=v;return this.score;}}

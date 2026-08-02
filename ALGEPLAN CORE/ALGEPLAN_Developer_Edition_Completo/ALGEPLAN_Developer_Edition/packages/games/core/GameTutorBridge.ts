@@ -1,0 +1,1 @@
+export class GameTutorBridge{hint(playerId:string){return 'hint';}}

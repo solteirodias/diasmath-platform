@@ -1,0 +1,1 @@
+export function Login(){return <form><input placeholder='E-mail'/><input type='password'/><button>Entrar</button></form>}

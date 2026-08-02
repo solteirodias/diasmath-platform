@@ -1,0 +1,1 @@
+export function StudentDashboard(){return <h2>Painel do Aluno</h2>}

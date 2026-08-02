@@ -1,0 +1,1 @@
+export const Environment={mode:'development',apiUrl:'http://localhost:3000'};

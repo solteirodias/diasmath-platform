@@ -1,0 +1,1 @@
+export class FunctionLab75 { start(){return true} stop(){return true} }

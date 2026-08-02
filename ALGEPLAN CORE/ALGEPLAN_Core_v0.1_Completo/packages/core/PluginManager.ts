@@ -1,0 +1,1 @@
+export class PluginManager{plugins:any[]=[];use(p:any){this.plugins.push(p)}}

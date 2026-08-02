@@ -1,0 +1,1 @@
+export function MainLayout({children}:any){return <div><header>ALGEPLAN</header><main>{children}</main></div>}

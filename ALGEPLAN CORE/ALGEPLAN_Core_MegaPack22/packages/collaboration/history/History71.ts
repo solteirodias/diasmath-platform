@@ -1,0 +1,1 @@
+export class History71{ start(){return true} stop(){return true} sync(){return true} }

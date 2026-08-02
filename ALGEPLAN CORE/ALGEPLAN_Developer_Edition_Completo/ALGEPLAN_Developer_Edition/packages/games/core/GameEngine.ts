@@ -1,0 +1,1 @@
+export class GameEngine{start(game:any){return game;}}

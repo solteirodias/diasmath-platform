@@ -1,0 +1,1 @@
+export function EmptyState(){return <div>Nenhum registro.</div>}

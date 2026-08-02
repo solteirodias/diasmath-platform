@@ -1,0 +1,1 @@
+export interface Module{name:string;init():void;}

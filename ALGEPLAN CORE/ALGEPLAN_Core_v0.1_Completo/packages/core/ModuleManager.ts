@@ -1,0 +1,1 @@
+export class ModuleManager{mods:any[]=[];register(m:any){this.mods.push(m)}boot(){this.mods.forEach(m=>m.init&&m.init())}}

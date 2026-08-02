@@ -1,0 +1,1 @@
+export class ServiceContainer{services=new Map();register(k:string,v:any){this.services.set(k,v)}resolve(k:string){return this.services.get(k)}}

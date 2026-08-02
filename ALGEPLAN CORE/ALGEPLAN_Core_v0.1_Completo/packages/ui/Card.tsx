@@ -1,0 +1,1 @@
+export function Card({children}:any){return <section>{children}</section>}
