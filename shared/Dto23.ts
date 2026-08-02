@@ -1,1 +1,0 @@
-export interface Dto23 {id:string}
