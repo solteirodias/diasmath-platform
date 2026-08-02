@@ -1,0 +1,1 @@
+Módulos: Auth, Builder, Responses, Dashboard, Reports, Admin.
