@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b4d86">
+  <title>Responder formulário — DIASMATH</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="respond-page">
+  <main class="respond-shell">
+    <div id="publicStatus" class="panel status-panel">
+      <h1>Carregando formulário...</h1>
+    </div>
+
+    <form id="responseForm" class="public-form hidden">
+      <header id="publicHeader" class="public-header">
+        <p class="eyebrow">DIASMATH Forms</p>
+        <h1 id="publicTitle"></h1>
+        <p id="publicDescription"></p>
+      </header>
+
+      <div id="progressWrap" class="progress-wrap hidden">
+        <div id="progressBar" class="progress-bar"></div>
+        <span id="progressLabel"></span>
+      </div>
+
+      <section id="participantFields" class="public-section"></section>
+      <section id="publicSection" class="public-section"></section>
+
+      <div class="public-nav">
+        <button id="prevSectionBtn" type="button" class="btn ghost hidden">Voltar</button>
+        <button id="nextSectionBtn" type="button" class="btn secondary">Próxima seção</button>
+        <button id="submitResponseBtn" type="submit" class="btn primary hidden">Enviar respostas</button>
+      </div>
+    </form>
+
+    <section id="thankYouPanel" class="panel thank-you hidden">
+      <div class="success-icon">✓</div>
+      <h1>Resposta registrada</h1>
+      <p id="thankYouText"></p>
+      <button id="answerAgainBtn" class="btn secondary hidden">Enviar outra resposta</button>
+    </section>
+  </main>
+  <script type="module" src="js/respond.js"></script>
+</body>
+</html>
