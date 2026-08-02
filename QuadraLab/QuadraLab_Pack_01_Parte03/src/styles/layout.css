@@ -1,0 +1,261 @@
+#app {
+  min-height: 100vh;
+}
+
+.home-screen {
+  position: relative;
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  overflow: hidden;
+  padding: 32px;
+}
+
+.home-card {
+  position: relative;
+  z-index: 2;
+  width: min(760px, 100%);
+  padding: clamp(34px, 6vw, 72px);
+  border: 1px solid var(--line-strong);
+  border-radius: 32px;
+  background:
+    linear-gradient(145deg, rgba(17, 42, 68, 0.91), rgba(7, 19, 34, 0.95));
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  backdrop-filter: blur(18px);
+}
+
+.home-card h1 {
+  margin: 12px 0 4px;
+  font-size: clamp(3.2rem, 9vw, 6.3rem);
+  letter-spacing: -0.07em;
+  line-height: 0.95;
+}
+
+.home-card h2 {
+  max-width: 560px;
+  margin: 20px auto 0;
+  color: #c8e8f7;
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  font-weight: 560;
+  line-height: 1.25;
+}
+
+.home-description {
+  max-width: 610px;
+  margin: 24px auto 0;
+  color: var(--text-soft);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+.home-features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 9px;
+  margin-top: 32px;
+}
+
+.home-features span {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
+  color: #b9d2df;
+  font-size: 0.82rem;
+}
+
+.home-orb {
+  position: absolute;
+  width: 430px;
+  height: 430px;
+  border-radius: 50%;
+  filter: blur(72px);
+  opacity: 0.32;
+}
+
+.home-orb--one {
+  top: -160px;
+  left: -100px;
+  background: #0c91cc;
+}
+
+.home-orb--two {
+  right: -180px;
+  bottom: -160px;
+  background: #8240ad;
+}
+
+.app-shell {
+  display: grid;
+  min-height: 100vh;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.app-topbar {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) auto minmax(220px, 1fr);
+  align-items: center;
+  gap: 18px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(5, 14, 25, 0.88);
+  backdrop-filter: blur(18px);
+}
+
+.app-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: 11px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.app-brand__symbol {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid rgba(96, 221, 255, 0.45);
+  border-radius: 13px;
+  background: linear-gradient(145deg, #1dc9ef, #1164b7);
+  box-shadow: 0 8px 24px rgba(13, 142, 202, 0.3);
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.app-brand strong,
+.app-brand small {
+  display: block;
+}
+
+.app-brand small {
+  margin-top: 2px;
+  color: var(--text-soft);
+  font-size: 0.7rem;
+}
+
+.topbar-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #bfe7f8;
+  font-weight: 700;
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 16px var(--green);
+}
+
+.topbar-actions {
+  display: flex;
+  justify-self: end;
+  gap: 8px;
+}
+
+.workspace {
+  display: grid;
+  min-height: 0;
+  grid-template-columns: 280px minmax(420px, 1fr) 240px;
+  gap: 12px;
+  padding: 12px;
+}
+
+.workspace-column {
+  min-width: 0;
+  min-height: 0;
+}
+
+.workspace-column--left,
+.workspace-column--right {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: auto;
+}
+
+.workspace-column--center {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 12px;
+}
+
+.canvas-panel {
+  display: grid;
+  min-height: 560px;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.canvas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 15px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.canvas-header h2 {
+  margin: 2px 0 0;
+  font-size: 1rem;
+}
+
+.canvas-wrap {
+  position: relative;
+  min-height: 0;
+}
+
+.lab-canvas {
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: grab;
+}
+
+.lab-canvas:active {
+  cursor: grabbing;
+}
+
+.status-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 9px 16px;
+  border-top: 1px solid var(--line);
+  background: rgba(5, 14, 25, 0.92);
+  color: var(--text-soft);
+  font-size: 0.76rem;
+}
+
+.status-brand {
+  color: var(--cyan);
+  font-weight: 800;
+}
+
+.status-hints {
+  margin-left: auto;
+}
