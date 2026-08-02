@@ -1,1 +1,0 @@
-export const route10='/api/10';

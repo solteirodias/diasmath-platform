@@ -1,1 +1,0 @@
-export const route7='/api/7';

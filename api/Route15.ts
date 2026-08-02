@@ -1,1 +1,0 @@
-export const route15='/api/15';

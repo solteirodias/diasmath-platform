@@ -1,1 +1,0 @@
-export const route21='/api/21';
