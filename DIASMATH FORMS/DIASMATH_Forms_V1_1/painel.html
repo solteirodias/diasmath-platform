@@ -1,0 +1,6 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="css/style.css"><title>Painel</title></head>
+<body><div class="wrap"><h2>Painel do Professor</h2>
+<p>Bem-vindo, <span id="nome"></span></p>
+<ul><li>Criar questionário</li><li>Meus formulários</li><li>Resultados</li></ul>
+<script>document.getElementById('nome').textContent=JSON.parse(localStorage.getItem('professor')).nome;</script>
+</div></body></html>
