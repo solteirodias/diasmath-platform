@@ -1,0 +1,1 @@
+export const route26='/api/26';

@@ -1,0 +1,1 @@
+export const route18='/api/18';

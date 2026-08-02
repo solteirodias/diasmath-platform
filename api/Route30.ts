@@ -1,0 +1,1 @@
+export const route30='/api/30';

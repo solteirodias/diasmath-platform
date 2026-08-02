@@ -1,0 +1,1 @@
+export interface Dto19 {id:string}

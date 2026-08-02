@@ -1,0 +1,1 @@
+export const route8='/api/8';

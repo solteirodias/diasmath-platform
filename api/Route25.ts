@@ -1,0 +1,1 @@
+export const route25='/api/25';

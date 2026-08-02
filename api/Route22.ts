@@ -1,0 +1,1 @@
+export const route22='/api/22';
