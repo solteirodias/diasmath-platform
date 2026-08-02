@@ -1,0 +1,24 @@
+<!doctype html><html lang='pt-BR'><head>
+<meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<link rel='stylesheet' href='css/style.css'><title>DIASMATH Forms V23</title></head>
+<body>
+<header>DIASMATH Forms V23</header>
+<div class='container grid'>
+<div class='card'>
+<h3>Meus Formulários</h3>
+<div id='list'></div>
+<button onclick='newForm()'>Novo</button>
+<button onclick='duplicate()'>Duplicar Atual</button>
+<button onclick='saveCurrent()'>Salvar</button>
+</div>
+<div class='card'>
+<input id='title' placeholder='Título' oninput='preview()'>
+<textarea id='desc' placeholder='Descrição' oninput='preview()'></textarea>
+<button onclick='addQuestion()'>Adicionar Pergunta</button>
+<hr>
+<h3>Pré-visualização</h3>
+<div id='preview'></div>
+</div>
+</div>
+<script src='js/forms.js'></script>
+</body></html>

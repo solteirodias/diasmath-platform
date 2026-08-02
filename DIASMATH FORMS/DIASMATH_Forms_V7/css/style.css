@@ -1,0 +1,7 @@
+
+body{margin:0;font-family:Arial,sans-serif;background:#eef3f8}
+header{background:#0b4d88;color:#fff;padding:16px;font-size:22px}
+.layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 54px)}
+aside{background:#163d69;color:#fff;padding:20px}
+main{padding:20px}
+.card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.15)}

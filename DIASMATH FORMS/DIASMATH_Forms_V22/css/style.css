@@ -1,0 +1,10 @@
+
+:root{--primary:#0f4c81;--bg:#eef4fb}
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:var(--bg)}
+header{background:var(--primary);color:#fff;padding:16px;font-size:22px}
+.container{max-width:1200px;margin:20px auto;padding:16px}
+.card{background:#fff;padding:18px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.12);margin-bottom:16px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap}
+button{padding:10px 14px;border:0;border-radius:6px;background:var(--primary);color:#fff;cursor:pointer}
+.question{border:1px solid #ddd;padding:12px;border-radius:8px;margin:10px 0}
+input,textarea,select{width:100%;padding:8px;margin:6px 0}

@@ -1,0 +1,1 @@
+Componentes planejados: QuestionCard, OptionList, PreviewPanel, DashboardWidget.

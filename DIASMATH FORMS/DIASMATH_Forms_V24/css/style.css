@@ -1,0 +1,9 @@
+
+body{font-family:Arial;margin:0;background:#eef4fb}
+header{background:#0f4c81;color:#fff;padding:16px}
+.container{max-width:1200px;margin:20px auto;padding:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:#fff;padding:16px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.q{border:1px solid #ddd;padding:10px;border-radius:8px;margin:8px 0}
+input,select,textarea,button{width:100%;padding:8px;margin:5px 0;box-sizing:border-box}
+.row{display:flex;gap:6px}.row button{flex:1}
