@@ -1,0 +1,1 @@
+export interface Entity9 {id:string}

@@ -1,0 +1,1 @@
+export interface Entity21 {id:string}
