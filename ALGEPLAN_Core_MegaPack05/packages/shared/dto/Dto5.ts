@@ -1,0 +1,1 @@
+export interface Dto5 {id:string}

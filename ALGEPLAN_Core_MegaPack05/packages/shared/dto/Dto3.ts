@@ -1,0 +1,1 @@
+export interface Dto3 {id:string}

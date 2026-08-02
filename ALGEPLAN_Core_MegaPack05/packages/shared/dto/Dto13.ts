@@ -1,0 +1,1 @@
+export interface Dto13 {id:string}
