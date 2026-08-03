@@ -1,32 +1,14 @@
-import Link from "next/link";
-
 export function Footer() {
   return (
     <footer className="border-t border-slate-200 bg-white">
-      <div className="mx-auto grid max-w-7xl gap-8 px-6 py-10 text-sm text-slate-600 md:grid-cols-[1.4fr_1fr_1fr]">
-        <div>
-          <p className="text-lg font-black text-slate-950">DIASMATH™</p>
-          <p className="mt-3 max-w-xl leading-7">
-            Jogos, laboratórios digitais e atividades pedagógicas para transformar a aprendizagem da Matemática com tecnologia, criatividade e dados.
-          </p>
-          <p className="mt-5 font-semibold text-slate-900">© 2026 Francisco Vieira Dias — DIASMATH™. Todos os direitos reservados.</p>
-          <p className="mt-2 text-xs text-slate-500">DIASMATH™ é marca em processo de registro junto ao INPI.</p>
-        </div>
-        <div>
-          <p className="font-black text-slate-950">Navegação</p>
-          <div className="mt-3 grid gap-2">
-            <Link href="/play" className="hover:text-blue-700">Jogos</Link>
-            <Link href="/labs" className="hover:text-blue-700">Labs</Link>
-            <Link href="/atividades" className="hover:text-blue-700">Atividades</Link>
-            <Link href="/contato" className="hover:text-blue-700">Contato</Link>
-          </div>
-        </div>
-        <div>
-          <p className="font-black text-slate-950">Contato</p>
-          <p className="mt-3 leading-7">Envie sugestões, necessidades pedagógicas, dúvidas ou parcerias.</p>
-          <a href="mailto:contato@diasmath.com.br" className="mt-3 block font-black text-blue-700 hover:text-blue-900">contato@diasmath.com.br</a>
-          <a href="https://wa.me/5589999877193?text=Ol%C3%A1%2C%20DIASMATH%21%20Tenho%20uma%20sugest%C3%A3o." target="_blank" rel="noopener noreferrer" className="mt-2 block font-black text-green-700 hover:text-green-900">WhatsApp (89) 99987-7193</a>
-        </div>
+      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-8 text-sm text-slate-600 md:flex-row md:items-center md:justify-between">
+        <p>
+          © 2026 Francisco Vieira Dias — DIASMATH™. Todos os direitos reservados.
+        </p>
+
+        <p className="font-semibold text-slate-500">
+          Plataforma educacional com apoio de IA para criação e revisão técnica.
+        </p>
       </div>
     </footer>
   );
