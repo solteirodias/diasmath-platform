@@ -20,17 +20,17 @@ export function Header() {
             ↗
           </div>
 
-          <div className="leading-tight">
+          <div className="leading-none">
             <p className="text-xl font-black tracking-tight text-slate-950">
-              DIAS<span className="text-blue-600">MATH</span><sup className="text-[10px]">™</sup>
+              DIAS<span className="text-blue-600">MATH</span><sup className="ml-0.5 align-super text-xs font-black">™</sup>
             </p>
-            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-slate-500">
-              Aprender • Explorar • Transformar
+            <p className="mt-1 hidden text-[9px] font-bold tracking-[0.14em] text-slate-500 sm:block">
+              APRENDER • EXPLORAR • TRANSFORMAR
             </p>
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-6 text-sm font-bold text-slate-700 lg:flex">
+        <nav className="hidden items-center gap-5 text-sm font-bold text-slate-700 lg:flex">
           {navItems.map((item) => (
             <Link key={item.href} href={item.href} className="transition hover:text-blue-700">
               {item.label}
@@ -39,7 +39,7 @@ export function Header() {
         </nav>
 
         <a
-          href="https://wa.me/5589999877193?text=Ol%C3%A1%2C%20DIASMATH!"
+          href="https://wa.me/5589999877193?text=Ol%C3%A1%2C%20DIASMATH%21%20Tenho%20uma%20sugest%C3%A3o."
           target="_blank"
           rel="noopener noreferrer"
           className="hidden rounded-full bg-blue-600 px-6 py-3 text-sm font-black text-white transition hover:bg-blue-700 sm:inline-flex"
