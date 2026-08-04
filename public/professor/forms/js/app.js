@@ -17,6 +17,17 @@ const OPTION_TYPES = ["single", "multiple", "dropdown"];
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
 
+function encodeFormForPublicLink(form) {
+  const copy = deepClone(form);
+  copy.published = true;
+  const json = JSON.stringify(copy);
+  const bytes = new TextEncoder().encode(json);
+  let binary = "";
+  bytes.forEach(byte => binary += String.fromCharCode(byte));
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+}
+
+
 $("#sidebarUser").textContent = user.name;
 $("#logoutBtn").addEventListener("click", logoutUser);
 $("#quickNewBtn").addEventListener("click", createBlankForm);
@@ -333,17 +344,27 @@ function togglePublish() {
   saveCurrentForm(); populateBuilder();
 }
 function publicLink(formId = currentForm.id) {
-  return new URL(`respond.html?id=${encodeURIComponent(formId)}`, location.href).href;
+  const form = formId === currentForm?.id
+    ? currentForm
+    : myForms().find(item => item.id === formId);
+
+  if (!form) {
+    return new URL(`respond.html?id=${encodeURIComponent(formId)}`, location.href).href;
+  }
+
+  const encoded = encodeFormForPublicLink(form);
+  return new URL(`respond.html?f=${encoded}`, location.href).href;
 }
 async function copyPublicLink() {
   if (!currentForm.published) return toast("Publique o formulário antes de compartilhar.");
   await copyText(publicLink());
-  toast("Link público copiado.");
+  toast("Link público copiado. Ele abrirá em outros navegadores e dispositivos.");
 }
 async function shareForm(formId) {
   const form = myForms().find(item=>item.id===formId);
   if (!form?.published) return toast("Este formulário ainda não foi publicado.");
-  await copyText(publicLink(formId)); toast("Link copiado.");
+  await copyText(publicLink(formId));
+  toast("Link copiado. Ele abrirá em outros navegadores e dispositivos.");
 }
 function duplicateForm(formId) {
   const form = myForms().find(item=>item.id===formId);

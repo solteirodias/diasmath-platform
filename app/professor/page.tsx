@@ -81,16 +81,6 @@ export default function ProfessorPage() {
             </article>
           ))}
         </div>
-
-        <section className="mt-10 rounded-3xl border border-amber-200 bg-amber-50 p-6 text-amber-950">
-          <h2 className="text-xl font-black">Observação importante</h2>
-          <p className="mt-3 leading-7">
-            Esta versão do DIASMATH Forms usa armazenamento local do navegador.
-            Os dados ficam no aparelho usado pelo professor. Para uso institucional
-            com sincronização entre dispositivos, a próxima etapa será integrar com
-            banco de dados, como Supabase ou Firebase.
-          </p>
-        </section>
       </main>
 
       <Footer />

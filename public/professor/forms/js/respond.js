@@ -2,8 +2,32 @@ import { DB } from "./storage.js";
 import { uid, safeText } from "./utils.js";
 
 const params = new URLSearchParams(location.search);
+const hashParams = new URLSearchParams(location.hash.replace(/^#/, ""));
 const formId = params.get("id");
-const form = DB.forms.all().find(item => item.id === formId);
+
+function decodeFormFromPublicLink() {
+  const encoded = params.get("f") || hashParams.get("f");
+  if (!encoded) return null;
+
+  try {
+    const normalized = encoded.replace(/-/g, "+").replace(/_/g, "/");
+    const padding = "=".repeat((4 - normalized.length % 4) % 4);
+    const binary = atob(normalized + padding);
+    const bytes = Uint8Array.from(binary, char => char.charCodeAt(0));
+    const json = new TextDecoder().decode(bytes);
+    const form = JSON.parse(json);
+
+    if (!form || !Array.isArray(form.sections)) return null;
+    form.published = true;
+    return form;
+  } catch (error) {
+    console.error("Erro ao ler formulário compartilhado:", error);
+    return null;
+  }
+}
+
+const sharedForm = decodeFormFromPublicLink();
+const form = sharedForm || DB.forms.all().find(item => item.id === formId);
 const status = document.querySelector("#publicStatus");
 const responseForm = document.querySelector("#responseForm");
 const themeColors = { blue:"#0b4d86",green:"#19754b",purple:"#6b3da1",orange:"#c96c18" };
