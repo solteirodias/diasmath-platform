@@ -16,13 +16,16 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-6 py-4">
         <Link href="/" className="flex items-center gap-3" aria-label="Página inicial DIASMATH">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600 text-xl font-black text-white shadow-sm">
-            ↗
-          </div>
+          <img
+            src="/brand/diasmath-icon.png"
+            alt="Logo DIASMATH"
+            className="h-12 w-12 shrink-0 rounded-2xl object-contain shadow-sm"
+          />
 
           <div className="leading-none">
             <p className="text-xl font-black tracking-tight text-slate-950">
-              DIAS<span className="text-blue-600">MATH</span><sup className="ml-0.5 align-super text-xs font-black">™</sup>
+              DIAS<span className="text-blue-600">MATH</span>
+              <sup className="ml-0.5 align-super text-xs font-black">™</sup>
             </p>
             <p className="mt-1 hidden text-[9px] font-bold tracking-[0.14em] text-slate-500 sm:block">
               APRENDER • EXPLORAR • TRANSFORMAR
