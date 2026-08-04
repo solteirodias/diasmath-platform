@@ -27,6 +27,69 @@ function encodeFormForPublicLink(form) {
   return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
 }
 
+const RESPONSE_SYNC = {
+  loading: {},
+  last: {}
+};
+
+function mergeRemoteResponses(remoteResponses = []) {
+  const local = DB.responses.all();
+  const byId = new Map(local.map(item => [item.id, item]));
+
+  remoteResponses.forEach(item => {
+    if (item && item.id) byId.set(item.id, item);
+  });
+
+  DB.responses.save([...byId.values()]);
+}
+
+async function fetchRemoteResponses(formId, options = {}) {
+  const { force = false, rerender = true } = options;
+
+  if (!formId) return;
+
+  const now = Date.now();
+  if (RESPONSE_SYNC.loading[formId]) return;
+  if (!force && RESPONSE_SYNC.last[formId] && now - RESPONSE_SYNC.last[formId] < 12000) return;
+
+  RESPONSE_SYNC.loading[formId] = true;
+
+  try {
+    const response = await fetch(`/api/forms/responses?formId=${encodeURIComponent(formId)}`, {
+      cache: "no-store"
+    });
+
+    if (!response.ok) {
+      const details = await response.json().catch(() => null);
+      throw new Error(details?.error || "Não foi possível buscar respostas online.");
+    }
+
+    const data = await response.json();
+    mergeRemoteResponses(Array.isArray(data.responses) ? data.responses : []);
+    RESPONSE_SYNC.last[formId] = Date.now();
+
+    if (rerender) {
+      renderOverview();
+      renderForms();
+      if (currentView === "responses") renderResponses(false);
+    }
+  } catch (error) {
+    console.warn("Sincronização de respostas indisponível:", error);
+  } finally {
+    RESPONSE_SYNC.loading[formId] = false;
+  }
+}
+
+async function syncAllPublishedResponses() {
+  const forms = myForms().filter(form => form.published);
+  for (const form of forms) {
+    await fetchRemoteResponses(form.id, { force: true, rerender: false });
+  }
+  renderOverview();
+  renderForms();
+  if (currentView === "responses") renderResponses(false);
+}
+
 
 $("#sidebarUser").textContent = user.name;
 $("#logoutBtn").addEventListener("click", logoutUser);
@@ -72,6 +135,7 @@ $$("[data-close-dialog]").forEach(button => button.addEventListener("click", () 
 
 populateBankTypeSelect();
 renderAll();
+setTimeout(syncAllPublishedResponses, 600);
 
 function myForms() {
   return DB.forms.all().filter(form => form.ownerId === user.id);
@@ -506,11 +570,16 @@ function renderResponsesPage() {
 function selectedResultForm() {
   return myForms().find(f=>f.id===$("#responseFormSelect").value)||myForms()[0];
 }
-function renderResponses() {
+function renderResponses(shouldSync = true) {
   const form=selectedResultForm();
   if(!form){
     $("#analysisContainer").innerHTML="<p>Nenhum formulário disponível.</p>";$("#responsesTable thead").innerHTML="";$("#responsesTable tbody").innerHTML="";return;
   }
+
+  if (shouldSync) {
+    fetchRemoteResponses(form.id, { rerender: true });
+  }
+
   const responses=DB.responses.all().filter(r=>r.formId===form.id);
   $("#resultResponseCount").textContent=responses.length;
   $("#resultParticipantCount").textContent=new Set(responses.map(r=>r.participant?.email||r.participant?.name||r.id)).size;
@@ -541,8 +610,9 @@ function renderResponseTable(form,responses) {
   $("#responsesTable thead").innerHTML=`<tr><th>Enviado em</th>${form.settings.collectName?"<th>Nome</th>":""}${form.settings.collectEmail?"<th>E-mail</th>":""}${questions.map(q=>`<th>${safeText(q.title)}</th>`).join("")}</tr>`;
   $("#responsesTable tbody").innerHTML=responses.map(r=>`<tr><td>${formatDate(r.submittedAt,true)}</td>${form.settings.collectName?`<td>${safeText(r.participant?.name||"")}</td>`:""}${form.settings.collectEmail?`<td>${safeText(r.participant?.email||"")}</td>`:""}${questions.map(q=>`<td>${safeText(Array.isArray(r.answers?.[q.id])?r.answers[q.id].join(", "):(r.answers?.[q.id]??""))}</td>`).join("")}</tr>`).join("");
 }
-function exportResponsesCsv() {
+async function exportResponsesCsv() {
   const form=selectedResultForm();if(!form)return;
+  await fetchRemoteResponses(form.id, { force: true, rerender: false });
   const responses=DB.responses.all().filter(r=>r.formId===form.id);
   const questions=form.sections.flatMap(s=>s.questions);
   const header=["Enviado em",...(form.settings.collectName?["Nome"]:[]),...(form.settings.collectEmail?["E-mail"]:[]),...questions.map(q=>q.title)];
@@ -555,8 +625,9 @@ function exportResponsesCsv() {
   ].map(csvEscape).join(",")));
   downloadFile(`${slugify(form.title)||"respostas"}.csv`, "\ufeff"+rows.join("\n"), "text/csv;charset=utf-8");
 }
-function exportResponsesJson() {
+async function exportResponsesJson() {
   const form=selectedResultForm();if(!form)return;
+  await fetchRemoteResponses(form.id, { force: true, rerender: false });
   const responses=DB.responses.all().filter(r=>r.formId===form.id);
   downloadFile(`${slugify(form.title)||"respostas"}.json`,JSON.stringify({form,responses},null,2));
 }

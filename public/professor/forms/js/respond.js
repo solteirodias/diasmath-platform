@@ -63,20 +63,66 @@ document.querySelector("#nextSectionBtn").addEventListener("click", () => {
   renderSection();
   scrollTo({top:0,behavior:"smooth"});
 });
-responseForm.addEventListener("submit", event => {
+responseForm.addEventListener("submit", async event => {
   event.preventDefault();
   if (!validateCurrentSection() || !validateParticipant()) return;
   collectCurrentSection();
+
   participant = {
     name: document.querySelector("#participantName")?.value.trim() || "",
     email: document.querySelector("#participantEmail")?.value.trim() || ""
   };
-  const responses = DB.responses.all();
-  responses.push({ id:uid("resp"), formId:form.id, submittedAt:new Date().toISOString(), participant, answers });
-  DB.responses.save(responses);
-  responseForm.classList.add("hidden");
-  document.querySelector("#thankYouPanel").classList.remove("hidden");
-  scrollTo({top:0,behavior:"smooth"});
+
+  const submitButton = document.querySelector("#submitResponseBtn");
+  const originalText = submitButton?.textContent || "Enviar resposta";
+  if (submitButton) {
+    submitButton.disabled = true;
+    submitButton.textContent = "Enviando...";
+  }
+
+  const responsePayload = {
+    id: uid("resp"),
+    formId: form.id,
+    formTitle: form.title,
+    submittedAt: new Date().toISOString(),
+    participant,
+    answers,
+    formSnapshot: form
+  };
+
+  try {
+    const remote = await fetch("/api/forms/responses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(responsePayload)
+    });
+
+    if (!remote.ok) {
+      const details = await remote.json().catch(() => null);
+      throw new Error(details?.error || "Não foi possível salvar a resposta no painel do professor.");
+    }
+
+    const responses = DB.responses.all();
+    responses.push(responsePayload);
+    DB.responses.save(responses);
+
+    responseForm.classList.add("hidden");
+    document.querySelector("#thankYouPanel").classList.remove("hidden");
+    scrollTo({ top: 0, behavior: "smooth" });
+  } catch (error) {
+    alert(
+      "Não foi possível enviar sua resposta agora. Verifique sua conexão e tente novamente. " +
+      "Se o problema continuar, avise o professor."
+    );
+    console.error("Erro ao enviar resposta:", error);
+
+    if (submitButton) {
+      submitButton.disabled = false;
+      submitButton.textContent = originalText;
+    }
+  }
 });
 document.querySelector("#answerAgainBtn").addEventListener("click", () => location.reload());
 
