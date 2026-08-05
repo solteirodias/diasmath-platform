@@ -8,6 +8,7 @@ type FormsResponsePayload = {
   participant?: Record<string, unknown>;
   answers?: Record<string, unknown>;
   formSnapshot?: Record<string, unknown>;
+  responses?: FormsResponsePayload[];
 };
 
 function jsonError(message: string, status = 400, details?: unknown) {
@@ -107,37 +108,43 @@ export async function POST(request: Request) {
 
     const payload = (await request.json()) as FormsResponsePayload;
 
-    if (!payload.formId) {
-      return jsonError("formId é obrigatório.", 400);
+    const incomingResponses = Array.isArray(payload.responses)
+      ? payload.responses
+      : [payload];
+
+    const validResponses = incomingResponses.filter(
+      (item) => item?.formId && item.answers && typeof item.answers === "object"
+    );
+
+    if (!validResponses.length) {
+      return jsonError("Nenhuma resposta válida enviada.", 400);
     }
 
-    if (!payload.answers || typeof payload.answers !== "object") {
-      return jsonError("answers é obrigatório.", 400);
-    }
+    const rows = validResponses.map((item) => {
+      const submittedAt = item.submittedAt || new Date().toISOString();
 
-    const submittedAt = payload.submittedAt || new Date().toISOString();
-
-    const row = {
-      id:
-        payload.id ||
-        `resp_${crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)}`,
-      form_id: payload.formId,
-      form_title: payload.formTitle || "Formulário DIASMATH",
-      submitted_at: submittedAt,
-      participant: payload.participant || {},
-      answers: payload.answers || {},
-      form_snapshot: payload.formSnapshot || {},
-    };
+      return {
+        id:
+          item.id ||
+          `resp_${crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)}`,
+        form_id: item.formId,
+        form_title: item.formTitle || "Formulário DIASMATH",
+        submitted_at: submittedAt,
+        participant: item.participant || {},
+        answers: item.answers || {},
+        form_snapshot: item.formSnapshot || {},
+      };
+    });
 
     const response = await fetch(
-      `${config.url}/rest/v1/diasmath_forms_responses`,
+      `${config.url}/rest/v1/diasmath_forms_responses?on_conflict=id`,
       {
         method: "POST",
         headers: {
           ...headers(config.key),
-          Prefer: "return=representation",
+          Prefer: "resolution=merge-duplicates,return=representation",
         },
-        body: JSON.stringify(row),
+        body: JSON.stringify(rows),
       }
     );
 
@@ -149,7 +156,8 @@ export async function POST(request: Request) {
 
     return Response.json({
       ok: true,
-      response: {
+      count: rows.length,
+      responses: rows.map((row) => ({
         id: row.id,
         formId: row.form_id,
         formTitle: row.form_title,
@@ -157,7 +165,7 @@ export async function POST(request: Request) {
         participant: row.participant,
         answers: row.answers,
         formSnapshot: row.form_snapshot,
-      },
+      })),
     });
   } catch (error) {
     return jsonError(

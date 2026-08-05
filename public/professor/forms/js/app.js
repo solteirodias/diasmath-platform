@@ -214,7 +214,127 @@ async function syncFormsWithCloud(options = {}) {
   }
 }
 
+
+function allLocalFormsMigrationCandidates() {
+  const email = currentUserEmail();
+  const ids = legacyUserIds();
+
+  return DB.forms.all().filter((form) => {
+    if (!form?.id) return false;
+
+    return (
+      belongsToCurrentUser(form) ||
+      !form.ownerEmail ||
+      form.ownerEmail === email ||
+      ids.has(form.ownerId)
+    );
+  });
+}
+
+function attachCurrentOwnerToForms(forms) {
+  const email = currentUserEmail();
+  return forms.map((form) => ({
+    ...deepClone(form),
+    ownerId: user.id,
+    ownerEmail: email,
+    updatedAt: form.updatedAt || new Date().toISOString(),
+    createdAt: form.createdAt || new Date().toISOString(),
+  }));
+}
+
+function migrateLocalFormsToCurrentUser() {
+  const candidates = allLocalFormsMigrationCandidates();
+  if (!candidates.length) return [];
+
+  const normalized = attachCurrentOwnerToForms(candidates);
+  const all = DB.forms.all();
+  const other = all.filter((form) => !normalized.some((item) => item.id === form.id));
+  DB.forms.save([...other, ...normalized]);
+
+  return normalized;
+}
+
+async function migrateLocalResponsesToCloud(forms) {
+  const formIds = new Set(forms.map((form) => form.id));
+  const responses = DB.responses.all().filter((response) => formIds.has(response.formId));
+
+  if (!responses.length) return 0;
+
+  const byId = new Map();
+  responses.forEach((response) => {
+    byId.set(response.id || `resp_${response.formId}_${response.submittedAt || Date.now()}`, response);
+  });
+
+  const payload = [...byId.values()].map((response) => {
+    const form = forms.find((item) => item.id === response.formId);
+    return {
+      id: response.id,
+      formId: response.formId,
+      formTitle: response.formTitle || form?.title || "Formulário DIASMATH",
+      submittedAt: response.submittedAt || new Date().toISOString(),
+      participant: response.participant || {},
+      answers: response.answers || {},
+      formSnapshot: response.formSnapshot || form || {},
+    };
+  });
+
+  const result = await fetch("/api/forms/responses", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ responses: payload }),
+  });
+
+  if (!result.ok) {
+    const details = await result.json().catch(() => null);
+    throw new Error(details?.error || "Não foi possível migrar respostas.");
+  }
+
+  return payload.length;
+}
+
+async function forceFullMigration() {
+  try {
+    toast("Sincronizando formulários e respostas...");
+
+    const forms = migrateLocalFormsToCurrentUser();
+
+    if (forms.length) {
+      await saveCloudForms(forms);
+      await migrateLocalResponsesToCloud(forms);
+    }
+
+    const cloud = await fetchCloudForms();
+    mergeCloudForms(cloud);
+
+    for (const form of myForms()) {
+      await fetchRemoteResponses(form.id, { force: true, rerender: false });
+    }
+
+    FORM_CLOUD_SYNC.last = Date.now();
+    renderAll();
+
+    toast("Sincronização concluída.");
+  } catch (error) {
+    console.error("Erro na migração total:", error);
+    toast("Não foi possível concluir a sincronização. Veja se a API e o Supabase estão configurados.");
+  }
+}
+
+
 async function syncEverythingOnline() {
+  const migratedForms = migrateLocalFormsToCurrentUser();
+
+  if (migratedForms.length) {
+    try {
+      await saveCloudForms(migratedForms);
+      await migrateLocalResponsesToCloud(migratedForms);
+    } catch (error) {
+      console.warn("Migração inicial não concluída:", error);
+    }
+  }
+
   await syncFormsWithCloud({ force: true, rerender: false });
   await syncAllPublishedResponses();
   renderAll();
