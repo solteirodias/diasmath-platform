@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0ea5e9">
+  <meta name="description" content="FracionaLab: laboratório interativo de frações para o 5º ano, com bancada visual, cotidiano, equivalência, reta numérica, desafios e relatório.">
+  <title>DIASMATH™ FracionaLab — Aventura das Partes</title>
+  <style>
+    :root{
+      --bg:#f4fbff;--surface:#fff;--ink:#17324d;--muted:#5f7488;
+      --primary:#0ea5e9;--primary-dark:#0369a1;--orange:#f97316;
+      --yellow:#facc15;--green:#84cc16;--green-dark:#3f8b15;
+      --red:#ef4444;--purple:#8b5cf6;--border:#cdeaf8;
+      --shadow:0 16px 42px rgba(14,86,126,.13);--radius:22px
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;min-height:100vh;color:var(--ink);
+      font-family:Inter,ui-rounded,"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+      background:
+        radial-gradient(circle at 8% 6%,rgba(250,204,21,.24),transparent 18%),
+        radial-gradient(circle at 94% 1%,rgba(14,165,233,.18),transparent 23%),
+        linear-gradient(180deg,#f5fbff 0%,#fffaf2 100%)
+    }
+    button,input,select{font:inherit}button{cursor:pointer}
+    button:focus-visible,input:focus-visible,select:focus-visible{outline:4px solid rgba(14,165,233,.28);outline-offset:3px}
+    .app{max-width:1320px;margin:auto;padding:18px}
+    .topbar{
+      position:sticky;top:8px;z-index:40;display:flex;align-items:center;
+      justify-content:space-between;gap:14px;padding:12px 16px;border-radius:20px;
+      border:1px solid rgba(255,255,255,.8);background:rgba(255,255,255,.86);
+      backdrop-filter:blur(15px);box-shadow:0 10px 30px rgba(12,74,110,.11)
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .logo{width:54px;height:54px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(145deg,var(--primary),#2563eb);color:#fff;font-size:24px;font-weight:950;box-shadow:inset 0 -8px rgba(0,0,0,.08)}
+    .brand h1{font-size:clamp(17px,2vw,27px);margin:0;line-height:1.05;color:var(--primary-dark)}
+    .brand p{margin:3px 0 0;font-size:13px;color:var(--muted)}
+    .top-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .btn,.icon-btn{border:0;border-radius:14px;padding:10px 13px;font-weight:900;background:#e8f6fd;color:var(--primary-dark);transition:.2s}
+    .btn:hover,.icon-btn:hover{transform:translateY(-2px);filter:brightness(.98)}
+    .btn.primary{background:var(--primary);color:#fff}.btn.orange{background:var(--orange);color:#fff}
+    .btn.green{background:var(--green-dark);color:#fff}.btn.purple{background:var(--purple);color:#fff}
+    .btn.ghost{background:#fff;border:1px solid var(--border)}
+    .hero{
+      position:relative;overflow:hidden;display:grid;grid-template-columns:1.15fr .85fr;
+      gap:22px;align-items:center;margin:26px 0 18px;padding:30px;border-radius:32px;
+      background:linear-gradient(135deg,#fff 0%,#eaf8ff 57%,#fff7df 100%);
+      border:1px solid #d9eef8;box-shadow:var(--shadow)
+    }
+    .hero:after{content:"";position:absolute;width:290px;height:290px;border-radius:50%;right:-90px;bottom:-130px;background:rgba(249,115,22,.12)}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff3d6;border:1px solid #fde68a;padding:7px 11px;border-radius:999px;font-weight:900;color:#945500}
+    .hero h2{font-size:clamp(36px,5vw,69px);line-height:.96;margin:17px 0 14px;color:#075985;letter-spacing:-2px}
+    .hero h2 span{color:var(--orange)}
+    .hero p{font-size:clamp(16px,1.7vw,21px);line-height:1.55;color:#38526b;max-width:730px}
+    .name-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    .name-row input{flex:1;min-width:220px;border:2px solid #b9e4f8;border-radius:14px;padding:13px 15px;background:#fff;outline:none}
+    .hero-art{display:grid;place-items:center;min-height:300px;position:relative;z-index:1}
+    .fraction-orbit{position:relative;width:min(330px,86vw);aspect-ratio:1}
+    .big-pie{position:absolute;inset:11%;border-radius:50%;background:conic-gradient(var(--orange) 0 25%,var(--yellow) 25% 50%,var(--primary) 50% 75%,var(--green) 75% 100%);box-shadow:0 20px 45px rgba(3,105,161,.22);animation:float 4s ease-in-out infinite}
+    .big-pie:after{content:"1 inteiro";position:absolute;inset:24%;border-radius:50%;display:grid;place-items:center;background:#fff;color:#075985;font-size:23px;font-weight:950;box-shadow:inset 0 0 0 8px rgba(14,165,233,.12)}
+    .frac-badge{position:absolute;background:#fff;border:3px solid #d9eef8;border-radius:18px;padding:10px 15px;font-size:28px;font-weight:950;box-shadow:var(--shadow);animation:bob 3s ease-in-out infinite}
+    .frac-badge b{display:block;text-align:center;line-height:.9}.frac-badge i{display:block;height:3px;border-radius:5px;background:currentColor;margin:4px 0}
+    .fb1{left:0;top:8%;color:#ea580c}.fb2{right:0;top:22%;color:#0284c7;animation-delay:.5s}.fb3{left:5%;bottom:8%;color:#65a30d;animation-delay:1s}
+    .status{display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:12px 16px;box-shadow:0 10px 25px rgba(14,86,126,.08);margin:14px 0 20px}
+    .progress-track{height:14px;background:#e2f2fa;border-radius:999px;overflow:hidden}
+    .progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--primary),var(--green));border-radius:999px;transition:.45s}
+    .score-chip,.module-chip{white-space:nowrap;font-weight:950;color:#075985}.module-chip{color:#51697d;font-size:14px}
+    .tabs{display:flex;gap:8px;overflow:auto;padding:4px 2px 12px;scrollbar-width:thin}
+    .tab{flex:0 0 auto;border:0;border-radius:15px;padding:12px 16px;background:#e9f7fd;color:#075985;font-weight:950;transition:.2s}
+    .tab.active{background:var(--primary);color:#fff;box-shadow:0 8px 18px rgba(14,165,233,.28);transform:translateY(-2px)}
+    .panel{display:none;animation:fadeUp .35s ease}.panel.active{display:block}
+    .section-card{background:rgba(255,255,255,.95);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(17px,3vw,28px);margin-bottom:20px}
+    .section-title{display:flex;align-items:center;gap:12px;margin:0 0 8px;color:#075985;font-size:clamp(24px,3vw,34px)}
+    .section-title .num{width:44px;height:44px;flex:0 0 44px;border-radius:14px;display:grid;place-items:center;background:var(--orange);color:#fff;font-size:21px;box-shadow:inset 0 -5px rgba(0,0,0,.09)}
+    .sub{color:var(--muted);margin:0 0 22px;line-height:1.55}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .mini-card{border:1px solid #d8edf7;background:#fbfeff;border-radius:18px;padding:17px}
+    .mini-card h4{margin:0 0 10px;color:#075985;font-size:19px}
+    .callout{padding:15px 17px;border-radius:16px;background:#fff8c7;border:1px solid #fde68a;line-height:1.5}
+    .callout.blue{background:#eaf8ff;border-color:#b9e4f8}.callout.green{background:#ecfdf3;border-color:#b9efca}
+    .muted{color:var(--muted)}
+    .info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+    .info-card{padding:17px;border-radius:18px;border:1px solid #d7ecf6;background:#fff;box-shadow:0 8px 20px rgba(14,86,126,.06)}
+    .info-card .icon{font-size:34px}.info-card h4{margin:7px 0;color:#075985}.info-card p{margin:0;color:var(--muted);line-height:1.45}
+    .fraction-display{display:flex;align-items:center;justify-content:center;gap:24px;min-height:230px;flex-wrap:wrap}
+    .fraction-number{font-size:70px;font-weight:950;color:#075985;display:grid;grid-template-rows:1fr 5px 1fr;min-width:110px;text-align:center;line-height:1}
+    .fraction-number .bar{background:#075985;border-radius:999px}.fraction-explain{max-width:350px}.fraction-explain strong{color:var(--orange)}
+    .controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:13px 0}.controls label{font-weight:900;color:#31516b}
+    .controls input[type="range"]{accent-color:var(--primary);width:min(260px,69vw)}
+    .value-badge{min-width:48px;text-align:center;background:#e7f7fe;border-radius:12px;padding:8px 10px;font-weight:950;color:#075985}
+    .select{border:1px solid #bee6f7;border-radius:13px;padding:10px 12px;background:#eef9ff;color:#075985;font-weight:850}
+    .rect-stage{min-height:220px;display:grid;place-items:center;padding:20px;border-radius:20px;background:linear-gradient(180deg,#f4fbff,#fff);border:2px dashed #b9e4f8}
+    .fraction-rect{width:min(690px,95%);height:145px;display:grid;gap:4px;background:#075985;padding:4px;border-radius:15px;overflow:hidden;box-shadow:0 15px 30px rgba(7,89,133,.16)}
+    .piece{border:0;background:#fff;display:grid;place-items:center;font-weight:900;color:transparent;transition:.25s;position:relative;overflow:hidden;min-width:0}
+    .piece.paint{background:linear-gradient(145deg,#facc15,#f97316);color:#6f3c00;animation:pop .32s ease}.piece:hover{transform:scale(.97);filter:brightness(.98)}
+    .term-card{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;padding:15px;border-radius:16px;background:#fff;border:1px solid #d8edf7}
+    .term-card .bubble{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:#fff;font-weight:950}.bubble.orange{background:var(--orange)}.bubble.blue{background:var(--primary)}
+    .equal-lab{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .partition-card{border:2px solid #d8edf7;border-radius:19px;padding:17px;background:#fbfeff;text-align:center}
+    .partition-card h4{margin:0 0 12px;color:#075985}.partition-bar{height:130px;display:flex;border:4px solid #075985;border-radius:14px;overflow:hidden;background:#fff}
+    .partition-piece{height:100%;border-right:3px solid #075985;background:#fff}.partition-piece:last-child{border-right:0}.partition-piece:nth-child(-n+2){background:linear-gradient(145deg,#fde047,#fb923c)}
+    .choice-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .feedback-box{min-height:58px;margin-top:14px;padding:13px 15px;border-radius:15px;background:#eef9ff;color:#31516b;font-weight:850;display:flex;align-items:center;justify-content:center;text-align:center}
+    .lab-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px;border-radius:17px;background:#f5fbff;border:1px solid #d8edf7;margin-bottom:15px}
+    .lab-stage{min-height:340px;display:grid;place-items:center;border-radius:20px;background:linear-gradient(145deg,#eef9ff,#fff9e8);border:1px solid #d8edf7;padding:20px}
+    .shape-grid{width:min(710px,96%);height:210px;display:grid;gap:5px;background:#075985;padding:5px;border-radius:16px;overflow:hidden}
+    .shape-cell{border:0;background:#fff;min-width:0;transition:.2s}.shape-cell.on{background:linear-gradient(145deg,#38bdf8,#0ea5e9)}.shape-cell:hover{filter:brightness(.96)}
+    .circle-svg{width:min(310px,84vw);height:auto;filter:drop-shadow(0 16px 22px rgba(7,89,133,.16))}
+    .circle-sector{stroke:#075985;stroke-width:2.3;fill:#fff;cursor:pointer;transition:.2s}.circle-sector.on{fill:#84cc16}.circle-sector:hover{filter:brightness(.96)}
+    .reading{font-size:clamp(19px,2.2vw,27px);font-weight:950;color:#075985;text-align:center;margin:10px 0}
+    .tag-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.tag{border-radius:999px;padding:7px 10px;background:#eaf8ff;color:#075985;font-weight:850;font-size:14px}.tag.orange{background:#fff0e4;color:#b64c00}
+    .context-cards{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px}
+    .context-card{border:2px solid transparent;border-radius:16px;padding:12px 8px;background:#f4fbff;color:#31516b;font-weight:900;text-align:center;transition:.2s}
+    .context-card span{display:block;font-size:29px;margin-bottom:4px}.context-card.active{border-color:var(--primary);background:#e7f7fe;color:#075985;transform:translateY(-2px)}
+    .context-stage{min-height:330px;display:grid;place-items:center;border-radius:20px;background:linear-gradient(145deg,#eef9ff,#fff8df);border:1px solid #d8edf7;padding:20px}
+    .context-visual{width:min(390px,92%);min-height:230px;display:grid;place-items:center}
+    .pizza{width:225px;aspect-ratio:1;border-radius:50%;border:8px solid #d97706;box-shadow:0 16px 28px rgba(124,66,0,.16);position:relative}
+    .pizza:after{content:"";position:absolute;inset:20%;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ef4444 0 7px,transparent 8px),radial-gradient(circle at 70% 55%,#ef4444 0 7px,transparent 8px),radial-gradient(circle at 46% 75%,#ef4444 0 7px,transparent 8px)}
+    .chocolate{width:290px;height:190px;display:grid;gap:5px;background:#5c2d10;padding:7px;border-radius:16px;box-shadow:0 16px 28px rgba(82,39,8,.18)}
+    .choc-piece{background:#9a4f22;border:3px solid #733612;border-radius:5px}.choc-piece.used{opacity:.16}
+    .bottle{width:125px;height:250px;border:7px solid #075985;border-radius:30px 30px 24px 24px;position:relative;overflow:hidden;background:#fff;box-shadow:0 16px 28px rgba(7,89,133,.16)}
+    .bottle:before{content:"";position:absolute;left:35px;right:35px;top:-20px;height:32px;border:7px solid #075985;border-bottom:0;border-radius:10px 10px 0 0;background:#fff}
+    .bottle-fill{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(#38bdf8,#0ea5e9);transition:height .45s}
+    .cup{width:190px;height:230px;border:7px solid #075985;border-top:0;border-radius:0 0 35px 35px;position:relative;overflow:hidden;background:#fff;box-shadow:0 16px 28px rgba(7,89,133,.16)}
+    .cup:after{content:"";position:absolute;right:-55px;top:55px;width:75px;height:85px;border:12px solid #075985;border-left:0;border-radius:0 42px 42px 0}
+    .cup-fill{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(#fde047,#f59e0b);transition:height .45s}
+    .garden{width:330px;height:230px;display:grid;gap:6px;background:#5d3215;padding:7px;border-radius:18px;box-shadow:0 16px 28px rgba(90,49,15,.18)}
+    .garden-cell{background:#8b5a2b;border-radius:6px;display:grid;place-items:center;font-size:25px}.garden-cell.on{background:#84cc16}
+    .rope{width:min(620px,95%);height:140px;position:relative}.rope-line{position:absolute;left:4%;right:4%;top:65px;height:9px;background:#c78739;border-radius:9px;box-shadow:inset 0 -3px rgba(84,45,12,.22)}
+    .rope-mark{position:absolute;top:50px;width:5px;height:39px;background:#5d3215;transform:translateX(-50%);border-radius:5px}.rope-mark:after{content:"";position:absolute;width:14px;height:14px;border:4px solid #5d3215;border-radius:50%;left:50%;top:50%;transform:translate(-50%,-50%);background:#fff4d7}
+    .rope-object{position:absolute;left:4%;top:99px;height:24px;border-radius:8px;background:linear-gradient(90deg,var(--orange),var(--yellow));transition:width .4s}
+    .story{font-size:clamp(18px,2.1vw,25px);font-weight:900;color:#31516b;line-height:1.4}.story strong{color:var(--orange)}
+    .equiv-bars{display:grid;gap:22px}.equiv-row{display:grid;grid-template-columns:100px 1fr;gap:15px;align-items:center}.equiv-label{font-size:30px;font-weight:950;color:#075985;text-align:center}
+    .equiv-strip{height:100px;display:grid;gap:4px;background:#075985;padding:4px;border-radius:14px;overflow:hidden}.equiv-piece{background:#fff}.equiv-piece.on{background:linear-gradient(145deg,#c4f04c,#65a30d)}
+    .equiv-equals{text-align:center;font-size:34px;font-weight:950;color:var(--orange)}
+    .steps{counter-reset:step;display:grid;gap:10px}.step{position:relative;padding:13px 13px 13px 56px;border:1px solid #d8edf7;background:#fff;border-radius:15px;line-height:1.45}
+    .step:before{counter-increment:step;content:counter(step);position:absolute;left:12px;top:12px;width:32px;height:32px;border-radius:10px;background:var(--primary);color:#fff;display:grid;place-items:center;font-weight:950}
+    .group-stage{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:15px;border-radius:20px;background:#f5fbff;border:2px dashed #b9e4f8}
+    .quantity-group{min-height:120px;border:2px solid #b9e4f8;border-radius:16px;background:#fff;padding:10px;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:7px;transition:.25s}
+    .quantity-group.on{background:#f0fbe5;border-color:#84cc16;box-shadow:0 8px 18px rgba(77,124,15,.13)}.counter{width:27px;height:27px;border-radius:50%;background:#dbeafe;border:3px solid #60a5fa}
+    .quantity-group.on .counter{background:#facc15;border-color:#f97316}
+    .equation-box{display:flex;justify-content:center;gap:12px;align-items:center;flex-wrap:wrap;font-size:clamp(24px,3vw,38px);font-weight:950;color:#075985;padding:18px;border-radius:18px;background:#eef9ff}.equation-box .result{color:var(--orange)}
+    .numberline-wrap{padding:30px 18px 18px;border-radius:20px;background:#fbfeff;border:2px dashed #b9e4f8;overflow:auto}
+    .numberline{position:relative;min-width:760px;height:140px;margin:auto}.nl-line{position:absolute;left:35px;right:35px;top:70px;height:5px;background:#31516b;border-radius:5px}
+    .tick{position:absolute;top:54px;width:3px;height:35px;background:#31516b;transform:translateX(-50%)}.tick-label{position:absolute;top:96px;transform:translateX(-50%);font-weight:850;color:#31516b}
+    .marker{position:absolute;top:14px;transform:translateX(-50%);background:var(--orange);color:#fff;border-radius:13px;padding:8px 11px;font-weight:950;box-shadow:0 8px 18px rgba(249,115,22,.28);transition:left .45s}
+    .marker:after{content:"";position:absolute;left:50%;top:100%;border:10px solid transparent;border-top-color:var(--orange);transform:translateX(-50%)}
+    .quiz-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.quiz-progress{font-weight:950;color:#075985}
+    .challenge-box{display:grid;grid-template-columns:1fr .92fr;gap:20px;align-items:center;margin-top:15px}.challenge-visual{min-height:330px;display:grid;place-items:center;border-radius:20px;background:linear-gradient(145deg,#eef9ff,#fff8df);border:1px solid #d8edf7;padding:18px}
+    .quiz-question{font-size:clamp(22px,3vw,32px);font-weight:950;line-height:1.25}.answers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+    .answer{border:2px solid #c7e8f7;background:#fff;border-radius:16px;padding:14px;font-size:20px;font-weight:950;color:#075985;transition:.2s}.answer:hover{transform:translateY(-2px);border-color:var(--primary)}
+    .answer.correct{background:#dcfce7;border-color:#22c55e;color:#166534}.answer.wrong{background:#fee2e2;border-color:#ef4444;color:#991b1b}
+    .feedback{min-height:62px;margin-top:14px;padding:13px 15px;border-radius:15px;background:#eef9ff;color:#31516b;font-weight:850;display:flex;align-items:center}
+    .quiz-fig{width:min(560px,95%);height:180px;display:grid;gap:4px;background:#075985;padding:4px;border-radius:15px;overflow:hidden}.quiz-cell{background:#fff}.quiz-cell.on{background:linear-gradient(145deg,#38bdf8,#0ea5e9)}
+    .quiz-dots{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;max-width:460px}.quiz-dot{width:33px;height:33px;border-radius:50%;background:#dbeafe;border:3px solid #60a5fa}.quiz-dot.on{background:#facc15;border-color:#f97316}
+    .quiz-line{position:relative;width:min(570px,92%);height:130px}.quiz-line .base{position:absolute;left:20px;right:20px;top:65px;height:5px;background:#31516b}.quiz-line .qmark{position:absolute;top:18px;transform:translateX(-50%);font-size:32px}.quiz-line .qtick{position:absolute;top:52px;width:3px;height:32px;background:#31516b;transform:translateX(-50%)}
+    .modal{position:fixed;inset:0;z-index:80;background:rgba(10,39,60,.58);display:none;place-items:center;padding:18px;backdrop-filter:blur(8px)}.modal.open{display:grid}
+    .modal-card{width:min(900px,96vw);max-height:89vh;overflow:auto;background:#fff;border-radius:24px;padding:24px;box-shadow:0 30px 80px rgba(0,0,0,.25)}.modal-card h3{margin-top:0;color:#075985;font-size:29px}
+    .close-modal{float:right;border:0;background:#eaf7fd;border-radius:12px;padding:9px 12px;font-weight:950;color:#075985}.teacher-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.teacher-grid .mini-card{background:#f8fcff}
+    .report-score{font-size:52px;font-weight:950;color:#075985;text-align:center}.report-score span{color:var(--orange)}
+    .toast{position:fixed;right:18px;bottom:18px;z-index:100;background:#075985;color:#fff;padding:13px 17px;border-radius:14px;box-shadow:0 15px 35px rgba(7,89,133,.28);transform:translateY(150%);transition:.3s;font-weight:850}.toast.show{transform:translateY(0)}
+    .confetti{position:fixed;width:10px;height:16px;top:-20px;z-index:120;animation:fall 1.7s linear forwards}
+    footer{text-align:center;color:#60758a;padding:24px 10px 40px;font-size:14px}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    @keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(3deg)}}
+    @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    @keyframes pop{0%{transform:scale(.8)}70%{transform:scale(1.06)}100%{transform:scale(1)}}
+    @keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+    @media(max-width:980px){.hero,.grid-2,.challenge-box{grid-template-columns:1fr}.hero-art{order:-1;min-height:230px}.fraction-orbit{width:250px}.grid-3,.info-grid{grid-template-columns:1fr 1fr}.context-cards{grid-template-columns:repeat(3,1fr)}.teacher-grid{grid-template-columns:1fr}.group-stage{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:660px){.app{padding:10px}.topbar{top:4px}.brand p{display:none}.logo{width:45px;height:45px}.top-actions .btn span{display:none}.hero{padding:20px}.hero h2{letter-spacing:-1px}.status{grid-template-columns:auto 1fr auto}.module-chip{display:none}.grid-3,.info-grid,.equal-lab{grid-template-columns:1fr}.context-cards{grid-template-columns:repeat(2,1fr)}.answers{grid-template-columns:1fr}.fraction-rect{height:120px}.equiv-row{grid-template-columns:75px 1fr}.equiv-label{font-size:24px}.equiv-strip{height:80px}.section-card{border-radius:18px}.group-stage{grid-template-columns:1fr 1fr}.btn{padding:10px 11px}}
+
+    .lab-hidden{display:none!important}
+    body.home-active{overflow:hidden}
+    .home-screen{
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      padding:24px;
+      background:
+        radial-gradient(circle at 12% 10%,rgba(250,204,21,.25),transparent 20rem),
+        radial-gradient(circle at 92% 12%,rgba(14,165,233,.25),transparent 22rem),
+        linear-gradient(145deg,#f4fbff,#fff8df);
+    }
+    .home-card{
+      width:min(1120px,96vw);
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:24px;
+      align-items:center;
+      background:rgba(255,255,255,.94);
+      border:1px solid #d8edf7;
+      box-shadow:0 30px 90px rgba(7,89,133,.18);
+      border-radius:34px;
+      padding:clamp(24px,4vw,42px);
+    }
+    .home-logo{
+      width:82px;height:82px;border-radius:24px;background:#fff;
+      display:grid;place-items:center;box-shadow:0 18px 38px rgba(14,86,126,.14);
+      border:1px solid #d8edf7;overflow:hidden;margin-bottom:18px
+    }
+    .home-logo img{width:100%;height:100%;object-fit:contain}
+    .home-kicker{
+      display:inline-flex;align-items:center;gap:8px;background:#e8f6fd;border:1px solid #b9e4f8;
+      color:#075985;font-weight:950;border-radius:999px;padding:8px 12px;text-transform:uppercase;
+      letter-spacing:.08em;font-size:12px
+    }
+    .home-card h1{
+      margin:16px 0 10px;
+      font-size:clamp(42px,7vw,86px);
+      line-height:.9;
+      letter-spacing:-3px;
+      color:#075985
+    }
+    .home-card h1 span{color:var(--orange)}
+    .home-card p{font-size:clamp(17px,2vw,22px);line-height:1.58;color:#38526b;margin:0 0 20px}
+    .home-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+    .home-input{
+      width:min(100%,420px);border:2px solid #b9e4f8;border-radius:16px;padding:14px 16px;
+      font-weight:850;color:#075985;background:#fff
+    }
+    .home-preview{
+      min-height:360px;border-radius:28px;background:linear-gradient(145deg,#eaf8ff,#fff4d6);
+      border:2px dashed #b9e4f8;display:grid;place-items:center;padding:22px;overflow:hidden
+    }
+    .home-fraction-orbit{position:relative;width:min(330px,80vw);aspect-ratio:1}
+    .logo img{width:100%;height:100%;object-fit:contain;border-radius:17px}
+    .part-index,.shape-cell .part-index{
+      display:grid;place-items:center;width:100%;height:100%;
+      color:#075985;font-weight:950;font-size:clamp(12px,2vw,18px)
+    }
+    .shape-cell.on .part-index{color:#fff}
+    .sector-label{
+      font:900 12px Inter,Arial,sans-serif;
+      fill:#075985;
+      pointer-events:none;
+      dominant-baseline:middle;
+      text-anchor:middle;
+    }
+    .circle-sector.on + .sector-label{fill:#fff}
+    .context-title{
+      margin:0 0 12px;
+      font-weight:950;
+      color:#075985;
+      text-align:center;
+      font-size:20px
+    }
+    .visual-caption{
+      margin-top:10px;
+      font-weight:900;
+      color:#31516b;
+      text-align:center;
+      line-height:1.35
+    }
+    .bottle-label,.cup-label{
+      position:absolute;inset:auto 10px 12px 10px;text-align:center;
+      font-weight:950;color:#075985;background:rgba(255,255,255,.78);
+      border-radius:12px;padding:6px
+    }
+    .challenge-visual.locked{
+      background:linear-gradient(145deg,#f8fcff,#eef9ff);
+      border:2px dashed #b9e4f8;
+    }
+    .challenge-placeholder{
+      max-width:430px;text-align:center;color:#31516b;font-weight:900;line-height:1.55;
+      padding:20px;border-radius:20px;background:#fff;border:1px solid #d8edf7
+    }
+    .challenge-placeholder .big{font-size:58px;display:block;margin-bottom:8px}
+    @media(max-width:900px){.home-card{grid-template-columns:1fr}.home-preview{min-height:260px}}
+
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
+  </style>
+</head>
+<body class="home-active">
+
+<section class="home-screen" id="homeScreen">
+  <div class="home-card">
+    <div>
+      <div class="home-logo">
+        <img src="/brand/diasmath-icon.png" alt="Logo DIASMATH" onerror="this.style.display='none';this.parentElement.textContent='⅗'">
+      </div>
+      <span class="home-kicker">DIASMATH™ Labs • Frações</span>
+      <h1><span>Fraciona</span>Lab</h1>
+      <p>
+        Aventura interativa para compreender frações com partes iguais, figuras,
+        situações do cotidiano, equivalência, reta numérica, fração de quantidade,
+        desafios e relatório pedagógico.
+      </p>
+      <input class="home-input" id="homeStudentName" maxlength="32" placeholder="Nome do estudante">
+      <div class="home-actions">
+        <button class="btn primary" id="enterLabBtn">⛶ Entrar em tela cheia</button>
+        <button class="btn ghost" id="enterWindowBtn">Entrar sem tela cheia</button>
+        <a class="btn orange" href="/labs">← Voltar aos Labs</a>
+      </div>
+    </div>
+    <div class="home-preview" aria-hidden="true">
+      <div class="home-fraction-orbit">
+        <div class="big-pie"></div>
+        <div class="frac-badge fb1"><b>1</b><i></i><b>2</b></div>
+        <div class="frac-badge fb2"><b>3</b><i></i><b>4</b></div>
+        <div class="frac-badge fb3"><b>5</b><i></i><b>8</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="app lab-hidden" id="labApp">
+  <header class="topbar">
+    <div class="brand"><div class="logo"><img src="/brand/diasmath-icon.png" alt="Logo DIASMATH" onerror="this.style.display=\'none\';this.parentElement.textContent=\'⅗\'"></div><div><h1>FracionaLab</h1><p>Aventura das Partes • 5º ano</p></div></div>
+    <div class="top-actions">
+      <button class="icon-btn" id="soundBtn" title="Ativar ou desativar sons">🔊</button>
+      <button class="btn" id="teacherBtn">👩‍🏫 <span>Professor</span></button>
+      <button class="btn" id="reportBtn">📊 <span>Relatório</span></button>
+      <button class="btn primary" id="fullBtn">⛶ <span>Tela cheia</span></button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <span class="eyebrow">✨ Aprender, experimentar e explicar</span>
+      <h2><span>Fraciona</span>Lab</h2>
+      <p>Investigue partes iguais, construa figuras, resolva situações do cotidiano, descubra frações equivalentes, encontre frações de quantidades e caminhe pela reta numérica.</p>
+      <div class="name-row">
+        <input id="studentName" maxlength="32" placeholder="Digite o nome do estudante" aria-label="Nome do estudante">
+        <button class="btn orange" id="startBtn">Entrar na bancada</button>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true"><div class="fraction-orbit"><div class="big-pie"></div><div class="frac-badge fb1"><b>1</b><i></i><b>2</b></div><div class="frac-badge fb2"><b>3</b><i></i><b>4</b></div><div class="frac-badge fb3"><b>5</b><i></i><b>8</b></div></div></div>
+  </section>
+
+  <section class="status" aria-label="Progresso">
+    <span>🏆</span><div class="progress-track"><div class="progress-bar" id="progressBar"></div></div><div class="score-chip"><span id="score">0</span> pontos</div><div class="module-chip"><span id="visitedCount">1</span>/8 módulos visitados</div>
+  </section>
+
+  <nav class="tabs" aria-label="Módulos do laboratório">
+    <button class="tab active" data-tab="descobrir">1. Descobrir</button>
+    <button class="tab" data-tab="iguais">2. Partes iguais</button>
+    <button class="tab" data-tab="bancada">3. Bancada de figuras</button>
+    <button class="tab" data-tab="cotidiano">4. Frações no cotidiano</button>
+    <button class="tab" data-tab="equivalentes">5. Equivalentes</button>
+    <button class="tab" data-tab="quantidade">6. Fração de quantidade</button>
+    <button class="tab" data-tab="reta">7. Reta numérica</button>
+    <button class="tab" data-tab="desafios">8. Desafios</button>
+  </nav>
+
+  <section class="panel active" id="descobrir">
+    <div class="section-card">
+      <h3 class="section-title"><span class="num">1</span> O que uma fração representa?</h3>
+      <p class="sub">Uma fração indica uma ou mais partes de um inteiro, de uma medida ou de uma quantidade. Para formar uma fração de uma figura, o inteiro precisa estar dividido em <strong>partes iguais</strong>.</p>
+      <div class="grid-2">
+        <div class="mini-card">
+          <div class="fraction-display">
+            <div class="fraction-number"><span id="introNum">3</span><span class="bar"></span><span id="introDen">4</span></div>
+            <div class="fraction-explain">
+              <p><strong>Numerador:</strong> mostra quantas partes foram consideradas, pintadas, usadas ou escolhidas.</p>
+              <p><strong>Denominador:</strong> mostra em quantas partes iguais o inteiro foi dividido.</p>
+              <p id="introReading" class="reading" style="text-align:left">Lemos: três quartos.</p>
+            </div>
+          </div>
+        </div>
+        <div class="mini-card">
+          <h4>Experimente</h4>
+          <div class="controls"><label>Partes iguais:</label><input id="introDenRange" type="range" min="2" max="12" value="4"><span class="value-badge" id="introDenValue">4</span></div>
+          <div class="controls"><label>Partes pintadas:</label><input id="introNumRange" type="range" min="0" max="4" value="3"><span class="value-badge" id="introNumValue">3</span></div>
+          <div class="rect-stage" style="min-height:175px"><div class="fraction-rect" id="introRect" style="height:105px"></div></div>
+        </div>
+      </div>
+      <div class="grid-2" style="margin-top:18px">
+        <div class="term-card"><div class="bubble orange">3</div><div><strong>Numerador</strong><br><span class="muted">Três partes foram pintadas.</span></div></div>
+        <div class="term-card"><div class="bubble blue">4</div><div><strong>Denominador</strong><br><span class="muted">O inteiro foi dividido em quatro partes iguais.</span></div></div>
+      </div>
+      <div class="callout" style="margin-top:18px">💡 <strong>Ideia principal:</strong> o denominador fala do tamanho das partes; o numerador fala da quantidade dessas partes que estamos considerando.</div>
+    </div>
+    <div class="section-card">
+      <h3 class="section-title"><span class="num">★</span> Onde encontramos frações?</h3>
+      <div class="info-grid">
+        <article class="info-card"><div class="icon">🍕</div><h4>Alimentos</h4><p>Metade de uma pizza, três quartos de um bolo ou cinco oitavos de uma barra de chocolate.</p></article>
+        <article class="info-card"><div class="icon">📏</div><h4>Medidas</h4><p>Meio metro, um quarto de litro e três quartos de uma hora são exemplos de medidas fracionárias.</p></article>
+        <article class="info-card"><div class="icon">👥</div><h4>Quantidades</h4><p>Doze estudantes podem ser separados em quatro grupos iguais; três desses grupos formam 3/4 da turma.</p></article>
+        <article class="info-card"><div class="icon">🧵</div><h4>Cordas e comprimentos</h4><p>Uma corda dividida por nós permite registrar comprimentos que não correspondem a uma unidade inteira.</p></article>
+        <article class="info-card"><div class="icon">🧪</div><h4>Receitas</h4><p>Receitas usam 1/2 xícara, 1/4 de colher ou 3/4 de copo para indicar porções.</p></article>
+        <article class="info-card"><div class="icon">⏰</div><h4>Tempo</h4><p>15 minutos correspondem a 1/4 de hora; 30 minutos correspondem a 1/2 hora.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="iguais">
+    <div class="section-card">
+      <h3 class="section-title"><span class="num">2</span> Laboratório das partes iguais</h3>
+      <p class="sub">Nem toda divisão de uma figura representa uma fração. Observe as divisões e decida se as partes possuem o mesmo tamanho.</p>
+      <div class="equal-lab">
+        <article class="partition-card"><h4>Experimento A</h4><div class="partition-bar" id="equalBar"></div><div class="choice-row"><button class="btn green" data-equal-choice="equal">Partes iguais</button><button class="btn orange" data-equal-choice="different">Partes diferentes</button></div></article>
+        <article class="partition-card"><h4>Experimento B</h4><div class="partition-bar" id="unequalBar"></div><div class="choice-row"><button class="btn green" data-unequal-choice="equal">Partes iguais</button><button class="btn orange" data-unequal-choice="different">Partes diferentes</button></div></article>
+      </div>
+      <div class="feedback-box" id="equalFeedback">Analise os dois experimentos e escolha uma resposta em cada um.</div>
+      <div class="callout blue" style="margin-top:18px">🔎 Mesmo que uma figura tenha quatro pedaços, ela só representa quartos quando os quatro pedaços têm o mesmo tamanho.</div>
+    </div>
+    <div class="section-card">
+      <h3 class="section-title"><span class="num">?</span> Teste rápido</h3>
+      <div class="grid-2">
+        <div class="mini-card"><h4>Uma pizza foi cortada em 6 pedaços, mas dois pedaços são bem maiores que os demais.</h4><p class="muted">Podemos dizer que cada pedaço representa 1/6 da pizza?</p><div class="choice-row"><button class="btn" id="quickYes">Sim</button><button class="btn orange" id="quickNo">Não</button></div></div>
+        <div class="mini-card"><h4>Explique com suas palavras</h4><p class="muted">A resposta esperada é: não, porque os pedaços não são iguais. O denominador 6 só pode ser usado quando o inteiro está dividido em seis partes de mesmo tamanho.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel" id="bancada">
+    <div class="section-card">
+      <h3 class="section-title"><span class="num">3</span> Bancada de construção</h3>
+      <p class="sub">Escolha a forma, determine o total de partes e clique nos pedaços para pintar ou apagar. A leitura da fração é atualizada automaticamente.</p>
+      <div class="lab-toolbar">
+        <label><strong>Forma:</strong></label><select id="shapeType" class="select"><option value="bar">Retângulo</option><option value="grid">Mosaico</option><option value="circle">Círculo</option></select>
+        <label><strong>Dividir em:</strong></label><input id="benchDen" type="range" min="2" max="12" value="8"><span class="value-badge" id="benchDenValue">8</span>
+        <button class="btn orange" id="benchRandom">🎲 Sortear</button><button class="btn ghost" id="benchClear">Limpar</button>
+      </div>
+      <div class="grid-2">
+        <div class="lab-stage" id="benchStage"></div>
+        <div class="mini-card" style="display:grid;place-items:center;align-content:center">
+          <div class="fraction-number"><span id="benchNum">0</span><span class="bar"></span><span id="benchDenText">8</span></div>
+          <div class="reading" id="benchReading">zero oitavos</div>
+          <p id="benchSentence" style="text-align:center;font-weight:850;color:#31516b">Nenhuma parte foi pintada.</p>
+          <div class="tag-row"><span class="tag" id="benchTag">Fração própria</span><span class="tag orange" id="benchRemaining">Restam 8/8 sem pintar</span></div>
+        </div>
+      </div>
+      <div class="callout green" style="margin-top:18px">🗣️ <strong>Desafio oral:</strong> explique por que a mudança no denominador altera o tamanho de cada pedaço.</div>
+    </div>
+  </section>
+
+  <section class="panel" id="cotidiano">
+    <div class="section-card">
+      <h3 class="section-title"><span class="num">4</span> Frações no cotidiano</h3>
+      <p class="sub">Escolha uma situação e altere a quantidade de partes consideradas. Observe como a mesma ideia de fração aparece em diferentes contextos.</p>
+      <div class="context-cards">
+        <button class="context-card active" data-context="pizza"><span>🍕</span>Pizza</button><button class="context-card" data-context="chocolate"><span>🍫</span>Chocolate</button><button class="context-card" data-context="bottle"><span>💧</span>Garrafa</button><button class="context-card" data-context="recipe"><span>🥛</span>Receita</button><button class="context-card" data-context="garden"><span>🌱</span>Horta</button><button class="context-card" data-context="rope"><span>🧵</span>Corda</button>
+      </div>
+      <div class="grid-2">
+        <div class="context-stage"><div class="context-visual" id="contextVisual"></div></div>
+        <div class="mini-card">
+          <div class="controls"><label>Total de partes:</label><input id="contextDen" type="range" min="2" max="12" value="8"><span class="value-badge" id="contextDenValue">8</span></div>
+          <div class="controls"><label>Partes consideradas:</label><input id="contextNum" type="range" min="0" max="8" value="3"><span class="value-badge" id="contextNumValue">3</span></div>
+          <div class="fraction-number" style="font-size:56px;margin:8px auto"><span id="contextNumText">3</span><span class="bar"></span><span id="contextDenText">8</span></div>
+          <p class="story" id="contextStory"></p>
+          <div class="callout blue" id="contextRemaining"></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-card">
+      <h3 class="section-title"><span class="num">🧵</span> Experiência da corda de medição</h3>
+      <p class="sub">Imagine uma corda com nós igualmente espaçados. Cada intervalo é uma parte igual da unidade. Ajuste a corda e o comprimento do objeto.</p>
+      <div class="controls"><label>Intervalos na unidade:</label><input id="ropeDen" type="range" min="2" max="12" value="8"><span class="value-badge" id="ropeDenValue">8</span></div>
+      <div class="controls"><label>Comprimento do objeto:</label><input id="ropeNum" type="range" min="1" max="8" value="5"><span class="value-badge" id="ropeNumValue">5</span></div>
+      <div class="context-stage" style="min-height:220px"><div class="rope" id="ropeLab"></div></div>
+      <div class="callout" id="ropeMessage" style="margin-top:15px"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="equivalentes">
+    <div class="section-card">
+      <h3 class="section-title"><span class="num">5</span> Máquina de frações equivalentes</h3>
+      <p class="sub">Frações equivalentes têm números diferentes, mas representam a mesma parte do inteiro. Multiplique o numerador e o denominador pelo mesmo número.</p>
+      <div class="grid-2">
+        <div>
+          <div class="controls"><label>Numerador:</label><input id="eqNum" type="range" min="1" max="3" value="1"><span class="value-badge" id="eqNumValue">1</span></div>
+          <div class="controls"><label>Denominador:</label><input id="eqDen" type="range" min="2" max="8" value="2"><span class="value-badge" id="eqDenValue">2</span></div>
+          <div class="controls"><label>Multiplicar por:</label><input id="eqFactor" type="range" min="1" max="4" value="2"><span class="value-badge" id="eqFactorValue">2</span></div>
+          <div class="callout blue" id="eqRule"></div>
+        </div>
+        <div class="mini-card"><div class="equiv-equals" id="eqEquation">1/2 = 2/4</div><p class="muted" style="text-align:center">As duas barras têm o mesmo tamanho total e a mesma área pintada.</p></div>
+      </div>
+      <div class="equiv-bars" style="margin-top:22px">
+        <div class="equiv-row"><div class="equiv-label" id="eqLabelA">1/2</div><div class="equiv-strip" id="eqStripA"></div></div>
+        <div class="equiv-equals">=</div>
+        <div class="equiv-row"><div class="equiv-label" id="eqLabelB">2/4</div><div class="equiv-strip" id="eqStripB"></div></div>
+      </div>
+    </div>
+    <div class="section-card">
+      <h3 class="section-title"><span class="num">↔</span> Como verificar?</h3>
+      <div class="steps"><div class="step">Observe se as figuras inteiras têm o mesmo tamanho.</div><div class="step">Compare a parte pintada. Ela deve ocupar a mesma quantidade do inteiro.</div><div class="step">Na escrita, multiplique ou divida o numerador e o denominador pelo mesmo número.</div></div>
+    </div>
+  </section>
+
+  <section class="panel" id="quantidade">
+    <div class="section-card">
+      <h3 class="section-title"><span class="num">6</span> Fração de uma quantidade</h3>
+      <p class="sub">Agora o inteiro é um conjunto de objetos. Primeiro dividimos a quantidade total em grupos iguais; depois consideramos a quantidade de grupos indicada pelo numerador.</p>
+      <div class="grid-2">
+        <div>
+          <div class="controls"><label>Quantidade total:</label><select id="qtyTotal" class="select"><option>8</option><option selected>12</option><option>16</option><option>18</option><option>20</option><option>24</option></select></div>
+          <div class="controls"><label>Denominador:</label><select id="qtyDen" class="select"></select></div>
+          <div class="controls"><label>Numerador:</label><input id="qtyNum" type="range" min="1" max="4" value="3"><span class="value-badge" id="qtyNumValue">3</span></div>
+          <div class="equation-box"><span id="qtyFraction">3/4</span><span>de</span><span id="qtyTotalText">12</span><span>=</span><span class="result" id="qtyResult">9</span></div>
+        </div>
+        <div class="mini-card">
+          <h4>Passo a passo</h4>
+          <div class="steps"><div class="step" id="qtyStep1"></div><div class="step" id="qtyStep2"></div></div>
+        </div>
+      </div>
+      <div class="group-stage" id="groupStage" style="margin-top:20px"></div>
+      <div class="callout green" id="qtySentence" style="margin-top:16px"></div>
+    </div>
+  </section>
+
+  <section class="panel" id="reta">
+    <div class="section-card">
+      <h3 class="section-title"><span class="num">7</span> Frações na reta numérica</h3>
+      <p class="sub">O trecho de 0 a 1 representa um inteiro. Divida-o em partes iguais e mova o marcador para localizar uma fração.</p>
+      <div class="controls"><label>Dividir o inteiro em:</label><input id="lineDen" type="range" min="2" max="12" value="8"><span class="value-badge" id="lineDenValue">8</span></div>
+      <div class="controls"><label>Posição do marcador:</label><input id="lineNum" type="range" min="0" max="8" value="3"><span class="value-badge" id="lineNumValue">3</span></div>
+      <div class="numberline-wrap"><div class="numberline" id="numberline"><div class="nl-line"></div><div class="marker" id="marker">3/8</div></div></div>
+      <div class="grid-2" style="margin-top:18px"><div class="callout" id="lineMessage"></div><div class="callout blue" id="lineEquivalent"></div></div>
+    </div>
+  </section>
+
+  <section class="panel" id="desafios">
+    <div class="section-card">
+      <div class="quiz-head"><div><h3 class="section-title" style="margin-bottom:0"><span class="num">8</span> Desafio final</h3><p class="sub" style="margin:6px 0 0">As questões misturam figuras, conceitos, equivalência, quantidade e reta numérica.</p></div><div class="quiz-progress">Questão <span id="quizCurrent">1</span> de 12</div></div>
+      <div class="challenge-box">
+        <div class="challenge-visual" id="challengeVisual"></div>
+        <div><div class="quiz-question" id="questionText"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback">Escolha uma alternativa.</div><button class="btn primary" id="nextQuestion" style="margin-top:12px;display:none">Próxima questão →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>© 2026 Francisco Vieira Dias — DIASMATH™. Recurso educacional desenvolvido com apoio de IA.</footer>
+</main>
+
+<div class="modal" id="teacherModal" role="dialog" aria-modal="true" aria-labelledby="teacherTitle"><div class="modal-card"><button class="close-modal" data-close="teacherModal">✕</button><h3 id="teacherTitle">Modo Professor</h3><p>FracionaLab indicado para introdução, exploração, sistematização e avaliação formativa do conceito de fração no 5º ano.</p><div class="teacher-grid"><div class="mini-card"><h4>Habilidades relacionadas</h4><p><strong>EF05MA03:</strong> identificação e representação de frações como parte de um todo, resultado de divisão e ponto na reta numérica.<br><br><strong>EF05MA04:</strong> identificação de frações equivalentes.</p></div><div class="mini-card"><h4>Objetivos</h4><p>Reconhecer partes iguais; identificar numerador e denominador; representar e ler frações; relacionar frações a situações reais; encontrar frações equivalentes e frações de quantidades.</p></div><div class="mini-card"><h4>Sugestão de 3 aulas</h4><p><strong>Aula 1:</strong> módulos 1, 2 e experiência da corda.<br><strong>Aula 2:</strong> bancada, cotidiano e equivalentes.<br><strong>Aula 3:</strong> quantidade, reta numérica e desafio final.</p></div><div class="mini-card"><h4>Avaliação formativa</h4><p>Observe se o estudante explica por que as partes devem ser iguais, identifica o total e as partes consideradas, usa a notação correta e justifica suas respostas.</p></div><div class="mini-card"><h4>Perguntas mediadoras</h4><p>O que o denominador informa? O que muda quando aumentamos o denominador? Como sabemos que duas frações são equivalentes? Qual foi o primeiro passo para encontrar 3/4 de 12?</p></div><div class="mini-card"><h4>Materiais concretos</h4><p>Barbante, tiras de papel, círculos de cartolina, tampinhas, palitos, régua, copos medidores e embalagens divididas em partes.</p></div></div><div class="callout" style="margin-top:16px">Sugestão: após cada experimento, peça ao estudante que represente no caderno a figura, a fração e uma frase explicativa.</div></div></div>
+
+<div class="modal" id="reportModal" role="dialog" aria-modal="true" aria-labelledby="reportTitle"><div class="modal-card"><button class="close-modal" data-close="reportModal">✕</button><h3 id="reportTitle">Relatório do estudante</h3><div class="report-score"><span id="reportScore">0</span> pontos</div><div class="teacher-grid"><div class="mini-card"><h4>Estudante</h4><p id="reportName">Estudante</p></div><div class="mini-card"><h4>Módulos visitados</h4><p><span id="reportModules">1</span> de 8</p></div><div class="mini-card"><h4>Desafio final</h4><p><span id="reportCorrect">0</span> acertos de 12</p></div><div class="mini-card"><h4>Orientação</h4><p id="reportAdvice">Explore os módulos e realize o desafio final.</p></div></div><div class="choice-row"><button class="btn orange" id="resetBtn">Reiniciar progresso</button><button class="btn primary" id="printBtn">Imprimir relatório</button></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const state={score:0,sound:true,player:'',visited:new Set(['descobrir']),benchSelected:new Set(),context:'pizza',quizIndex:0,quizAnswered:false,quizCorrect:0,quiz:[]};
+const fracNames={2:['meio','meios'],3:['terço','terços'],4:['quarto','quartos'],5:['quinto','quintos'],6:['sexto','sextos'],7:['sétimo','sétimos'],8:['oitavo','oitavos'],9:['nono','nonos'],10:['décimo','décimos'],11:['onze avos','onze avos'],12:['doze avos','doze avos']};
+const numWords=['zero','um','dois','três','quatro','cinco','seis','sete','oito','nove','dez','onze','doze'];
+
+
+function openLab(wantFullscreen=true){
+  const homeName=$('#homeStudentName')?.value.trim();
+  if(homeName){
+    state.player=homeName;
+    $('#studentName').value=homeName;
+  }
+  document.body.classList.remove('home-active');
+  $('#homeScreen')?.classList.add('lab-hidden');
+  $('#labApp')?.classList.remove('lab-hidden');
+  if(wantFullscreen&&!document.fullscreenElement){
+    document.documentElement.requestFullscreen?.().catch(()=>{});
+  }
+  saveState();
+  updateReport();
+  setTimeout(()=>document.querySelector('.hero')?.scrollIntoView({behavior:'smooth',block:'start'}),80);
+}
+
+function readFraction(n,d){
+  if(n===0)return 'zero '+fracNames[d][1];
+  if(n===d)return 'um inteiro';
+  return `${numWords[n]||n} ${fracNames[d][n===1?0:1]}`;
+}
+function gcd(a,b){while(b){[a,b]=[b,a%b]}return a}
+function beep(freq=440,duration=.08,type='sine'){
+  if(!state.sound)return;
+  try{
+    const ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const osc=ctx.createOscillator(),gain=ctx.createGain();
+    osc.type=type;osc.frequency.value=freq;gain.gain.value=.055;
+    osc.connect(gain);gain.connect(ctx.destination);osc.start();
+    gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+duration);
+    osc.stop(ctx.currentTime+duration);setTimeout(()=>ctx.close(),300)
+  }catch(e){}
+}
+function toast(msg){
+  const t=$('#toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2200)
+}
+function confetti(){
+  const colors=['#0ea5e9','#f97316','#84cc16','#facc15','#8b5cf6'];
+  for(let i=0;i<42;i++){
+    const c=document.createElement('i');c.className='confetti';
+    c.style.left=Math.random()*100+'vw';c.style.background=colors[i%colors.length];
+    c.style.animationDelay=Math.random()*.35+'s';document.body.appendChild(c);
+    setTimeout(()=>c.remove(),2200)
+  }
+}
+function saveState(){
+  localStorage.setItem('diasmath-fractions-v2',JSON.stringify({
+    score:state.score,player:state.player,visited:[...state.visited],quizCorrect:state.quizCorrect
+  }))
+}
+function loadState(){
+  try{
+    const saved=JSON.parse(localStorage.getItem('diasmath-fractions-v2')||'null');
+    if(!saved)return;
+    state.score=saved.score||0;state.player=saved.player||'';
+    state.visited=new Set(saved.visited||['descobrir']);state.quizCorrect=saved.quizCorrect||0;
+    $('#studentName').value=state.player
+  }catch(e){}
+}
+function updateStatus(){
+  $('#score').textContent=state.score;
+  $('#visitedCount').textContent=state.visited.size;
+  const progress=Math.min(100,(state.visited.size/8)*70+(state.quizCorrect/12)*30);
+  $('#progressBar').style.width=progress+'%';saveState()
+}
+function addScore(n){
+  state.score+=n;updateStatus()
+}
+function renderPieces(el,den,num,clickable=false,selectedSet=null){
+  el.innerHTML='';el.style.gridTemplateColumns=`repeat(${den},1fr)`;
+  for(let i=0;i<den;i++){
+    const p=document.createElement('button');p.type='button';p.className='piece';
+    const active=selectedSet?selectedSet.has(i):i<num;
+    if(active)p.classList.add('paint');
+    p.setAttribute('aria-label',`Parte ${i+1}`);
+    if(clickable)p.addEventListener('click',()=>{
+      selectedSet.has(i)?selectedSet.delete(i):selectedSet.add(i);
+      p.classList.toggle('paint');updateBenchText();beep(p.classList.contains('paint')?650:310,.05)
+    });
+    el.appendChild(p)
+  }
+}
+
+$('#enterLabBtn')?.addEventListener('click',()=>openLab(true));
+$('#enterWindowBtn')?.addEventListener('click',()=>openLab(false));
+$('#homeStudentName')?.addEventListener('keydown',e=>{if(e.key==='Enter')openLab(true)});
+
+$$('.tab').forEach(btn=>btn.addEventListener('click',()=>{
+  $$('.tab').forEach(b=>b.classList.remove('active'));
+  $$('.panel').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');$('#'+btn.dataset.tab).classList.add('active');
+  if(!state.visited.has(btn.dataset.tab)){state.visited.add(btn.dataset.tab);addScore(3)}
+  updateStatus();beep(520,.06);
+  document.querySelector('.tabs').scrollIntoView({behavior:'smooth',block:'start'})
+}));
+$('#startBtn').addEventListener('click',()=>{
+  state.player=$('#studentName').value.trim()||'Estudante';
+  addScore(5);toast(`Vamos experimentar, ${state.player}!`);beep(660,.12);
+  document.querySelector('.tabs').scrollIntoView({behavior:'smooth',block:'start'});
+  const bancadaTab=[...document.querySelectorAll('.tab')].find(t=>t.dataset.tab==='bancada');
+  bancadaTab?.click();
+});
+$('#soundBtn').addEventListener('click',()=>{
+  state.sound=!state.sound;$('#soundBtn').textContent=state.sound?'🔊':'🔇';
+  toast(state.sound?'Sons ativados':'Sons desativados')
+});
+$('#fullBtn').addEventListener('click',()=>{
+  if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();
+  else document.exitFullscreen?.()
+});
+$('#teacherBtn').addEventListener('click',()=>$('#teacherModal').classList.add('open'));
+$('#reportBtn').addEventListener('click',()=>{updateReport();$('#reportModal').classList.add('open')});
+$$('[data-close]').forEach(b=>b.addEventListener('click',()=>$('#'+b.dataset.close).classList.remove('open')));
+$$('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open')}));
+$('#printBtn').addEventListener('click',()=>window.print());
+$('#resetBtn').addEventListener('click',()=>{
+  if(!confirm('Deseja reiniciar os pontos e o progresso deste laboratório?'))return;
+  localStorage.removeItem('diasmath-fractions-v2');location.reload()
+});
+function updateReport(){
+  const name=state.player||$('#studentName').value.trim()||'Estudante';
+  $('#reportName').textContent=name;$('#reportScore').textContent=state.score;
+  $('#reportModules').textContent=state.visited.size;$('#reportCorrect').textContent=state.quizCorrect;
+  let advice='Explore os módulos e realize o desafio final.';
+  if(state.quizCorrect>=10)advice='Excelente domínio! Proponha ao estudante que crie e explique novos exemplos.';
+  else if(state.quizCorrect>=7)advice='Bom desempenho. Retome as questões erradas e peça justificativas orais.';
+  else if(state.quizIndex>0)advice='Retome partes iguais, equivalência e fração de quantidade antes de refazer o desafio.';
+  $('#reportAdvice').textContent=advice
+}
+
+// Descobrir
+function updateIntro(){
+  const d=+$('#introDenRange').value;let n=+$('#introNumRange').value;
+  $('#introNumRange').max=d;if(n>d){n=d;$('#introNumRange').value=d}
+  $('#introDenValue').textContent=d;$('#introNumValue').textContent=n;
+  $('#introNum').textContent=n;$('#introDen').textContent=d;
+  $('#introReading').textContent='Lemos: '+readFraction(n,d)+'.';
+  renderPieces($('#introRect'),d,n)
+}
+$('#introDenRange').addEventListener('input',updateIntro);
+$('#introNumRange').addEventListener('input',updateIntro);
+
+// Partes iguais
+function renderPartitions(){
+  $('#equalBar').innerHTML='';$('#unequalBar').innerHTML='';
+  [25,25,25,25].forEach(w=>{
+    const p=document.createElement('div');p.className='partition-piece';p.style.width=w+'%';$('#equalBar').appendChild(p)
+  });
+  [14,28,20,38].forEach(w=>{
+    const p=document.createElement('div');p.className='partition-piece';p.style.width=w+'%';$('#unequalBar').appendChild(p)
+  })
+}
+$$('[data-equal-choice]').forEach(b=>b.addEventListener('click',()=>{
+  const ok=b.dataset.equalChoice==='equal';
+  $('#equalFeedback').innerHTML=ok?'✅ No experimento A, as quatro partes possuem o mesmo tamanho. Podemos representar quartos.':'❌ Observe novamente: no experimento A, as quatro partes têm o mesmo tamanho.';
+  beep(ok?760:230,.1);if(ok)addScore(4)
+}));
+$$('[data-unequal-choice]').forEach(b=>b.addEventListener('click',()=>{
+  const ok=b.dataset.unequalChoice==='different';
+  $('#equalFeedback').innerHTML=ok?'✅ No experimento B, os pedaços têm tamanhos diferentes. Não podemos chamar cada pedaço de 1/4.':'❌ Conte os pedaços, mas compare também seus tamanhos. Eles são diferentes.';
+  beep(ok?760:230,.1);if(ok)addScore(4)
+}));
+$('#quickYes').addEventListener('click',()=>{toast('Não. O denominador 6 exige seis partes iguais.');beep(230,.12)});
+$('#quickNo').addEventListener('click',()=>{toast('Correto! As partes precisam ter o mesmo tamanho.');addScore(3);beep(760,.12)});
+
+// Bancada de figuras
+function gridColumns(d){let c=Math.floor(Math.sqrt(d));while(c>1&&d%c!==0)c--;return c}
+function polar(cx,cy,r,angle){
+  const a=(angle-90)*Math.PI/180;
+  return {x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)}
+}
+function arcPath(cx,cy,r,start,end){
+  const s=polar(cx,cy,r,end),e=polar(cx,cy,r,start);
+  return `M ${cx} ${cy} L ${s.x} ${s.y} A ${r} ${r} 0 ${end-start<=180?0:1} 0 ${e.x} ${e.y} Z`
+}
+function renderBench(){
+  const d=+$('#benchDen').value,type=$('#shapeType').value;
+  state.benchSelected=new Set([...state.benchSelected].filter(i=>i<d));
+  $('#benchDenValue').textContent=d;$('#benchDenText').textContent=d;
+  const stage=$('#benchStage');stage.innerHTML='';
+  if(type==='circle'){
+    const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 240 240');svg.classList.add('circle-svg');
+    for(let i=0;i<d;i++){
+      const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+      p.setAttribute('d',arcPath(120,120,105,i*360/d,(i+1)*360/d));
+      p.classList.add('circle-sector');if(state.benchSelected.has(i))p.classList.add('on');
+      p.addEventListener('click',()=>{
+        state.benchSelected.has(i)?state.benchSelected.delete(i):state.benchSelected.add(i);
+        p.classList.toggle('on');updateBenchText();beep(p.classList.contains('on')?650:310,.05);
+        renderBench();
+      });svg.appendChild(p);
+      const mid=polar(120,120,66,(i+.5)*360/d);
+      const label=document.createElementNS('http://www.w3.org/2000/svg','text');
+      label.setAttribute('x',mid.x);label.setAttribute('y',mid.y);
+      label.setAttribute('class','sector-label');
+      label.textContent=i+1;
+      svg.appendChild(label)
+    }
+    stage.appendChild(svg)
+  }else{
+    const grid=document.createElement('div');grid.className='shape-grid';
+    if(type==='grid'){
+      const cols=gridColumns(d);grid.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+      grid.style.height='260px'
+    }else grid.style.gridTemplateColumns=`repeat(${d},1fr)`;
+    for(let i=0;i<d;i++){
+      const cell=document.createElement('button');cell.type='button';cell.className='shape-cell';
+      cell.innerHTML=`<span class="part-index">${i+1}</span>`;
+      cell.title=`Parte ${i+1} de ${d}`;
+      if(state.benchSelected.has(i))cell.classList.add('on');
+      cell.addEventListener('click',()=>{
+        state.benchSelected.has(i)?state.benchSelected.delete(i):state.benchSelected.add(i);
+        cell.classList.toggle('on');updateBenchText();beep(cell.classList.contains('on')?650:310,.05)
+      });grid.appendChild(cell)
+    }
+    stage.appendChild(grid)
+  }
+  updateBenchText()
+}
+function updateBenchText(){
+  const d=+$('#benchDen').value,n=state.benchSelected.size;
+  $('#benchNum').textContent=n;$('#benchDenText').textContent=d;
+  $('#benchReading').textContent=readFraction(n,d);
+  $('#benchSentence').textContent=n===0?`A animação mostra ${d} partes iguais numeradas. Nenhuma parte foi pintada.`:`A animação mostra ${d} partes iguais numeradas; ${n} parte(s) foram pintadas.`;
+  $('#benchRemaining').textContent=`Restam ${d-n}/${d} sem pintar`;
+  $('#benchTag').textContent=n===d?'Representa 1 inteiro':n<d?'Fração própria':'Fração';
+}
+$('#shapeType').addEventListener('change',renderBench);
+$('#benchDen').addEventListener('input',()=>{state.benchSelected.clear();renderBench()});
+$('#benchRandom').addEventListener('click',()=>{
+  const d=+$('#benchDen').value,n=Math.floor(Math.random()*d)+1;
+  state.benchSelected=new Set(Array.from({length:n},(_,i)=>i));renderBench();addScore(3);beep(730,.1)
+});
+$('#benchClear').addEventListener('click',()=>{state.benchSelected.clear();renderBench()});
+
+// Cotidiano
+const contextDefaults={
+  pizza:[3,8],chocolate:[5,12],bottle:[3,4],recipe:[2,3],garden:[2,5],rope:[7,10]
+};
+const contextPhrases={
+  pizza:(n,d)=>`Foram escolhidas <strong>${n} de ${d} fatias</strong> da pizza.`,
+  chocolate:(n,d)=>`Foram consumidos <strong>${n} de ${d} pedaços</strong> da barra.`,
+  bottle:(n,d)=>`A garrafa está com <strong>${n}/${d}</strong> de sua capacidade.`,
+  recipe:(n,d)=>`A receita pede <strong>${n}/${d}</strong> de uma xícara.`,
+  garden:(n,d)=>`Foram cultivados <strong>${n} de ${d} canteiros</strong> da horta.`,
+  rope:(n,d)=>`O objeto mede <strong>${n}/${d}</strong> da unidade da corda.`
+};
+function contextTitle(){
+  return {
+    pizza:'Pizza dividida com a turma',
+    chocolate:'Tablete de chocolate',
+    bottle:'Garrafa com parte preenchida',
+    recipe:'Receita culinária',
+    garden:'Horta da escola',
+    rope:'Corda para medir percurso'
+  }[state.context] || 'Situação';
+}
+function makeContextHeader(n,d){
+  return `<p class="context-title">${contextTitle()}</p><p class="visual-caption">${n}/${d} representado nesta situação.</p>`;
+}
+function svgPie(n,d){
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('viewBox','0 0 240 240');svg.classList.add('circle-svg');
+  for(let i=0;i<d;i++){
+    const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',arcPath(120,120,105,i*360/d,(i+1)*360/d));
+    p.setAttribute('fill',i<n?'#f97316':'#fff7ed');
+    p.setAttribute('stroke','#075985');p.setAttribute('stroke-width','2.2');
+    svg.appendChild(p);
+    const mid=polar(120,120,67,(i+.5)*360/d);
+    const label=document.createElementNS('http://www.w3.org/2000/svg','text');
+    label.setAttribute('x',mid.x);label.setAttribute('y',mid.y);
+    label.setAttribute('class','sector-label');
+    label.textContent=i+1;
+    svg.appendChild(label);
+  }
+  return svg;
+}
+function contextGrid(className,d,n,emoji=''){
+  const el=document.createElement('div');el.className=className;
+  const cols=gridColumns(d);el.style.gridTemplateColumns=`repeat(${cols},1fr)`;
+  for(let i=0;i<d;i++){
+    const x=document.createElement('div');
+    x.className=(className==='chocolate'?'choc-piece':className==='garden'?'garden-cell':'piece')+(i<n?(className==='chocolate'?' used':className==='garden'?' on':' paint'):'');
+    x.textContent=i<n?emoji || (i+1):i+1;
+    el.appendChild(x);
+  }
+  return el;
+}
+function renderContext(){
+  const d=+$('#contextDen').value;let n=+$('#contextNum').value;
+  $('#contextNum').max=d;if(n>d){n=d;$('#contextNum').value=d}
+  $('#contextDenValue').textContent=d;$('#contextNumValue').textContent=n;
+  $('#contextNumText').textContent=n;$('#contextDenText').textContent=d;
+  $('#contextStory').innerHTML=contextPhrases[state.context](n,d);
+  $('#contextRemaining').innerHTML=`A parte restante é <strong>${d-n}/${d}</strong>.`;
+  const v=$('#contextVisual');v.innerHTML='';
+  const wrap=document.createElement('div');wrap.style.display='grid';wrap.style.placeItems='center';wrap.style.gap='10px';wrap.style.width='100%';
+  const title=document.createElement('div');title.innerHTML=makeContextHeader(n,d);wrap.appendChild(title);
+
+  if(state.context==='pizza'){
+    wrap.appendChild(svgPie(n,d));
+  }else if(state.context==='chocolate'){
+    wrap.appendChild(contextGrid('chocolate',d,n,''));
+  }else if(state.context==='bottle'){
+    const b=document.createElement('div');b.className='bottle';
+    b.innerHTML=`<div class="bottle-fill" style="height:${n/d*100}%"></div><div class="bottle-label">${n}/${d} da garrafa</div>`;
+    wrap.appendChild(b);
+  }else if(state.context==='recipe'){
+    const cup=document.createElement('div');cup.className='cup';
+    cup.innerHTML=`<div class="cup-fill" style="height:${n/d*100}%"></div><div class="cup-label">${n}/${d} de xícara</div>`;
+    wrap.appendChild(cup);
+  }else if(state.context==='garden'){
+    wrap.appendChild(contextGrid('garden',d,n,'🌱'));
+  }else{
+    const r=document.createElement('div');r.className='rope';renderRope(r,d,n);wrap.appendChild(r);
+  }
+  v.appendChild(wrap);
+}
+$$('.context-card').forEach(b=>b.addEventListener('click',()=>{
+  $$('.context-card').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  state.context=b.dataset.context;
+  const [n,d]=contextDefaults[state.context];
+  $('#contextDen').value=d;$('#contextNum').value=n;renderContext();addScore(2);beep(620,.07)
+}));
+$('#contextDen').addEventListener('input',renderContext);
+$('#contextNum').addEventListener('input',renderContext);
+function renderRope(el,d,n){
+  el.innerHTML='<div class="rope-line"></div>';
+  for(let i=0;i<=d;i++){
+    const m=document.createElement('div');m.className='rope-mark';
+    m.style.left=(4+92*(i/d))+'%';el.appendChild(m)
+  }
+  const obj=document.createElement('div');obj.className='rope-object';
+  obj.style.width=(92*n/d)+'%';el.appendChild(obj)
+}
+function updateRopeLab(){
+  const d=+$('#ropeDen').value;let n=+$('#ropeNum').value;
+  $('#ropeNum').max=d;if(n>d){n=d;$('#ropeNum').value=d}
+  $('#ropeDenValue').textContent=d;$('#ropeNumValue').textContent=n;
+  renderRope($('#ropeLab'),d,n);
+  $('#ropeMessage').innerHTML=`A unidade foi dividida em <strong>${d} intervalos iguais</strong>. O objeto ocupa ${n} intervalos, portanto mede <strong>${n}/${d}</strong> da unidade.`
+}
+$('#ropeDen').addEventListener('input',updateRopeLab);
+$('#ropeNum').addEventListener('input',updateRopeLab);
+
+// Frações equivalentes
+function renderStrip(el,den,num){
+  el.innerHTML='';el.style.gridTemplateColumns=`repeat(${den},1fr)`;
+  for(let i=0;i<den;i++){
+    const p=document.createElement('div');p.className='equiv-piece'+(i<num?' on':'');el.appendChild(p)
+  }
+}
+function updateEquivalent(){
+  const d=+$('#eqDen').value;let n=+$('#eqNum').value,factor=+$('#eqFactor').value;
+  $('#eqNum').max=d-1;if(n>=d){n=d-1;$('#eqNum').value=n}
+  $('#eqNumValue').textContent=n;$('#eqDenValue').textContent=d;$('#eqFactorValue').textContent=factor;
+  const n2=n*factor,d2=d*factor;
+  $('#eqLabelA').textContent=`${n}/${d}`;$('#eqLabelB').textContent=`${n2}/${d2}`;
+  $('#eqEquation').textContent=`${n}/${d} = ${n2}/${d2}`;
+  $('#eqRule').innerHTML=`Multiplicamos por ${factor}: <strong>${n} × ${factor} = ${n2}</strong> e <strong>${d} × ${factor} = ${d2}</strong>.`;
+  renderStrip($('#eqStripA'),d,n);renderStrip($('#eqStripB'),d2,n2)
+}
+$('#eqNum').addEventListener('input',updateEquivalent);
+$('#eqDen').addEventListener('input',updateEquivalent);
+$('#eqFactor').addEventListener('input',updateEquivalent);
+
+// Fração de quantidade
+function validDenominators(total){return [2,3,4,5,6,8,10,12].filter(d=>d<=total&&total%d===0)}
+function rebuildQtyDen(){
+  const total=+$('#qtyTotal').value,sel=$('#qtyDen'),before=+sel.value||4;
+  sel.innerHTML='';
+  validDenominators(total).forEach(d=>{
+    const o=document.createElement('option');o.value=d;o.textContent=d+' partes';
+    if(d===before)o.selected=true;sel.appendChild(o)
+  });
+  if(!sel.value)sel.value=validDenominators(total)[0];
+  updateQuantity()
+}
+function updateQuantity(){
+  const total=+$('#qtyTotal').value,d=+$('#qtyDen').value;
+  let n=+$('#qtyNum').value;$('#qtyNum').max=d;if(n>d){n=d;$('#qtyNum').value=d}
+  const one=total/d,result=one*n;
+  $('#qtyNumValue').textContent=n;$('#qtyFraction').textContent=`${n}/${d}`;
+  $('#qtyTotalText').textContent=total;$('#qtyResult').textContent=result;
+  $('#qtyStep1').innerHTML=`Divida o total pelo denominador: <strong>${total} ÷ ${d} = ${one}</strong>. Cada grupo possui ${one} elementos.`;
+  $('#qtyStep2').innerHTML=`Multiplique pelo numerador: <strong>${one} × ${n} = ${result}</strong>.`;
+  $('#qtySentence').innerHTML=`Portanto, <strong>${n}/${d} de ${total} é igual a ${result}</strong>.`;
+  const stage=$('#groupStage');stage.innerHTML='';stage.style.gridTemplateColumns=`repeat(${Math.min(d,4)},1fr)`;
+  for(let g=0;g<d;g++){
+    const group=document.createElement('div');group.className='quantity-group'+(g<n?' on':'');
+    for(let i=0;i<one;i++){const dot=document.createElement('span');dot.className='counter';group.appendChild(dot)}
+    stage.appendChild(group)
+  }
+}
+$('#qtyTotal').addEventListener('change',rebuildQtyDen);
+$('#qtyDen').addEventListener('change',updateQuantity);
+$('#qtyNum').addEventListener('input',updateQuantity);
+
+// Reta numérica
+function renderLine(){
+  const d=+$('#lineDen').value;let n=+$('#lineNum').value;
+  $('#lineNum').max=d;if(n>d){n=d;$('#lineNum').value=d}
+  $('#lineDenValue').textContent=d;$('#lineNumValue').textContent=n;
+  const line=$('#numberline');line.querySelectorAll('.tick,.tick-label').forEach(x=>x.remove());
+  const start=35,width=690;
+  for(let i=0;i<=d;i++){
+    const pos=start+width*i/d;
+    const tick=document.createElement('div');tick.className='tick';tick.style.left=pos+'px';line.appendChild(tick);
+    if(i===0||i===d||d<=8){
+      const label=document.createElement('div');label.className='tick-label';label.style.left=pos+'px';
+      label.textContent=i===0?'0':i===d?'1':`${i}/${d}`;line.appendChild(label)
+    }
+  }
+  const marker=$('#marker');marker.style.left=(start+width*n/d)+'px';marker.textContent=`${n}/${d}`;
+  $('#lineMessage').innerHTML=n===0?'O marcador está no <strong>zero</strong>.':n===d?`${n}/${d} corresponde a <strong>1 inteiro</strong>.`:`A fração <strong>${n}/${d}</strong> está entre 0 e 1.`;
+  const g=gcd(n,d);
+  $('#lineEquivalent').innerHTML=g>1&&n>0?`Na forma simplificada, <strong>${n}/${d} = ${n/g}/${d/g}</strong>.`:'A fração já está na forma mais simples.'
+}
+$('#lineDen').addEventListener('input',renderLine);
+$('#lineNum').addEventListener('input',renderLine);
+
+// Desafio final
+function shuffle(arr){return [...arr].sort(()=>Math.random()-.5)}
+function makeQuiz(){
+  state.quiz=[
+    {kind:'figure',data:{n:3,d:8},prompt:'Qual fração representa a parte pintada?',options:['3/8','5/8','3/5','8/3'],correct:'3/8',explain:'A figura tem 8 partes iguais e 3 estão pintadas.'},
+    {kind:'concept',data:{icon:'🔽'},prompt:'O que o denominador de uma fração informa?',options:['O total de partes iguais','Apenas as partes pintadas','O tamanho da figura','O resultado de uma soma'],correct:'O total de partes iguais',explain:'O denominador indica em quantas partes iguais o inteiro foi dividido.'},
+    {kind:'concept',data:{icon:'🔼'},prompt:'O que o numerador de uma fração informa?',options:['As partes consideradas','O total de inteiros','O nome da figura','O tamanho de cada lado'],correct:'As partes consideradas',explain:'O numerador indica quantas partes foram consideradas, pintadas ou escolhidas.'},
+    {kind:'unequal',data:{widths:[15,25,20,40]},prompt:'Esses quatro pedaços podem ser chamados de quartos?',options:['Sim','Não'],correct:'Não',explain:'Não. Os pedaços têm tamanhos diferentes; por isso não representam quartos.'},
+    {kind:'equiv',data:{n1:1,d1:2,n2:2,d2:4},prompt:'Qual fração é equivalente a 1/2?',options:['2/4','1/3','3/4','2/3'],correct:'2/4',explain:'1/2 e 2/4 ocupam a mesma parte do inteiro.'},
+    {kind:'quantity',data:{total:12,on:9},prompt:'Quanto é 3/4 de 12?',options:['9','8','6','4'],correct:'9',explain:'12 ÷ 4 = 3 e 3 × 3 = 9.'},
+    {kind:'figure',data:{n:5,d:8},prompt:'Se 5/8 foram usados, qual fração ainda resta?',options:['3/8','5/8','3/5','8/5'],correct:'3/8',explain:'O inteiro tem 8/8. Então, 8/8 − 5/8 = 3/8.'},
+    {kind:'line',data:{n:3,d:5},prompt:'Qual fração está marcada na reta?',options:['3/5','2/5','3/4','5/3'],correct:'3/5',explain:'O inteiro foi dividido em 5 partes iguais e o marcador está na terceira parte.'},
+    {kind:'concept',data:{icon:'🗣️'},prompt:'Como lemos a fração 4/6?',options:['Quatro sextos','Seis quartos','Quatro meios','Seis oitavos'],correct:'Quatro sextos',explain:'Lemos primeiro o numerador e depois o nome relacionado ao denominador.'},
+    {kind:'compare',data:{a:'5/8',b:'3/8'},prompt:'Qual é a maior fração?',options:['5/8','3/8','São iguais','Não é possível comparar'],correct:'5/8',explain:'Com denominadores iguais, a fração com maior numerador é a maior.'},
+    {kind:'whole',data:{d:6},prompt:'A fração 6/6 representa:',options:['1 inteiro','1/2','6 inteiros','0'],correct:'1 inteiro',explain:'Quando numerador e denominador são iguais, todas as partes do inteiro foram consideradas.'},
+    {kind:'figure',data:{n:2,d:3},prompt:'Observe a figura. Qual é a fração pintada?',options:['2/3','1/3','3/2','2/5'],correct:'2/3',explain:'Duas das três partes iguais estão pintadas.'}
+  ]
+}
+function quizFigure(n,d){
+  const el=document.createElement('div');el.className='quiz-fig';el.style.gridTemplateColumns=`repeat(${d},1fr)`;
+  for(let i=0;i<d;i++){const c=document.createElement('div');c.className='quiz-cell'+(i<n?' on':'');el.appendChild(c)}
+  return el
+}
+function quizLine(n,d){
+  const el=document.createElement('div');el.className='quiz-line';el.innerHTML='<div class="base"></div>';
+  for(let i=0;i<=d;i++){
+    const pos=5+90*i/d;
+    const t=document.createElement('div');t.className='qtick';t.style.left=pos+'%';el.appendChild(t)
+  }
+  const mark=document.createElement('div');mark.className='qmark';mark.style.left=(5+90*n/d)+'%';mark.textContent='📍';el.appendChild(mark);
+  return el
+}
+function renderQuizVisual(q){
+  const v=$('#challengeVisual');v.innerHTML='';
+  if(q.kind==='figure')v.appendChild(quizFigure(q.data.n,q.data.d));
+  else if(q.kind==='quantity'){
+    const box=document.createElement('div');box.className='quiz-dots';
+    for(let i=0;i<q.data.total;i++){const d=document.createElement('span');d.className='quiz-dot'+(i<q.data.on?' on':'');box.appendChild(d)}
+    v.appendChild(box)
+  }else if(q.kind==='line')v.appendChild(quizLine(q.data.n,q.data.d));
+  else if(q.kind==='unequal'){
+    const card=document.createElement('div');card.className='partition-bar';card.style.width='min(560px,95%)';
+    q.data.widths.forEach((w,i)=>{const p=document.createElement('div');p.className='partition-piece';p.style.width=w+'%';if(i<2)p.style.background='linear-gradient(145deg,#fde047,#fb923c)';card.appendChild(p)});
+    v.appendChild(card)
+  }else if(q.kind==='equiv'){
+    const wrap=document.createElement('div');wrap.style.width='95%';wrap.className='equiv-bars';
+    const a=document.createElement('div');a.className='equiv-strip';renderStrip(a,q.data.d1,q.data.n1);
+    const b=document.createElement('div');b.className='equiv-strip';renderStrip(b,q.data.d2,q.data.n2);
+    wrap.appendChild(a);const eq=document.createElement('div');eq.className='equiv-equals';eq.textContent='=';wrap.appendChild(eq);wrap.appendChild(b);v.appendChild(wrap)
+  }else if(q.kind==='compare'){
+    v.innerHTML=`<div class="equiv-equals" style="font-size:58px">${q.data.a} &nbsp; ? &nbsp; ${q.data.b}</div>`
+  }else if(q.kind==='whole'){
+    v.appendChild(quizFigure(q.data.d,q.data.d))
+  }else{
+    v.innerHTML=`<div style="font-size:100px">${q.data.icon}</div>`
+  }
+}
+function renderQuiz(){
+  const q=state.quiz[state.quizIndex];state.quizAnswered=false;
+  $('#quizCurrent').textContent=state.quizIndex+1;$('#questionText').textContent=q.prompt;
+  $('#feedback').textContent='Escolha uma alternativa.';$('#nextQuestion').style.display='none';
+  $('#challengeVisual').classList.add('locked');
+  $('#challengeVisual').innerHTML='<div class="challenge-placeholder"><span class="big">❓</span>Responda primeiro. A animação e a explicação visual aparecerão após sua escolha.</div>';
+  const box=$('#answers');box.innerHTML='';
+  shuffle(q.options).forEach(value=>{
+    const b=document.createElement('button');b.className='answer';b.textContent=value;b.dataset.value=value;
+    b.addEventListener('click',()=>answerQuiz(b,value===q.correct,q));box.appendChild(b)
+  })
+}
+function answerQuiz(btn,ok,q){
+  if(state.quizAnswered)return;state.quizAnswered=true;
+  $('#challengeVisual').classList.remove('locked');
+  renderQuizVisual(q);
+  $$('.answer').forEach(b=>{b.disabled=true;if(b.dataset.value===q.correct)b.classList.add('correct')});
+  if(ok){
+    btn.classList.add('correct');state.quizCorrect++;addScore(10);
+    $('#feedback').textContent='Muito bem! '+q.explain;beep(820,.15,'triangle');confetti()
+  }else{
+    btn.classList.add('wrong');$('#feedback').textContent='Observe a explicação: '+q.explain;beep(220,.18,'sawtooth')
+  }
+  saveState();$('#nextQuestion').style.display='inline-block'
+}
+$('#nextQuestion').addEventListener('click',()=>{
+  if(state.quizIndex<state.quiz.length-1){state.quizIndex++;renderQuiz();return}
+  const name=state.player||$('#studentName').value.trim()||'Estudante';
+  $('#questionText').textContent=`Parabéns, ${name}! Você concluiu o laboratório.`;
+  $('#challengeVisual').innerHTML='<div style="font-size:100px">🏆</div>';
+  $('#answers').innerHTML='';$('#feedback').textContent=`Resultado: ${state.quizCorrect} acertos de 12 e ${state.score} pontos.`;
+  $('#nextQuestion').style.display='none';confetti();beep(900,.3,'triangle');updateReport();saveState()
+});
+
+// Inicialização
+loadState();updateStatus();updateIntro();renderPartitions();
+state.benchSelected=new Set([0,1,2]);renderBench();
+renderContext();updateRopeLab();updateEquivalent();rebuildQtyDen();renderLine();
+makeQuiz();renderQuiz();
+</script>
+</body>
+</html>
