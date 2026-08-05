@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 
 const ferramentas = [
   {
-    title: "DIASMATH Forms V32",
+    title: "DIASMATH Forms",
     description:
       "Crie formulários, questionários, atividades avaliativas, compartilhe links e acompanhe respostas em um painel pedagógico.",
     href: "/professor/forms",

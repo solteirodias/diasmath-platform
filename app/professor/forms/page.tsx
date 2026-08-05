@@ -15,7 +15,7 @@ export default function DiasmathFormsPage() {
         </Link>
 
         <p className="truncate text-center text-sm font-bold">
-          DIASMATH Forms V32
+          DIASMATH Forms
         </p>
 
         <a
@@ -30,7 +30,7 @@ export default function DiasmathFormsPage() {
 
       <iframe
         src="/professor/forms/index.html"
-        title="DIASMATH Forms V32"
+        title="DIASMATH Forms"
         className="h-[calc(100vh-56px)] w-full border-0"
         allow="fullscreen"
         allowFullScreen

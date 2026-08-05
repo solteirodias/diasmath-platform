@@ -1,4 +1,4 @@
-# DIASMATH Forms V32
+# DIASMATH Forms
 
 Versão integrada e funcional para publicação em hospedagem estática.
 

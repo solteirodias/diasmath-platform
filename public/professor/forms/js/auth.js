@@ -37,8 +37,38 @@ export async function registerUser({ name, email, school, city, password }) {
 export async function loginUser(email, password) {
   const normalizedEmail = email.trim().toLowerCase();
   const passwordHash = await hashText(password);
-  const user = DB.users.all().find(item => item.email === normalizedEmail && item.passwordHash === passwordHash);
+  const users = DB.users.all();
+
+  let user = users.find(
+    item => item.email === normalizedEmail && item.passwordHash === passwordHash
+  );
+
+  /*
+    Acesso em outro navegador:
+    Esta versão do DIASMATH Forms usa armazenamento local para o cadastro do professor.
+    Por isso, quando o professor abre em outro navegador, o cadastro antigo não existe ali.
+
+    Para evitar bloqueio, se o e-mail ainda não existir neste navegador, o sistema
+    ativa esse mesmo e-mail e senha digitados como acesso local do aparelho atual.
+  */
+  if (!user && !users.some(item => item.email === normalizedEmail)) {
+    user = {
+      id: uid("user"),
+      name: "Francisco Vieira Dias",
+      email: normalizedEmail,
+      school: "DIASMATH",
+      city: "",
+      passwordHash,
+      createdAt: new Date().toISOString(),
+      restoredAccess: true
+    };
+
+    users.push(user);
+    DB.users.save(users);
+  }
+
   if (!user) throw new Error("E-mail ou senha inválidos.");
+
   DB.session.set({ userId: user.id, createdAt: new Date().toISOString() });
   return user;
 }
