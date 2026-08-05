@@ -1,5 +1,5 @@
 import { DB } from "./storage.js";
-import { requireUser, logoutUser } from "./auth.js";
+import { requireUser, logoutUser, updateRemoteProfile } from "./auth.js";
 import { TEMPLATES } from "./templates.js";
 import { uid, formatDate, downloadFile, csvEscape, copyText, deepClone, safeText, slugify } from "./utils.js";
 
@@ -31,6 +31,195 @@ const RESPONSE_SYNC = {
   loading: {},
   last: {}
 };
+
+
+const FORM_CLOUD_SYNC = {
+  loading: false,
+  last: 0
+};
+
+function currentUserEmail() {
+  return String(user.email || "").trim().toLowerCase();
+}
+
+function legacyUserIds() {
+  return new Set([user.id, ...(user.legacyIds || [])].filter(Boolean));
+}
+
+function belongsToCurrentUser(form) {
+  const email = currentUserEmail();
+  const ids = legacyUserIds();
+
+  return (
+    form.ownerEmail === email ||
+    form.owner_email === email ||
+    ids.has(form.ownerId) ||
+    (!form.ownerEmail && !form.owner_email && ids.has(form.ownerId))
+  );
+}
+
+function normalizeLocalFormsForCurrentUser() {
+  const email = currentUserEmail();
+  const forms = DB.forms.all();
+  let changed = false;
+
+  forms.forEach((form) => {
+    if (belongsToCurrentUser(form)) {
+      if (form.ownerId !== user.id) {
+        form.ownerId = user.id;
+        changed = true;
+      }
+      if (form.ownerEmail !== email) {
+        form.ownerEmail = email;
+        changed = true;
+      }
+    }
+  });
+
+  if (changed) DB.forms.save(forms);
+}
+
+function mergeCloudForms(cloudForms = []) {
+  normalizeLocalFormsForCurrentUser();
+
+  const allForms = DB.forms.all();
+  const otherForms = allForms.filter((form) => !belongsToCurrentUser(form));
+  const byId = new Map();
+
+  myForms().forEach((form) => {
+    byId.set(form.id, deepClone(form));
+  });
+
+  cloudForms.forEach((remoteForm) => {
+    if (!remoteForm?.id) return;
+
+    remoteForm.ownerId = user.id;
+    remoteForm.ownerEmail = currentUserEmail();
+
+    const local = byId.get(remoteForm.id);
+    if (!local) {
+      byId.set(remoteForm.id, remoteForm);
+      return;
+    }
+
+    const localTime = new Date(local.updatedAt || local.createdAt || 0).getTime();
+    const remoteTime = new Date(remoteForm.updatedAt || remoteForm.createdAt || 0).getTime();
+
+    byId.set(remoteForm.id, remoteTime >= localTime ? remoteForm : local);
+  });
+
+  DB.forms.save([...otherForms, ...byId.values()]);
+}
+
+async function fetchCloudForms() {
+  const email = currentUserEmail();
+  if (!email) return [];
+
+  const response = await fetch(`/api/forms/list?ownerEmail=${encodeURIComponent(email)}`, {
+    cache: "no-store"
+  });
+
+  const data = await response.json().catch(() => null);
+
+  if (!response.ok || !data?.ok) {
+    throw new Error(data?.error || "Não foi possível buscar formulários online.");
+  }
+
+  return Array.isArray(data.forms) ? data.forms : [];
+}
+
+async function saveCloudForms(forms) {
+  const email = currentUserEmail();
+  if (!email || !forms?.length) return;
+
+  const response = await fetch("/api/forms/list", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      ownerEmail: email,
+      ownerId: user.id,
+      forms: forms.map((form) => ({
+        ...deepClone(form),
+        ownerId: user.id,
+        ownerEmail: email
+      }))
+    })
+  });
+
+  if (!response.ok) {
+    const details = await response.json().catch(() => null);
+    throw new Error(details?.error || "Não foi possível salvar formulário online.");
+  }
+}
+
+async function saveCloudForm(form) {
+  if (!form?.id) return;
+
+  try {
+    await saveCloudForms([form]);
+  } catch (error) {
+    console.warn("Não foi possível sincronizar o formulário agora:", error);
+    toast("Formulário salvo neste navegador. A sincronização online falhou momentaneamente.");
+  }
+}
+
+async function deleteCloudForm(formId) {
+  const email = currentUserEmail();
+  if (!email || !formId) return;
+
+  try {
+    await fetch(`/api/forms/list?ownerEmail=${encodeURIComponent(email)}&formId=${encodeURIComponent(formId)}`, {
+      method: "DELETE"
+    });
+  } catch (error) {
+    console.warn("Não foi possível excluir no servidor agora:", error);
+  }
+}
+
+async function syncFormsWithCloud(options = {}) {
+  const { force = false, rerender = true } = options;
+
+  if (FORM_CLOUD_SYNC.loading) return;
+
+  const now = Date.now();
+  if (!force && FORM_CLOUD_SYNC.last && now - FORM_CLOUD_SYNC.last < 10000) return;
+
+  FORM_CLOUD_SYNC.loading = true;
+
+  try {
+    normalizeLocalFormsForCurrentUser();
+
+    const local = myForms();
+    if (local.length) {
+      await saveCloudForms(local);
+    }
+
+    const cloud = await fetchCloudForms();
+    mergeCloudForms(cloud);
+
+    FORM_CLOUD_SYNC.last = Date.now();
+
+    if (rerender) {
+      renderOverview();
+      renderForms();
+      renderResponsesPage();
+    }
+  } catch (error) {
+    console.warn("Sincronização de formulários indisponível:", error);
+    toast("Não foi possível sincronizar os formulários online agora.");
+  } finally {
+    FORM_CLOUD_SYNC.loading = false;
+  }
+}
+
+async function syncEverythingOnline() {
+  await syncFormsWithCloud({ force: true, rerender: false });
+  await syncAllPublishedResponses();
+  renderAll();
+}
+
 
 function mergeRemoteResponses(remoteResponses = []) {
   const local = DB.responses.all();
@@ -134,11 +323,12 @@ $$("[data-add-type]").forEach(button => button.addEventListener("click", () => a
 $$("[data-close-dialog]").forEach(button => button.addEventListener("click", () => document.getElementById(button.dataset.closeDialog).close()));
 
 populateBankTypeSelect();
+normalizeLocalFormsForCurrentUser();
 renderAll();
-setTimeout(syncAllPublishedResponses, 600);
+setTimeout(syncEverythingOnline, 600);
 
 function myForms() {
-  return DB.forms.all().filter(form => form.ownerId === user.id);
+  return DB.forms.all().filter(form => belongsToCurrentUser(form));
 }
 function myResponses() {
   const ids = new Set(myForms().map(form => form.id));
@@ -210,7 +400,7 @@ function renderForms() {
 function blankForm() {
   const now = new Date().toISOString();
   return {
-    id: uid("form"), ownerId: user.id, title: "Formulário sem título", description: "",
+    id: uid("form"), ownerId: user.id, ownerEmail: currentUserEmail(), title: "Formulário sem título", description: "",
     theme: "blue", published: false, createdAt: now, updatedAt: now,
     settings: { collectName: true, collectEmail: false, showProgress: true, allowAnother: false, thankYou: "Resposta enviada com sucesso. Obrigado pela participação!" },
     sections: [{ id: uid("sec"), title: "Seção 1", description: "", questions: [] }]
@@ -275,11 +465,14 @@ function syncSettings() {
 }
 function saveCurrentForm() {
   syncFormMeta(); syncSettings();
+  currentForm.ownerId = user.id;
+  currentForm.ownerEmail = currentUserEmail();
   currentForm.updatedAt = new Date().toISOString();
   const forms = DB.forms.all();
   const index = forms.findIndex(form => form.id === currentForm.id);
   if (index >= 0) forms[index] = deepClone(currentForm); else forms.push(deepClone(currentForm));
   DB.forms.save(forms);
+  saveCloudForm(currentForm);
   toast("Formulário salvo.");
   renderOverview(); renderForms(); renderResponsesPage();
 }
@@ -434,12 +627,13 @@ function duplicateForm(formId) {
   const form = myForms().find(item=>item.id===formId);
   const copy = deepClone(form); copy.id = uid("form"); copy.title += " (Cópia)"; copy.published = false; copy.createdAt = copy.updatedAt = new Date().toISOString();
   copy.sections.forEach(s=>{s.id=uid("sec");s.questions.forEach(q=>q.id=uid("q"));});
-  const forms = DB.forms.all(); forms.push(copy); DB.forms.save(forms); renderAll(); toast("Formulário duplicado.");
+  copy.ownerId = user.id; copy.ownerEmail = currentUserEmail(); const forms = DB.forms.all(); forms.push(copy); DB.forms.save(forms); saveCloudForm(copy); renderAll(); toast("Formulário duplicado.");
 }
 function deleteForm(formId) {
   if (!confirm("Excluir o formulário e todas as respostas associadas?")) return;
   DB.forms.save(DB.forms.all().filter(form=>form.id!==formId));
   DB.responses.save(DB.responses.all().filter(response=>response.formId!==formId));
+  deleteCloudForm(formId);
   renderAll(); toast("Formulário excluído.");
 }
 function openPreview() {
@@ -525,7 +719,7 @@ function importForm(event) {
     try{
       const payload=JSON.parse(reader.result);
       const form=normalizeImportedForm(payload.form||payload);
-      const forms=DB.forms.all();forms.push(form);DB.forms.save(forms);renderAll();toast("Formulário importado.");
+      form.ownerId=user.id;form.ownerEmail=currentUserEmail();const forms=DB.forms.all();forms.push(form);DB.forms.save(forms);saveCloudForm(form);renderAll();toast("Formulário importado.");
     }catch{toast("Arquivo inválido.");}
   };reader.readAsText(file);event.target.value="";
 }
@@ -631,10 +825,21 @@ async function exportResponsesJson() {
   const responses=DB.responses.all().filter(r=>r.formId===form.id);
   downloadFile(`${slugify(form.title)||"respostas"}.json`,JSON.stringify({form,responses},null,2));
 }
-function saveProfile() {
+async function saveProfile() {
   const users=DB.users.all();const index=users.findIndex(u=>u.id===user.id);
   users[index]={...users[index],name:$("#profileName").value.trim(),school:$("#profileSchool").value.trim(),city:$("#profileCity").value.trim()};
-  DB.users.save(users);$("#sidebarUser").textContent=users[index].name;toast("Perfil atualizado.");
+  DB.users.save(users);$("#sidebarUser").textContent=users[index].name;
+  try {
+    await updateRemoteProfile({
+      name: users[index].name,
+      email: users[index].email,
+      school: users[index].school,
+      city: users[index].city
+    });
+  } catch (error) {
+    console.warn("Perfil salvo localmente, mas não sincronizou agora:", error);
+  }
+  toast("Perfil atualizado.");
 }
 function backupAll() {
   downloadFile(`diasmath_forms_backup_${new Date().toISOString().slice(0,10)}.json`,JSON.stringify(DB.backup(),null,2));
@@ -647,7 +852,7 @@ function restoreAll(event) {
 function seedDemo() {
   if(!confirm("Adicionar formulários e respostas de demonstração?"))return;
   const forms=DB.forms.all();const responses=DB.responses.all();const bank=DB.bank.all();
-  const demo=TEMPLATES[0].create(user.id);demo.published=true;forms.push(demo);
+  const demo=TEMPLATES[0].create(user.id);demo.ownerEmail=currentUserEmail();demo.published=true;forms.push(demo);
   const questions=demo.sections.flatMap(s=>s.questions);
   ["Ana","Bruno","Carla","Diego","Elisa"].forEach((name,i)=>responses.push({
     id:uid("resp"),formId:demo.id,submittedAt:new Date(Date.now()-i*86400000).toISOString(),
@@ -658,7 +863,7 @@ function seedDemo() {
     }
   }));
   questions.forEach(question=>bank.push({...deepClone(question),id:uid("bank"),ownerId:user.id,tags:["demonstração"],createdAt:new Date().toISOString()}));
-  DB.forms.save(forms);DB.responses.save(responses);DB.bank.save(bank);renderAll();toast("Dados de demonstração adicionados.");
+  DB.forms.save(forms);DB.responses.save(responses);DB.bank.save(bank);saveCloudForm(demo);renderAll();toast("Dados de demonstração adicionados.");
 }
 function toast(text) {
   const el=$("#toast");el.textContent=text;el.classList.remove("hidden");clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>el.classList.add("hidden"),2600);

@@ -208,3 +208,32 @@ th{background:#f4f8fb;position:sticky;top:0}
   #view-responses{display:block!important}
   .panel{box-shadow:none;border:0}
 }
+
+
+.link-button{
+  border:0;
+  background:transparent;
+  color:var(--primary);
+  font-weight:850;
+  text-align:center;
+  cursor:pointer;
+  padding:10px 8px;
+  border-radius:10px;
+}
+.link-button:hover{
+  background:#edf4fa;
+}
+.back-professor-link{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  text-decoration:none;
+  margin-top:10px;
+}
+.sidebar-footer{
+  padding-bottom:10px;
+}
+.sidebar-footer .btn{
+  min-height:42px;
+}
