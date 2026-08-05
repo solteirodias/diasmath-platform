@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#0b4d86">
   <title>DIASMATH Forms — Painel</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/styles.css?v=46">
 </head>
 <body class="app-page">
   <div class="app-layout">
@@ -72,6 +72,8 @@
             <div><h2>Meus formulários</h2><p>Crie, duplique, publique e compartilhe.</p></div>
             <div class="inline-actions">
               <input id="formSearch" class="compact-input" placeholder="Pesquisar formulário">
+              <button id="loadOnlineBtn" class="btn secondary" type="button">Atualizar dados online</button>
+              <button id="migrateOnlineBtn" class="btn ghost" type="button">Sincronizar agora</button>
               <button id="importFormBtn" class="btn secondary">Importar JSON</button>
               <input id="importFormInput" type="file" accept=".json,application/json" hidden>
               <button id="newFormBtn" class="btn primary">Novo formulário</button>
@@ -240,6 +242,6 @@
   </dialog>
 
   <div id="toast" class="toast hidden"></div>
-  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/app.js?v=46"></script>
 </body>
 </html>

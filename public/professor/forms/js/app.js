@@ -46,6 +46,51 @@ function legacyUserIds() {
   return new Set([user.id, ...(user.legacyIds || [])].filter(Boolean));
 }
 
+
+function normalizeFormForApp(form) {
+  const now = new Date().toISOString();
+  const normalized = {
+    ...deepClone(form || {}),
+    id: String(form?.id || uid("form")),
+    ownerId: user.id,
+    ownerEmail: currentUserEmail(),
+    title: form?.title || "Formulário sem título",
+    description: form?.description || "",
+    theme: form?.theme || "blue",
+    published: Boolean(form?.published),
+    createdAt: form?.createdAt || form?.created_at || now,
+    updatedAt: form?.updatedAt || form?.updated_at || now,
+    settings: {
+      collectName: true,
+      collectEmail: false,
+      showProgress: true,
+      allowAnother: false,
+      thankYou: "Resposta enviada com sucesso. Obrigado pela participação!",
+      ...(form?.settings || {})
+    },
+    sections: Array.isArray(form?.sections) ? form.sections : []
+  };
+
+  if (!normalized.sections.length) {
+    normalized.sections = [{ id: uid("sec"), title: "Seção 1", description: "", questions: [] }];
+  }
+
+  normalized.sections = normalized.sections.map((section) => ({
+    id: section.id || uid("sec"),
+    title: section.title || "Seção",
+    description: section.description || "",
+    questions: Array.isArray(section.questions) ? section.questions : []
+  }));
+
+  return normalized;
+}
+
+function safeQuestionCount(form) {
+  return (Array.isArray(form?.sections) ? form.sections : [])
+    .reduce((sum, section) => sum + (Array.isArray(section?.questions) ? section.questions.length : 0), 0);
+}
+
+
 function belongsToCurrentUser(form) {
   const email = currentUserEmail();
   const ids = legacyUserIds();
@@ -93,8 +138,7 @@ function mergeCloudForms(cloudForms = []) {
   cloudForms.forEach((remoteForm) => {
     if (!remoteForm?.id) return;
 
-    remoteForm.ownerId = user.id;
-    remoteForm.ownerEmail = currentUserEmail();
+    remoteForm = normalizeFormForApp(remoteForm);
 
     const local = byId.get(remoteForm.id);
     if (!local) {
@@ -324,20 +368,28 @@ async function forceFullMigration() {
 
 
 async function syncEverythingOnline() {
-  const migratedForms = migrateLocalFormsToCurrentUser();
+  try {
+    const migratedForms = migrateLocalFormsToCurrentUser();
 
-  if (migratedForms.length) {
-    try {
-      await saveCloudForms(migratedForms);
-      await migrateLocalResponsesToCloud(migratedForms);
-    } catch (error) {
-      console.warn("Migração inicial não concluída:", error);
+    if (migratedForms.length) {
+      try {
+        await saveCloudForms(migratedForms.map(normalizeFormForApp));
+        await migrateLocalResponsesToCloud(migratedForms);
+      } catch (error) {
+        console.warn("Migração inicial não concluída:", error);
+      }
     }
-  }
 
-  await syncFormsWithCloud({ force: true, rerender: false });
-  await syncAllPublishedResponses();
-  renderAll();
+    const cloud = await fetchCloudForms();
+    mergeCloudForms(cloud);
+
+    await syncAllPublishedResponses();
+    renderAll();
+  } catch (error) {
+    console.warn("Sincronização inicial falhou:", error);
+    renderAll();
+    toast("Não foi possível sincronizar automaticamente. Clique em Atualizar dados online.");
+  }
 }
 
 
@@ -467,6 +519,62 @@ function switchView(view) {
   if (view === "bank") renderBank();
   if (view === "responses") renderResponsesPage();
 }
+
+async function loadOnlineFormsNow() {
+  try {
+    toast("Buscando seus formulários online...");
+    const cloud = await fetchCloudForms();
+    mergeCloudForms(cloud);
+    await syncAllPublishedResponses();
+    renderAll();
+
+    if (cloud.length) {
+      toast(`${cloud.length} formulário(s) carregado(s) do Supabase.`);
+    } else {
+      toast("Nenhum formulário online encontrado para este e-mail.");
+    }
+  } catch (error) {
+    console.error("Erro ao carregar dados online:", error);
+    toast("Não foi possível carregar os formulários online. Teste a API /api/forms/list com o mesmo e-mail.");
+  }
+}
+
+async function migrateAndLoadOnlineNow() {
+  try {
+    toast("Sincronizando formulários locais e online...");
+    const migratedForms = typeof migrateLocalFormsToCurrentUser === "function"
+      ? migrateLocalFormsToCurrentUser()
+      : myForms();
+
+    if (migratedForms.length) {
+      await saveCloudForms(migratedForms.map(normalizeFormForApp));
+      if (typeof migrateLocalResponsesToCloud === "function") {
+        await migrateLocalResponsesToCloud(migratedForms);
+      }
+    }
+
+    await loadOnlineFormsNow();
+  } catch (error) {
+    console.error("Erro ao sincronizar agora:", error);
+    toast("Não foi possível sincronizar agora. Verifique se as APIs estão publicadas.");
+  }
+}
+
+function bindOnlineButtons() {
+  const loadButton = document.querySelector("#loadOnlineBtn");
+  if (loadButton && !loadButton.dataset.bound) {
+    loadButton.dataset.bound = "true";
+    loadButton.addEventListener("click", loadOnlineFormsNow);
+  }
+
+  const migrateButton = document.querySelector("#migrateOnlineBtn");
+  if (migrateButton && !migrateButton.dataset.bound) {
+    migrateButton.dataset.bound = "true";
+    migrateButton.addEventListener("click", migrateAndLoadOnlineNow);
+  }
+}
+
+
 function renderAll() {
   renderOverview();
   renderForms();
@@ -484,7 +592,7 @@ function renderOverview() {
   $("#recentForms").innerHTML = forms.length
     ? [...forms].sort((a,b) => new Date(b.updatedAt) - new Date(a.updatedAt)).slice(0,5).map(form => `
       <div class="list-item">
-        <div class="meta"><strong>${safeText(form.title)}</strong><small>${form.sections.reduce((sum,s)=>sum+s.questions.length,0)} perguntas • ${formatDate(form.updatedAt,true)}</small></div>
+        <div class="meta"><strong>${safeText(form.title)}</strong><small>${safeQuestionCount(form)} perguntas • ${formatDate(form.updatedAt,true)}</small></div>
         <button class="btn ghost" data-open-form="${form.id}">Abrir</button>
       </div>`).join("")
     : `<div class="list-item"><div class="meta"><strong>Nenhum formulário</strong><small>Crie o primeiro ou use um modelo.</small></div></div>`;
@@ -499,7 +607,7 @@ function renderForms() {
   const forms = myForms().filter(form => `${form.title} ${form.description}`.toLowerCase().includes(search));
   $("#formsGrid").innerHTML = forms.length ? forms.map(form => {
     const responseCount = DB.responses.all().filter(r => r.formId === form.id).length;
-    const questionCount = form.sections.reduce((sum, section) => sum + section.questions.length, 0);
+    const questionCount = safeQuestionCount(form);
     return `<article class="form-card">
       <div><h3>${safeText(form.title)}</h3><p>${safeText(form.description || "Sem descrição")}</p></div>
       <div class="badge-row"><span class="badge ${form.published ? "published" : ""}">${form.published ? "Publicado" : "Rascunho"}</span><span class="badge">${questionCount} perguntas</span><span class="badge">${responseCount} respostas</span></div>
@@ -550,7 +658,7 @@ function openForm(formId) {
   const form = myForms().find(item => item.id === formId);
   if (!form) return toast("Formulário não encontrado.");
   currentForm = deepClone(form);
-  activeSectionId = currentForm.sections[0]?.id;
+  currentForm = normalizeFormForApp(currentForm); activeSectionId = currentForm.sections[0]?.id;
   populateBuilder();
   switchView("builder");
 }

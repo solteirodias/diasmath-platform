@@ -237,3 +237,16 @@ th{background:#f4f8fb;position:sticky;top:0}
 .sidebar-footer .btn{
   min-height:42px;
 }
+
+
+#loadOnlineBtn, #migrateOnlineBtn{
+  white-space: nowrap;
+}
+@media(max-width: 900px){
+  .inline-actions{
+    align-items: stretch;
+  }
+  #loadOnlineBtn, #migrateOnlineBtn{
+    width: 100%;
+  }
+}
