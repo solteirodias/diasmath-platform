@@ -1,0 +1,9 @@
+aplicacao;serie;disciplina;escolas;estudantes;media;acertos;esperado;percentual;habilidades
+5º MINITESTE;1ª Série;Língua Portuguesa;21;845;6,32;6410;10140;63,2;D01 83.0% | D02 62.0% | D03 51.0% | D04 58.0% | D06 84.0% | D07 73.0% | D08 46.0% | D13 72.0% | D14 39.0% | D15 66.0% | D18 64.0% | D20 61.0%
+5º MINITESTE;1ª Série;Matemática;21;850;4,36;4454;10200;43,7;D14 38.0% | D15 58.0% | D17 42.0% | D26 36.0%
+5º MINITESTE;2ª Série;Língua Portuguesa;21;933;6,3;7039;11196;62,9;D03 60.0% | D04 63.0% | D12 63.0% | D13 59.0% | D16 62.0% | D20 72.0%
+5º MINITESTE;2ª Série;Matemática;21;914;4,63;5087;10968;46,4;D05 54.0% | D11 45.0% | D12 45.0% | D30 41.0%
+5º MINITESTE;3ª Série;Língua Portuguesa;20;813;7,09;6900;9756;70,7;D02 73.0% | D03 72.0% | D08 84.0% | D13 67.0% | D14 65.0% | D21 64.0%
+5º MINITESTE;3ª Série;Matemática;20;816;5,82;5221;8976;58,2;D8 56.0% | D12 69.0% | D13 52.0% | D25 54.0%
+5º MINITESTE;9º Ano;Língua Portuguesa;3;25;5,45;163;300;54,3;D02 74.0% | D03 57.0% | D08 32.0% | D13 46.0% | D14 68.0% | D21 40.0%
+5º MINITESTE;9º Ano;Matemática;2;19;6,09;138;228;60,5;D03 EF 53.0% | D27 EF 54.0% | D29 EF 56.0% | D36 EF 58.0% | D37 EF 89.0%

@@ -1,50 +1,60 @@
-# Correção 35 — Header, Footer e alias @
+# Atualização 47 - SAP com dados do 5º Miniteste
 
-Esta correção resolve o erro da Vercel:
+Esta atualização inclui os novos dados enviados nos 8 PDFs do consolidado de escolas.
 
-```text
-Module not found: Can't resolve '@/components/Header'
-Module not found: Can't resolve '@/components/Footer'
-```
+## O que entra no SAP
 
-## O que ela restaura
-
-```text
-components/Header.tsx
-components/Footer.tsx
-tsconfig.json
-next-env.d.ts
-next.config.js
-postcss.config.js
-tailwind.config.js
-```
-
-O ponto mais importante é o `tsconfig.json`, porque ele faz o atalho `@/components/...` funcionar.
+- 5º Miniteste - Língua Portuguesa - 1ª Série
+- 5º Miniteste - Língua Portuguesa - 2ª Série
+- 5º Miniteste - Língua Portuguesa - 3ª Série
+- 5º Miniteste - Língua Portuguesa - 9º Ano
+- 5º Miniteste - Matemática - 1ª Série
+- 5º Miniteste - Matemática - 2ª Série
+- 5º Miniteste - Matemática - 3ª Série
+- 5º Miniteste - Matemática - 9º Ano
 
 ## Como subir no GitHub
 
-1. Baixe o ZIP.
-2. Extraia.
-3. No GitHub, clique em `Add file` → `Upload files`.
-4. Envie estes itens extraídos:
+Extraia o ZIP e envie a pasta:
 
 ```text
-components
-tsconfig.json
-next-env.d.ts
-next.config.js
-postcss.config.js
-tailwind.config.js
+public
+docs
 ```
 
-5. Commit:
+Commit sugerido:
 
 ```text
-Corrige Header Footer e alias do projeto
+Atualiza SAP com dados do 5º Miniteste
 ```
 
-6. Aguarde a Vercel publicar.
+## Depois de publicar
 
-## Depois
+Abra:
 
-Se a Vercel mostrar novo erro, abra `Details → Logs` e envie o print.
+```text
+https://www.diasmath.com.br/escolas/sap-avaliacoes-2026
+```
+
+Depois aperte:
+
+```text
+Ctrl + F5
+```
+
+Nos filtros, selecione:
+
+```text
+Tipo de avaliação: Minitestes
+Aplicação: 5º MINITESTE
+```
+
+## Arquivos principais
+
+```text
+public/escolas/sap-avaliacoes-2026/dados.json
+public/escolas/sap-avaliacoes-2026/index.html
+public/escolas/sap-avaliacoes-2026/fontes/relatorios/consolidado-escolas (25).pdf ... (32).pdf
+docs/SAP_5O_MINITESTE_RESUMO.csv
+docs/SAP_5O_MINITESTE_RELATORIO.md
+```
