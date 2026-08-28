@@ -1,60 +1,38 @@
-# Atualização 47 - SAP com dados do 5º Miniteste
+# DIASMATH — Atualização 48
 
-Esta atualização inclui os novos dados enviados nos 8 PDFs do consolidado de escolas.
+## SAP Avaliações 2026 — 5º Miniteste completo
 
-## O que entra no SAP
+Esta atualização inclui os resultados consolidados do 5º Miniteste e os cadernos/avaliações comentadas enviados.
 
-- 5º Miniteste - Língua Portuguesa - 1ª Série
-- 5º Miniteste - Língua Portuguesa - 2ª Série
-- 5º Miniteste - Língua Portuguesa - 3ª Série
-- 5º Miniteste - Língua Portuguesa - 9º Ano
-- 5º Miniteste - Matemática - 1ª Série
-- 5º Miniteste - Matemática - 2ª Série
-- 5º Miniteste - Matemática - 3ª Série
-- 5º Miniteste - Matemática - 9º Ano
+## Arquivos principais
 
-## Como subir no GitHub
-
-Extraia o ZIP e envie a pasta:
+Envie para o GitHub as pastas:
 
 ```text
 public
 docs
 ```
 
-Commit sugerido:
+## Caminho no site
 
-```text
-Atualiza SAP com dados do 5º Miniteste
-```
-
-## Depois de publicar
-
-Abra:
+Após publicar, acesse:
 
 ```text
 https://www.diasmath.com.br/escolas/sap-avaliacoes-2026
 ```
 
-Depois aperte:
+Depois pressione **Ctrl + F5**.
+
+## Como conferir
+
+1. Abra a aba **Minitestes**.
+2. Em **Aplicação**, escolha **5º MINITESTE**.
+3. Use os filtros de **Série/Ano**, **Disciplina/Área** e **Escola**.
+4. Abra **Materiais** para ver os PDFs comentados.
+5. Abra **Questões e devolutiva** para ver questões, páginas e orientações pedagógicas.
+
+## Commit sugerido
 
 ```text
-Ctrl + F5
-```
-
-Nos filtros, selecione:
-
-```text
-Tipo de avaliação: Minitestes
-Aplicação: 5º MINITESTE
-```
-
-## Arquivos principais
-
-```text
-public/escolas/sap-avaliacoes-2026/dados.json
-public/escolas/sap-avaliacoes-2026/index.html
-public/escolas/sap-avaliacoes-2026/fontes/relatorios/consolidado-escolas (25).pdf ... (32).pdf
-docs/SAP_5O_MINITESTE_RESUMO.csv
-docs/SAP_5O_MINITESTE_RELATORIO.md
+Atualiza SAP com resultados e avaliações comentadas do 5º Miniteste
 ```
