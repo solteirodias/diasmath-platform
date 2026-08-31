@@ -1,0 +1,4 @@
+SAP Avaliações 2026 — Dados V9 do 5º Miniteste
+Atualização obrigatória: este pacote substitui public/escolas/sap-avaliacoes-2026/dados.json
+Contém grupos do 5º Miniteste para Matemática e Língua Portuguesa: 9º Ano EF, 1ª, 2ª e 3ª Séries EM.
+Para conferir no GitHub, abra dados.json e procure por: "sequence": 5
