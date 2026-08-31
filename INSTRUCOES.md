@@ -1,55 +1,36 @@
-# Correção 34B — SAP puxar imagem original das questões
+# Atualização 35 — SAP V9 com 5º Miniteste
 
-Esta correção resolve o problema apresentado na aba **Questões e devolutiva**, onde aparecia:
+Esta atualização publica no SAP os novos dados do **5º Miniteste**.
 
-```text
-Visual original indisponível
-```
-
-## Causa
-
-Algumas questões existiam no caderno comentado, mas estavam sem vínculo com:
+## Arquivos incluídos
 
 ```text
-source_pdf
-source_link
-page
-page_image
+public/escolas/sap-avaliacoes-2026/dados.json
+docs/SAP_V9_5_MINITESTE_RELATORIO.md
+docs/SAP_V9_5_MINITESTE_QUESTOES_DESCRITORES.csv
 ```
 
-Por isso o sistema não puxava a imagem original da questão.
+## Como subir no GitHub
 
-## O que foi corrigido
-
-- Vinculação das questões ao caderno comentado correto.
-- Mapeamento da página da questão pelo número do item quando a página não estava preenchida.
-- Inclusão das imagens faltantes dos Minitestes de Matemática da 3ª Série.
-- Correção direta para o caso mostrado: **Minitestes 4 • 3ª Série • Matemática • Questão 11**.
-- Quando não houver imagem, o sistema passa a mostrar o botão para abrir o caderno comentado na página da questão.
-
-## Imagens incluídas nesta correção
-
-Total: 24 imagens WEBP.
-
-## Como publicar
-
-1. Baixe e extraia o ZIP.
-2. No GitHub, clique em `Add file` → `Upload files`.
-3. Envie a pasta extraída:
+1. Baixe o ZIP.
+2. Extraia o ZIP.
+3. No GitHub, clique em **Add file → Upload files**.
+4. Envie as pastas extraídas:
 
 ```text
 public
+docs
 ```
 
-4. Commit:
+5. Commit sugerido:
 
 ```text
-Corrige imagens originais das questões do SAP
+Atualiza SAP com dados do 5º Miniteste
 ```
 
-5. Aguarde a Vercel publicar.
+6. Aguarde a Vercel publicar.
 
-## Teste
+## Teste depois
 
 Abra:
 
@@ -57,10 +38,23 @@ Abra:
 https://www.diasmath.com.br/escolas/sap-avaliacoes-2026/index.html
 ```
 
-Depois vá em:
+Depois filtre:
 
 ```text
-Questões e devolutiva → Minitestes 4 → 3ª Série → Matemática → Questão 11
+Tipo de avaliação: Minitestes
+Aplicação: 5
 ```
 
-A área da esquerda deve mostrar a imagem original da questão.
+Teste as abas:
+
+```text
+Visão geral
+Minitestes
+Habilidades
+Dependências
+Questões e devolutiva
+```
+
+## Observação
+
+Esta atualização traz a base textual e numérica do 5º Miniteste. Para exibir a imagem original de cada questão, os PDFs ou as páginas WEBP também precisam estar publicados no repositório nas pastas `materiais` e `paginas`.
