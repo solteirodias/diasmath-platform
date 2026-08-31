@@ -1,38 +1,66 @@
-# DIASMATH — Atualização 48
+# Correção 34B — SAP puxar imagem original das questões
 
-## SAP Avaliações 2026 — 5º Miniteste completo
+Esta correção resolve o problema apresentado na aba **Questões e devolutiva**, onde aparecia:
 
-Esta atualização inclui os resultados consolidados do 5º Miniteste e os cadernos/avaliações comentadas enviados.
+```text
+Visual original indisponível
+```
 
-## Arquivos principais
+## Causa
 
-Envie para o GitHub as pastas:
+Algumas questões existiam no caderno comentado, mas estavam sem vínculo com:
+
+```text
+source_pdf
+source_link
+page
+page_image
+```
+
+Por isso o sistema não puxava a imagem original da questão.
+
+## O que foi corrigido
+
+- Vinculação das questões ao caderno comentado correto.
+- Mapeamento da página da questão pelo número do item quando a página não estava preenchida.
+- Inclusão das imagens faltantes dos Minitestes de Matemática da 3ª Série.
+- Correção direta para o caso mostrado: **Minitestes 4 • 3ª Série • Matemática • Questão 11**.
+- Quando não houver imagem, o sistema passa a mostrar o botão para abrir o caderno comentado na página da questão.
+
+## Imagens incluídas nesta correção
+
+Total: 24 imagens WEBP.
+
+## Como publicar
+
+1. Baixe e extraia o ZIP.
+2. No GitHub, clique em `Add file` → `Upload files`.
+3. Envie a pasta extraída:
 
 ```text
 public
-docs
 ```
 
-## Caminho no site
-
-Após publicar, acesse:
+4. Commit:
 
 ```text
-https://www.diasmath.com.br/escolas/sap-avaliacoes-2026
+Corrige imagens originais das questões do SAP
 ```
 
-Depois pressione **Ctrl + F5**.
+5. Aguarde a Vercel publicar.
 
-## Como conferir
+## Teste
 
-1. Abra a aba **Minitestes**.
-2. Em **Aplicação**, escolha **5º MINITESTE**.
-3. Use os filtros de **Série/Ano**, **Disciplina/Área** e **Escola**.
-4. Abra **Materiais** para ver os PDFs comentados.
-5. Abra **Questões e devolutiva** para ver questões, páginas e orientações pedagógicas.
-
-## Commit sugerido
+Abra:
 
 ```text
-Atualiza SAP com resultados e avaliações comentadas do 5º Miniteste
+https://www.diasmath.com.br/escolas/sap-avaliacoes-2026/index.html
 ```
+
+Depois vá em:
+
+```text
+Questões e devolutiva → Minitestes 4 → 3ª Série → Matemática → Questão 11
+```
+
+A área da esquerda deve mostrar a imagem original da questão.
