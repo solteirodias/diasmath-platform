@@ -1,60 +1,54 @@
-# Atualização 35 — SAP V9 com 5º Miniteste
+# Correção 37 — Fazer o 5º Miniteste aparecer no SAP
 
-Esta atualização publica no SAP os novos dados do **5º Miniteste**.
+O SAP estava mostrando apenas M1, M2, M3 e M4 porque o arquivo principal `index.html` possui uma base de dados embutida dentro dele.
 
-## Arquivos incluídos
+A correção anterior atualizou apenas `dados.json`, mas o sistema continuou lendo os dados antigos embutidos no `index.html`.
+
+## Esta correção substitui
 
 ```text
+public/escolas/sap-avaliacoes-2026/index.html
 public/escolas/sap-avaliacoes-2026/dados.json
-docs/SAP_V9_5_MINITESTE_RELATORIO.md
-docs/SAP_V9_5_MINITESTE_QUESTOES_DESCRITORES.csv
+public/escolas/sap-avaliacoes-2026/VERSAO_DADOS.txt
 ```
 
-## Como subir no GitHub
+## Como subir
 
 1. Baixe o ZIP.
-2. Extraia o ZIP.
-3. No GitHub, clique em **Add file → Upload files**.
-4. Envie as pastas extraídas:
+2. Extraia.
+3. No GitHub, clique em `Add file → Upload files`.
+4. Envie a pasta extraída:
 
 ```text
 public
-docs
 ```
 
 5. Commit sugerido:
 
 ```text
-Atualiza SAP com dados do 5º Miniteste
+Corrige SAP para exibir 5 Miniteste
 ```
 
-6. Aguarde a Vercel publicar.
+6. Aguarde a Vercel ficar `Ready`.
 
-## Teste depois
+## Teste
 
-Abra:
+Abra com versão/cache limpo:
 
 ```text
-https://www.diasmath.com.br/escolas/sap-avaliacoes-2026/index.html
+https://www.diasmath.com.br/escolas/sap-avaliacoes-2026/index.html?v=37
 ```
 
-Depois filtre:
+Depois entre na aba `Minitestes`.
+
+O gráfico precisa mostrar:
 
 ```text
-Tipo de avaliação: Minitestes
-Aplicação: 5
+M1, M2, M3, M4 e M5
 ```
 
-Teste as abas:
+Se ainda mostrar só até M4, faça na Vercel:
 
 ```text
-Visão geral
-Minitestes
-Habilidades
-Dependências
-Questões e devolutiva
+Deployments → Redeploy → sem usar cache
 ```
-
-## Observação
-
-Esta atualização traz a base textual e numérica do 5º Miniteste. Para exibir a imagem original de cada questão, os PDFs ou as páginas WEBP também precisam estar publicados no repositório nas pastas `materiais` e `paginas`.
