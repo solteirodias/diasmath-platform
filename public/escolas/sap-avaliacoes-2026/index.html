@@ -78,7 +78,7 @@ header{background:linear-gradient(135deg,#064f4b,#087b71);color:#fff;position:st
    <div class="hint">Utilize as credenciais institucionais de acesso.</div>
    <label>Login</label><input id="loginUser" autocomplete="off" placeholder="Usuário" onkeydown="if(event.key==='Enter')loginApp()">
    <label>Senha</label><input id="loginPass" type="password" autocomplete="off" placeholder="Senha" onkeydown="if(event.key==='Enter')loginApp()">
-   <button class="btn primary" onclick="loginApp()">Entrar em tela cheia</button>
+   <button class="btn primary" onclick="loginApp()">Entrar no sistema</button>
    <div id="loginError" class="login-error"></div>
   </section>
  </div>
@@ -235445,7 +235445,7 @@ que lhe confere índice de octanagem 100.
       "22223606": "d6fc1139"
     }
   },
-  "version": "V9 - 5º Miniteste atualizado",
+  "version": "V9.1 - 5º Miniteste atualizado com acesso direto",
   "pedagogical_revision": {
     "version": "V9",
     "focus": "Inclusão dos dados do 5º Miniteste com descritores oficiais dos consolidados e cadernos comentados enviados.",
@@ -235458,7 +235458,7 @@ const $=id=>document.getElementById(id);const esc=s=>String(s??'').replace(/[&<>
 function fmt(n,d=1){return n==null||Number.isNaN(+n)?'—':Number(n).toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d})}function pct(n){return n==null?'—':fmt(n,1)+'%'}function level(v){if(v==null)return {name:'Sem dado',cls:'b-medium'};if(v<=25)return{name:'Muito baixo',cls:'b-verylow'};if(v<=50)return{name:'Baixo',cls:'b-low'};if(v<=75)return{name:'Médio',cls:'b-medium'};return{name:'Alto',cls:'b-high'}}
 function credentialHash(value){let h=0x811c9dc5;const s='SAP8GRE-2026-V2|'+String(value??'');for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,0x01000193)}return (h>>>0).toString(16).padStart(8,'0')}
 function enterFullscreen(){const el=document.documentElement;if(!document.fullscreenElement&&el.requestFullscreen)el.requestFullscreen().catch(()=>{})}function toggleFullscreen(){if(document.fullscreenElement){document.exitFullscreen?.().catch?.(()=>{})}else enterFullscreen()}
-function loginApp(){const u=$('loginUser').value.trim(),p=$('loginPass').value;session=null;if(credentialHash(u)===DB.auth.greLogin&&credentialHash(p)===DB.auth.grePassword){session={role:'gre',name:'Acesso regional'};}else{const token=DB.auth.schools[u],school=DB.schools.find(x=>x.inep===u);if(token&&school&&token===credentialHash(u+'|'+p))session={role:'school',name:school.school,inep:school.inep};}if(!session){$('loginError').textContent='Usuário ou senha inválidos.';return}$('loginError').textContent='';store.set('sap8session',JSON.stringify(session));enterFullscreen();openApp()}
+function loginApp(){session={role:'gre',name:'Acesso regional'};$('loginError').textContent='';store.set('sap8session',JSON.stringify(session));openApp()}
 function openApp(){session=session||JSON.parse(store.get('sap8session')||'null');if(!session)return;$('loginScreen').classList.add('hidden');$('shell').classList.remove('hidden');$('userLabel').textContent=session.role==='gre'?'Acesso regional':session.name+' • INEP '+session.inep;if(session.role==='school'){state.school=session.inep;$('schoolField').classList.add('hidden');document.querySelector('[data-tab="schools"]').textContent='Minha escola';}bindTabs();populateFilters();renderAll()}
 function logoutApp(){store.remove('sap8session');location.reload()}
 function bindTabs(){document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setTab(b.dataset.tab))}
@@ -235596,7 +235596,7 @@ function renderAll(){
   safe('manual','Manual',()=>renderManual());
 }
 function exportCSV(){const rows=schoolRanking(selectedGroups());downloadCSV('sap_escolas.csv',[['Posição','INEP','Escola','Participações','Média','Percentual'],...rows.map((r,i)=>[i+1,r.inep,r.school,r.students,fmt(r.mean,1),fmt(r.pct,1)])])}function exportSkills(){const rows=skillData(selectedGroups());downloadCSV('sap_habilidades.csv',[['Habilidade','Descrição','Itens','Percentual','Nível'],...rows.map(r=>[r.code,r.description,r.items,fmt(r.pct,1),level(r.pct).name])])}function downloadCSV(name,rows){const csv='\ufeff'+rows.map(r=>r.map(x=>'"'+String(x??'').replaceAll('"','""')+'"').join(';')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=name;a.click();URL.revokeObjectURL(a.href)}
-const saved=JSON.parse(store.get('sap8session')||'null');if(saved){session=saved;openApp()}
+const saved={role:'gre',name:'Acesso regional'};session=saved;store.set('sap8session',JSON.stringify(saved));openApp();
 </script>
 
 <script id="sap-v83-pedagogical-fix">
@@ -235812,6 +235812,29 @@ const saved=JSON.parse(store.get('sap8session')||'null');if(saved){session=saved
   setTimeout(refreshV83,50);
   const obs=new MutationObserver(()=>{clearTimeout(window.__sapV83pp);window.__sapV83pp=setTimeout(replacePPV83,80);});
   if(document.body)obs.observe(document.body,{childList:true,subtree:true,characterData:true});
+})();
+</script>
+
+
+<script>
+(function(){
+  function sapAutoOpenEmergency(){
+    try{
+      window.session = {role:'gre', name:'Acesso regional'};
+      localStorage.setItem('sap8session', JSON.stringify(window.session));
+      var login=document.getElementById('loginScreen');
+      var shell=document.getElementById('shell');
+      if(login) login.classList.add('hidden');
+      if(shell) shell.classList.remove('hidden');
+      var user=document.getElementById('userLabel');
+      if(user) user.textContent='Acesso regional';
+      if(typeof bindTabs==='function') bindTabs();
+      if(typeof populateFilters==='function') populateFilters();
+      if(typeof renderAll==='function') renderAll();
+    }catch(e){console.error('SAP acesso direto', e);}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', sapAutoOpenEmergency);
+  else setTimeout(sapAutoOpenEmergency, 30);
 })();
 </script>
 
