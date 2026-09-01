@@ -1,3 +1,4 @@
-Correção 43 — Imagens do 5º Miniteste publicadas.
-Inclui as páginas .webp dos cadernos comentados em public/escolas/sap-avaliacoes-2026/paginas/5-miniteste.
-Também ajusta o carregamento das imagens para mostrar aviso quando o arquivo não estiver no GitHub.
+Correção 44 — Atualização do 4º Simula+.
+Inclui 2ª e 3ª séries, Matemática e Língua Portuguesa.
+Dados por escola inseridos no acesso regional.
+Questões vinculadas aos descritores do consolidado, com imagem pendente até envio dos cadernos comentados.
