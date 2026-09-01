@@ -235445,7 +235445,7 @@ que lhe confere índice de octanagem 100.
       "22223606": "d6fc1139"
     }
   },
-  "version": "V9.1 - 5º Miniteste atualizado com acesso direto",
+  "version": "V9.2 - SAP restaurado: acesso regional e abas funcionando",
   "pedagogical_revision": {
     "version": "V9",
     "focus": "Inclusão dos dados do 5º Miniteste com descritores oficiais dos consolidados e cadernos comentados enviados.",
@@ -235818,23 +235818,41 @@ const saved={role:'gre',name:'Acesso regional'};session=saved;store.set('sap8ses
 
 <script>
 (function(){
-  function sapAutoOpenEmergency(){
+  function sapAutoOpenRegional(){
     try{
-      window.session = {role:'gre', name:'Acesso regional'};
-      localStorage.setItem('sap8session', JSON.stringify(window.session));
-      var login=document.getElementById('loginScreen');
-      var shell=document.getElementById('shell');
-      if(login) login.classList.add('hidden');
-      if(shell) shell.classList.remove('hidden');
+      var regionalSession = {role:'gre', name:'Acesso regional'};
+      localStorage.setItem('sap8session', JSON.stringify(regionalSession));
+
+      /*
+        Importante: a variável principal do sistema foi declarada como `let session`.
+        Por isso, não adianta usar apenas `window.session`, pois isso cria outra variável.
+        A forma segura é chamar openApp(), porque essa função atualiza a sessão interna,
+        preenche os filtros e renderiza todas as abas.
+      */
+      if (typeof openApp === 'function') {
+        openApp();
+      } else if (typeof loginApp === 'function') {
+        loginApp();
+      } else {
+        var login=document.getElementById('loginScreen');
+        var shell=document.getElementById('shell');
+        if(login) login.classList.add('hidden');
+        if(shell) shell.classList.remove('hidden');
+      }
+
+      if (typeof populateFilters === 'function') populateFilters();
+      if (typeof renderAll === 'function') renderAll();
+
       var user=document.getElementById('userLabel');
       if(user) user.textContent='Acesso regional';
-      if(typeof bindTabs==='function') bindTabs();
-      if(typeof populateFilters==='function') populateFilters();
-      if(typeof renderAll==='function') renderAll();
-    }catch(e){console.error('SAP acesso direto', e);}
+    }catch(e){
+      console.error('SAP acesso regional', e);
+      var status=document.getElementById('statusline');
+      if(status) status.textContent='Falha ao carregar o SAP: '+(e && e.message ? e.message : e);
+    }
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', sapAutoOpenEmergency);
-  else setTimeout(sapAutoOpenEmergency, 30);
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', sapAutoOpenRegional);
+  else setTimeout(sapAutoOpenRegional, 30);
 })();
 </script>
 
