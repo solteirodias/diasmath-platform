@@ -193,7 +193,44 @@ function renderDependencies(){const skills=skillData(selectedGroups());if(!skill
 
 function questionPerformance(q,school=state.school){const group=DB.groups.find(g=>g.id===q.group_id);if(!group)return null;const rows=school==='Todos'?group.schools:group.schools.filter(s=>s.inep===school);let correct=0,expected=0,values=[];rows.forEach(r=>(r.skills||[]).filter(s=>s.code===q.skill_code).forEach(s=>{correct+=s.correct||0;expected+=s.expected||0;if(s.pct!=null)values.push(s.pct)}));return expected?100*correct/expected:(values.length?values.reduce((a,b)=>a+b,0)/values.length:null)}
 function relevantQuestions(){const ids=new Set(selectedGroups().map(g=>g.id));return DB.questions.filter(q=>ids.has(q.group_id)&&q.instrument!=='Avaliação Diagnóstica').map(q=>({...q,gre_pct:q.pct,selection_pct:questionPerformance(q),selection_error:(questionPerformance(q)==null?null:100-questionPerformance(q)),gre_error:q.pct==null?null:100-q.pct})).sort((a,b)=>((state.school==='Todos'?b.gre_error:b.selection_error)??-1)-((state.school==='Todos'?a.gre_error:a.selection_error)??-1))}
-function questionOriginalHtml(q){if(!q.page_image)return `<div class="question-original"><div class="question-original-head"><b>Visual original indisponível</b><span>Consulte o caderno comentado</span></div><div class="q-text" style="padding:14px">${esc(q.statement||'Questão disponível no caderno comentado.')}</div></div>`;const pdf=(q.source_pdf||q.source_link)+(q.page?`#page=${q.page}&view=FitH`:'');return `<div class="question-original"><div class="question-original-head"><b>Imagem original da questão</b><span>Página ${q.page} do caderno comentado</span></div><img class="question-original-image" loading="lazy" src="${encodeURI(q.page_image)}" alt="Imagem original da questão ${q.number}" onclick="window.open('${encodeURI(q.page_image)}','_blank')"><div class="question-original-tools"><span>Clique na imagem para ampliar.</span><button onclick="window.open('${encodeURI(pdf)}','_blank')">Abrir no caderno comentado</button></div></div>`}
+function questionOriginalHtml(q){
+  if(!q.page_image){
+    return `<div class="question-original"><div class="question-original-head"><b>Visual original indisponível</b><span>Consulte o caderno comentado</span></div><div class="q-text" style="padding:14px">${esc(q.statement||'Questão disponível no caderno comentado.')}</div></div>`;
+  }
+
+  const cleanImagePath = String(q.page_image||'').replace(/^\.?\//,'');
+  const imgSrc = encodeURI(cleanImagePath) + (cleanImagePath.includes('?') ? '&' : '?') + 'v=43';
+  const pdfBase = q.source_pdf || q.source_link || '';
+  const pdf = pdfBase ? encodeURI(pdfBase) + (q.page ? `#page=${q.page}&view=FitH` : '') : '';
+
+  return `<div class="question-original">
+    <div class="question-original-head">
+      <b>Imagem original da questão</b>
+      <span>Página ${q.page||'—'} do caderno comentado</span>
+    </div>
+
+    <img
+      class="question-original-image"
+      loading="lazy"
+      src="${imgSrc}"
+      alt="Imagem original da questão ${q.number}"
+      onclick="window.open('${imgSrc}','_blank')"
+      onerror="this.style.display='none';const box=this.closest('.question-original').querySelector('.image-fallback');if(box)box.style.display='block';"
+    >
+
+    <div class="image-fallback" style="display:none;padding:14px;background:#fff7ed;border-top:1px solid #fed7aa;color:#7c2d12;font-size:12px;line-height:1.55">
+      <b>A imagem desta questão ainda não carregou.</b><br>
+      Caminho esperado no GitHub:<br>
+      <code>public/escolas/sap-avaliacoes-2026/${esc(cleanImagePath)}</code><br>
+      <a href="${imgSrc}" target="_blank" style="display:inline-block;margin-top:8px;font-weight:900;color:#0f766e">Testar imagem diretamente</a>
+    </div>
+
+    <div class="question-original-tools">
+      <span>Clique na imagem para ampliar.</span>
+      ${pdf ? `<button onclick="window.open('${pdf}','_blank')">Abrir no caderno comentado</button>` : ''}
+    </div>
+  </div>`;
+}
 function renderQuestions(){const qs=relevantQuestions();if(!qs.length){$('questions').innerHTML='<div class="empty">Não há questões comentadas vinculadas ao recorte. A Avaliação Diagnóstica não possui caderno comentado.</div>';return}if(!selectedQuestion||!qs.some(q=>q.group_id+'#'+q.number===selectedQuestion))selectedQuestion=qs[0].group_id+'#'+qs[0].number;const q=qs.find(x=>x.group_id+'#'+x.number===selectedQuestion)||qs[0],metric=x=>state.school==='Todos'?x.gre_error:x.selection_error;$('questions').innerHTML=`<div class="section-title"><div><h2>Questões e devolutiva</h2><p>Imagem original, dificuldade da seleção e referência geral.</p></div></div><div class="card"><h3>Questões mais críticas</h3><div class="question-rank">${qs.slice(0,10).map((x,i)=>`<div class="q-rank" onclick="selectQuestion('${esc(x.group_id)}',${x.number})"><small>${i+1}ª prioridade</small><div class="n">Questão ${x.number}</div><div class="err">${pct(metric(x))} de erro ${state.school==='Todos'?'na GRE':'na escola'}</div><small>${esc(x.skill_code||'Sem código')} • GRE ${pct(x.gre_error)} erro</small></div>`).join('')}</div></div><div class="card"><h3>Lista de questões</h3><div class="q-index">${qs.slice(0,180).map(x=>`<button class="q-btn ${x.group_id+'#'+x.number===selectedQuestion?'active':''}" onclick="selectQuestion('${esc(x.group_id)}',${x.number})"><strong>${x.number}</strong><span>${pct(metric(x))} erro</span><small>${esc(x.skill_code||'')}</small></button>`).join('')}</div></div>${questionDetail(q)}`}
 function selectQuestion(g,n){selectedQuestion=g+'#'+n;renderQuestions();setTimeout(()=>document.querySelector('.q-work')?.scrollIntoView({behavior:'smooth',block:'start'}),30)}
 

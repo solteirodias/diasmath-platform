@@ -1,3 +1,3 @@
-Correção 42 — SAP V9.2
-5º Miniteste com escolas individuais restauradas no acesso regional.
-Corrige aba Escolas exibindo apenas Consolidado regional.
+Correção 43 — Imagens do 5º Miniteste publicadas.
+Inclui as páginas .webp dos cadernos comentados em public/escolas/sap-avaliacoes-2026/paginas/5-miniteste.
+Também ajusta o carregamento das imagens para mostrar aviso quando o arquivo não estiver no GitHub.
