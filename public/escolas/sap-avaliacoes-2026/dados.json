@@ -236956,7 +236956,8 @@
   "schools": [
     {
       "inep": "00000000",
-      "school": "08ª GRE - OEIRAS (Consolidado regional)"
+      "school": "08ª GRE - OEIRAS (Consolidado regional)",
+      "gre": "08ª GRE - OEIRAS"
     },
     {
       "inep": "22080392",
@@ -237000,7 +237001,8 @@
     },
     {
       "inep": "22134018",
-      "school": "CETI ESCOLA FAMÍLIA AGRÍCOLA DOM EDILBERTO III"
+      "school": "CETI ESCOLA FAMÍLIA AGRÍCOLA DOM EDILBERTO III",
+      "gre": "08ª GRE - OEIRAS"
     },
     {
       "inep": "22136045",
@@ -237090,7 +237092,7 @@
       "22223606": "d6fc1139"
     }
   },
-  "version": "SAP Avaliações 2026 — V10 Simula+ 4 atualizado",
+  "version": "SAP Avaliações 2026 — V11 Acessos por GRE e Escola",
   "pedagogical_revision": {
     "version": "V9",
     "focus": "Inclusão dos dados do 5º Miniteste com descritores oficiais dos consolidados e cadernos comentados enviados.",
@@ -237120,5 +237122,12 @@
     ],
     "questions_added": 104,
     "note": "As imagens originais das questões do 4º Simula+ dependem do envio dos cadernos comentados."
+  },
+  "fix_45": {
+    "date": "2026-09-02",
+    "description": "Restaura controle de acesso: GRE visualiza todos os dados; escola acessa por INEP e visualiza somente seus próprios resultados.",
+    "gre_login": "8gre",
+    "school_login_rule": "login e senha iguais ao INEP da escola",
+    "schools_count": 21
   }
 }

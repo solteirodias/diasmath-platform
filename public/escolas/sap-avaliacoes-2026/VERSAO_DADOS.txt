@@ -1,4 +1,5 @@
-Correção 44 — Atualização do 4º Simula+.
-Inclui 2ª e 3ª séries, Matemática e Língua Portuguesa.
-Dados por escola inseridos no acesso regional.
-Questões vinculadas aos descritores do consolidado, com imagem pendente até envio dos cadernos comentados.
+Correção 45 — Acessos por GRE e escola.
+GRE: login 8gre.
+Escolas: login e senha iguais ao INEP.
+O sistema não abre mais automaticamente como regional.
+Cada escola visualiza apenas seus próprios dados.
