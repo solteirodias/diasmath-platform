@@ -125,6 +125,73 @@ pointer-events:none}
   .logo{font-size:42px}.panel{padding:17px}
 }
 @media(min-width:900px) and (pointer:fine){.controls{display:none!important}}
+
+/* DIASMATH V46 — Ajuda do Guardião da Divisão */
+.guardianHintWrap{
+  margin:12px auto 4px;
+  max-width:760px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+}
+.guardianHelpBtn{
+  border:0;
+  border-radius:18px;
+  padding:12px 18px;
+  font-weight:950;
+  font-size:15px;
+  cursor:pointer;
+  color:#fff;
+  background:linear-gradient(135deg,#0b6f68,#1ab394);
+  box-shadow:0 7px 0 #064d49,0 12px 24px rgba(0,0,0,.20);
+  letter-spacing:.2px;
+}
+.guardianHelpBtn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+.guardianHelpBtn:active{transform:translateY(2px);box-shadow:0 4px 0 #064d49,0 8px 16px rgba(0,0,0,.18)}
+.guardianHelpBtn:disabled{opacity:.7;cursor:wait;filter:grayscale(.25)}
+.guardianSpeech{
+  width:min(760px,92vw);
+  border:3px solid #0b6f68;
+  border-radius:22px;
+  background:linear-gradient(180deg,#fffdf2,#f1fff8);
+  color:#123;
+  padding:14px 16px;
+  text-align:left;
+  box-shadow:0 12px 28px rgba(0,0,0,.18);
+  display:none;
+  position:relative;
+  font-weight:850;
+  line-height:1.45;
+}
+.guardianSpeech.active{display:block;animation:guardianPop .18s ease-out}
+.guardianSpeech::before{
+  content:"🛡️";
+  position:absolute;
+  left:-16px;
+  top:-18px;
+  background:#063f3d;
+  color:#fff;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  border:3px solid #fff;
+  box-shadow:0 5px 14px rgba(0,0,0,.25);
+}
+.guardianSpeech strong{color:#075f58}
+.guardianSpeech small{
+  display:block;
+  margin-top:6px;
+  opacity:.72;
+  font-weight:800;
+}
+@keyframes guardianPop{
+  from{transform:scale(.96);opacity:.2}
+  to{transform:scale(1);opacity:1}
+}
+
 </style>
 </head>
 <body>
@@ -173,7 +240,7 @@ pointer-events:none}
   <div class="panel">
     <h2 class="title2">Como jogar</h2>
     <p class="problem">Mover: ← → ou A/D. Pular: Espaço/W/↑. Atacar: F ou X. Dash: Shift ou C. Especial: Q ou Z. Ação: E ou Enter.</p>
-    <p class="problem">O Baú do Saber libera o Raio da Partilha. O Portal da Partilha abre a divisão na prática. A fase final exige vários problemas desafiadores.</p>
+    <p class="problem">O Baú do Saber libera o Raio da Partilha. Ao errar, use 🛡️ Pedir ajuda ao Guardião para receber dicas sem ganhar a resposta pronta.</p>
     <div class="btns"><button class="btn alt" data-screen="titleScreen">VOLTAR</button></div>
   </div>
 </section>
@@ -184,7 +251,7 @@ pointer-events:none}
     <div class="credits">
       <p><strong>Os Guardiões da Divisão</strong></p>
       <p>Concepção pedagógica, matemática e identidade DIASMATH™: Francisco Vieira Dias.</p>
-      <p>Objetivo: ensinar divisão como repartição, agrupamento, quociente e resto por meio de uma aventura brasileira.</p>
+      <p>Objetivo: ensinar divisão como repartição, agrupamento, quociente e resto por meio de uma aventura brasileira, com dicas progressivas do Guardião.</p>
       <p>© 2026 Francisco Vieira Dias — DIASMATH™.</p>
     </div>
     <div class="btns"><button class="btn alt" data-screen="titleScreen">VOLTAR</button></div>
@@ -199,6 +266,7 @@ pointer-events:none}
     <div id="challengePreview"></div>
     <div id="challengeAnswers" class="answers"></div>
     <div id="challengeFeedback" class="feedback"></div>
+    <div id="challengeGuardianHint" class="guardianHintWrap"></div>
     <div class="btns"><button id="challengeBack" class="btn small alt">VOLTAR À FASE</button></div>
   </div>
 </section>
@@ -212,6 +280,7 @@ pointer-events:none}
     <div id="remainderInfo"></div>
     <div id="mathLine" class="mathline"></div>
     <div id="practiceFeedback" class="feedback"></div>
+    <div id="practiceGuardianHint" class="guardianHintWrap"></div>
     <div id="practiceButtons" class="btns"></div>
     <div id="practiceAnswers" class="answers"></div>
   </div>
@@ -223,6 +292,7 @@ pointer-events:none}
     <p class="problem">Resolva os problemas para abrir uma brecha no Rei Desigual.</p>
     <div id="bossQuizList" class="bossProblems"></div>
     <div id="bossQuizFeedback" class="feedback"></div>
+    <div id="bossGuardianHint" class="guardianHintWrap"></div>
     <div class="btns">
       <button id="bossQuizCheck" class="btn">CONFERIR E ATACAR</button>
       <button id="bossQuizBack" class="btn alt">VOLTAR À ARENA</button>
@@ -512,6 +582,7 @@ function startLevel(index){
   currentLevel=index;
   const level=LEVELS[index];
   state = level.mode === "boss" ? "boss" : "playing";
+  limparAjudaGuardiao("bossGuardianHint");
   showScreen(null);
   setGameUI(true);
   buildLevel();
@@ -875,12 +946,132 @@ function challengeOptions(ans){
   }
   return [text];
 }
+
+/* DIASMATH V46 — Sistema de dicas progressivas do Guardião */
+function guardianWordLimit(text){
+  const words=String(text||"").trim().split(/\s+/).filter(Boolean);
+  if(words.length<=35)return String(text||"").trim();
+  return words.slice(0,35).join(" ")+"...";
+}
+function guardianCleanNumber(value){
+  const n=Number(value);
+  return Number.isFinite(n)?n:null;
+}
+function guardianOperationPayload(context){
+  const level=LEVELS[currentLevel]||{};
+  return {
+    dividendo: guardianCleanNumber(context.dividendo ?? level.total),
+    divisor: guardianCleanNumber(context.divisor ?? level.divisor),
+    respostaInformada: String(context.respostaInformada ?? ""),
+    respostaCorreta: String(context.respostaCorreta ?? answerLabel(level.quotient,level.rest)),
+    tentativa: Math.max(1,Number(context.tentativa||1)),
+    temResto: Boolean(context.temResto ?? Number(level.rest||0)>0),
+    nivelAtual: String(context.nivelAtual ?? `Fase ${currentLevel+1}`),
+  };
+}
+function guardianLocalHint(payload){
+  const n=Number(payload.dividendo);
+  const d=Number(payload.divisor);
+  const attempt=Number(payload.tentativa||1);
+  if(!Number.isFinite(n)||!Number.isFinite(d)||!d){
+    return "Observe os grupos formados e compare com a pergunta. Pense se todos ficaram com a mesma quantidade.";
+  }
+  const q=Math.floor(n/d);
+  const base=(d*10<n&&q!==10)?10:Math.max(1,q-1);
+  const produto=base*d;
+  const falta=Math.max(0,n-produto);
+
+  if(attempt<=1){
+    return guardianWordLimit(`Pense em grupos de ${d}. Comece estimando: ${d} × ${base} chega perto de ${n}? Ajuste sua ideia com calma.`);
+  }
+  if(attempt===2){
+    return guardianWordLimit(`${d} × ${base} = ${produto}. Agora veja quanto ainda falta para chegar a ${n} e pense em mais grupos de ${d}.`);
+  }
+  return guardianWordLimit(`Depois de ${d} × ${base} = ${produto}, faltam ${falta}. Veja quantos grupos de ${d} cabem nesse restante e complete.`);
+}
+function guardianSafeTip(text,payload){
+  let tip=guardianWordLimit(text||"");
+  const correct=String(payload.respostaCorreta||"").trim();
+  if(!tip)return guardianLocalHint(payload);
+  const q=correct.split(",")[0].trim();
+  const revealsAnswer=new RegExp(`(^|\\D)${q}(\\D|$)`).test(tip) && /resposta|resultado|quociente|igual|vale/i.test(tip);
+  if(/a resposta é|o resultado é|quociente é|digite/i.test(tip)||revealsAnswer){
+    return guardianLocalHint(payload);
+  }
+  return tip;
+}
+async function pedirAjudaGuardiao(context,wrapId){
+  const wrap=$("#"+wrapId);
+  if(!wrap)return;
+  const payload=guardianOperationPayload(context);
+  const btn=wrap.querySelector(".guardianHelpBtn");
+  const speech=wrap.querySelector(".guardianSpeech");
+  if(btn)btn.disabled=true;
+  if(speech){
+    speech.classList.add("active");
+    speech.innerHTML="<strong>🛡️ Guardião da Divisão:</strong><br>O Guardião está analisando sua estratégia...";
+  }
+
+  try{
+    const res=await fetch("/api/guardiao-divisao/dica",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(payload)
+    });
+    const data=await res.json().catch(()=>({}));
+    const tip=guardianSafeTip(data.dica,payload);
+    if(speech){
+      speech.innerHTML=`<strong>🛡️ Guardião da Divisão:</strong><br>${tip}<small>Dica ${payload.tentativa}: pense, teste e tente novamente.</small>`;
+    }
+  }catch(error){
+    const tip=guardianLocalHint(payload);
+    if(speech){
+      speech.innerHTML=`<strong>🛡️ Guardião da Divisão:</strong><br>${tip}<small>Dica local: continue tentando.</small>`;
+    }
+  }finally{
+    if(btn)btn.disabled=false;
+  }
+}
+function mostrarBotaoGuardiao(wrapId,context){
+  const wrap=$("#"+wrapId);
+  if(!wrap)return;
+  wrap.innerHTML="";
+  const btn=document.createElement("button");
+  btn.className="guardianHelpBtn";
+  btn.type="button";
+  btn.textContent="🛡️ Pedir ajuda ao Guardião";
+  const speech=document.createElement("div");
+  speech.className="guardianSpeech";
+  btn.onclick=()=>pedirAjudaGuardiao(context,wrapId);
+  wrap.append(btn,speech);
+}
+function limparAjudaGuardiao(...ids){
+  ids.forEach(id=>{
+    const el=$("#"+id);
+    if(el)el.innerHTML="";
+  });
+}
+function respostaCorretaDoNivel(level){
+  return answerLabel(level.quotient,level.rest);
+}
+function respostaPraticaInformada(level){
+  if(!practice)return "";
+  if(level.mode==="share"){
+    return `grupos: ${(practice.groups||[]).join(", ")}; separados: ${practice.remaining}`;
+  }
+  return `grupos completos: ${(practice.cards||[]).length}; separados: ${practice.remaining}`;
+}
+function parseBossDivision(problem){
+  const nums=String(problem.q||"").match(/\d+/g)||[];
+  return {dividendo:Number(nums[0]||0),divisor:Number(nums[1]||0)};
+}
+
 function openChallenge(kind,target=null){
   const level=LEVELS[currentLevel];
   const divisor=level.divisor || 6;
   const ans=Math.max(2,(level.quotient || 5) + (kind==="weapon"?0:1));
   const total=divisor*ans;
-  challenge={kind,target,total,divisor,ans:String(ans)};
+  challenge={kind,target,total,divisor,ans:String(ans),attempts:0};
   state="challenge";
   setGameUI(false);
   showScreen("challengeScreen");
@@ -889,6 +1080,7 @@ function openChallenge(kind,target=null){
   $("#challengeQuestion").textContent=`Quanto é ${total} ÷ ${divisor}?`;
   $("#challengePreview").innerHTML=previewDivision(total,divisor,ans,level.token);
   $("#challengeFeedback").textContent="Escolha uma das 4 alternativas.";
+  limparAjudaGuardiao("challengeGuardianHint");
   const box=$("#challengeAnswers");
   box.innerHTML="";
   challengeOptions(ans).forEach(v=>{
@@ -903,12 +1095,23 @@ function openChallenge(kind,target=null){
 function answerChallenge(v,button){
   if(!challenge) return;
   if(v!==challenge.ans){
+    challenge.attempts=(challenge.attempts||0)+1;
     button.disabled=true;
     button.style.filter="grayscale(1)";
-    $("#challengeFeedback").textContent="Observe a prática e tente outra alternativa.";
+    $("#challengeFeedback").textContent="Ainda não está certo. Peça uma pista ao Guardião ou tente outra estratégia.";
+    mostrarBotaoGuardiao("challengeGuardianHint",{
+      dividendo:challenge.total,
+      divisor:challenge.divisor,
+      respostaInformada:v,
+      respostaCorreta:challenge.ans,
+      tentativa:challenge.attempts,
+      temResto:false,
+      nivelAtual:`Fase ${currentLevel+1} • ${$("#challengeTitle").textContent||"desafio"}`
+    });
     beep(130,.12,"sawtooth");
     return;
   }
+  limparAjudaGuardiao("challengeGuardianHint");
   if(challenge.kind==="weapon"){
     chest.open=true;
     player.weapon=true;
@@ -961,7 +1164,7 @@ function tokenHTML(kind,n){
 
 function openPractice(){
   const level=LEVELS[currentLevel];
-  practice={remaining:level.total,groups:[],history:[],cards:[],answerReady:false};
+  practice={remaining:level.total,groups:[],history:[],cards:[],answerReady:false,attempts:0,answerAttempts:0};
   state="practice";
   setGameUI(false);
   showScreen("practiceScreen");
@@ -970,6 +1173,7 @@ function openPractice(){
   $("#practiceFeedback").style.color="#a13a33";
   $("#practiceFeedback").textContent=level.rest?"Forme grupos completos e deixe separado apenas o resto.":"Organize todos os objetos em partes iguais.";
   $("#practiceAnswers").innerHTML="";
+  limparAjudaGuardiao("practiceGuardianHint");
   renderPractice();
 }
 function renderPractice(){
@@ -1057,11 +1261,22 @@ function checkPractice(){
     ok=practice.cards.length===level.quotient && practice.remaining===level.rest;
   }
   if(!ok){
+    practice.attempts=(practice.attempts||0)+1;
     $("#practiceFeedback").style.color="#a13a33";
-    $("#practiceFeedback").textContent=level.rest?`Ainda não. Devem ser ${level.quotient} grupos completos e resto ${level.rest}.`:"Ainda não. Confira se os grupos estão corretos.";
+    $("#practiceFeedback").textContent="Ainda não está certo. Observe os grupos e peça uma dica ao Guardião.";
+    mostrarBotaoGuardiao("practiceGuardianHint",{
+      dividendo:level.total,
+      divisor:level.divisor,
+      respostaInformada:respostaPraticaInformada(level),
+      respostaCorreta:respostaCorretaDoNivel(level),
+      tentativa:practice.attempts,
+      temResto:Number(level.rest||0)>0,
+      nivelAtual:`Fase ${currentLevel+1} • Portal da Partilha`
+    });
     beep(140,.13,"sawtooth");
     return;
   }
+  limparAjudaGuardiao("practiceGuardianHint");
   showPracticeAnswers();
 }
 function answerLabel(q,r){ return r ? `${q}, resto ${r}` : `${q}`; }
@@ -1081,13 +1296,24 @@ function showPracticeAnswers(){
     b.textContent=label;
     b.onclick=()=>{
       if(label===good){
+        limparAjudaGuardiao("practiceGuardianHint");
         $("#mathLine").textContent=level.rest?`${level.total} ÷ ${level.divisor} = ${level.quotient}, resto ${level.rest}`:`${level.total} ÷ ${level.divisor} = ${level.quotient}`;
         $("#practiceFeedback").style.color="#287447";
         $("#practiceFeedback").textContent="Excelente! Portal concluído.";
         setTimeout(completeLevel,850);
       }else{
+        practice.answerAttempts=(practice.answerAttempts||0)+1;
         $("#practiceFeedback").style.color="#a13a33";
-        $("#practiceFeedback").textContent="Observe os grupos e tente novamente.";
+        $("#practiceFeedback").textContent="Observe os grupos e peça uma dica ao Guardião se precisar.";
+        mostrarBotaoGuardiao("practiceGuardianHint",{
+          dividendo:level.total,
+          divisor:level.divisor,
+          respostaInformada:label,
+          respostaCorreta:good,
+          tentativa:practice.answerAttempts,
+          temResto:Number(level.rest||0)>0,
+          nivelAtual:`Fase ${currentLevel+1} • escolha do resultado`
+        });
         beep(140,.13,"sawtooth");
       }
     };
@@ -1109,6 +1335,8 @@ function openBossQuiz(){
   const list=$("#bossQuizList");
   list.innerHTML="";
   bossProblems=[...FINAL_PROBLEMS].sort(()=>Math.random()-.5).slice(0,3);
+  window.bossHintAttempts=0;
+  limparAjudaGuardiao("bossGuardianHint");
   bossProblems.forEach((p,i)=>{
     const div=document.createElement("div");
     div.className="bossProblem";
@@ -1123,7 +1351,21 @@ function checkBossQuiz(){
     if(sel.value!==bossProblems[Number(sel.dataset.i)].a) ok=false;
   });
   if(!ok){
-    $("#bossQuizFeedback").textContent="Ainda há resposta incorreta. Revise as divisões.";
+    window.bossHintAttempts=(window.bossHintAttempts||0)+1;
+    $("#bossQuizFeedback").textContent="Ainda há resposta incorreta. Peça uma dica ao Guardião e revise as divisões.";
+    const wrong=$$("#bossQuizList select").find(sel=>sel.value!==bossProblems[Number(sel.dataset.i)].a);
+    const idx=wrong?Number(wrong.dataset.i):0;
+    const problem=bossProblems[idx]||bossProblems[0]||{};
+    const parsed=parseBossDivision(problem);
+    mostrarBotaoGuardiao("bossGuardianHint",{
+      dividendo:parsed.dividendo,
+      divisor:parsed.divisor,
+      respostaInformada:wrong?wrong.value:"",
+      respostaCorreta:problem.a||"",
+      tentativa:window.bossHintAttempts,
+      temResto:/resto/i.test(problem.a||""),
+      nivelAtual:`Fase ${currentLevel+1} • Desafio do Chefão`
+    });
     beep(140,.14,"sawtooth");
     return;
   }
