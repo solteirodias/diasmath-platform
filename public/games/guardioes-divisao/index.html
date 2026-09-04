@@ -193,6 +193,8 @@ pointer-events:none}
 }
 
 </style>
+
+<!-- DIASMATH V48: ajuda do Guardião corrigida diretamente nos blocos internos de erro. -->
 </head>
 <body>
 <div id="app">
@@ -240,7 +242,7 @@ pointer-events:none}
   <div class="panel">
     <h2 class="title2">Como jogar</h2>
     <p class="problem">Mover: ← → ou A/D. Pular: Espaço/W/↑. Atacar: F ou X. Dash: Shift ou C. Especial: Q ou Z. Ação: E ou Enter.</p>
-    <p class="problem">O Baú do Saber libera o Raio da Partilha. Ao errar em qualquer etapa, use 🛡️ Pedir ajuda ao Guardião para receber dicas sem ganhar a resposta pronta.</p>
+    <p class="problem">O Baú do Saber libera o Raio da Partilha. Ao errar, use 🛡️ Pedir ajuda ao Guardião para receber dicas sem ganhar a resposta pronta.</p>
     <div class="btns"><button class="btn alt" data-screen="titleScreen">VOLTAR</button></div>
   </div>
 </section>
@@ -1371,6 +1373,7 @@ function checkBossQuiz(){
   }
   showScreen(null);
   setGameUI(true);
+  limparAjudaGuardiao("bossGuardianHint");
   state="boss";
   boss.hp-=7;
   player.ammo+=5;
@@ -2784,7 +2787,7 @@ document.addEventListener("visibilitychange",()=>{ if(document.hidden) stopMusic
   function openQuestionBlock(block){
     const level=LEVELS[currentLevel];
     const correctAnswer = block.answerText || String(block.answer);
-    challenge={kind:"block",target:block,total:block.total,divisor:block.divisor,ans:correctAnswer};
+    challenge={kind:"block",target:block,total:block.total,divisor:block.divisor,ans:correctAnswer,attempts:0,quotient:block.quotient ?? block.answer,remainder:block.remainder || 0};
     block.tries++;
     state="challenge";setGameUI(false);progressWrap.classList.remove("active");stageTag.classList.remove("active");showScreen("challengeScreen");
     $("#challengeTitle").textContent="Bloco da Divisão";
@@ -2792,6 +2795,7 @@ document.addEventListener("visibilitychange",()=>{ if(document.hidden) stopMusic
     $("#challengeQuestion").textContent=`Quanto é ${block.total} ÷ ${block.divisor}?`;
     $("#challengePreview").innerHTML=previewDivision(block.total,block.divisor,block.quotient ?? block.answer,level.token,block.remainder || 0);
     $("#challengeFeedback").textContent="Escolha a alternativa correta.";
+    limparAjudaGuardiao("challengeGuardianHint");
     const box=$("#challengeAnswers");box.innerHTML="";
     challengeOptions(correctAnswer).forEach(v=>{const b=document.createElement("button");b.className="answer";b.textContent=v;b.onclick=()=>answerChallenge(String(v),b);box.appendChild(b)});
     beep(640,.08,"triangle");
@@ -2800,8 +2804,24 @@ document.addEventListener("visibilitychange",()=>{ if(document.hidden) stopMusic
   answerChallenge = function(v,button){
     if(!challenge)return;
     if(v!==challenge.ans){
-      wrongAnswers++;button.disabled=true;button.style.filter="grayscale(1)";$("#challengeFeedback").textContent="Ainda não. Conte os grupos ou use a multiplicação para conferir.";beep(130,.12,"sawtooth");return;
+      wrongAnswers++;
+      challenge.attempts=(challenge.attempts||0)+1;
+      button.disabled=true;
+      button.style.filter="grayscale(1)";
+      $("#challengeFeedback").textContent="Ainda não. Peça ajuda ao Guardião para pensar nos grupos.";
+      mostrarBotaoGuardiao("challengeGuardianHint",{
+        dividendo:challenge.total,
+        divisor:challenge.divisor,
+        respostaInformada:v,
+        respostaCorreta:challenge.ans,
+        tentativa:challenge.attempts,
+        temResto:Boolean(challenge.remainder||String(challenge.ans).toLowerCase().includes("resto")),
+        nivelAtual:`Fase ${currentLevel+1} • ${$("#challengeTitle").textContent||"desafio"}`
+      });
+      beep(130,.12,"sawtooth");
+      return;
     }
+    limparAjudaGuardiao("challengeGuardianHint");
     if(challenge.kind==="weapon"){
       chest.open=true;player.weapon=true;player.ammo+=diff().ammo;toast("Raio da Partilha liberado! Use F ou X.",2200);
     }else if(challenge.kind==="block"){
@@ -3228,13 +3248,14 @@ document.addEventListener("visibilitychange",()=>{ if(document.hidden) stopMusic
     const p=BONUS_PORTAL_PROBLEMS[bonusSourcePortal.portalId%BONUS_PORTAL_PROBLEMS.length];
     const q=Math.floor(p.total/p.divisor),r=p.total%p.divisor;
     const answer=r?`${q}, resto ${r}`:String(q);
-    challenge={kind:"bonusGate",target:bonusSourcePortal,total:p.total,divisor:p.divisor,ans:answer,quotient:q,remainder:r};
+    challenge={kind:"bonusGate",target:bonusSourcePortal,total:p.total,divisor:p.divisor,ans:answer,quotient:q,remainder:r,attempts:0};
     state="challenge";setGameUI(false);progressWrap.classList.remove("active");stageTag.classList.remove("active");showScreen("challengeScreen");
     $("#challengeTitle").textContent=bonusSourcePortal.kind==="shield"?"Desafio do Portal do Escudo":"Desafio do Portal das Vidas";
     $("#challengeText").textContent="Resolva a divisão para ativar a recompensa e liberar o portal de retorno.";
     $("#challengeQuestion").textContent=`Quanto é ${p.total} ÷ ${p.divisor}?`;
     $("#challengePreview").innerHTML=previewDivision(p.total,p.divisor,q,LEVELS[currentLevel].token,r);
     $("#challengeFeedback").textContent=r?"Escolha o quociente e o resto corretos.":"Escolha a alternativa correta.";
+    limparAjudaGuardiao("challengeGuardianHint");
     const box=$("#challengeAnswers");box.innerHTML="";
     challengeOptions(answer).forEach(v=>{const b=document.createElement("button");b.className="answer";b.textContent=v;b.onclick=()=>answerChallenge(String(v),b);box.appendChild(b)});
     beep(690,.09,"triangle");
@@ -3259,10 +3280,24 @@ document.addEventListener("visibilitychange",()=>{ if(document.hidden) stopMusic
   answerChallenge=function(v,button){
     if(challenge&&challenge.kind==="bonusGate"){
       if(String(v)!==String(challenge.ans)){
-        wrongAnswers++;button.disabled=true;button.style.filter="grayscale(1)";
-        $("#challengeFeedback").textContent="Ainda não. Confira os grupos e lembre que o resto deve ser menor que o divisor.";
-        beep(130,.13,"sawtooth");return;
+        wrongAnswers++;
+        challenge.attempts=(challenge.attempts||0)+1;
+        button.disabled=true;
+        button.style.filter="grayscale(1)";
+        $("#challengeFeedback").textContent="Ainda não. Peça ajuda ao Guardião e confira se o resto é menor que o divisor.";
+        mostrarBotaoGuardiao("challengeGuardianHint",{
+          dividendo:challenge.total,
+          divisor:challenge.divisor,
+          respostaInformada:v,
+          respostaCorreta:challenge.ans,
+          tentativa:challenge.attempts,
+          temResto:Boolean(challenge.remainder),
+          nivelAtual:`Fase ${currentLevel+1} • ${$("#challengeTitle").textContent||"Portal bônus"}`
+        });
+        beep(130,.13,"sawtooth");
+        return;
       }
+      limparAjudaGuardiao("challengeGuardianHint");
       bonusMathSolved=true;grantBonusReward();challenge=null;state="playing";showScreen(null);setGameUI(true);progressWrap.classList.add("active");stageTag.classList.add("active");
       toast("Desafio vencido! O portal de retorno foi liberado.",2100);beep(920,.14,"triangle");
       return;
@@ -3404,231 +3439,5 @@ setGameUI(false);
 requestAnimationFrame(loop);
 })();
 </script>
-
-<script>
-/* DIASMATH V47 — Ajuda do Guardião em todas as fases */
-(function(){
-  if(window.__GUARDIAO_DIVISAO_V47_TODAS_FASES__) return;
-  window.__GUARDIAO_DIVISAO_V47_TODAS_FASES__ = true;
-
-  function byId(id){ return document.getElementById(id); }
-  function txt(id){ return byId(id) ? byId(id).textContent || "" : ""; }
-  function isVisible(id){
-    const el = byId(id);
-    if(!el) return false;
-    return !el.classList.contains("hidden") && getComputedStyle(el).display !== "none";
-  }
-  function ensureHintArea(id, afterId){
-    if(byId(id)) return;
-    const after = byId(afterId);
-    if(!after || !after.parentElement) return;
-    const div = document.createElement("div");
-    div.id = id;
-    div.className = "guardianHintWrap";
-    after.insertAdjacentElement("afterend", div);
-  }
-  function resetChallengeHint(){
-    ensureHintArea("challengeGuardianHint","challengeFeedback");
-    if(typeof limparAjudaGuardiao === "function") limparAjudaGuardiao("challengeGuardianHint");
-  }
-  function resetPracticeHint(){
-    ensureHintArea("practiceGuardianHint","practiceFeedback");
-    if(typeof limparAjudaGuardiao === "function") limparAjudaGuardiao("practiceGuardianHint");
-  }
-  function resetBossHint(){
-    ensureHintArea("bossGuardianHint","bossQuizFeedback");
-    if(typeof limparAjudaGuardiao === "function") limparAjudaGuardiao("bossGuardianHint");
-  }
-  function parseDivisionFromText(text){
-    const numbers = String(text || "").match(/\d+/g) || [];
-    return {
-      dividendo: Number(numbers[0] || 0),
-      divisor: Number(numbers[1] || 0)
-    };
-  }
-  function challengePayload(v){
-    if(typeof challenge === "undefined" || !challenge) return null;
-    const level = (typeof LEVELS !== "undefined" && typeof currentLevel !== "undefined") ? LEVELS[currentLevel] || {} : {};
-    const title = txt("challengeTitle") || "Desafio da Divisão";
-    const tentativa = Math.max(1, Number(challenge.attempts || 1));
-    const restoTexto = String(challenge.ans || "").toLowerCase().includes("resto");
-    return {
-      dividendo: Number(challenge.total || level.total || 0),
-      divisor: Number(challenge.divisor || level.divisor || 0),
-      respostaInformada: String(v ?? ""),
-      respostaCorreta: String(challenge.ans ?? ""),
-      tentativa,
-      temResto: Boolean(challenge.remainder || level.rest || restoTexto),
-      nivelAtual: `Fase ${(typeof currentLevel !== "undefined" ? currentLevel + 1 : "")} • ${title}`
-    };
-  }
-  function showChallengeHelp(v){
-    ensureHintArea("challengeGuardianHint","challengeFeedback");
-    if(typeof challenge === "undefined" || !challenge || typeof mostrarBotaoGuardiao !== "function") return;
-    const before = Number(challenge.attempts || 0);
-    challenge.attempts = Math.max(1, before);
-    const payload = challengePayload(v);
-    if(payload) mostrarBotaoGuardiao("challengeGuardianHint", payload);
-  }
-  function showPracticeHelp(){
-    ensureHintArea("practiceGuardianHint","practiceFeedback");
-    if(typeof practice === "undefined" || !practice || typeof mostrarBotaoGuardiao !== "function") return;
-    const level = (typeof LEVELS !== "undefined" && typeof currentLevel !== "undefined") ? LEVELS[currentLevel] || {} : {};
-    practice.attempts = Math.max(1, Number(practice.attempts || 1));
-    const respostaInformada = typeof respostaPraticaInformada === "function" ? respostaPraticaInformada(level) : "organização dos grupos";
-    const respostaCorreta = typeof respostaCorretaDoNivel === "function" ? respostaCorretaDoNivel(level) : "";
-    mostrarBotaoGuardiao("practiceGuardianHint",{
-      dividendo: Number(level.total || 0),
-      divisor: Number(level.divisor || 0),
-      respostaInformada,
-      respostaCorreta,
-      tentativa: practice.attempts,
-      temResto: Boolean(level.rest),
-      nivelAtual: `Fase ${(typeof currentLevel !== "undefined" ? currentLevel + 1 : "")} • Portal da Partilha`
-    });
-  }
-  function showBossHelp(){
-    ensureHintArea("bossGuardianHint","bossQuizFeedback");
-    if(typeof bossProblems === "undefined" || !Array.isArray(bossProblems) || typeof mostrarBotaoGuardiao !== "function") return;
-    window.bossHintAttempts = Math.max(1, Number(window.bossHintAttempts || 1));
-    const selects = Array.from(document.querySelectorAll("#bossQuizList select"));
-    let wrong = selects.find(sel => {
-      const p = bossProblems[Number(sel.dataset.i)];
-      return p && sel.value && sel.value !== p.a;
-    });
-    if(!wrong) wrong = selects[0] || null;
-    const idx = wrong ? Number(wrong.dataset.i || 0) : 0;
-    const problem = bossProblems[idx] || bossProblems[0] || {};
-    const parsed = parseDivisionFromText(problem.q || "");
-    mostrarBotaoGuardiao("bossGuardianHint",{
-      dividendo: parsed.dividendo,
-      divisor: parsed.divisor,
-      respostaInformada: wrong ? String(wrong.value || "sem resposta") : "sem resposta",
-      respostaCorreta: String(problem.a || ""),
-      tentativa: window.bossHintAttempts,
-      temResto: /resto/i.test(String(problem.a || "")),
-      nivelAtual: `Fase ${(typeof currentLevel !== "undefined" ? currentLevel + 1 : "")} • Desafio do Chefão`
-    });
-  }
-
-  ensureHintArea("challengeGuardianHint","challengeFeedback");
-  ensureHintArea("practiceGuardianHint","practiceFeedback");
-  ensureHintArea("bossGuardianHint","bossQuizFeedback");
-
-  if(typeof openChallenge === "function"){
-    const oldOpenChallenge = openChallenge;
-    openChallenge = function(){
-      const r = oldOpenChallenge.apply(this, arguments);
-      resetChallengeHint();
-      if(typeof challenge !== "undefined" && challenge) challenge.attempts = 0;
-      return r;
-    };
-  }
-
-  if(typeof openQuestionBlock === "function"){
-    const oldOpenQuestionBlock = openQuestionBlock;
-    openQuestionBlock = function(){
-      const r = oldOpenQuestionBlock.apply(this, arguments);
-      resetChallengeHint();
-      if(typeof challenge !== "undefined" && challenge) challenge.attempts = 0;
-      return r;
-    };
-  }
-
-  if(typeof openBonusGateChallenge === "function"){
-    const oldOpenBonusGateChallenge = openBonusGateChallenge;
-    openBonusGateChallenge = function(){
-      const r = oldOpenBonusGateChallenge.apply(this, arguments);
-      resetChallengeHint();
-      if(typeof challenge !== "undefined" && challenge) challenge.attempts = 0;
-      return r;
-    };
-  }
-
-  if(typeof answerChallenge === "function"){
-    const oldAnswerChallenge = answerChallenge;
-    answerChallenge = function(v, button){
-      const activeChallenge = (typeof challenge !== "undefined") ? challenge : null;
-      const wasWrong = activeChallenge && String(v) !== String(activeChallenge.ans);
-      const before = activeChallenge ? Number(activeChallenge.attempts || 0) : 0;
-      const result = oldAnswerChallenge.apply(this, arguments);
-      if(wasWrong && typeof challenge !== "undefined" && challenge){
-        challenge.attempts = Math.max(Number(challenge.attempts || 0), before + 1);
-        showChallengeHelp(v);
-      }
-      return result;
-    };
-  }
-
-  if(typeof openPractice === "function"){
-    const oldOpenPractice = openPractice;
-    openPractice = function(){
-      const r = oldOpenPractice.apply(this, arguments);
-      resetPracticeHint();
-      if(typeof practice !== "undefined" && practice){
-        practice.attempts = 0;
-        practice.answerAttempts = 0;
-      }
-      return r;
-    };
-  }
-
-  if(typeof checkPractice === "function"){
-    const oldCheckPractice = checkPractice;
-    checkPractice = function(){
-      const before = (typeof practice !== "undefined" && practice) ? Number(practice.attempts || 0) : 0;
-      const result = oldCheckPractice.apply(this, arguments);
-      const feedback = txt("practiceFeedback").toLowerCase();
-      if(isVisible("practiceScreen") && /(ainda|observe|não está|nao esta|tente)/i.test(feedback)){
-        if(typeof practice !== "undefined" && practice) practice.attempts = Math.max(Number(practice.attempts || 0), before + 1);
-        showPracticeHelp();
-      }
-      return result;
-    };
-  }
-
-  if(typeof openBossQuiz === "function"){
-    const oldOpenBossQuiz = openBossQuiz;
-    openBossQuiz = function(){
-      const r = oldOpenBossQuiz.apply(this, arguments);
-      resetBossHint();
-      window.bossHintAttempts = 0;
-      return r;
-    };
-  }
-
-  if(typeof checkBossQuiz === "function"){
-    const oldCheckBossQuiz = checkBossQuiz;
-    checkBossQuiz = function(){
-      const before = Number(window.bossHintAttempts || 0);
-      const result = oldCheckBossQuiz.apply(this, arguments);
-      const feedback = txt("bossQuizFeedback").toLowerCase();
-      if(isVisible("bossQuizScreen") && /(ainda|incorreta|escolha|revise)/i.test(feedback)){
-        window.bossHintAttempts = Math.max(Number(window.bossHintAttempts || 0), before + 1);
-        showBossHelp();
-      }
-      return result;
-    };
-  }
-
-  document.addEventListener("click", function(){
-    setTimeout(function(){
-      const challengeFeedback = txt("challengeFeedback").toLowerCase();
-      if(isVisible("challengeScreen") && /(ainda|confira|conte os grupos|multiplicação|multiplicacao|resto)/i.test(challengeFeedback)){
-        showChallengeHelp("");
-      }
-      const practiceFeedback = txt("practiceFeedback").toLowerCase();
-      if(isVisible("practiceScreen") && /(ainda|observe|não está|nao esta|tente)/i.test(practiceFeedback)){
-        showPracticeHelp();
-      }
-      const bossFeedback = txt("bossQuizFeedback").toLowerCase();
-      if(isVisible("bossQuizScreen") && /(ainda|incorreta|escolha|revise)/i.test(bossFeedback)){
-        showBossHelp();
-      }
-    }, 80);
-  }, true);
-})();
-</script>
-
 </body>
 </html>
