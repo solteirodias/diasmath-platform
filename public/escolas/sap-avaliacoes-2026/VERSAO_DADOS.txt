@@ -1,4 +1,6 @@
-Correção 49 — IA Pedagógica responde qualquer pergunta do SAP.
-A pergunta personalizada agora interpreta a intenção: melhores resultados, prioridades, comparação, plano, devolutiva, mensagem, orientação ao professor ou gestão.
-A primeira linha responde diretamente à pergunta.
-Se a IA online falhar, a resposta pedagógica local também considera a pergunta feita.
+Correção 50 — Aba SAEPI no SAP.
+Inclui resultados SAEPI 2025 por escola para 9º Ano, 1ª, 2ª e 3ª séries.
+Inclui Matemática e Língua Portuguesa.
+Mostra proficiência, participação, níveis de desempenho, habilidades, habilidades trabalhadas em 2026 e habilidades que ainda precisam ser trabalhadas.
+O acesso de escola continua restrito ao INEP logado.
+Mapeamento de escolas SAEPI atualizado, incluindo Costa Alvarenga, Luiz Ubiraci e Professor Balduíno.
