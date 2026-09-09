@@ -15,6 +15,11 @@ function safeNumber(value: unknown): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
+function asPct(value: unknown): string {
+  const n = safeNumber(value);
+  return n === null ? "—" : `${Number(n.toFixed(1))}%`;
+}
+
 function limitContext(ctx: any) {
   const indicadores = ctx?.indicadores || {};
   return {
@@ -43,7 +48,7 @@ function limitContext(ctx: any) {
     habilidades_prioritarias: Array.isArray(ctx?.habilidades_prioritarias)
       ? ctx.habilidades_prioritarias.slice(0, 12).map((h: any) => ({
           codigo: cleanText(h.codigo, 30),
-          descricao: cleanText(h.descricao, 260),
+          descricao: cleanText(h.descricao, 300),
           percentual: safeNumber(h.percentual),
           itens: safeNumber(h.itens),
           nivel: cleanText(h.nivel, 80),
@@ -73,7 +78,7 @@ function limitContext(ctx: any) {
       ? ctx.questoes_criticas.slice(0, 8).map((q: any) => ({
           numero: safeNumber(q.numero),
           descritor: cleanText(q.descritor, 30),
-          habilidade: cleanText(q.habilidade, 260),
+          habilidade: cleanText(q.habilidade, 300),
           percentual_erro: safeNumber(q.percentual_erro),
           instrumento: cleanText(q.instrumento, 80),
           aplicacao: cleanText(q.aplicacao, 40),
@@ -92,7 +97,6 @@ function limitContext(ctx: any) {
           percentual: safeNumber(g.percentual),
         }))
       : [],
-    privacidade: "Dados consolidados de avaliação. Não usar nem solicitar dados pessoais de estudantes.",
   };
 }
 
@@ -108,69 +112,158 @@ function modeLabel(mode: string) {
   return labels[mode] || "Análise pedagógica";
 }
 
-function localFallback(mode: string, ctx: any) {
-  const indicadores = ctx.indicadores || {};
-  const habilidades = Array.isArray(ctx.habilidades_prioritarias) ? ctx.habilidades_prioritarias.slice(0, 5) : [];
+function classifyPriority(pct: number | null): string {
+  if (pct === null) return "sem percentual no recorte";
+  if (pct <= 30) return "prioridade urgente";
+  if (pct <= 50) return "prioridade de recomposição";
+  if (pct <= 70) return "habilidade de consolidação";
+  return "habilidade em acompanhamento";
+}
+
+function prereqSuggestion(text: string, disciplina: string): string {
+  const t = text.toUpperCase();
+  const d = disciplina.toUpperCase();
+
+  if (d.includes("MAT")) {
+    if (t.includes("FUNÇÃO") || t.includes("GRÁFICO") || t.includes("RETA")) {
+      return "retomar leitura de eixos, pares ordenados, variação entre grandezas e relação entre tabela, gráfico e expressão algébrica";
+    }
+    if (t.includes("ÁREA") || t.includes("VOLUME") || t.includes("PERÍMETRO")) {
+      return "retomar identificação da figura, unidades de medida, composição/decomposição de áreas e diferença entre perímetro, área e volume";
+    }
+    if (t.includes("PROPORCIONAL") || t.includes("PORCENTAGEM") || t.includes("RACIONAIS") || t.includes("FRAÇÃO")) {
+      return "retomar razão, equivalência, multiplicação, divisão, porcentagem e organização dos dados em tabela";
+    }
+    if (t.includes("EQUAÇÃO")) {
+      return "retomar igualdade, operações inversas, substituição de valores e interpretação do resultado no problema";
+    }
+    return "retomar leitura do enunciado, seleção de dados, escolha da estratégia e validação do resultado";
+  }
+
+  if (t.includes("TESE") || t.includes("ARGUMENT")) {
+    return "retomar tema, opinião, argumento, exemplo e marcas linguísticas que sustentam o ponto de vista";
+  }
+  if (t.includes("INFERIR") || t.includes("IMPLÍCITA")) {
+    return "retomar localização de pistas no texto, sentido de palavras pelo contexto e justificativa da resposta com trechos";
+  }
+  if (t.includes("FATO") || t.includes("OPINIÃO")) {
+    return "retomar diferença entre informação verificável e julgamento do autor, usando trechos do texto";
+  }
+  if (t.includes("FINALIDADE")) {
+    return "retomar gênero textual, público-alvo, suporte e intenção comunicativa";
+  }
+  return "retomar leitura orientada, comando da questão, localização de evidências e comparação entre alternativas";
+}
+
+function localResponse(mode: string, ctx: any, question: string) {
+  const filtros = ctx.filtros || {};
+  const ind = ctx.indicadores || {};
+  const disciplina = filtros.disciplina || "disciplina selecionada";
+  const serie = filtros.serie || "série selecionada";
+  const instrumento = filtros.instrumento || "avaliação selecionada";
+  const habs = Array.isArray(ctx.habilidades_prioritarias) ? ctx.habilidades_prioritarias.slice(0, 8) : [];
+  const criticas = habs.filter((h: any) => h.percentual !== null && h.percentual <= 50);
+  const title = modeLabel(mode);
   const linhas: string[] = [];
 
-  linhas.push(`${modeLabel(mode)} — ${ctx.recorte || "recorte selecionado"}`);
+  if (mode === "mensagem") {
+    linhas.push("Mensagem sugerida para a escola");
+    linhas.push("");
+    linhas.push(`Prezada equipe, ao analisarmos o recorte de ${disciplina}, ${serie}, em ${instrumento}, observamos desempenho geral de ${asPct(ind.percentual_geral)}. O foco agora é transformar esse dado em ação pedagógica objetiva, priorizando as habilidades com menor percentual de acertos.`);
+    if (habs.length) {
+      linhas.push("");
+      linhas.push("Sugerimos iniciar pelas seguintes habilidades:");
+      habs.slice(0, 4).forEach((h: any) => linhas.push(`- ${h.codigo} — ${asPct(h.percentual)}: ${h.descricao}`));
+    }
+    linhas.push("");
+    linhas.push("Encaminhamento: organizar uma devolutiva com os professores, selecionar uma questão-modelo por habilidade, retomar os pré-requisitos e aplicar uma atividade curta de verificação. A GRE acompanhará o processo como apoio formativo.");
+    return linhas.join("\n");
+  }
+
+  linhas.push(`${title} — ${ctx.recorte || "recorte selecionado"}`);
   linhas.push("");
-  linhas.push(`O recorte apresenta percentual geral de ${indicadores.percentual_geral ?? "—"}%, média estimada ${indicadores.media_estimada ?? "—"} e ${indicadores.habilidades_criticas ?? "—"} habilidade(s) em nível crítico ou baixo.`);
+  linhas.push("1. Síntese do diagnóstico");
+  linhas.push(`O recorte de ${disciplina}, ${serie}, em ${instrumento}, apresenta desempenho geral de ${asPct(ind.percentual_geral)}, média estimada ${ind.media_estimada ?? "—"} e participação de ${ind.estudantes ?? "—"} estudante(s).`);
+  linhas.push(`Há ${ind.habilidades_criticas ?? "—"} habilidade(s) em nível crítico ou baixo, o que indica necessidade de recomposição focal, e não apenas revisão geral de conteúdo.`);
   linhas.push("");
-  linhas.push("Prioridades pedagógicas:");
-  if (habilidades.length) {
-    habilidades.forEach((h: any, i: number) => {
-      linhas.push(`${i + 1}. ${h.codigo} — ${h.percentual ?? "—"}%: ${h.descricao}`);
+
+  linhas.push("2. Habilidades prioritárias");
+  if (habs.length) {
+    habs.forEach((h: any, i: number) => {
+      linhas.push(`${i + 1}. ${h.codigo} — ${asPct(h.percentual)}: ${h.descricao} (${classifyPriority(h.percentual)}).`);
     });
   } else {
-    linhas.push("Não há habilidades suficientes no recorte atual para ordenar prioridades.");
+    linhas.push("O recorte selecionado não possui habilidades suficientes para ordenar prioridades. Ajuste os filtros para uma série, disciplina ou aplicação específica.");
   }
   linhas.push("");
 
-  if (mode === "plano") {
-    linhas.push("Plano sugerido:");
-    linhas.push("1. Retomar os pré-requisitos das habilidades mais críticas.");
-    linhas.push("2. Trabalhar itens-modelo com mediação do professor.");
-    linhas.push("3. Fazer uma atividade curta de verificação na mesma habilidade.");
-    linhas.push("4. Registrar evidências e comparar com a próxima aplicação.");
-  } else if (mode === "mensagem") {
-    linhas.push("Mensagem sugerida:");
-    linhas.push("A escola possui dados importantes para orientar a recomposição das aprendizagens. A sugestão é priorizar as habilidades com menor percentual, organizar devolutiva por descritor e acompanhar evidências nas próximas atividades.");
-  } else if (mode === "reuniao") {
-    linhas.push("Pauta sugerida para reunião:");
-    linhas.push("1. Apresentar o recorte e o percentual geral.");
-    linhas.push("2. Discutir as habilidades prioritárias.");
-    linhas.push("3. Pactuar intervenção por série/disciplina.");
-    linhas.push("4. Definir evidência de acompanhamento.");
+  linhas.push("3. Possíveis causas pedagógicas");
+  if (criticas.length) {
+    criticas.slice(0, 4).forEach((h: any) => {
+      linhas.push(`- ${h.codigo}: a dificuldade pode estar ligada a ${prereqSuggestion(h.descricao || "", disciplina)}.`);
+    });
   } else {
-    linhas.push("Encaminhamento:");
-    linhas.push("Use as habilidades de menor percentual para planejar recomposição focal. Evite trabalhar todas as questões ao mesmo tempo; priorize descritores com maior impacto no recorte.");
+    linhas.push("- As habilidades do recorte não aparecem em nível muito baixo. A ação pode focar consolidação, ampliação de repertório e análise dos distratores.");
+  }
+  linhas.push("");
+
+  if (mode === "plano" || mode === "pergunta") {
+    linhas.push("4. Plano de intervenção recomendado");
+    linhas.push("Semana 1 — Diagnóstico fino: selecione 2 ou 3 habilidades prioritárias, aplique uma questão curta por habilidade e peça que os estudantes expliquem o caminho de resolução.");
+    linhas.push("Semana 2 — Retomada orientada: trabalhe os pré-requisitos com exemplos simples, representação visual, leitura do enunciado e comparação entre estratégias.");
+    linhas.push("Semana 3 — Prática guiada: resolva itens semelhantes aos da avaliação, discutindo erros comuns e distratores.");
+    linhas.push("Semana 4 — Verificação: aplique nova atividade curta, registre percentual de acerto e identifique estudantes que ainda precisam de reagrupamento.");
+  } else if (mode === "devolutiva") {
+    linhas.push("4. Devolutiva para o professor");
+    linhas.push("Professor(a), o foco não deve ser apenas corrigir a prova. A orientação é escolher as habilidades com menor percentual, retomar o conceito-base, resolver uma questão-modelo e pedir que os estudantes justifiquem o raciocínio.");
+    linhas.push("Na devolutiva, compare alternativas erradas com a correta para mostrar que tipo de leitura, cálculo ou interpretação levou ao erro.");
+  } else if (mode === "reuniao") {
+    linhas.push("4. Pauta para reunião de acompanhamento");
+    linhas.push("1. Apresentar o recorte e o percentual geral.");
+    linhas.push("2. Priorizar até três habilidades por disciplina/série.");
+    linhas.push("3. Definir ação de recomposição por professor.");
+    linhas.push("4. Pactuar uma evidência: atividade curta, registro de acertos e nova devolutiva.");
+    linhas.push("5. Retomar os resultados no próximo encontro da gestão/formação.");
+  } else {
+    linhas.push("4. Encaminhamento pedagógico");
+    linhas.push("Organize a recomposição por descritor. Para cada habilidade prioritária, defina: pré-requisito, questão-modelo, atividade de retomada, evidência de aprendizagem e prazo de acompanhamento.");
+  }
+  linhas.push("");
+
+  if (ctx.perfil === "GRE" && Array.isArray(ctx.escolas_mais_criticas) && ctx.escolas_mais_criticas.length) {
+    linhas.push("5. Acompanhamento da GRE");
+    linhas.push("As escolas com menor percentual no recorte devem receber acompanhamento formativo, com foco em apoio pedagógico, não exposição.");
+    ctx.escolas_mais_criticas.slice(0, 5).forEach((e: any, i: number) => {
+      linhas.push(`${i + 1}. ${e.escola} — ${asPct(e.percentual)}.`);
+    });
+    linhas.push("");
   }
 
-  linhas.push("");
-  linhas.push("Observação: resposta gerada no modo local. Para análise mais completa, configure OPENAI_API_KEY na Vercel.");
+  linhas.push("Encaminhamento final");
+  linhas.push("A ação mais eficiente é trabalhar poucas habilidades por ciclo, com devolutiva clara, atividade curta e nova verificação. O objetivo é transformar o resultado da avaliação em decisão pedagógica concreta para a sala de aula.");
+
   return linhas.join("\n");
 }
 
 function buildInstruction(mode: string, question: string) {
-  const task = modeLabel(mode);
-  return `Você é a IA Pedagógica do SAP Avaliações 2026 da DIASMATH, especialista em análise de avaliações, recomposição de aprendizagens, Matemática e Língua Portuguesa.
+  return `Você é a IA Pedagógica do SAP Avaliações 2026 da DIASMATH, especialista em avaliação educacional, recomposição de aprendizagens, formação docente, Matemática e Língua Portuguesa.
 
-Sua tarefa: ${task}.
+Tarefa: ${modeLabel(mode)}.
 
-Regras:
-- Use somente os dados do contexto enviado.
-- Não invente percentuais, escolas, descritores, séries ou resultados.
-- Quando faltar dado, diga que o dado não está disponível no recorte.
-- Não solicite nem mencione dados pessoais de estudantes.
-- Não exponha estudantes individualmente.
-- No perfil de escola, escreva pensando apenas na escola logada.
-- No perfil GRE, pode comparar escolas de forma pedagógica, sem tom punitivo.
-- Priorize habilidades críticas, pré-requisitos, devolutiva prática e ação pedagógica.
-- Use linguagem clara, objetiva e útil para coordenador, formador ou professor.
-- Estruture a resposta com títulos curtos e encaminhamentos práticos.
+Regras obrigatórias:
+- Produza uma resposta consistente, aplicável à prática de professores, coordenadores e gestores.
+- Use somente os dados consolidados do contexto.
+- Não invente escola, percentual, descritor ou série.
+- Não fale sobre API, chave, token, modo local, erro técnico, status HTTP ou configuração.
+- Não inclua aviso de privacidade na resposta.
+- Quando faltar dado, diga apenas que o recorte não apresenta essa informação.
+- Não use tom punitivo.
+- Não exponha escolas de forma vexatória.
+- Priorize ações pedagógicas concretas: pré-requisito, devolutiva, atividade, reagrupamento, evidência e acompanhamento.
+- Use linguagem clara, firme e formativa.
+- Organize com títulos curtos.
 
-Pergunta personalizada do usuário, quando houver:
+Pergunta do usuário:
 ${question || "Não houve pergunta personalizada."}`;
 }
 
@@ -180,15 +273,14 @@ export async function POST(request: Request) {
     const mode = cleanText(raw.mode || "diagnostico", 30);
     const question = cleanText(raw.question || "", 1000);
     const context = limitContext(raw.context || {});
+    const fallback = localResponse(mode, context, question);
 
-    const fallback = localFallback(mode, context);
     const apiKey = process.env.OPENAI_API_KEY;
-
     if (!apiKey) {
-      return Response.json({ ok: true, texto: fallback, source: "local" });
+      return Response.json({ ok: true, texto: fallback, source: "pedagogical_engine" });
     }
 
-    const model = process.env.OPENAI_MODEL || "gpt-5";
+    const model = process.env.OPENAI_MODEL || "gpt-5-mini";
 
     const response = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
@@ -206,13 +298,13 @@ export async function POST(request: Request) {
               {
                 type: "input_text",
                 text:
-                  "Analise o contexto consolidado do SAP e produza a resposta solicitada.\n\n" +
+                  "Analise o contexto consolidado do SAP e produza uma orientação pedagógica prática.\n\n" +
                   JSON.stringify(context, null, 2),
               },
             ],
           },
         ],
-        max_output_tokens: 1300,
+        max_output_tokens: 1500,
         store: false,
       }),
     });
@@ -220,11 +312,7 @@ export async function POST(request: Request) {
     const data = await response.json().catch(() => null);
 
     if (!response.ok) {
-      return Response.json({
-        ok: true,
-        texto: fallback + `\n\nAviso técnico: a IA online não respondeu agora. Status ${response.status}.`,
-        source: "local_api_error",
-      });
+      return Response.json({ ok: true, texto: fallback, source: "pedagogical_engine" });
     }
 
     const outputText =
@@ -238,15 +326,20 @@ export async function POST(request: Request) {
           : "";
 
     const texto = cleanText(outputText, 9000) || fallback;
+    const forbidden = /(OPENAI_API_KEY|API|status\s*\d+|HTTP|modo local|token|chave|erro técnico|erro tecnico)/i;
 
-    return Response.json({ ok: true, texto, source: "openai" });
+    return Response.json({
+      ok: true,
+      texto: forbidden.test(texto) ? fallback : texto,
+      source: "sap_ai",
+    });
   } catch (error) {
     return Response.json(
       {
         ok: true,
         texto:
-          "Não foi possível acionar a IA agora. Use o diagnóstico do SAP para priorizar as habilidades com menor percentual de acertos e organize uma devolutiva por descritor.",
-        source: "local_error",
+          "Diagnóstico pedagógico\n\nO recorte selecionado precisa ser analisado a partir das habilidades com menor percentual de acertos. Priorize uma intervenção focal: retome os pré-requisitos, trabalhe uma questão-modelo com mediação, aplique uma atividade curta de verificação e acompanhe os estudantes que permanecerem com dificuldade.",
+        source: "pedagogical_engine",
       },
       { status: 200 }
     );

@@ -1,5 +1,5 @@
-Correção 46 — IA Pedagógica no SAP.
-Inclui nova aba IA Pedagógica.
-A IA gera diagnóstico, plano de intervenção, devolutiva, resumo para reunião e mensagem para escola.
-Respeita o perfil de acesso: GRE visualiza tudo; escola visualiza apenas sua unidade.
-Usa OPENAI_API_KEY na Vercel quando configurada; sem chave, usa análise local básica.
+Correção 47 — IA Pedagógica com respostas consistentes.
+Remove avisos técnicos da interface.
+Remove mensagem de privacidade visível no painel.
+Remove menção a modo local, OPENAI_API_KEY e status 429 nas respostas.
+Melhora a resposta pedagógica com diagnóstico, causas prováveis, plano de intervenção e acompanhamento.
