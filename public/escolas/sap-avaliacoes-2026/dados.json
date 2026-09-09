@@ -237092,7 +237092,7 @@
       "22223606": "d6fc1139"
     }
   },
-  "version": "SAP Avaliações 2026 — V11 Acessos por GRE e Escola",
+  "version": "SAP Avaliações 2026 — V12 IA Pedagógica",
   "pedagogical_revision": {
     "version": "V9",
     "focus": "Inclusão dos dados do 5º Miniteste com descritores oficiais dos consolidados e cadernos comentados enviados.",
@@ -237129,5 +237129,11 @@
     "gre_login": "8gre",
     "school_login_rule": "login e senha iguais ao INEP da escola",
     "schools_count": 21
+  },
+  "fix_46_sap_ia": {
+    "date": "2026-09-09",
+    "description": "Adiciona IA pedagógica no SAP para diagnóstico, plano de intervenção, devolutiva, resumo da GRE e mensagem para escola.",
+    "privacy": "A IA recebe apenas dados consolidados do recorte selecionado. Não envia nome de estudante, turma individual ou dados pessoais.",
+    "access_rule": "No perfil escola, o recorte enviado à IA é limitado à escola logada."
   }
 }

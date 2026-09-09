@@ -1,5 +1,5 @@
-Correção 45 — Acessos por GRE e escola.
-GRE: login 8gre.
-Escolas: login e senha iguais ao INEP.
-O sistema não abre mais automaticamente como regional.
-Cada escola visualiza apenas seus próprios dados.
+Correção 46 — IA Pedagógica no SAP.
+Inclui nova aba IA Pedagógica.
+A IA gera diagnóstico, plano de intervenção, devolutiva, resumo para reunião e mensagem para escola.
+Respeita o perfil de acesso: GRE visualiza tudo; escola visualiza apenas sua unidade.
+Usa OPENAI_API_KEY na Vercel quando configurada; sem chave, usa análise local básica.
