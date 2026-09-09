@@ -1,5 +1,4 @@
-Correção 47 — IA Pedagógica com respostas consistentes.
-Remove avisos técnicos da interface.
-Remove mensagem de privacidade visível no painel.
-Remove menção a modo local, OPENAI_API_KEY e status 429 nas respostas.
-Melhora a resposta pedagógica com diagnóstico, causas prováveis, plano de intervenção e acompanhamento.
+Correção 48 — IA Pedagógica com pergunta personalizada direta.
+Quando o usuário faz uma pergunta personalizada, a resposta começa diretamente respondendo à pergunta.
+Não abre com título, recorte ou diagnóstico genérico.
+Usa os dados do SAP apenas como apoio para orientar ações pedagógicas.

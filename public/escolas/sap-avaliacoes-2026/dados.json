@@ -237092,7 +237092,7 @@
       "22223606": "d6fc1139"
     }
   },
-  "version": "SAP Avaliações 2026 — V13 IA Pedagógica Consistente",
+  "version": "SAP Avaliações 2026 — V14 IA com pergunta personalizada direta",
   "pedagogical_revision": {
     "version": "V9",
     "focus": "Inclusão dos dados do 5º Miniteste com descritores oficiais dos consolidados e cadernos comentados enviados.",
@@ -237144,6 +237144,16 @@
       "Observação de modo local",
       "Mensagem OPENAI_API_KEY na resposta",
       "Status técnico 429 na resposta"
+    ]
+  },
+  "fix_48_sap_ia_pergunta_direta": {
+    "date": "2026-09-09",
+    "description": "Pergunta personalizada passa a responder diretamente à pergunta desde a primeira linha, sem abrir com diagnóstico genérico.",
+    "rules": [
+      "Se mode=pergunta, a resposta começa respondendo a pergunta.",
+      "Não abre com título genérico.",
+      "Não repete o recorte como primeira linha.",
+      "Usa os dados do SAP apenas quando ajudarem a responder à pergunta."
     ]
   }
 }

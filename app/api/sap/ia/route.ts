@@ -48,7 +48,7 @@ function limitContext(ctx: any) {
     habilidades_prioritarias: Array.isArray(ctx?.habilidades_prioritarias)
       ? ctx.habilidades_prioritarias.slice(0, 12).map((h: any) => ({
           codigo: cleanText(h.codigo, 30),
-          descricao: cleanText(h.descricao, 300),
+          descricao: cleanText(h.descricao, 320),
           percentual: safeNumber(h.percentual),
           itens: safeNumber(h.itens),
           nivel: cleanText(h.nivel, 80),
@@ -78,7 +78,7 @@ function limitContext(ctx: any) {
       ? ctx.questoes_criticas.slice(0, 8).map((q: any) => ({
           numero: safeNumber(q.numero),
           descritor: cleanText(q.descritor, 30),
-          habilidade: cleanText(q.habilidade, 300),
+          habilidade: cleanText(q.habilidade, 320),
           percentual_erro: safeNumber(q.percentual_erro),
           instrumento: cleanText(q.instrumento, 80),
           aplicacao: cleanText(q.aplicacao, 40),
@@ -126,36 +126,100 @@ function prereqSuggestion(text: string, disciplina: string): string {
 
   if (d.includes("MAT")) {
     if (t.includes("FUNÇÃO") || t.includes("GRÁFICO") || t.includes("RETA")) {
-      return "retomar leitura de eixos, pares ordenados, variação entre grandezas e relação entre tabela, gráfico e expressão algébrica";
+      return "leitura de eixos, pares ordenados, variação entre grandezas e relação entre tabela, gráfico e expressão algébrica";
     }
     if (t.includes("ÁREA") || t.includes("VOLUME") || t.includes("PERÍMETRO")) {
-      return "retomar identificação da figura, unidades de medida, composição/decomposição de áreas e diferença entre perímetro, área e volume";
+      return "identificação da figura, unidades de medida, decomposição de áreas e diferença entre perímetro, área e volume";
     }
     if (t.includes("PROPORCIONAL") || t.includes("PORCENTAGEM") || t.includes("RACIONAIS") || t.includes("FRAÇÃO")) {
-      return "retomar razão, equivalência, multiplicação, divisão, porcentagem e organização dos dados em tabela";
+      return "razão, equivalência, multiplicação, divisão, porcentagem e organização dos dados";
     }
     if (t.includes("EQUAÇÃO")) {
-      return "retomar igualdade, operações inversas, substituição de valores e interpretação do resultado no problema";
+      return "igualdade, operações inversas, substituição de valores e interpretação do resultado";
     }
-    return "retomar leitura do enunciado, seleção de dados, escolha da estratégia e validação do resultado";
+    return "leitura do enunciado, seleção de dados, escolha de estratégia e validação do resultado";
   }
 
   if (t.includes("TESE") || t.includes("ARGUMENT")) {
-    return "retomar tema, opinião, argumento, exemplo e marcas linguísticas que sustentam o ponto de vista";
+    return "tema, opinião, argumento, exemplo e marcas linguísticas que sustentam o ponto de vista";
   }
   if (t.includes("INFERIR") || t.includes("IMPLÍCITA")) {
-    return "retomar localização de pistas no texto, sentido de palavras pelo contexto e justificativa da resposta com trechos";
+    return "localização de pistas no texto, sentido de palavras pelo contexto e justificativa com trechos";
   }
   if (t.includes("FATO") || t.includes("OPINIÃO")) {
-    return "retomar diferença entre informação verificável e julgamento do autor, usando trechos do texto";
+    return "diferença entre informação verificável e julgamento do autor";
   }
   if (t.includes("FINALIDADE")) {
-    return "retomar gênero textual, público-alvo, suporte e intenção comunicativa";
+    return "gênero textual, público-alvo, suporte e intenção comunicativa";
   }
-  return "retomar leitura orientada, comando da questão, localização de evidências e comparação entre alternativas";
+  return "leitura orientada, comando da questão, localização de evidências e comparação entre alternativas";
+}
+
+function directPersonalizedOpening(question: string, ctx: any): string {
+  const q = question.toLowerCase();
+  const disciplina = String(ctx?.filtros?.disciplina || "").toLowerCase();
+
+  if (q.includes("melhorar") && (q.includes("matem") || disciplina.includes("matem"))) {
+    return "Para melhorar o desempenho dos estudantes em Matemática, a escola deve priorizar as habilidades com menor percentual de acertos e transformar cada descritor crítico em uma sequência curta de retomada, prática guiada e verificação.";
+  }
+  if (q.includes("devolutiva") || q.includes("professor")) {
+    return "A devolutiva aos professores deve ser feita por habilidade, mostrando o que os estudantes ainda não consolidaram, qual pré-requisito precisa ser retomado e que atividade será usada para verificar avanço.";
+  }
+  if (q.includes("gest") || q.includes("coorden") || q.includes("gre")) {
+    return "A gestão deve acompanhar a intervenção com foco em evidências: habilidade priorizada, ação realizada, nova atividade aplicada e evolução do percentual de acertos.";
+  }
+  if (q.includes("escola")) {
+    return "A orientação para a escola deve ser objetiva: selecionar poucas habilidades críticas, organizar uma devolutiva com os professores e acompanhar uma nova evidência de aprendizagem.";
+  }
+  return "A resposta deve partir diretamente da pergunta feita e usar os dados do recorte apenas para definir prioridades, ações pedagógicas e formas de acompanhamento.";
+}
+
+function localPersonalizedResponse(ctx: any, question: string) {
+  const filtros = ctx.filtros || {};
+  const ind = ctx.indicadores || {};
+  const habs = Array.isArray(ctx.habilidades_prioritarias) ? ctx.habilidades_prioritarias.slice(0, 7) : [];
+  const linhas: string[] = [];
+
+  linhas.push(directPersonalizedOpening(question, ctx));
+  linhas.push("");
+
+  linhas.push("No recorte selecionado, os dados indicam:");
+  linhas.push(`- Percentual geral: ${asPct(ind.percentual_geral)}.`);
+  linhas.push(`- Série/área: ${filtros.serie || "—"} • ${filtros.disciplina || "—"}.`);
+  linhas.push(`- Instrumento/aplicação: ${filtros.instrumento || "—"} • ${filtros.aplicacao || "—"}.`);
+  linhas.push(`- Habilidades críticas ou baixas: ${ind.habilidades_criticas ?? "—"}.`);
+  linhas.push("");
+
+  if (habs.length) {
+    linhas.push("Priorize estas habilidades primeiro:");
+    habs.slice(0, 5).forEach((h: any, i: number) => {
+      linhas.push(`${i + 1}. ${h.codigo} — ${asPct(h.percentual)}: ${h.descricao}`);
+    });
+  } else {
+    linhas.push("O recorte não apresenta habilidades suficientes para ordenar prioridades. Ajuste os filtros para uma série, disciplina ou aplicação específica.");
+  }
+  linhas.push("");
+
+  linhas.push("Como transformar isso em prática:");
+  linhas.push("1. Escolha até três habilidades prioritárias para um ciclo de intervenção.");
+  linhas.push("2. Antes de refazer questões, retome o pré-requisito de cada habilidade.");
+  linhas.push("3. Resolva uma questão-modelo com a turma, explicitando o caminho de raciocínio.");
+  linhas.push("4. Aplique uma atividade curta semelhante para verificar se houve aprendizagem.");
+  linhas.push("5. Reagrupe os estudantes que ainda apresentarem dificuldade e faça nova mediação.");
+
+  if (String(filtros.disciplina || "").toLowerCase().includes("matem") || question.toLowerCase().includes("matem")) {
+    linhas.push("");
+    linhas.push("Em Matemática, a intervenção deve começar pela compreensão da situação-problema: leitura do enunciado, identificação dos dados, representação visual ou tabela, estimativa e só depois o cálculo formal.");
+  }
+
+  return linhas.join("\n");
 }
 
 function localResponse(mode: string, ctx: any, question: string) {
+  if (mode === "pergunta") {
+    return localPersonalizedResponse(ctx, question);
+  }
+
   const filtros = ctx.filtros || {};
   const ind = ctx.indicadores || {};
   const disciplina = filtros.disciplina || "disciplina selecionada";
@@ -167,16 +231,16 @@ function localResponse(mode: string, ctx: any, question: string) {
   const linhas: string[] = [];
 
   if (mode === "mensagem") {
-    linhas.push("Mensagem sugerida para a escola");
+    linhas.push("Prezada equipe, o recorte analisado indica que a escola precisa transformar os dados da avaliação em uma ação pedagógica objetiva e acompanhável.");
     linhas.push("");
-    linhas.push(`Prezada equipe, ao analisarmos o recorte de ${disciplina}, ${serie}, em ${instrumento}, observamos desempenho geral de ${asPct(ind.percentual_geral)}. O foco agora é transformar esse dado em ação pedagógica objetiva, priorizando as habilidades com menor percentual de acertos.`);
+    linhas.push(`Em ${disciplina}, ${serie}, no instrumento ${instrumento}, o desempenho geral foi de ${asPct(ind.percentual_geral)}.`);
     if (habs.length) {
       linhas.push("");
       linhas.push("Sugerimos iniciar pelas seguintes habilidades:");
       habs.slice(0, 4).forEach((h: any) => linhas.push(`- ${h.codigo} — ${asPct(h.percentual)}: ${h.descricao}`));
     }
     linhas.push("");
-    linhas.push("Encaminhamento: organizar uma devolutiva com os professores, selecionar uma questão-modelo por habilidade, retomar os pré-requisitos e aplicar uma atividade curta de verificação. A GRE acompanhará o processo como apoio formativo.");
+    linhas.push("Encaminhamento: organizar uma devolutiva com os professores, selecionar uma questão-modelo por habilidade, retomar os pré-requisitos e aplicar uma atividade curta de verificação.");
     return linhas.join("\n");
   }
 
@@ -184,7 +248,7 @@ function localResponse(mode: string, ctx: any, question: string) {
   linhas.push("");
   linhas.push("1. Síntese do diagnóstico");
   linhas.push(`O recorte de ${disciplina}, ${serie}, em ${instrumento}, apresenta desempenho geral de ${asPct(ind.percentual_geral)}, média estimada ${ind.media_estimada ?? "—"} e participação de ${ind.estudantes ?? "—"} estudante(s).`);
-  linhas.push(`Há ${ind.habilidades_criticas ?? "—"} habilidade(s) em nível crítico ou baixo, o que indica necessidade de recomposição focal, e não apenas revisão geral de conteúdo.`);
+  linhas.push(`Há ${ind.habilidades_criticas ?? "—"} habilidade(s) em nível crítico ou baixo, o que indica necessidade de recomposição focal.`);
   linhas.push("");
 
   linhas.push("2. Habilidades prioritárias");
@@ -193,7 +257,7 @@ function localResponse(mode: string, ctx: any, question: string) {
       linhas.push(`${i + 1}. ${h.codigo} — ${asPct(h.percentual)}: ${h.descricao} (${classifyPriority(h.percentual)}).`);
     });
   } else {
-    linhas.push("O recorte selecionado não possui habilidades suficientes para ordenar prioridades. Ajuste os filtros para uma série, disciplina ou aplicação específica.");
+    linhas.push("O recorte selecionado não possui habilidades suficientes para ordenar prioridades.");
   }
   linhas.push("");
 
@@ -207,64 +271,88 @@ function localResponse(mode: string, ctx: any, question: string) {
   }
   linhas.push("");
 
-  if (mode === "plano" || mode === "pergunta") {
+  if (mode === "plano") {
     linhas.push("4. Plano de intervenção recomendado");
-    linhas.push("Semana 1 — Diagnóstico fino: selecione 2 ou 3 habilidades prioritárias, aplique uma questão curta por habilidade e peça que os estudantes expliquem o caminho de resolução.");
-    linhas.push("Semana 2 — Retomada orientada: trabalhe os pré-requisitos com exemplos simples, representação visual, leitura do enunciado e comparação entre estratégias.");
-    linhas.push("Semana 3 — Prática guiada: resolva itens semelhantes aos da avaliação, discutindo erros comuns e distratores.");
-    linhas.push("Semana 4 — Verificação: aplique nova atividade curta, registre percentual de acerto e identifique estudantes que ainda precisam de reagrupamento.");
+    linhas.push("Semana 1: selecione 2 ou 3 habilidades prioritárias e aplique uma questão curta por habilidade.");
+    linhas.push("Semana 2: retome pré-requisitos com exemplos simples e representação visual.");
+    linhas.push("Semana 3: resolva itens semelhantes com mediação, discutindo erros comuns.");
+    linhas.push("Semana 4: aplique nova verificação e registre quem avançou.");
   } else if (mode === "devolutiva") {
     linhas.push("4. Devolutiva para o professor");
-    linhas.push("Professor(a), o foco não deve ser apenas corrigir a prova. A orientação é escolher as habilidades com menor percentual, retomar o conceito-base, resolver uma questão-modelo e pedir que os estudantes justifiquem o raciocínio.");
-    linhas.push("Na devolutiva, compare alternativas erradas com a correta para mostrar que tipo de leitura, cálculo ou interpretação levou ao erro.");
+    linhas.push("Professor(a), escolha as habilidades com menor percentual, retome o conceito-base, resolva uma questão-modelo e peça que os estudantes justifiquem o raciocínio.");
   } else if (mode === "reuniao") {
-    linhas.push("4. Pauta para reunião de acompanhamento");
+    linhas.push("4. Pauta para reunião");
     linhas.push("1. Apresentar o recorte e o percentual geral.");
-    linhas.push("2. Priorizar até três habilidades por disciplina/série.");
-    linhas.push("3. Definir ação de recomposição por professor.");
-    linhas.push("4. Pactuar uma evidência: atividade curta, registro de acertos e nova devolutiva.");
-    linhas.push("5. Retomar os resultados no próximo encontro da gestão/formação.");
+    linhas.push("2. Priorizar até três habilidades.");
+    linhas.push("3. Definir ação por professor.");
+    linhas.push("4. Pactuar evidência de acompanhamento.");
   } else {
     linhas.push("4. Encaminhamento pedagógico");
-    linhas.push("Organize a recomposição por descritor. Para cada habilidade prioritária, defina: pré-requisito, questão-modelo, atividade de retomada, evidência de aprendizagem e prazo de acompanhamento.");
+    linhas.push("Organize a recomposição por descritor, com pré-requisito, questão-modelo, atividade de retomada, evidência de aprendizagem e prazo.");
   }
-  linhas.push("");
 
   if (ctx.perfil === "GRE" && Array.isArray(ctx.escolas_mais_criticas) && ctx.escolas_mais_criticas.length) {
+    linhas.push("");
     linhas.push("5. Acompanhamento da GRE");
-    linhas.push("As escolas com menor percentual no recorte devem receber acompanhamento formativo, com foco em apoio pedagógico, não exposição.");
+    linhas.push("As escolas com menor percentual devem receber acompanhamento formativo, com foco em apoio pedagógico.");
     ctx.escolas_mais_criticas.slice(0, 5).forEach((e: any, i: number) => {
       linhas.push(`${i + 1}. ${e.escola} — ${asPct(e.percentual)}.`);
     });
-    linhas.push("");
   }
 
+  linhas.push("");
   linhas.push("Encaminhamento final");
-  linhas.push("A ação mais eficiente é trabalhar poucas habilidades por ciclo, com devolutiva clara, atividade curta e nova verificação. O objetivo é transformar o resultado da avaliação em decisão pedagógica concreta para a sala de aula.");
+  linhas.push("Trabalhe poucas habilidades por ciclo, com devolutiva clara, atividade curta e nova verificação.");
 
   return linhas.join("\n");
 }
 
 function buildInstruction(mode: string, question: string) {
+  if (mode === "pergunta") {
+    return `Você é a IA Pedagógica do SAP Avaliações 2026 da DIASMATH.
+
+REGRA MAIS IMPORTANTE:
+Responda somente à pergunta personalizada do usuário.
+A primeira linha da resposta deve começar respondendo diretamente à pergunta.
+Não comece com título.
+Não comece com "Pergunta personalizada".
+Não comece citando o recorte.
+Não faça diagnóstico geral se a pergunta não pedir diagnóstico.
+Não explique o sistema.
+Não fale sobre API, chave, token, configuração, erro técnico, HTTP ou status.
+Não inclua aviso de privacidade.
+Use os dados do contexto apenas quando ajudarem a responder à pergunta.
+Se a pergunta for "Como melhorar...", responda com ações práticas, objetivas e pedagógicas.
+Se citar habilidades, cite apenas as que aparecem no contexto.
+Se faltarem dados para algum ponto, diga de forma simples que o recorte não apresenta essa informação.
+A resposta deve ajudar professores, coordenadores e gestores a agir na escola.
+
+Pergunta personalizada:
+${question || "O usuário não escreveu a pergunta. Oriente a selecionar uma pergunta objetiva."}`;
+  }
+
   return `Você é a IA Pedagógica do SAP Avaliações 2026 da DIASMATH, especialista em avaliação educacional, recomposição de aprendizagens, formação docente, Matemática e Língua Portuguesa.
 
 Tarefa: ${modeLabel(mode)}.
 
 Regras obrigatórias:
-- Produza uma resposta consistente, aplicável à prática de professores, coordenadores e gestores.
+- Produza uma resposta aplicável à prática de professores, coordenadores e gestores.
 - Use somente os dados consolidados do contexto.
 - Não invente escola, percentual, descritor ou série.
 - Não fale sobre API, chave, token, modo local, erro técnico, status HTTP ou configuração.
-- Não inclua aviso de privacidade na resposta.
+- Não inclua aviso de privacidade.
 - Quando faltar dado, diga apenas que o recorte não apresenta essa informação.
 - Não use tom punitivo.
-- Não exponha escolas de forma vexatória.
-- Priorize ações pedagógicas concretas: pré-requisito, devolutiva, atividade, reagrupamento, evidência e acompanhamento.
+- Priorize ações concretas: pré-requisito, devolutiva, atividade, reagrupamento, evidência e acompanhamento.
 - Use linguagem clara, firme e formativa.
-- Organize com títulos curtos.
 
-Pergunta do usuário:
+Pergunta do usuário, se houver:
 ${question || "Não houve pergunta personalizada."}`;
+}
+
+function firstLineLooksGeneric(text: string): boolean {
+  const first = cleanText(text, 600).split(/\n/)[0] || "";
+  return /^(pergunta personalizada|diagnóstico pedagógico|diagnostico pedagogico|análise pedagógica|analise pedagogica|recorte|simula\+|avaliação|avaliacao)/i.test(first.trim());
 }
 
 export async function POST(request: Request) {
@@ -298,13 +386,13 @@ export async function POST(request: Request) {
               {
                 type: "input_text",
                 text:
-                  "Analise o contexto consolidado do SAP e produza uma orientação pedagógica prática.\n\n" +
+                  "Contexto consolidado do SAP para apoiar a resposta. Não responda além da pergunta feita.\n\n" +
                   JSON.stringify(context, null, 2),
               },
             ],
           },
         ],
-        max_output_tokens: 1500,
+        max_output_tokens: mode === "pergunta" ? 1100 : 1500,
         store: false,
       }),
     });
@@ -326,19 +414,23 @@ export async function POST(request: Request) {
           : "";
 
     const texto = cleanText(outputText, 9000) || fallback;
-    const forbidden = /(OPENAI_API_KEY|API|status\s*\d+|HTTP|modo local|token|chave|erro técnico|erro tecnico)/i;
+    const forbidden = /(OPENAI_API_KEY|API|status\s*\d+|HTTP|modo local|token|chave|erro técnico|erro tecnico|configura)/i;
 
-    return Response.json({
-      ok: true,
-      texto: forbidden.test(texto) ? fallback : texto,
-      source: "sap_ai",
-    });
+    if (forbidden.test(texto)) {
+      return Response.json({ ok: true, texto: fallback, source: "pedagogical_engine" });
+    }
+
+    if (mode === "pergunta" && firstLineLooksGeneric(texto)) {
+      return Response.json({ ok: true, texto: fallback, source: "pedagogical_engine" });
+    }
+
+    return Response.json({ ok: true, texto, source: "sap_ai" });
   } catch (error) {
     return Response.json(
       {
         ok: true,
         texto:
-          "Diagnóstico pedagógico\n\nO recorte selecionado precisa ser analisado a partir das habilidades com menor percentual de acertos. Priorize uma intervenção focal: retome os pré-requisitos, trabalhe uma questão-modelo com mediação, aplique uma atividade curta de verificação e acompanhe os estudantes que permanecerem com dificuldade.",
+          "Para responder melhor à pergunta, selecione um recorte específico no SAP e priorize as habilidades com menor percentual de acertos, transformando cada uma em uma ação de retomada, prática guiada e verificação.",
         source: "pedagogical_engine",
       },
       { status: 200 }
