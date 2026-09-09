@@ -237092,7 +237092,7 @@
       "22223606": "d6fc1139"
     }
   },
-  "version": "SAP Avaliações 2026 — V14 IA com pergunta personalizada direta",
+  "version": "SAP Avaliações 2026 — V15 IA responde qualquer pergunta pedagógica",
   "pedagogical_revision": {
     "version": "V9",
     "focus": "Inclusão dos dados do 5º Miniteste com descritores oficiais dos consolidados e cadernos comentados enviados.",
@@ -237154,6 +237154,16 @@
       "Não abre com título genérico.",
       "Não repete o recorte como primeira linha.",
       "Usa os dados do SAP apenas quando ajudarem a responder à pergunta."
+    ]
+  },
+  "fix_49_sap_ia_qualquer_pergunta": {
+    "date": "2026-09-09",
+    "description": "A pergunta personalizada passa a interpretar a intenção do usuário e responder diretamente: melhores resultados, piores resultados, habilidades, plano, devolutiva, comparação, mensagem ou orientação pedagógica.",
+    "rules": [
+      "Responder qualquer pergunta relacionada ao SAP, avaliação, aprendizagem, escola, professor, gestor ou intervenção.",
+      "Usar dados do recorte quando a pergunta pedir resultado, comparação, ranking ou habilidade.",
+      "Usar conhecimento pedagógico quando a pergunta pedir orientação prática.",
+      "Não iniciar com frase genérica."
     ]
   }
 }

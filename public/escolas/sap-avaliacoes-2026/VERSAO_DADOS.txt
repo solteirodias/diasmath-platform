@@ -1,4 +1,4 @@
-Correção 48 — IA Pedagógica com pergunta personalizada direta.
-Quando o usuário faz uma pergunta personalizada, a resposta começa diretamente respondendo à pergunta.
-Não abre com título, recorte ou diagnóstico genérico.
-Usa os dados do SAP apenas como apoio para orientar ações pedagógicas.
+Correção 49 — IA Pedagógica responde qualquer pergunta do SAP.
+A pergunta personalizada agora interpreta a intenção: melhores resultados, prioridades, comparação, plano, devolutiva, mensagem, orientação ao professor ou gestão.
+A primeira linha responde diretamente à pergunta.
+Se a IA online falhar, a resposta pedagógica local também considera a pergunta feita.
