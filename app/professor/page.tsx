@@ -11,6 +11,17 @@ const ferramentas = [
     directHref: "/professor/forms/index.html",
     emoji: "📝",
     status: "Publicado",
+    external: false,
+  },
+  {
+    title: "DIASMATH Arena",
+    description:
+      "Crie atividades interativas ao vivo, gere QR Code, link e código de acesso para os alunos e acompanhe respostas e resultados em tempo real.",
+    href: "https://diasmath-arena.lovable.app",
+    directHref: "https://diasmath-arena.lovable.app",
+    emoji: "🎯",
+    status: "Novo",
+    external: true,
   },
 ];
 
@@ -62,12 +73,23 @@ export default function ProfessorPage() {
               </p>
 
               <div className="mt-7 flex flex-wrap gap-3">
-                <Link
-                  href={item.href}
-                  className="inline-flex rounded-full bg-slate-950 px-5 py-2.5 text-sm font-black text-white transition hover:bg-blue-700"
-                >
-                  Abrir ferramenta
-                </Link>
+                {item.external ? (
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex rounded-full bg-slate-950 px-5 py-2.5 text-sm font-black text-white transition hover:bg-blue-700"
+                  >
+                    Abrir ferramenta
+                  </a>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className="inline-flex rounded-full bg-slate-950 px-5 py-2.5 text-sm font-black text-white transition hover:bg-blue-700"
+                  >
+                    Abrir ferramenta
+                  </Link>
+                )}
 
                 <a
                   href={item.directHref}
