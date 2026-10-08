@@ -71,7 +71,7 @@ function AuthPage() {
         },
       });
       if (error) throw error;
-      toast.success("Enviamos um link de acesso para o seu e-mail.");
+      toast.success("Enviamos um link de acesso para o seu Gmail. Abra esse link para entrar na mesma conta.");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Não foi possível enviar o link de acesso.");
     } finally {
@@ -107,10 +107,10 @@ function AuthPage() {
               disabled={busy}
               className="btn-skew btn-outline w-full py-4"
             >
-              <span>Entrar por link no e-mail</span>
+              <span>Entrar com meu Gmail</span>
             </button>
             <p className="mt-3 text-xs text-ash">
-              O acesso com Google está temporariamente indisponível. Use e-mail e senha ou receba um link de acesso.
+              Digite acima o mesmo Gmail usado na sua conta do DIASMATH Sprint. Enviaremos um link para entrar na mesma conta e manter suas atividades.
             </p>
           </>
         )}
