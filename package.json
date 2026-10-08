@@ -4,17 +4,17 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run build:sprint && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:sprint": "npm --prefix apps/sprint install --no-audit --no-fund --legacy-peer-deps && npm --prefix apps/sprint run build && node scripts/copy-sprint.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
     "next": "^14.2.15",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "resend": "^4.0.0",
-    "@lovable.dev/cloud-auth-js": "^1.1.2"
+    "resend": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.16.11",

@@ -43,7 +43,7 @@ function AuthPage() {
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/painel` },
+          options: { emailRedirectTo: `${window.location.origin}/sprint/painel` },
         });
         if (error) throw error;
         if (data.session) navigate({ to: "/painel" });
@@ -59,7 +59,7 @@ function AuthPage() {
   const google = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${window.location.origin}/painel` },
+      options: { redirectTo: `${window.location.origin}/sprint/painel` },
     });
     if (error) toast.error("Não foi possível entrar com Google");
   };

@@ -19,13 +19,13 @@ const ferramentas = [
     title: "DIASMATH Sprint",
     description:
       "Crie atividades interativas ao vivo, gere QR Code, link e código de acesso para os alunos e acompanhe respostas e resultados em tempo real.",
-    href: "https://diasmath-arena.lovable.app",
-    directHref: "https://diasmath-arena.lovable.app",
+    href: "/sprint",
+    directHref: "/sprint",
     emoji: null,
     image: "/diasmath-sprint-logo.webp",
     status: "Novo",
-    external: true,
-    importHref: "/professor/sprint-import",
+    external: false,
+    importHref: null,
   },
 ];
 

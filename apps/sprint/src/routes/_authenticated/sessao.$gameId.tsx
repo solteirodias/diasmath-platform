@@ -84,7 +84,7 @@ function Host() {
   }, [left, current.length, players.length, q?.status]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!q) return <div className="p-10">Carregando…</div>;
-  const link = typeof window !== "undefined" ? `${window.location.origin}/arena/${q.pin}` : "";
+  const link = typeof window !== "undefined" ? `${window.location.origin}/sprint/arena/${q.pin}` : "";
 
   return (
     <div className="min-h-screen bg-ink text-paper grid-paper">
@@ -106,7 +106,7 @@ function Host() {
           <div>
             <p className="text-brand uppercase tracking-widest text-sm font-semibold">{q.title}</p>
             <h1 className="font-display text-5xl mt-2">Sala de espera</h1>
-            <p className="text-ash mt-2">Escaneie o QR Code ou acesse <b className="text-paper">{typeof window !== "undefined" ? window.location.host : ""}/arena</b> e digite o código.</p>
+            <p className="text-ash mt-2">Escaneie o QR Code ou acesse <b className="text-paper">{typeof window !== "undefined" ? window.location.host : ""}/sprint/arena</b> e digite o código.</p>
             <p className="mt-8 font-mono text-xl">{players.length} participante(s)</p>
             <div className="flex flex-wrap gap-3 my-6">
               {players.map((p) => <div key={p.id} className="bg-panel border border-paper/10 rounded-lg px-3 py-2 flex items-center gap-3 max-w-full"><ParticipantAvatar avatarId={p.avatar_id} className="size-14" /><span className="font-semibold break-words min-w-0">{p.nickname}</span></div>)}
