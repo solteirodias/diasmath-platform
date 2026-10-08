@@ -7,7 +7,7 @@
     "build": "npm run build:sprint && next build",
     "start": "next start",
     "lint": "next lint",
-    "build:sprint": "npm --prefix apps/sprint install --no-audit --no-fund --legacy-peer-deps && npm --prefix apps/sprint run build && node scripts/copy-sprint.mjs"
+    "build:sprint": "npm --prefix apps/sprint install --include=dev --no-audit --no-fund --legacy-peer-deps && npm --prefix apps/sprint run build && node scripts/copy-sprint.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
@@ -26,6 +26,6 @@
     "typescript": "^5.6.3"
   },
   "engines": {
-    "node": ">=22.12.0"
+    "node": "22.x"
   }
 }
