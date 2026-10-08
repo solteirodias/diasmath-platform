@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { sprintSupabase } from "@/lib/sprintSupabase";
+import { signInSprintWithGoogle, sprintSupabase } from "@/lib/sprintSupabase";
 import {
   ImportedQuestion,
   parseImportFile,
@@ -73,6 +73,7 @@ export default function SprintImportPage() {
   const fileInput = useRef<HTMLInputElement>(null);
   const [session, setSession] = useState<any>(null);
   const [authReady, setAuthReady] = useState(false);
+  const [authMode, setAuthMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authBusy, setAuthBusy] = useState(false);
@@ -115,13 +116,53 @@ export default function SprintImportPage() {
     else setJobs([]);
   }, [session?.user?.id]);
 
-  const login = async (event: React.FormEvent) => {
+  const submitAuth = async (event: React.FormEvent) => {
     event.preventDefault();
     setAuthBusy(true);
     setNotice("");
-    const { error } = await sprintSupabase.auth.signInWithPassword({ email, password });
-    setAuthBusy(false);
-    if (error) setNotice("Não foi possível entrar: " + error.message);
+    try {
+      if (authMode === "login") {
+        const { error } = await sprintSupabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+      } else {
+        const { data, error } = await sprintSupabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/professor/sprint-import`,
+          },
+        });
+        if (error) throw error;
+        if (!data.session) {
+          setNotice("Conta criada! Confirme pelo link enviado ao seu e-mail.");
+        }
+      }
+    } catch (error: any) {
+      setNotice(
+        authMode === "login"
+          ? "Não foi possível entrar: " + (error?.message || "verifique seus dados.")
+          : "Não foi possível criar a conta: " + (error?.message || "tente novamente."),
+      );
+    } finally {
+      setAuthBusy(false);
+    }
+  };
+
+  const loginWithGoogle = async () => {
+    setAuthBusy(true);
+    setNotice("");
+    try {
+      const result: any = await signInSprintWithGoogle(
+        `${window.location.origin}/professor/sprint-import`,
+      );
+      if (result?.error) {
+        setNotice("Não foi possível entrar com Google.");
+      }
+    } catch {
+      setNotice("Não foi possível entrar com Google.");
+    } finally {
+      setAuthBusy(false);
+    }
   };
 
   const logout = async () => {
@@ -498,16 +539,70 @@ export default function SprintImportPage() {
             <p className="mt-3 leading-7 text-slate-600">
               Entre com a mesma conta de professor usada no Sprint. O arquivo será lido e transformado em um rascunho para sua revisão.
             </p>
-            <form onSubmit={login} className="mt-7 space-y-4">
-              <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
-                placeholder="E-mail" className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-600" />
-              <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)}
-                placeholder="Senha" className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-600" />
-              <button disabled={authBusy} className="w-full rounded-2xl bg-blue-700 px-5 py-3.5 font-black text-white hover:bg-blue-800 disabled:opacity-60">
-                {authBusy ? "Entrando…" : "Entrar com minha conta do Sprint"}
+            <form onSubmit={submitAuth} className="mt-7 space-y-4">
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="E-mail"
+                className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-600"
+              />
+              <input
+                type="password"
+                required
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Senha"
+                className="w-full rounded-2xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-600"
+              />
+              <button
+                disabled={authBusy}
+                className="w-full rounded-2xl bg-blue-700 px-5 py-3.5 font-black text-white transition hover:bg-blue-800 disabled:opacity-60"
+              >
+                {authBusy
+                  ? "Aguarde…"
+                  : authMode === "login"
+                    ? "Entrar"
+                    : "Criar conta"}
               </button>
             </form>
-            {notice && <p className="mt-4 rounded-xl bg-rose-50 p-3 text-sm font-semibold text-rose-700">{notice}</p>}
+
+            <div className="my-5 flex items-center gap-3">
+              <div className="h-px flex-1 bg-slate-200" />
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">ou</span>
+              <div className="h-px flex-1 bg-slate-200" />
+            </div>
+
+            <button
+              type="button"
+              onClick={loginWithGoogle}
+              disabled={authBusy}
+              className="flex w-full items-center justify-center gap-3 rounded-2xl border border-slate-300 bg-white px-5 py-3.5 font-black text-slate-800 transition hover:border-blue-400 hover:bg-blue-50 disabled:opacity-60"
+            >
+              <span className="grid h-7 w-7 place-items-center rounded-full bg-white text-lg font-black text-blue-600 shadow-sm">G</span>
+              Continuar com Google
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setAuthMode(authMode === "login" ? "signup" : "login");
+                setNotice("");
+              }}
+              className="mt-5 w-full text-center text-sm font-bold text-blue-700 underline underline-offset-4 hover:text-blue-900"
+            >
+              {authMode === "login"
+                ? "Não tem conta? Cadastre-se"
+                : "Já tem conta? Entrar"}
+            </button>
+
+            {notice && (
+              <p className="mt-4 rounded-xl bg-blue-50 p-3 text-sm font-semibold text-blue-900">
+                {notice}
+              </p>
+            )}
           </div>
         </main>
         <Footer />
