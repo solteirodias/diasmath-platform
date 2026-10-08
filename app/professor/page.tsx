@@ -13,6 +13,7 @@ const ferramentas = [
     image: null,
     status: "Publicado",
     external: false,
+    importHref: null,
   },
   {
     title: "DIASMATH Sprint",
@@ -24,6 +25,7 @@ const ferramentas = [
     image: "/diasmath-sprint-logo.webp",
     status: "Novo",
     external: true,
+    importHref: "/professor/sprint-import",
   },
 ];
 
