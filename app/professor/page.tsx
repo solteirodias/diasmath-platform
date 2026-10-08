@@ -10,16 +10,18 @@ const ferramentas = [
     href: "/professor/forms",
     directHref: "/professor/forms/index.html",
     emoji: "📝",
+    image: null,
     status: "Publicado",
     external: false,
   },
   {
-    title: "DIASMATH Arena",
+    title: "DIASMATH Sprint",
     description:
       "Crie atividades interativas ao vivo, gere QR Code, link e código de acesso para os alunos e acompanhe respostas e resultados em tempo real.",
     href: "https://diasmath-arena.lovable.app",
     directHref: "https://diasmath-arena.lovable.app",
-    emoji: "🎯",
+    emoji: null,
+    image: "/diasmath-sprint-logo.webp",
     status: "Novo",
     external: true,
   },
@@ -55,9 +57,18 @@ export default function ProfessorPage() {
               className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
             >
               <div className="flex items-start justify-between gap-4">
-                <div className="text-5xl" aria-hidden="true">
-                  {item.emoji}
-                </div>
+                {item.image ? (
+                  <img
+                    src={item.image}
+                    alt=""
+                    className="h-16 w-16 rounded-2xl object-cover shadow-sm"
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <div className="text-5xl" aria-hidden="true">
+                    {item.emoji}
+                  </div>
+                )}
 
                 <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-black text-blue-700">
                   {item.status}
