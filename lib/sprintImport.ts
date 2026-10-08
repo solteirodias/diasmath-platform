@@ -29,7 +29,7 @@ type SourceLine = { page: number | null; text: string };
 
 const QUESTION_PREFIX = /^\s*quest(?:ão|ao)\s*0*(\d{1,3})(?:\s*[).:\-–]\s*|\s+)?(.*)$/i;
 const NUMBERED_PREFIX = /^\s*0*(\d{1,3})\s*[).:\-–]\s*(.*)$/;
-const ALT_PREFIX = /^\s*[([]?([A-E])[]).:\-–]\s*(.+)$/i;
+const ALT_PREFIX = /^\s*(?:\(|\[)?([A-E])(?:\)|\]|\.|:|-|–)\s*(.+)$/i;
 const ALT_LOOSE = /^\s*([A-E])\s{2,}(.+)$/i;
 
 function cleanText(value: string) {
