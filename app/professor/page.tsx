@@ -110,6 +110,15 @@ export default function ProfessorPage() {
                 >
                   Outra aba
                 </a>
+
+                {item.importHref && (
+                  <Link
+                    href={item.importHref}
+                    className="inline-flex rounded-full bg-blue-50 px-5 py-2.5 text-sm font-black text-blue-700 transition hover:bg-blue-100"
+                  >
+                    Importar PDF/Word
+                  </Link>
+                )}
               </div>
             </article>
           ))}
