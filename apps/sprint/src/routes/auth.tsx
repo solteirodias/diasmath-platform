@@ -56,12 +56,27 @@ function AuthPage() {
     }
   };
 
-  const google = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: { redirectTo: `${window.location.origin}/sprint/painel` },
-    });
-    if (error) toast.error("Não foi possível entrar com Google");
+  const magicLink = async () => {
+    if (!email.trim()) {
+      toast.error("Digite seu e-mail primeiro.");
+      return;
+    }
+    setBusy(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: {
+          emailRedirectTo: `${window.location.origin}/sprint/painel`,
+          shouldCreateUser: false,
+        },
+      });
+      if (error) throw error;
+      toast.success("Enviamos um link de acesso para o seu e-mail.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Não foi possível enviar o link de acesso.");
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -79,9 +94,26 @@ function AuthPage() {
             <span>{mode === "login" ? "Entrar" : "Criar conta"}</span>
           </button>
         </form>
-        <button onClick={google} className="btn-skew btn-outline w-full py-4 mt-4">
-          <span>Continuar com Google</span>
-        </button>
+        {mode === "login" && (
+          <>
+            <div className="my-5 flex items-center gap-3">
+              <div className="h-px flex-1 bg-ink/15" />
+              <span className="text-xs uppercase tracking-wider text-ash">ou</span>
+              <div className="h-px flex-1 bg-ink/15" />
+            </div>
+            <button
+              type="button"
+              onClick={magicLink}
+              disabled={busy}
+              className="btn-skew btn-outline w-full py-4"
+            >
+              <span>Entrar por link no e-mail</span>
+            </button>
+            <p className="mt-3 text-xs text-ash">
+              O acesso com Google está temporariamente indisponível. Use e-mail e senha ou receba um link de acesso.
+            </p>
+          </>
+        )}
         <button onClick={() => setMode(mode === "login" ? "signup" : "login")} className="mt-6 text-sm underline hover:text-brand">
           {mode === "login" ? "Não tem conta? Cadastre-se" : "Já tem conta? Entrar"}
         </button>
