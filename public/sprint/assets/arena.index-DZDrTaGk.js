@@ -1,1 +1,0 @@
-import{o as e}from"./useSelector-BDz39zP7.js";import{t}from"./StudentArena-TVeWEqTr.js";var n=e(),r=()=>(0,n.jsx)(t,{});export{r as component};
