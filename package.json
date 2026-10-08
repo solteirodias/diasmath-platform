@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run build:sprint && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "build:sprint": "npm --prefix apps/sprint install --include=dev --no-audit --no-fund --legacy-peer-deps && npm --prefix apps/sprint run build && node scripts/copy-sprint.mjs"
