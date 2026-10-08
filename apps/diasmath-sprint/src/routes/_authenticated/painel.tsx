@@ -87,7 +87,7 @@ function Painel() {
     <div className="min-h-screen bg-ink text-paper grid-paper">
       <TopBar sub="Professor">
         <button onClick={logout} className="text-sm font-medium text-ash hover:text-paper">Sair</button>
-        <button onClick={create} className="btn-skew btn-brand"><span>+ Criar atividade</span></button>
+        <Link to="/importar" className="btn-skew btn-outline"><span>📄 Importar PDF/Word</span></Link>\n        <button onClick={create} className="btn-skew btn-brand"><span>+ Criar atividade</span></button>
       </TopBar>
       <section className="max-w-[1200px] mx-auto px-6 py-12">
         <div className="text-xs uppercase tracking-[0.3em] text-brand mb-3 font-semibold">DIASMATH Sprint · Professor</div>
@@ -99,7 +99,7 @@ function Painel() {
           {!isLoading && quizzes.length === 0 && (
             <div className="p-12 text-center rounded-2xl border-2 border-dashed border-paper/20">
               <p className="text-ash mb-6">Você ainda não tem atividades.</p>
-              <button onClick={create} className="btn-skew btn-brand"><span>Criar minha primeira atividade</span></button>
+              <div className="flex flex-wrap justify-center gap-3"><Link to="/importar" className="btn-skew btn-outline"><span>Importar PDF/Word</span></Link><button onClick={create} className="btn-skew btn-brand"><span>Criar minha primeira atividade</span></button></div>
             </div>
           )}
           {quizzes.map((q) => {
