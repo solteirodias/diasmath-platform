@@ -183,13 +183,60 @@ export function parseQuestionLines(
   });
 }
 
-async function loadPdfJs() {
-  const pdfjs: any = await import("pdfjs-dist/legacy/build/pdf.mjs");
-  if (!pdfjs.GlobalWorkerOptions.workerSrc) {
-    pdfjs.GlobalWorkerOptions.workerSrc =
-      `https://cdn.jsdelivr.net/npm/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`;
+let pdfLoader: Promise<void> | null = null;
+let mammothLoader: Promise<void> | null = null;
+
+function loadExternalScript(src: string, id: string, current: () => unknown) {
+  if (typeof window === "undefined") return Promise.reject(new Error("Leitor disponível apenas no navegador."));
+  if (current()) return Promise.resolve();
+  const existing = document.getElementById(id) as HTMLScriptElement | null;
+  if (existing) {
+    return new Promise<void>((resolve, reject) => {
+      existing.addEventListener("load", () => resolve(), { once: true });
+      existing.addEventListener("error", () => reject(new Error("Falha ao carregar o leitor do documento.")), { once: true });
+    });
   }
+  return new Promise<void>((resolve, reject) => {
+    const script = document.createElement("script");
+    script.id = id;
+    script.src = src;
+    script.async = true;
+    script.crossOrigin = "anonymous";
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("Falha ao carregar o leitor do documento."));
+    document.head.appendChild(script);
+  });
+}
+
+async function loadPdfJs() {
+  const win = window as any;
+  if (!win.pdfjsLib) {
+    pdfLoader ||= loadExternalScript(
+      "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js",
+      "diasmath-pdfjs",
+      () => (window as any).pdfjsLib,
+    );
+    await pdfLoader;
+  }
+  const pdfjs = win.pdfjsLib;
+  if (!pdfjs) throw new Error("Não foi possível iniciar o leitor de PDF.");
+  pdfjs.GlobalWorkerOptions.workerSrc =
+    "https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js";
   return pdfjs;
+}
+
+async function loadMammoth() {
+  const win = window as any;
+  if (!win.mammoth) {
+    mammothLoader ||= loadExternalScript(
+      "https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js",
+      "diasmath-mammoth",
+      () => (window as any).mammoth,
+    );
+    await mammothLoader;
+  }
+  if (!win.mammoth) throw new Error("Não foi possível iniciar o leitor de Word.");
+  return win.mammoth;
 }
 
 function textContentToLines(content: any) {
@@ -251,7 +298,7 @@ export async function renderPdfPage(file: File, pageNumber: number) {
 }
 
 export async function parseDocx(file: File): Promise<ParsedImport> {
-  const mammoth: any = await import("mammoth");
+  const mammoth: any = await loadMammoth();
   const arrayBuffer = await file.arrayBuffer();
   const raw = await mammoth.extractRawText({ arrayBuffer });
   const text = String(raw.value || "");
