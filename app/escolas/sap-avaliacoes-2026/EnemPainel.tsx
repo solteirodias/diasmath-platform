@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import EnemEvolucao from "./EnemEvolucao";
 
 type Habilidade = { habilidade: string; percentual: number };
 type Escola = {
@@ -59,7 +60,6 @@ export default function EnemPainel() {
   const [sim, setSim] = useState(1);
   const [serie, setSerie] = useState(3);
   const [dia, setDia] = useState(1);
-  const [grupo, setGrupo] = useState(1);
   const [busca, setBusca] = useState("");
   const [municipio, setMunicipio] = useState("todos");
   const [escolaSelecionada, setEscolaSelecionada] = useState("");
@@ -83,8 +83,47 @@ export default function EnemPainel() {
   const serieAtual = series.includes(serie) ? serie : (series[0] ?? 1);
   const dias = [...new Set(todos.filter(x => x.sim === sim && x.serie === serieAtual).map(x => x.dia))].sort((a,b) => a-b);
   const diaAtual = dias.includes(dia) ? dia : (dias[0] ?? 1);
-  const grupos = todos.filter(x => x.sim === sim && x.serie === serieAtual && x.dia === diaAtual);
-  const conjunto = grupos.find(x => x.grupo === grupo) || grupos[0];
+  const conjunto = useMemo<Conjunto | undefined>(() => {
+    const selecionados = todos.filter(x => x.sim === sim && x.serie === serieAtual && x.dia === diaAtual);
+    if (!selecionados.length) return undefined;
+    type Acumulado = { registro: Escola; soma: number; quantidade: number; faixas: Set<string>; habilidades: Map<string, { soma: number; quantidade: number }> };
+    const escolas = new Map<string, Acumulado>();
+    for (const arquivo of selecionados) for (const item of arquivo.escolas) {
+      const chave = item.inep || item.escola;
+      if (!escolas.has(chave)) escolas.set(chave, {
+        registro: { ...item, alunos: 0, turmas: 0, online: 0, impresso: 0, media: null, faixa: "", habilidades: [] },
+        soma: 0, quantidade: 0, faixas: new Set<string>(), habilidades: new Map()
+      });
+      const atual = escolas.get(chave)!;
+      if (item.media !== null) { atual.soma += item.media; atual.quantidade++; }
+      atual.registro.alunos = Math.max(atual.registro.alunos, item.alunos);
+      atual.registro.online = Math.max(atual.registro.online, item.online);
+      atual.registro.impresso = Math.max(atual.registro.impresso, item.impresso);
+      atual.registro.turmas = Math.max(atual.registro.turmas, item.turmas);
+      if (!atual.registro.municipio || /^\d+$/.test(atual.registro.municipio)) atual.registro.municipio = item.municipio;
+      if (item.faixa) atual.faixas.add(item.faixa);
+      for (const h of item.habilidades) {
+        const info = atual.habilidades.get(h.habilidade) || { soma: 0, quantidade: 0 };
+        info.soma += h.percentual; info.quantidade++;
+        atual.habilidades.set(h.habilidade, info);
+      }
+    }
+    const linhas = [...escolas.values()].map(atual => {
+      atual.registro.media = atual.quantidade ? atual.soma / atual.quantidade : null;
+      atual.registro.faixa = atual.faixas.size === 1 ? [...atual.faixas][0] : "Variável";
+      atual.registro.habilidades = [...atual.habilidades.entries()].map(([habilidade, info]) => ({
+        habilidade, percentual: info.soma / info.quantidade
+      }));
+      return atual.registro;
+    });
+    return {
+      ...selecionados[0],
+      fonte: selecionados.map(x => x.fonte).join(" | "),
+      fontes: selecionados.flatMap(x => x.fontes),
+      cabecalhos: [...new Set(selecionados.flatMap(x => x.cabecalhos))],
+      escolas: linhas
+    };
+  }, [base, sim, serieAtual, diaAtual]);
   const municipios = [...new Set((conjunto?.escolas || []).map(x => x.municipio))].sort((a,b)=>a.localeCompare(b,"pt-BR"));
   const filtradas = useMemo(() => {
     const q = semAcentos(busca.trim());
@@ -114,17 +153,17 @@ export default function EnemPainel() {
   function exportar() {
     if (!conjunto) return;
     const esc = (x: unknown) => '"' + String(x ?? "").replace(/"/g, '""') + '"';
-    const header = ["Simulado","Série","Dia","Conjunto","INEP","Escola","Município","Alunos","Online","Impresso","Turmas","Média","Faixa",...conjunto.cabecalhos];
+    const header = ["Simulado","Série","Dia","INEP","Escola","Município","Alunos","Online","Impresso","Turmas","Média","Faixa",...conjunto.cabecalhos];
     const lines = [header.map(esc).join(";")];
     for(const x of filtradas) {
       const mapa = new Map(x.habilidades.map(h=>[h.habilidade,h.percentual]));
-      const row = [sim,serieAtual,diaAtual,conjunto.rotulo,x.inep,x.escola,x.municipio,x.alunos,x.online,x.impresso,x.turmas, x.media === null ? "" : nota(x.media),x.faixa, ...conjunto.cabecalhos.map(h => mapa.has(h) ? pct(mapa.get(h)!) : "")];
+      const row = [sim,serieAtual,diaAtual,x.inep,x.escola,x.municipio,x.alunos,x.online,x.impresso,x.turmas, x.media === null ? "" : nota(x.media),x.faixa, ...conjunto.cabecalhos.map(h => mapa.has(h) ? pct(mapa.get(h)!) : "")];
       lines.push(row.map(esc).join(";"));
     }
     const blob = new Blob(["\uFEFF"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"});
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href=url; a.download="DIASMATH_ENEM_"+sim+"sim_"+serieAtual+"serie_"+diaAtual+"dia_conjunto"+conjunto.grupo+".csv";
+    a.href=url; a.download="DIASMATH_ENEM_"+sim+"sim_"+serieAtual+"serie_"+diaAtual+"dia_integrado.csv";
     document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
   }
 
@@ -146,22 +185,18 @@ export default function EnemPainel() {
       </div>
 
       <div className={painel + " mb-5 p-4 sm:p-5"}>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
           <div><label htmlFor="enem-sim" className={label}>Simulado</label>
-            <select id="enem-sim" className={campo} value={sim} onChange={e=>{setSim(Number(e.target.value));setGrupo(1);setMunicipio("todos");setEscolaSelecionada("");}}>
+            <select id="enem-sim" className={campo} value={sim} onChange={e=>{setSim(Number(e.target.value));setMunicipio("todos");setEscolaSelecionada("");}}>
               {simulados.map(x=><option key={x} value={x}>{x}º simulado</option>)}
             </select></div>
           <div><label htmlFor="enem-serie" className={label}>Série</label>
-            <select id="enem-serie" className={campo} value={serieAtual} onChange={e=>{setSerie(Number(e.target.value));setGrupo(1);setMunicipio("todos");setEscolaSelecionada("");}}>
+            <select id="enem-serie" className={campo} value={serieAtual} onChange={e=>{setSerie(Number(e.target.value));setMunicipio("todos");setEscolaSelecionada("");}}>
               {series.map(x=><option key={x} value={x}>{x}ª série</option>)}
             </select></div>
           <div><label htmlFor="enem-dia" className={label}>Dia de prova</label>
-            <select id="enem-dia" className={campo} value={diaAtual} onChange={e=>{setDia(Number(e.target.value));setGrupo(1);setMunicipio("todos");setEscolaSelecionada("");}}>
+            <select id="enem-dia" className={campo} value={diaAtual} onChange={e=>{setDia(Number(e.target.value));setMunicipio("todos");setEscolaSelecionada("");}}>
               {dias.map(x=><option key={x} value={x}>{x}º dia</option>)}
-            </select></div>
-          <div><label htmlFor="enem-conjunto" className={label}>Conjunto de resultados</label>
-            <select id="enem-conjunto" className={campo} value={conjunto?.grupo || 1} onChange={e=>{setGrupo(Number(e.target.value));setMunicipio("todos");setEscolaSelecionada("");}}>
-              {grupos.map(x=><option key={x.grupo} value={x.grupo}>{x.rotulo}</option>)}
             </select></div>
           <div><label htmlFor="enem-cidade" className={label}>Município</label>
             <select id="enem-cidade" className={campo} value={municipios.includes(municipio) ? municipio : "todos"} onChange={e=>{setMunicipio(e.target.value);setEscolaSelecionada("");}}>
@@ -172,29 +207,31 @@ export default function EnemPainel() {
           </div>
         </div>
         <p className="mt-3 text-xs leading-relaxed text-slate-500">
-          Cada conjunto representa uma exportação distinta do MOBI. Os CSVs não informam explicitamente a área/disciplina em todos os arquivos, por isso a nomenclatura original não foi presumida.
-          {conjunto && <> <strong>Fonte:</strong> {conjunto.fonte} {conjunto.fontes.length>1 ? "(" + conjunto.fontes.length + " cópias idênticas recebidas)" : ""}.</>}
+          Visualização integrada dos arquivos deste simulado, série e dia. Quando há mais de uma exportação por escola, a média exibida é a média aritmética das médias informadas, não uma nota oficial do ENEM.
+          {conjunto && <> <strong>Arquivos utilizados:</strong> {conjunto.fontes.length}.</>}
         </p>
       </div>
 
       <div className="mb-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Indicador titulo="Média ponderada" valor={nota(notaMedia)} subtitulo="Ponderada pelo nº de alunos em cada escola" />
-        <Indicador titulo="Alunos no conjunto" valor={numero(totalAlunos)} subtitulo="Não somar entre conjuntos / dias" />
+        <Indicador titulo="Alunos nas escolas" valor={numero(totalAlunos)} subtitulo="Cada escola contada uma vez por dia" />
         <Indicador titulo="Escolas" valor={numero(filtradas.length)} subtitulo="Após filtros selecionados" />
         <Indicador titulo="Habilidades" valor={numero(skillData.length)} subtitulo={skillData.length ? "Percentuais de acertos por habilidade" : "Não disponíveis nesta exportação"} />
       </div>
 
+      <EnemEvolucao fontes={todos} serie={serieAtual} dia={diaAtual} municipio={municipios.includes(municipio) ? municipio : "todos"} />
+
       <div className="mb-5 grid gap-4 lg:grid-cols-2">
         <div className={painel + " p-5"}>
           <h2 className="text-lg font-black">Desempenho das escolas</h2>
-          <p className="mb-4 text-xs text-slate-500">Maiores médias do conjunto selecionado · {Math.min(10,filtradas.length)} escolas</p>
+          <p className="mb-4 text-xs text-slate-500">Maiores médias do simulado selecionado · {Math.min(10,filtradas.length)} escolas</p>
           {filtradas.length===0 ? <p className="text-sm text-slate-500">Nenhuma escola encontrada.</p> :
             filtradas.slice(0,10).map(x=><Barra key={x.inep} nome={x.escola} valor={x.media??0} maximo={10} />)}
         </div>
         <div className={painel + " p-5"}>
           <h2 className="text-lg font-black">Habilidades que exigem atenção</h2>
           <p className="mb-4 text-xs text-slate-500">Menores percentuais de acerto, ponderados pelo nº de alunos</p>
-          {skillData.length===0 ? <p className="rounded-xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">Este conjunto não contém campos de habilidades. Escolha uma exportação com habilidades para visualizar o diagnóstico.</p> :
+          {skillData.length===0 ? <p className="rounded-xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">Os arquivos desta seleção não apresentam percentuais por habilidade.</p> :
             skillData.slice(0,10).map(h=><Barra key={h.habilidade} nome={h.habilidade} valor={h.percentual} maximo={100} destaque />)}
         </div>
       </div>
@@ -240,9 +277,10 @@ export default function EnemPainel() {
 
       <div className="mt-5 rounded-xl border border-slate-200 bg-white p-4 text-xs leading-6 text-slate-600">
         <strong>Leitura dos dados:</strong> as médias e as faixas são as informadas na fonte (não são proficiências TRI do ENEM).
-        Os valores apresentados se referem ao conjunto escolhido, sem somar alunos repetidos de outros conjuntos.
-        Não é possível calcular taxa de participação sem o número oficial de estudantes previstos.
-        O banco contém {base.totalConjuntos} conjuntos distintos extraídos de {base.totalArquivos} arquivos recebidos.
+        As médias exibidas integram as exportações por escola, série, dia e simulado usando a média aritmética das médias informadas.
+        As faixas de desempenho podem variar entre as fontes. Habilidades com o mesmo código em arquivos distintos são resumidas por média simples, sem garantia de equivalência entre matrizes.
+        Não é possível calcular taxa de participação sem os estudantes previstos.
+        A base utiliza {base.totalArquivos} arquivos recebidos, sem contar duplicidades idênticas duas vezes.
       </div>
     </div>
   </section>;
