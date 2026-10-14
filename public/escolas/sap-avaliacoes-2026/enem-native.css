@@ -1,0 +1,58 @@
+/* SAP DIASMATH ENEM+ — integração visual nativa */
+#enem{max-width:100%;color:var(--ink);font-family:inherit}
+#enem .enem-hero{border-radius:22px;background:linear-gradient(120deg,#084a45,#096f65 65%,#13a58d);color:white;padding:24px 26px;margin:0 0 16px;box-shadow:0 18px 40px #084f4530}
+#enem .enem-kicker{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;font-weight:900;color:#b9eee2}
+#enem .enem-hero h2{font-size:30px;margin:9px 0 6px;line-height:1.15;color:white}
+#enem .enem-hero p{font-size:14px;line-height:1.5;color:#ddfff6;margin:0}
+#enem .enem-filtros{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow);margin-bottom:16px;display:grid;grid-template-columns:repeat(3,minmax(120px,1fr)) repeat(2,minmax(155px,1.25fr)) minmax(140px,1fr) auto;gap:10px;align-items:end}
+#enem .enem-field{min-width:0}
+#enem .enem-field label{display:block;margin:0 0 5px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.5px;color:#53716e}
+#enem .enem-field select,#enem .enem-field input{display:block;width:100%;min-height:40px;background:#fbfefc;border:1px solid #cfdedb;border-radius:10px;color:#153b38;padding:9px 10px;min-width:0;font-size:12px;font-weight:650;outline:none}
+#enem .enem-field :is(select,input):focus{border-color:#0d8576;box-shadow:0 0 0 3px #a3e6d740}
+#enem .enem-export{background:#086d64;color:#fff;border:0;padding:11px 13px;min-height:40px;border-radius:10px;white-space:nowrap;cursor:pointer;font-size:12px;font-weight:850}
+#enem .enem-export:hover{background:#064b46}
+#enem .enem-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 16px}
+#enem .enem-kpi{padding:16px 16px 14px;border-radius:17px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px}
+#enem .enem-kpi span{font-size:11px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;color:#60807a}
+#enem .enem-kpi strong{font-size:28px;line-height:1.1;color:#0c544c;font-variant-numeric:tabular-nums}
+#enem .enem-kpi small{font-size:11px;color:#718783;line-height:1.35}
+#enem .enem-card{background:#fff;border:1px solid var(--line);border-radius:19px;box-shadow:var(--shadow);padding:19px;margin-bottom:16px}
+#enem .enem-card h3{font-size:18px;margin:0 0 8px;color:#144d46}
+#enem .enem-chart-card{padding:21px}
+#enem .enem-section-title{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px;margin-bottom:12px}
+#enem .enem-section-title h3{margin:0}
+#enem .enem-section-title p{margin:5px 0 0;font-size:12px;color:#6a827e}
+#enem .enem-delta{border-radius:13px;padding:9px 12px;font-size:24px;font-weight:900;color:#345f58;background:#edf5f3;white-space:nowrap}
+#enem .enem-delta small{font-weight:650;font-size:11px}
+#enem .enem-delta.enem-pos{color:#187249;background:#ecfaf2}
+#enem .enem-delta.enem-neg{color:#af4439;background:#fff3ef}
+#enem .enem-svg{width:100%;overflow-x:auto}
+#enem .enem-svg svg{display:block;width:100%;min-width:450px;max-height:350px}
+#enem .enem-mini-table{max-width:100%;overflow-x:auto}
+#enem .enem-mini-table table{border-collapse:collapse;width:100%;font-size:12px}
+#enem .enem-mini-table :is(td,th){padding:9px 12px;text-align:left;border-bottom:1px solid #edf3f1}
+#enem .enem-mini-table th{background:#f4faf8;color:#55736d;font-size:10px;text-transform:uppercase;letter-spacing:.5px}
+#enem .enem-note{font-size:12px;line-height:1.55;color:#64817b;margin:4px 0 14px}
+#enem .enem-bottom{max-width:100%;padding:15px 16px;border:1px solid #d5e8e2;border-radius:14px;background:#f9fffc}
+#enem .enem-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+#enem .enem-bar{padding:5px 0}
+#enem .enem-bar-label{display:flex;justify-content:space-between;gap:12px;font-size:12px;margin-bottom:5px;align-items:center}
+#enem .enem-bar-label span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#385f58}
+#enem .enem-bar-label b{white-space:nowrap;color:#153b38;font-variant-numeric:tabular-nums}
+#enem .enem-track{background:#e7f1ee;height:10px;border-radius:100px;overflow:hidden}
+#enem .enem-track span{display:block;height:100%;border-radius:100px}
+#enem .enem-count{padding:6px 11px;border-radius:20px;background:#e8f8f3;color:#0b6458;font-size:12px;font-weight:900}
+#enem .enem-table-wrap{max-width:100%;overflow:auto}
+#enem .enem-table{width:100%;border-collapse:collapse;font-size:12px;min-width:690px}
+#enem .enem-table th{background:#edf8f5;color:#53716b;text-transform:uppercase;letter-spacing:.4px;font-size:10px;text-align:left}
+#enem .enem-table td,#enem .enem-table th{padding:12px;border-bottom:1px solid #e5efec}
+#enem .enem-table td strong{color:#234b45}
+#enem .enem-table td small{display:block;color:#879e98;margin-top:3px}
+#enem .enem-school-row{cursor:pointer}
+#enem .enem-school-row:hover{background:#eefaf6}
+#enem .enem-empty{background:#f5faf8;border-radius:12px;padding:22px;color:#67827a;font-size:12px;line-height:1.6}
+#enem .enem-error{color:#ab3e32;border-color:#f2c3bd;background:#fff8f5}
+@media(max-width:1320px){#enem .enem-filtros{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:800px){#enem .enem-grid2{grid-template-columns:1fr}#enem .enem-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}#enem .enem-filtros{grid-template-columns:repeat(2,minmax(0,1fr))}#enem .enem-hero h2{font-size:24px}}
+@media(max-width:520px){#enem .enem-kpi strong{font-size:23px}#enem .enem-filtros{grid-template-columns:1fr}#enem .enem-hero{padding:18px}#enem .enem-card{padding:13px}#enem .enem-chart-card{padding:13px}}
+@media print{#enem .enem-filtros,#enem .enem-export{display:none!important}#enem .enem-card{break-inside:avoid;box-shadow:none}#enem .enem-chart-card svg{min-width:0!important}}
