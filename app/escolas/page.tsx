@@ -9,7 +9,7 @@ const sistemas = [
     description:
       "Sistema de Análise Pedagógica para acompanhar resultados por escola, série, disciplina, habilidades críticas, questões, desempenho e intervenções.",
     href: "/escolas/sap-avaliacoes-2026",
-    directHref: "/escolas/sap-avaliacoes-2026/index.html",
+    directHref: "/escolas/sap-avaliacoes-2026?aba=enem",
     emoji: "📊",
     area: "Análise pedagógica",
   },
