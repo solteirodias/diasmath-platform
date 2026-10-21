@@ -18,7 +18,8 @@ const expected = [
   "labs/prancha-trigonometrica/page.tsx",
   "labs/subtracao/page.tsx",
   "labs/xadrez/page.tsx",
-  "professor/forms/page.tsx"
+  "professor/forms/page.tsx",
+  "escolas/sap-avaliacoes-2026/page.tsx"
 ];
 
 const srcPaths = [];
