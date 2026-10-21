@@ -819,6 +819,8 @@
       state.legalMoves = [];
       state.history = [];
       state.lastMove = null;
+      state.pendingPromotion = null;
+      $('promotionModal').classList.add('hidden');
       state.missionDone = false;
       $('modeSelect').value = state.mode;
       $('lessonSubtitle').textContent = `${lesson.title}: ${lesson.subtitle}`;
@@ -945,6 +947,7 @@
     }
 
     function handleSquareClick(r,c) {
+      if(state.pendingPromotion)return;
       const piece = state.board[r][c];
       const chosenMove = state.legalMoves.find(m => m.r===r && m.c===c);
 
@@ -1237,6 +1240,7 @@
 
     function undo() {
       const prev = state.history.pop();
+      if(state.pendingPromotion){state.pendingPromotion=null;$('promotionModal').classList.add('hidden')}
       if (!prev) { toast('Ainda não há movimento para desfazer.'); return; }
       state.board = prev.board;
       state.currentTurn = prev.turn;
@@ -1272,7 +1276,7 @@
       const army = $('armySelect').value;
       state.board = standardPlacement(selectedTypes,army);
       state.mode = $('customMode').value;
-      state.currentTurn='white'; state.selected=null; state.legalMoves=[]; state.history=[]; state.lastMove=null; state.missionDone=false; state.custom=true;
+      state.currentTurn='white'; state.selected=null; state.legalMoves=[]; state.history=[]; state.lastMove=null; state.pendingPromotion=null; $('promotionModal').classList.add('hidden'); state.missionDone=false; state.custom=true;
       $('modeSelect').value=state.mode;
       $('lessonSubtitle').textContent='Aula personalizada';
       $('missionText').textContent='Explore as peças escolhidas e descubra todos os movimentos.';
@@ -1354,6 +1358,7 @@
     $('exampleBtn').addEventListener('click',showExample);
     $('speakBtn').addEventListener('click',speakCurrent);
     $('modeSelect').addEventListener('change',e=>{
+      if(state.pendingPromotion){e.target.value=state.mode;toast('Escolha primeiro a peça da promoção.');return}
       state.mode=e.target.value; state.currentTurn='white'; state.selected=null; state.legalMoves=[];
       setCoach(state.mode==='explore'?'Exploração livre ativada':'Partida guiada ativada', state.mode==='explore'?'Movimente qualquer peça e investigue todos os caminhos.':'As peças brancas começam. O laboratório controlará os turnos e protegerá os reis.');
       render();
