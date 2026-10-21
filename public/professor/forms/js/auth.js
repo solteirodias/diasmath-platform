@@ -20,7 +20,7 @@ async function apiAuth(payload) {
   return data;
 }
 
-function saveAuthenticatedUser(remoteUser, passwordHash) {
+function saveAuthenticatedUser(remoteUser) {
   const users = DB.users.all();
   const email = normalizeEmail(remoteUser.email);
   const sameEmailUsers = users.filter((item) => normalizeEmail(item.email) === email);
@@ -33,14 +33,13 @@ function saveAuthenticatedUser(remoteUser, passwordHash) {
   const user = {
     ...remoteUser,
     email,
-    passwordHash,
     legacyIds: Array.from(new Set(legacyIds)),
   };
 
   const filtered = users.filter((item) => normalizeEmail(item.email) !== email && item.id !== user.id);
   filtered.push(user);
 
-  DB.users.save(filtered);
+  DB.users.save(filtered.map(({ passwordHash, ...safe }) => safe));
   DB.session.set({ userId: user.id, createdAt: new Date().toISOString() });
 
   return user;
@@ -74,7 +73,7 @@ export async function registerUser({ name, email, school, city, password }) {
     passwordHash,
   });
 
-  return saveAuthenticatedUser(data.user, passwordHash);
+  return saveAuthenticatedUser(data.user);
 }
 
 export async function loginUser(email, password) {
@@ -87,7 +86,7 @@ export async function loginUser(email, password) {
     passwordHash,
   });
 
-  return saveAuthenticatedUser(data.user, passwordHash);
+  return saveAuthenticatedUser(data.user);
 }
 
 export async function recoverPassword(email) {
@@ -105,7 +104,7 @@ export async function resetPassword(email, resetCode, newPassword) {
     passwordHash,
   });
 
-  return saveAuthenticatedUser(data.user, passwordHash);
+  return saveAuthenticatedUser(data.user);
 }
 
 export async function updateRemoteProfile({ name, email, school, city }) {
@@ -113,7 +112,27 @@ export async function updateRemoteProfile({ name, email, school, city }) {
   return data.user;
 }
 
-export function logoutUser() {
-  DB.session.clear();
-  location.href = "index.html";
+export async function logoutUser() {
+  try { await apiAuth({ action: "logout" }); }
+  catch (error) { console.warn("Não foi possível encerrar a sessão no servidor.", error); }
+  finally { DB.session.clear(); location.href = "index.html"; }
+}
+
+export async function verifyRemoteSession() {
+  try {
+    const response=await fetch("/api/forms/auth",{ method:"GET",cache:"no-store" });
+    const data=await response.json().catch(()=>null);
+    if(!response.ok||!data?.ok){ DB.session.clear(); return null; }
+    return saveAuthenticatedUser(data.user);
+  } catch (error) {
+    // Never trust a local session when the server cannot validate it.
+    console.warn("Não foi possível validar a sessão do professor.",error);
+    return null;
+  }
+}
+
+export async function requireVerifiedUser() {
+  const user=await verifyRemoteSession();
+  if(!user){location.href="index.html";throw new Error("Sessão não validada.");}
+  return user;
 }
