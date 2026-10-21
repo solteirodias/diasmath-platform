@@ -70,6 +70,10 @@ async function mockFetch(url,options={}){
       entries.forEach(v=>{if(!answers.has(v.id))answers.set(v.id,v)});
       return json([],201);
     }
+    if(method==="DELETE"){
+      for(const [key,value] of answers)if(value.form_id===id)answers.delete(key);
+      return json([]);
+    }
   }
   throw new Error("Unexpected API call: "+method+" "+url);
 }
@@ -219,6 +223,17 @@ async function main(){
     const malicious=await responses.POST(req("/api/forms/responses","POST",{formId:form.id,participant:{name:"Ana"},answers:{"q_1":"42",other:"leak"}}));
     const cors=await listing.POST(req("/api/forms/list","POST",{forms:[form]},ana,"https://evil.example"));
     assert.equal(incomplete.status,400);assert.equal(malicious.status,400);assert.equal(cors.status,403);
+  });
+  await test("Exclusão restrita ao dono também remove respostas dos estudantes",async()=>{
+    const denied=await listing.DELETE(req("/api/forms/list?formId="+form.id,"DELETE",undefined,bruno));
+    assert.equal(denied.status,404);
+    assert.equal(answers.size,2);
+    const ownerDelete=await listing.DELETE(req("/api/forms/list?formId="+form.id,"DELETE",undefined,ana));
+    assert.equal(ownerDelete.status,200);
+    assert.equal(forms.has(form.id),false);
+    assert.equal(answers.size,0);
+    const publicPage=await publicForm.GET(req("/api/forms/public?id="+form.id));
+    assert.equal(publicPage.status,404);
   });
   await test("Recuperação produz código forte e invalida sessões antigas",async()=>{
     const recovered=await auth.POST(req("/api/forms/auth","POST",{action:"recover",email:"ana@example.com"}));
