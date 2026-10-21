@@ -99,6 +99,7 @@ test("FracionaLab: placares ficam separados por estudante e acertos não duplica
   vm.runInContext("loadState('Ana')",ctx);
   assert.equal(state.score,70);assert.equal(state.quizCorrect,1);
   assert.match(s,/if\(!state.quizSolved.has\(state.quizIndex\)\)/);
+  assert.match(s,/localStorage\.removeItem\(\x27diasmath-fractions-v2\x27\)/);
 });
 test("IntegraZ: relatórios de estudantes diferentes não se misturam",()=>{
   const s=lab("integraz");

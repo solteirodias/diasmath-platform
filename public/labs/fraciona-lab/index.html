@@ -747,7 +747,14 @@ $$('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classLi
 $('#printBtn').addEventListener('click',()=>window.print());
 $('#resetBtn').addEventListener('click',()=>{
   if(!confirm('Deseja reiniciar os pontos e o progresso deste laboratório?'))return;
-  try{localStorage.removeItem(profileKey(state.player))}catch(error){console.warn(error)}location.reload()
+  try{
+    const legacy=JSON.parse(localStorage.getItem('diasmath-fractions-v2')||'null');
+    if(legacy&&String(legacy.player||'Estudante').trim().toLowerCase()===state.player.toLowerCase()){
+      localStorage.removeItem('diasmath-fractions-v2');
+    }
+    localStorage.removeItem(profileKey(state.player));
+  }catch(error){console.warn(error)}
+  location.reload()
 });
 function updateReport(){
   const name=state.player||$('#studentName').value.trim()||'Estudante';
