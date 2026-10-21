@@ -29,6 +29,9 @@ jobs:
       - name: Validate labs
         run: npm run test:labs
 
+      - name: Validate Forms security
+        run: npm run test:forms
+
       - name: Build DIASMATH Sprint
         run: npm run build:sprint
 
