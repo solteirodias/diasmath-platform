@@ -1,4 +1,3 @@
-import { DB } from "./storage.js";
 import { uid, safeText } from "./utils.js";
 
 const params = new URLSearchParams(location.search);
@@ -26,8 +25,8 @@ function decodeFormFromPublicLink() {
   }
 }
 
-const sharedForm = decodeFormFromPublicLink();
-const form = sharedForm || DB.forms.all().find(item => item.id === formId);
+const requestedFormId = formId || decodeFormFromPublicLink()?.id || "";
+let form = null;
 const status = document.querySelector("#publicStatus");
 const responseForm = document.querySelector("#responseForm");
 const themeColors = { blue:"#0b4d86",green:"#19754b",purple:"#6b3da1",orange:"#c96c18" };
@@ -35,20 +34,36 @@ let sectionIndex = 0;
 let answers = {};
 let participant = { name:"", email:"" };
 
-if (!form || !form.published) {
-  status.innerHTML = `<h1>Formulário indisponível</h1><p>O link pode estar incorreto ou o professor retirou a publicação.</p>`;
-} else {
-  document.documentElement.style.setProperty("--primary", themeColors[form.theme] || themeColors.blue);
-  status.classList.add("hidden");
-  responseForm.classList.remove("hidden");
-  document.querySelector("#publicTitle").textContent = form.title;
-  document.querySelector("#publicDescription").textContent = form.description;
-  document.querySelector("#thankYouText").textContent = form.settings.thankYou;
-  document.querySelector("#progressWrap").classList.toggle("hidden", !form.settings.showProgress);
-  document.querySelector("#answerAgainBtn").classList.toggle("hidden", !form.settings.allowAnother);
-  renderParticipantFields();
-  renderSection();
+async function loadPublishedForm(){
+  try {
+    if(!requestedFormId)throw new Error("Link sem identificador de formulário.");
+    const response=await fetch("/api/forms/public?id="+encodeURIComponent(requestedFormId),{cache:"no-store"});
+    const data=await response.json().catch(()=>null);
+    if(!response.ok||!data?.ok||!data.form?.published)throw new Error("Formulário não publicado.");
+    form=data.form;
+    form.settings={
+      collectName:true,collectEmail:false,showProgress:true,
+      allowAnother:false,thankYou:"Resposta enviada com sucesso.",
+      ...(form.settings||{})
+    };
+    if(!Array.isArray(form.sections)||!form.sections.length)throw new Error("Formulário sem seções.");
+    document.documentElement.style.setProperty("--primary",themeColors[form.theme]||themeColors.blue);
+    status.classList.add("hidden");
+    responseForm.classList.remove("hidden");
+    document.querySelector("#publicTitle").textContent=form.title;
+    document.querySelector("#publicDescription").textContent=form.description||"";
+    document.querySelector("#thankYouText").textContent=form.settings.thankYou;
+    document.querySelector("#progressWrap").classList.toggle("hidden",!form.settings.showProgress);
+    document.querySelector("#answerAgainBtn").classList.toggle("hidden",!form.settings.allowAnother);
+    renderParticipantFields();
+    renderSection();
+  } catch(error) {
+    status.innerHTML="<h1>Formulário indisponível</h1><p>O link pode estar incorreto ou o professor retirou a publicação.</p>";
+    responseForm.classList.add("hidden");
+    console.warn("Não foi possível abrir o formulário:",error);
+  }
 }
+loadPublishedForm();
 
 document.querySelector("#prevSectionBtn").addEventListener("click", () => {
   collectCurrentSection();
@@ -86,8 +101,7 @@ responseForm.addEventListener("submit", async event => {
     formTitle: form.title,
     submittedAt: new Date().toISOString(),
     participant,
-    answers,
-    formSnapshot: form
+    answers
   };
 
   try {
@@ -103,10 +117,6 @@ responseForm.addEventListener("submit", async event => {
       const details = await remote.json().catch(() => null);
       throw new Error(details?.error || "Não foi possível salvar a resposta no painel do professor.");
     }
-
-    const responses = DB.responses.all();
-    responses.push(responsePayload);
-    DB.responses.save(responses);
 
     responseForm.classList.add("hidden");
     document.querySelector("#thankYouPanel").classList.remove("hidden");
