@@ -200,15 +200,12 @@ async function saveCloudForm(form) {
 }
 
 async function deleteCloudForm(formId) {
-  const email = currentUserEmail();
-  if (!email || !formId) return;
-
-  try {
-    await fetch(`/api/forms/list?ownerEmail=${encodeURIComponent(email)}&formId=${encodeURIComponent(formId)}`, {
-      method: "DELETE"
-    });
-  } catch (error) {
-    console.warn("Não foi possível excluir no servidor agora:", error);
+  const email=currentUserEmail();
+  if (!email || !formId) throw new Error("Dados de acesso incompletos.");
+  const response=await fetch(`/api/forms/list?ownerEmail=${encodeURIComponent(email)}&formId=${encodeURIComponent(formId)}`,{method:"DELETE"});
+  if(!response.ok){
+    const details=await response.json().catch(()=>null);
+    throw new Error(details?.error||"Não foi possível excluir os dados no servidor.");
   }
 }
 
