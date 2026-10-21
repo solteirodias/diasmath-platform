@@ -34,6 +34,12 @@ function sign(value: string, secret: string): string {
   return createHmac("sha256", secret).update("diasmath-forms-session-v1:" + value).digest("base64url");
 }
 
+export function hashRecoveryCode(email: string, code: string): string {
+  const secret=sessionSecret();
+  if(!secret)throw new Error("Forms session secret missing");
+  return createHmac("sha256",secret).update("diasmath-forms-recovery:"+email.toLowerCase()+":"+code).digest("hex");
+}
+
 export function issueFormsSession(id: string, email: string, passwordHash: string): string {
   const secret = sessionSecret();
   if (!secret) throw new Error("Forms session secret missing");
