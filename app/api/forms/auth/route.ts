@@ -1,6 +1,6 @@
 export const runtime = "nodejs";
 
-import { createHash, randomInt, timingSafeEqual } from "node:crypto";
+import { randomInt, timingSafeEqual } from "node:crypto";
 import {
   formsConfig, formsHeaders, formsError, formsJson, formsCookieHeader,
   getFormsUser, getFormsUserFromSession, issueFormsSession, isAllowedFormsWrite,
