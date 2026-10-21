@@ -26,6 +26,9 @@ jobs:
       - name: Validate games
         run: npm run test:games
 
+      - name: Validate labs
+        run: npm run test:labs
+
       - name: Build DIASMATH Sprint
         run: npm run build:sprint
 
