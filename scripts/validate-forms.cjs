@@ -238,7 +238,7 @@ async function main(){
   await test("Recuperação produz código forte e invalida sessões antigas",async()=>{
     const recovered=await auth.POST(req("/api/forms/auth","POST",{action:"recover",email:"ana@example.com"}));
     assert.equal(recovered.status,200);assert.match(lastMailCode,/^\d{8}$/);
-    assert.equal(users.get("ana@example.com").reset_code,nodeCrypto.createHash("sha256").update(lastMailCode).digest("hex"));
+    assert.equal(users.get("ana@example.com").reset_code,security.hashRecoveryCode("ana@example.com",lastMailCode));
     const wrong=await auth.POST(req("/api/forms/auth","POST",{action:"reset",email:"ana@example.com",resetCode:"12345678",passwordHash:hashB}));
     assert.equal(wrong.status,400);
     const ok=await auth.POST(req("/api/forms/auth","POST",{action:"reset",email:"ana@example.com",resetCode:lastMailCode,passwordHash:hashB}));
