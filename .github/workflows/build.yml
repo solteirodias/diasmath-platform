@@ -32,6 +32,9 @@ jobs:
       - name: Validate Forms security
         run: npm run test:forms
 
+      - name: Validate embedded materials
+        run: npm run test:materials
+
       - name: Build DIASMATH Sprint
         run: npm run build:sprint
 
