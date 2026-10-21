@@ -17,6 +17,16 @@ function rowForForm(form: any,user: any) {
   const now=new Date().toISOString();
   if(!form || typeof form!=="object" || typeof form.id!=="string" ||
      !/^form_[\w-]{4,120}$/.test(form.id))return null;
+  if(!Array.isArray(form.sections)||!form.sections.length||form.sections.length>50)return null;
+  const safeId=/^[A-Za-z0-9_-]{1,120}$/;
+  const totalQuestions=form.sections.reduce((sum:number,section:any)=>{
+    if(!section||!safeId.test(String(section.id||""))||!Array.isArray(section.questions)||section.questions.length>100)return 1000;
+    if(section.questions.some((q:any)=>!q||!safeId.test(String(q.id||""))||typeof q.title!=="string"||q.title.length>1500||
+      (q.options!==undefined&&(!Array.isArray(q.options)||q.options.length>80||
+      q.options.some((option:any)=>typeof option!=="string"||option.length>1000)))))return 1000;
+    return sum+section.questions.length;
+  },0);
+  if(totalQuestions>200)return null;
   const normalized={
     ...form,id:form.id,
     ownerId:user.id,ownerEmail:user.email,
@@ -111,6 +121,12 @@ export async function DELETE(request: Request) {
     const existing=await getStoredForm(auth.config,formId);
     if(!ownsStoredForm(existing,auth.user))return formsError("Formulário não encontrado.",404);
     // Deleting the form is an owner-only action; responses are associated with it.
+    // Delete student responses before removing the form so no orphaned personal
+    // records remain in the remote database after the teacher confirms deletion.
+    const responsesEnd=auth.config.url+"/rest/v1/diasmath_forms_responses?form_id=eq."+
+      encodeURIComponent(formId);
+    const removed=await fetch(responsesEnd,{method:"DELETE",headers:formsHeaders(auth.config),cache:"no-store"});
+    if(!removed.ok)throw new Error("delete_form_responses");
     const end=auth.config.url+"/rest/v1/diasmath_forms_forms?id=eq."+
       encodeURIComponent(formId)+"&owner_email=eq."+encodeURIComponent(auth.user.email);
     const response=await fetch(end,{method:"DELETE",headers:formsHeaders(auth.config),cache:"no-store"});
