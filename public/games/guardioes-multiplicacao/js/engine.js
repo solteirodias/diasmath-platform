@@ -21,16 +21,24 @@
 
     continueSaved(){
       const save=G.Progress.load();
-      if(!save)return this.startNew();
-      this.lives=clampNumber(save.lives,1,C.maxLives,C.startLives);
-      this.bombs=Math.max(0,Number(save.bombs)||0);
-      this.score=Math.max(0,Number(save.score)||0);
-      this.totalCrystals=Math.max(0,Number(save.totalCrystals)||0);
-      this.running=true;this.loadWorld(save.worldId,Array.isArray(save.solvedIds)?save.solvedIds:[]);this.ensureLoop();
+      if(!save||save.stageComplete)return this.startNew();
+      const savedWorld=G.getWorld(save.worldId);
+      const validSolved=new Set(G.QuestionDatabase.getWorld(savedWorld.id).map(q=>q.id));
+      const solvedIds=Array.isArray(save.solvedIds)?[...new Set(save.solvedIds.filter(id=>validSolved.has(id)))]:[];
+      const restartAfterGameOver=Number(save.lives)<=0;
+      this.lives=restartAfterGameOver?C.startLives:clampNumber(save.lives,1,C.maxLives,C.startLives);
+      this.bombs=restartAfterGameOver?C.startBombs:Math.max(0,Number(save.bombs)||0);
+      this.score=Math.max(0,(Number(save.score)||0)-(restartAfterGameOver?solvedIds.length*(savedWorld.bossWorld?200:100):0));
+      this.totalCrystals=Math.max(0,(Number(save.totalCrystals)||0)-(restartAfterGameOver?solvedIds.length:0));
+      this.running=true;this.loadWorld(savedWorld.id,restartAfterGameOver?[]:solvedIds);this.ensureLoop();
+      if(restartAfterGameOver)this.saveProgress();
       return this.world;
     }
 
     restartCurrentWorld(){
+      const solved=this.challenges.filter(ch=>ch.solved).length;
+      this.score=Math.max(0,this.score-solved*(this.world.bossWorld?200:100));
+      this.totalCrystals=Math.max(0,this.totalCrystals-solved);
       this.lives=C.startLives;this.bombs=C.startBombs;
       this.loadWorld(this.world.id,[]);this.saveProgress();
       return this.world;

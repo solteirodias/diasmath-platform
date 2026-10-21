@@ -3,13 +3,15 @@ name: Build DIASMATH
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 permissions:
   contents: write
 
 jobs:
   build:
-    if: ${{ !contains(github.event.head_commit.message, 'Atualiza build estático do DIASMATH Sprint') }}
+    if: ${{ github.event_name == 'pull_request' || !contains(github.event.head_commit.message, 'Atualiza build estático do DIASMATH Sprint') }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -21,6 +23,9 @@ jobs:
       - name: Install site dependencies
         run: npm install --no-audit --no-fund
 
+      - name: Validate games
+        run: npm run test:games
+
       - name: Build DIASMATH Sprint
         run: npm run build:sprint
 
@@ -31,6 +36,7 @@ jobs:
         run: npm run build
 
       - name: Publish Sprint static build into repository
+        if: github.event_name == 'push'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

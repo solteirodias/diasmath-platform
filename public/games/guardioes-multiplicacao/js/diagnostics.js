@@ -15,6 +15,7 @@
         const answer=Number(q.fact?.[0])*Number(q.fact?.[1]);
         if(!Number.isFinite(answer))errors.push(`${q.id}: fato multiplicativo inválido.`);
         if(!Array.isArray(q.alternatives)||q.alternatives.length!==4||!q.alternatives.map(Number).includes(answer))errors.push(`${q.id}: alternativas não contêm a resposta correta.`);
+        if(Array.isArray(q.alternatives)&&new Set(q.alternatives.map(Number)).size!==q.alternatives.length)errors.push(`${q.id}: alternativas duplicadas.`);
         const p=q.practice||{};
         if(Number(p.groups)!==Number(q.fact?.[0])||Number(p.perGroup)!==Number(q.fact?.[1]))errors.push(`${q.id}: prática não corresponde ao fato multiplicativo.`);
         if(!q.text?.includes('?'))warnings.push(`${q.id}: enunciado sem ponto de interrogação.`);

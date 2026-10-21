@@ -81,7 +81,7 @@
     $('world-complete-title').textContent=world.completeTitle;$('world-complete-text').textContent=world.transitionText;
     $('next-world-panel').hidden=isFinal;$('btn-next-world').hidden=isFinal;
     if(nextWorld){$('next-world-icon').textContent=nextWorld.worldIcon;$('next-world-name').textContent=nextWorld.name;$('btn-next-world').textContent='Entrar no novo mundo'}
-    $('btn-world-menu').textContent=isFinal?'Concluir Etapa 6':'Voltar ao menu';
+    $('btn-world-menu').textContent=isFinal?'Concluir aventura':'Voltar ao menu';
     $('overlay-world').classList.add('active');
   }
   function showFinalVictory(world,stats){

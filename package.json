@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:sprint": "npm --prefix apps/sprint install --include=dev --no-audit --no-fund --legacy-peer-deps && npm --prefix apps/sprint run build && node scripts/copy-sprint.mjs"
+    "build:sprint": "npm --prefix apps/sprint install --include=dev --no-audit --no-fund --legacy-peer-deps && npm --prefix apps/sprint run build && node scripts/copy-sprint.mjs",
+    "test:games": "node scripts/validate-games.cjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",
