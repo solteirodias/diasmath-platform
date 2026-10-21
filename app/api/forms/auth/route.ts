@@ -3,7 +3,7 @@ export const runtime = "nodejs";
 import { randomInt, timingSafeEqual } from "node:crypto";
 import {
   formsConfig, formsHeaders, formsError, formsJson, formsCookieHeader,
-  getFormsUser, getFormsUserFromSession, issueFormsSession, isAllowedFormsWrite,
+  getFormsUser, getFormsUserFromSession, issueFormsSession, isAllowedFormsWrite, hashRecoveryCode,
 } from "../../../../lib/formsSecurity";
 
 type Action = "login" | "register" | "recover" | "reset" | "profile" | "logout";
