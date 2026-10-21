@@ -113,9 +113,14 @@ export async function updateRemoteProfile({ name, email, school, city }) {
 }
 
 export async function logoutUser() {
-  try { await apiAuth({ action: "logout" }); }
-  catch (error) { console.warn("Não foi possível encerrar a sessão no servidor.", error); }
-  finally { DB.session.clear(); location.href = "index.html"; }
+  try {
+    await apiAuth({ action: "logout" });
+    DB.session.clear();
+    location.href = "index.html";
+  } catch (error) {
+    console.warn("Não foi possível encerrar a sessão no servidor.", error);
+    alert("Não foi possível encerrar a sessão com segurança. Verifique sua conexão e tente novamente.");
+  }
 }
 
 export async function verifyRemoteSession() {
