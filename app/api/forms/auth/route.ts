@@ -149,7 +149,7 @@ export async function POST(request: Request) {
         // Avoid rapid repeated emails to the same mailbox.
         if(!user.reset_code || !Number.isFinite(expires) || expires<Date.now()){
           const code=String(randomInt(10_000_000,100_000_000));
-          const digest=createHash("sha256").update(code).digest("hex");
+          const digest=hashRecoveryCode(email,code);
           await updateUser(config,email,{reset_code:digest,reset_expires_at:new Date(Date.now()+15*60_000).toISOString()});
           await sendRecoveryEmail(email,code);
         }
@@ -163,7 +163,7 @@ export async function POST(request: Request) {
       const user=await getFormsUser(config,email);
       // Do not reveal whether an account exists via reset.
       if(!user || !user.reset_expires_at || Date.parse(user.reset_expires_at)<=Date.now())return formsError("Código inválido ou expirado.",400);
-      const digest=createHash("sha256").update(code).digest("hex");
+      const digest=hashRecoveryCode(email,code);
       if(!secureCompare(String(user.reset_code||""),digest) && !secureCompare(String(user.reset_code||""),code)){
         return formsError("Código inválido ou expirado.",400);
       }
