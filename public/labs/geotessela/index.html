@@ -1287,9 +1287,16 @@
         return;
       }
 
-      const matches=text.match(/\d+/g);
+      // Não extraia apenas os algarismos de uma entrada malformada: isso
+      // transformava "abc4-8-8" em uma configuração aparentemente válida.
+      const cleaned=text.replace(/[()[\]]/g,'').trim();
+      const matches=cleaned.split(/[\s,;-]+/);
+      if(matches.some(token=>!/^\d+$/.test(token))){
+        showToast("Use apenas números inteiros separados por vírgulas, espaços ou hífens.");
+        return;
+      }
 
-      if(!matches || matches.length<3){
+      if(matches.length<3){
         showToast("Informe pelo menos três polígonos. Exemplo: (4, 8, 8).");
         return;
       }

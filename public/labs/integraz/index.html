@@ -534,13 +534,30 @@ let session={
   missions:0,bestMission:0
 };
 
-function loadSession(){
-  try{
-    const saved=JSON.parse(localStorage.getItem('diasmath-integraz-session')||'null');
-    if(saved&&saved.skills){session={...session,...saved,started:Date.now()}}
-  }catch(e){}
+function sessionKey(name){
+  return 'diasmath-integraz-v2-'+encodeURIComponent(String(name||'Estudante').trim().toLowerCase().slice(0,60)||'estudante');
 }
-function saveSession(){try{localStorage.setItem('diasmath-integraz-session',JSON.stringify(session))}catch(e){}}
+function loadSession(name='Estudante'){
+  const target=String(name||'Estudante').trim().slice(0,60)||'Estudante';
+  const base={
+    student:target,started:Date.now(),attempts:0,correct:0,
+    skills:{comparison:[0,0],opposite:[0,0],add:[0,0],subtract:[0,0],multiply:[0,0],divide:[0,0],expressions:[0,0],contexts:[0,0]},
+    missions:0,bestMission:0
+  };
+  session=base;
+  try{
+    let saved=JSON.parse(localStorage.getItem(sessionKey(target))||'null');
+    if(!saved){
+      const legacy=JSON.parse(localStorage.getItem('diasmath-integraz-session')||'null');
+      if(legacy&&String(legacy.student||'Estudante').trim().toLowerCase()===target.toLowerCase())saved=legacy;
+    }
+    if(saved&&saved.skills)session={...base,...saved,student:target,started:Date.now()};
+  }catch(error){console.warn('Não foi possível carregar esta sessão do IntegraZ.',error)}
+}
+function saveSession(){
+  try{localStorage.setItem(sessionKey(session.student),JSON.stringify(session));return true}
+  catch(error){console.warn('Não foi possível salvar a sessão do IntegraZ.',error);return false}
+}
 function record(skill,ok){
   session.attempts++; if(ok)session.correct++;
   if(!session.skills[skill])session.skills[skill]=[0,0];
@@ -549,9 +566,10 @@ function record(skill,ok){
 }
 function startLab(){
   initAudio();
-  const name=$('studentName').value.trim();
-  if(name)session.student=name;
+  const name=$('studentName').value.trim()||'Estudante';
+  loadSession(name);
   session.started=Date.now();
+  saveSession();
   $('landing').classList.add('hidden');$('app').classList.remove('hidden');
   document.documentElement.requestFullscreen?.().catch(()=>{});
   resetNumberLine();resetChips();resetContext();resetOperation();renderReport();
