@@ -1,0 +1,1 @@
+import{o as e}from"./useSelector-Dq6-RCm6.js";import{r as t}from"./index-DM4u8mY1.js";import{t as n}from"./StudentArena-iNHiNLXm.js";var r=e();function i(){let{code:e}=t.useParams();return(0,r.jsx)(n,{initialCode:e.replace(/\D/g,``).slice(0,6)})}export{i as component};

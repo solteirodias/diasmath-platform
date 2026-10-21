@@ -1,0 +1,1 @@
+import{l as e,n as t,s as n}from"./useSelector-Dq6-RCm6.js";var r=e(n(),1);function i(e){let n=t();return r.useCallback(t=>n.navigate({...t,from:t.from??e?.from}),[e?.from,n])}export{i as t};
