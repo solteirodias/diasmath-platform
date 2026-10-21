@@ -10,6 +10,13 @@ export async function GET(request: Request) {
     const row=await getStoredForm(config,id);
     if(!row||!row.published)return formsError("Formulário indisponível.",404);
     const source=row.form||{};
+    const safeId=/^[A-Za-z0-9_-]{1,120}$/;
+    const sections=Array.isArray(source.sections)?source.sections:[];
+    if(!sections.length||sections.length>50||sections.some((section:any)=>
+      !safeId.test(String(section?.id||""))||
+      !Array.isArray(section.questions)||section.questions.length>100||
+      section.questions.some((q:any)=>!safeId.test(String(q?.id||"")))
+    ))return formsError("Formulário indisponível.",404);
     return Response.json({
       ok:true,
       form:{
