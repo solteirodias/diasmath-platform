@@ -832,12 +832,17 @@ function duplicateForm(formId) {
   copy.sections.forEach(s=>{s.id=uid("sec");s.questions.forEach(q=>q.id=uid("q"));});
   copy.ownerId = user.id; copy.ownerEmail = currentUserEmail(); const forms = DB.forms.all(); forms.push(copy); DB.forms.save(forms); saveCloudForm(copy); renderAll(); toast("Formulário duplicado.");
 }
-function deleteForm(formId) {
+async function deleteForm(formId) {
   if (!confirm("Excluir o formulário e todas as respostas associadas?")) return;
-  DB.forms.save(DB.forms.all().filter(form=>form.id!==formId));
-  DB.responses.save(DB.responses.all().filter(response=>response.formId!==formId));
-  deleteCloudForm(formId);
-  renderAll(); toast("Formulário excluído.");
+  try {
+    await deleteCloudForm(formId);
+    DB.forms.save(DB.forms.all().filter(form=>form.id!==formId));
+    DB.responses.save(DB.responses.all().filter(response=>response.formId!==formId));
+    renderAll();toast("Formulário e respostas excluídos.");
+  } catch(error) {
+    console.warn("Exclusão não concluída:",error);
+    toast("A exclusão não foi concluída. Verifique a conexão e tente novamente.");
+  }
 }
 function openPreview() {
   syncFormMeta(); syncSettings();
