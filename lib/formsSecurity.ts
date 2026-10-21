@@ -1,7 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
 export type FormsConfig = { url: string; key: string };
-export type FormsSession = { id: string; email: string; exp: number };
+export type FormsSession = { id: string; email: string; pw: string; exp: number };
 
 const COOKIE = "dm_forms_session";
 const MAX_AGE = 7 * 24 * 60 * 60;
@@ -34,10 +34,10 @@ function sign(value: string, secret: string): string {
   return createHmac("sha256", secret).update("diasmath-forms-session-v1:" + value).digest("base64url");
 }
 
-export function issueFormsSession(id: string, email: string): string {
+export function issueFormsSession(id: string, email: string, passwordHash: string): string {
   const secret = sessionSecret();
   if (!secret) throw new Error("Forms session secret missing");
-  const data: FormsSession = { id, email: email.trim().toLowerCase(), exp: Math.floor(Date.now()/1000) + MAX_AGE };
+  const data: FormsSession = { id, email: email.trim().toLowerCase(), pw: sign("password:"+passwordHash, secret), exp: Math.floor(Date.now()/1000) + MAX_AGE };
   const encoded = Buffer.from(JSON.stringify(data)).toString("base64url");
   return "v1." + encoded + "." + sign(encoded, secret);
 }
@@ -55,9 +55,9 @@ export function readFormsSession(request: Request): FormsSession | null {
   if (actual.length !== expected.length || !timingSafeEqual(actual, expected)) return null;
   try {
     const data = JSON.parse(Buffer.from(parts[1], "base64url").toString("utf8"));
-    if (typeof data?.id !== "string" || typeof data?.email !== "string" || !Number.isInteger(data.exp)) return null;
+    if (typeof data?.id !== "string" || typeof data?.email !== "string" || typeof data?.pw !== "string" || !Number.isInteger(data.exp)) return null;
     if (!data.id || !data.email || data.exp <= Math.floor(Date.now()/1000)) return null;
-    return { id: data.id, email: data.email, exp: data.exp };
+    return { id: data.id, email: data.email, pw: data.pw, exp: data.exp };
   } catch { return null; }
 }
 
@@ -95,7 +95,12 @@ export async function getFormsUserFromSession(config: FormsConfig, request: Requ
   const session = readFormsSession(request);
   if (!session) return null;
   const user = await getFormsUser(config, session.email);
-  return user && user.id === session.id ? user : null;
+  if (!user || user.id !== session.id) return null;
+  const secret = sessionSecret();
+  if (!secret) return null;
+  const expected = Buffer.from(sign("password:"+user.password_hash, secret));
+  const actual = Buffer.from(session.pw);
+  return actual.length === expected.length && timingSafeEqual(actual, expected) ? user : null;
 }
 
 export async function getStoredForm(config: FormsConfig, id: string): Promise<any | null> {
