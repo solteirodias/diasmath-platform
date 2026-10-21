@@ -69,18 +69,27 @@ export async function POST(request: Request) {
     const ids=rows.map(row=>row!.id);
     if(new Set(ids).size!==ids.length)return formsError("Há identificadores duplicados.");
 
-    // The service-role key bypasses database RLS. Explicitly verify every existing
-    // form before UPSERT, never trusting ownerEmail or ownerId from the client.
-    for(const id of ids){
-      const existing=await getStoredForm(auth.config,id);
+    // Never UPSERT privileged rows: even a same-owner lookup can race with
+    // a foreign owner's creation of an identical ID. Owner-scoped PATCH
+    // cannot modify another professor's form.
+    for(const row of rows){
+      const existing=await getStoredForm(auth.config,row!.id);
       if(existing && !ownsStoredForm(existing,auth.user))return formsError("Formulário de outro professor.",403);
+      const endpoint=existing
+        ? auth.config.url+"/rest/v1/diasmath_forms_forms?id=eq."+encodeURIComponent(row!.id)+
+          "&owner_email=eq."+encodeURIComponent(auth.user.email)
+        : auth.config.url+"/rest/v1/diasmath_forms_forms";
+      const response=await fetch(endpoint,{
+        method:existing?"PATCH":"POST",
+        headers:{...formsHeaders(auth.config),Prefer:"return=minimal"},
+        body:JSON.stringify(existing?{
+          title:row!.title,description:row!.description,published:row!.published,
+          updated_at:row!.updated_at,form:row!.form
+        }:row),cache:"no-store"
+      });
+      if(response.status===409)return formsError("Conflito ao criar formulário. Recarregue os dados.",409);
+      if(!response.ok)throw new Error("write_forms");
     }
-    const response=await fetch(auth.config.url+"/rest/v1/diasmath_forms_forms?on_conflict=id",{
-      method:"POST",
-      headers:{...formsHeaders(auth.config),Prefer:"resolution=merge-duplicates,return=minimal"},
-      body:JSON.stringify(rows),cache:"no-store"
-    });
-    if(!response.ok)throw new Error("write_forms");
     return Response.json({ok:true,count:rows.length},{headers:NO_CACHE});
   }catch(error){
     if(error instanceof Error&&error.message==="payload_too_large")return formsError("Formulário muito grande.",413);
