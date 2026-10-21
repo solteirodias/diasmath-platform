@@ -162,7 +162,8 @@ export async function POST(request: Request) {
       if(!/^\d{6}$|^\d{8}$/.test(code))return formsError("Código inválido.");
       const user=await getFormsUser(config,email);
       // Do not reveal whether an account exists via reset.
-      if(!user || !user.reset_expires_at || Date.parse(user.reset_expires_at)<=Date.now())return formsError("Código inválido ou expirado.",400);
+      const expiry=Date.parse(user?.reset_expires_at||"");
+      if(!user || !Number.isFinite(expiry) || expiry<=Date.now())return formsError("Código inválido ou expirado.",400);
       const digest=hashRecoveryCode(email,code);
       if(!secureCompare(String(user.reset_code||""),digest) && !secureCompare(String(user.reset_code||""),code)){
         return formsError("Código inválido ou expirado.",400);
