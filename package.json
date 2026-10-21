@@ -9,7 +9,8 @@
     "lint": "next lint",
     "build:sprint": "npm --prefix apps/sprint install --include=dev --no-audit --no-fund --legacy-peer-deps && npm --prefix apps/sprint run build && node scripts/copy-sprint.mjs",
     "test:games": "node scripts/validate-games.cjs",
-    "test:labs": "node scripts/validate-labs.cjs"
+    "test:labs": "node scripts/validate-labs.cjs",
+    "test:forms": "node scripts/validate-forms.cjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.45.4",

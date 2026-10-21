@@ -21,7 +21,7 @@ function write(key, value) {
 export const DB = {
   users: {
     all: () => read(KEYS.users, []),
-    save: value => write(KEYS.users, value)
+    save: value => write(KEYS.users, (Array.isArray(value)?value:[]).map(({ passwordHash, ...safe }) => safe))
   },
   session: {
     get: () => read(KEYS.session, null),
@@ -44,7 +44,7 @@ export const DB = {
     return {
       version: 32,
       exportedAt: new Date().toISOString(),
-      users: this.users.all(),
+      users: this.users.all().map(({ passwordHash, ...safe }) => safe),
       forms: this.forms.all(),
       responses: this.responses.all(),
       bank: this.bank.all()

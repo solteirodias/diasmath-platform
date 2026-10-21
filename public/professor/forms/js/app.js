@@ -1,9 +1,9 @@
 import { DB } from "./storage.js";
-import { requireUser, logoutUser, updateRemoteProfile } from "./auth.js";
+import { requireVerifiedUser, logoutUser, updateRemoteProfile } from "./auth.js";
 import { TEMPLATES } from "./templates.js";
 import { uid, formatDate, downloadFile, csvEscape, copyText, deepClone, safeText, slugify } from "./utils.js";
 
-const user = requireUser();
+const user = await requireVerifiedUser();
 let currentView = "overview";
 let currentForm = null;
 let activeSectionId = null;
@@ -16,16 +16,6 @@ const OPTION_TYPES = ["single", "multiple", "dropdown"];
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
-
-function encodeFormForPublicLink(form) {
-  const copy = deepClone(form);
-  copy.published = true;
-  const json = JSON.stringify(copy);
-  const bytes = new TextEncoder().encode(json);
-  let binary = "";
-  bytes.forEach(byte => binary += String.fromCharCode(byte));
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
-}
 
 const RESPONSE_SYNC = {
   loading: {},
@@ -210,15 +200,12 @@ async function saveCloudForm(form) {
 }
 
 async function deleteCloudForm(formId) {
-  const email = currentUserEmail();
-  if (!email || !formId) return;
-
-  try {
-    await fetch(`/api/forms/list?ownerEmail=${encodeURIComponent(email)}&formId=${encodeURIComponent(formId)}`, {
-      method: "DELETE"
-    });
-  } catch (error) {
-    console.warn("Não foi possível excluir no servidor agora:", error);
+  const email=currentUserEmail();
+  if (!email || !formId) throw new Error("Dados de acesso incompletos.");
+  const response=await fetch(`/api/forms/list?ownerEmail=${encodeURIComponent(email)}&formId=${encodeURIComponent(formId)}`,{method:"DELETE"});
+  if(!response.ok){
+    const details=await response.json().catch(()=>null);
+    throw new Error(details?.error||"Não foi possível excluir os dados no servidor.");
   }
 }
 
@@ -267,10 +254,7 @@ function allLocalFormsMigrationCandidates() {
     if (!form?.id) return false;
 
     return (
-      belongsToCurrentUser(form) ||
-      !form.ownerEmail ||
-      form.ownerEmail === email ||
-      ids.has(form.ownerId)
+      belongsToCurrentUser(form)
     );
   });
 }
@@ -829,16 +813,7 @@ function togglePublish() {
   saveCurrentForm(); populateBuilder();
 }
 function publicLink(formId = currentForm.id) {
-  const form = formId === currentForm?.id
-    ? currentForm
-    : myForms().find(item => item.id === formId);
-
-  if (!form) {
-    return new URL(`respond.html?id=${encodeURIComponent(formId)}`, location.href).href;
-  }
-
-  const encoded = encodeFormForPublicLink(form);
-  return new URL(`respond.html?f=${encoded}`, location.href).href;
+  return new URL(`respond.html?id=${encodeURIComponent(formId)}`, location.href).href;
 }
 async function copyPublicLink() {
   if (!currentForm.published) return toast("Publique o formulário antes de compartilhar.");
@@ -857,12 +832,17 @@ function duplicateForm(formId) {
   copy.sections.forEach(s=>{s.id=uid("sec");s.questions.forEach(q=>q.id=uid("q"));});
   copy.ownerId = user.id; copy.ownerEmail = currentUserEmail(); const forms = DB.forms.all(); forms.push(copy); DB.forms.save(forms); saveCloudForm(copy); renderAll(); toast("Formulário duplicado.");
 }
-function deleteForm(formId) {
+async function deleteForm(formId) {
   if (!confirm("Excluir o formulário e todas as respostas associadas?")) return;
-  DB.forms.save(DB.forms.all().filter(form=>form.id!==formId));
-  DB.responses.save(DB.responses.all().filter(response=>response.formId!==formId));
-  deleteCloudForm(formId);
-  renderAll(); toast("Formulário excluído.");
+  try {
+    await deleteCloudForm(formId);
+    DB.forms.save(DB.forms.all().filter(form=>form.id!==formId));
+    DB.responses.save(DB.responses.all().filter(response=>response.formId!==formId));
+    renderAll();toast("Formulário e respostas excluídos.");
+  } catch(error) {
+    console.warn("Exclusão não concluída:",error);
+    toast("A exclusão não foi concluída. Verifique a conexão e tente novamente.");
+  }
 }
 function openPreview() {
   syncFormMeta(); syncSettings();

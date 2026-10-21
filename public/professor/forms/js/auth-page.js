@@ -1,12 +1,12 @@
 import {
-  currentUser,
+  verifyRemoteSession,
   loginUser,
   registerUser,
   recoverPassword,
   resetPassword,
 } from "./auth.js";
 
-if (currentUser()) location.href = "app.html";
+verifyRemoteSession().then(user=>{if(user)location.href="app.html"});
 
 const tabs = document.querySelectorAll(".tab");
 const loginForm = document.querySelector("#loginForm");
