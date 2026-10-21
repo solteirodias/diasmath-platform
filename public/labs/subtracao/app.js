@@ -144,7 +144,8 @@ function openModule(module) {
 }
 
 function sanitizeNumber(value) {
-  return Number(String(value).replace(/\D/g, ""));
+  const text=String(value ?? "").trim();
+  return /^\d+$/.test(text) ? Number(text) : NaN;
 }
 
 function getDigits(number, size) {
@@ -299,6 +300,10 @@ function checkChallenge() {
     return;
   }
   const answer = sanitizeNumber(value);
+  if (!Number.isInteger(answer)) {
+    setChallengeFeedback("Digite apenas algarismos de um número inteiro não negativo.", false);
+    return;
+  }
   const correct = challenge.a - challenge.b;
   if (answer === correct) {
     if (!state.solvedChallenges.has(state.challengeIndex)) {
