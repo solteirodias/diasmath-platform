@@ -1,9 +1,9 @@
 import { DB } from "./storage.js";
-import { requireUser, logoutUser, updateRemoteProfile } from "./auth.js";
+import { requireVerifiedUser, logoutUser, updateRemoteProfile } from "./auth.js";
 import { TEMPLATES } from "./templates.js";
 import { uid, formatDate, downloadFile, csvEscape, copyText, deepClone, safeText, slugify } from "./utils.js";
 
-const user = requireUser();
+const user = await requireVerifiedUser();
 let currentView = "overview";
 let currentForm = null;
 let activeSectionId = null;
@@ -16,16 +16,6 @@ const OPTION_TYPES = ["single", "multiple", "dropdown"];
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
-
-function encodeFormForPublicLink(form) {
-  const copy = deepClone(form);
-  copy.published = true;
-  const json = JSON.stringify(copy);
-  const bytes = new TextEncoder().encode(json);
-  let binary = "";
-  bytes.forEach(byte => binary += String.fromCharCode(byte));
-  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
-}
 
 const RESPONSE_SYNC = {
   loading: {},
@@ -267,10 +257,7 @@ function allLocalFormsMigrationCandidates() {
     if (!form?.id) return false;
 
     return (
-      belongsToCurrentUser(form) ||
-      !form.ownerEmail ||
-      form.ownerEmail === email ||
-      ids.has(form.ownerId)
+      belongsToCurrentUser(form)
     );
   });
 }
@@ -829,16 +816,7 @@ function togglePublish() {
   saveCurrentForm(); populateBuilder();
 }
 function publicLink(formId = currentForm.id) {
-  const form = formId === currentForm?.id
-    ? currentForm
-    : myForms().find(item => item.id === formId);
-
-  if (!form) {
-    return new URL(`respond.html?id=${encodeURIComponent(formId)}`, location.href).href;
-  }
-
-  const encoded = encodeFormForPublicLink(form);
-  return new URL(`respond.html?f=${encoded}`, location.href).href;
+  return new URL(`respond.html?id=${encodeURIComponent(formId)}`, location.href).href;
 }
 async function copyPublicLink() {
   if (!currentForm.published) return toast("Publique o formulário antes de compartilhar.");
