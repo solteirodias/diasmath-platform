@@ -43,6 +43,11 @@ jobs:
           }
           walk(db,"root",0);
           console.log("SAP_SIMULA_SAMPLES",JSON.stringify(matches));
+          console.log("SAP_SIMULA_GROUPS",JSON.stringify(db.groups.filter(g=>g.instrument==="Simula+").map(g=>({id:g.id,sequence:g.sequence,grade:g.grade,discipline:g.discipline,n:g.schools?.length,source:g.sources?.[0]}))));
+          const html=fs.readFileSync("public/escolas/sap-avaliacoes-2026/index.html","utf8");
+          for(const pat of ["function populateFilters","function renderAll","function renderSimula","function setTab","const GRADES","gradeSelect","state.grade"]){
+            let idx=html.indexOf(pat);if(idx>=0) console.log("SAP_HTML_SNIPPET",pat,html.slice(Math.max(0,idx-120),idx+1700).replace(/\\s+/g," "));
+          }
           NODE
       - name: Validate games
         run: npm run test:games
