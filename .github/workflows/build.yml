@@ -59,6 +59,7 @@ jobs:
           git add public/escolas/sap-avaliacoes-2026/index.html
           git add public/escolas/sap-avaliacoes-2026/dados.json
           git add docs/SAP_2_SERIE_EXPORT_2026.b64
+          git add docs/SAP_2_SERIE_RESUMO_2026.b64
           if git diff --cached --quiet; then
             echo "Sprint static build unchanged."
           else
