@@ -23,6 +23,27 @@ jobs:
       - name: Install site dependencies
         run: npm install --no-audit --no-fund
 
+      - name: Inspect SAP Simula schema
+        run: |
+          node - <<'NODE'
+          const fs = require("fs");
+          const db = JSON.parse(fs.readFileSync("public/escolas/sap-avaliacoes-2026/dados.json","utf8"));
+          const shape = x => Array.isArray(x)?{type:"array",len:x.length,sample:x.length?Object.keys(x[0]||{}).slice(0,30):[]}:(x && typeof x==="object"?{type:"object",keys:Object.keys(x).slice(0,40)}:String(x).slice(0,100));
+          console.log("SAP_SCHEMA_TOP",JSON.stringify(shape(db)));
+          for(const [k,v] of Object.entries(db)) console.log("SAP_SCHEMA_KEY",k,JSON.stringify(shape(v)));
+          const matches=[];
+          function walk(x,path,depth){
+            if(matches.length>5 || depth>6 || x===null || typeof x!=="object")return;
+            if(Array.isArray(x)) {for(let i=0;i<Math.min(x.length,100);i++)walk(x[i],path+"["+i+"]",depth+1);return}
+            const ent=Object.entries(x);
+            if(ent.some(([k,v])=> typeof v==="string" && /simula\s*\+/i.test(v))){
+              matches.push({path,fields:ent.map(([k,v])=>[k,shape(v)]).slice(0,35),sample:JSON.stringify(x).slice(0,1000)});
+            }
+            for(const [k,v] of ent)if(typeof v==="object")walk(v,path+"."+k,depth+1);
+          }
+          walk(db,"root",0);
+          console.log("SAP_SIMULA_SAMPLES",JSON.stringify(matches));
+          NODE
       - name: Validate games
         run: npm run test:games
 
