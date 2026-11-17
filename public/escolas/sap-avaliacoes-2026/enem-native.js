@@ -3,7 +3,7 @@
 "use strict";
 const BASE="/escolas/sap-avaliacoes-2026/enem-dados-2026.json";
 let dados=null, carregamento=null, ultimaSessao=null;
-const escolha={sim:1,serie:3,dia:1,municipio:"Todos",escola:"Todos",busca:""};
+const escolha={sim:5,serie:3,dia:1,area:"Todas",municipio:"Todos",escola:"Todos",busca:""};
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const numero=x=>Number(x||0).toLocaleString("pt-BR");
@@ -27,26 +27,26 @@ function fontes(){
  const inep=String(ultimaSessao.inep||"");
  return todas.map(f=>({...f,escolas:f.escolas.filter(e=>String(e.inep)===inep)}));
 }
-function juntar(sources,sim,serie,dia){
+function juntar(sources,sim,serie,dia,area="Todas"){
  const escolas=new Map();
- for(const arquivo of sources.filter(f=>f.sim===sim&&f.serie===serie&&f.dia===dia)){
+ for(const arquivo of sources.filter(f=>f.sim===sim&&f.serie===serie&&f.dia===dia&&(area==="Todas"||f.area===area))){
   for(const row of arquivo.escolas){
    const id=String(row.inep||row.escola);
    if(!escolas.has(id)){
-    escolas.set(id,{inep:id,escola:row.escola,municipio:row.municipio,alunos:0,turmas:0,online:0,impresso:0,
+    escolas.set(id,{inep:id,escola:row.escola,municipio:row.municipio,alunos:0,turmas:0,online:null,impresso:null,
      soma:0,nmedias:0,faixas:new Set(),skills:new Map()});
    }
    const item=escolas.get(id);
    item.alunos=Math.max(item.alunos,Number(row.alunos)||0);
    item.turmas=Math.max(item.turmas,Number(row.turmas)||0);
-   item.online=Math.max(item.online,Number(row.online)||0);
-   item.impresso=Math.max(item.impresso,Number(row.impresso)||0);
+   if(row.online!=null)item.online=Math.max(item.online??0,Number(row.online)||0);
+   if(row.impresso!=null)item.impresso=Math.max(item.impresso??0,Number(row.impresso)||0);
    if(!ehCidade(item.municipio)&&ehCidade(row.municipio))item.municipio=row.municipio;
    if(row.media!=null&&!Number.isNaN(Number(row.media))){item.soma+=Number(row.media);item.nmedias++;}
    if(row.faixa)item.faixas.add(row.faixa);
    for(const h of row.habilidades||[]){
     if(h.percentual==null)continue;
-    const k=String(h.habilidade).trim();
+    const k=(area==="Todas"&&arquivo.area?arquivo.area+": ":"")+String(h.habilidade).trim();
     let info=item.skills.get(k);
     if(!info){info={soma:0,n:0};item.skills.set(k,info);}
     info.soma+=Number(h.percentual);info.n++;
@@ -54,7 +54,7 @@ function juntar(sources,sim,serie,dia){
   }
  }
  return [...escolas.values()].map(e=>({
-  ...e,media:e.nmedias?e.soma/e.nmedias:null,faixa:e.faixas.size===1?[...e.faixas][0]:"Variável",
+  ...e,media:e.nmedias?e.soma/e.nmedias:null,faixa:e.faixas.size===0?"Não informada":e.faixas.size===1?[...e.faixas][0]:"Variável",
   habilidades:[...e.skills.entries()].map(([habilidade,i])=>({habilidade,percentual:i.soma/i.n}))
  })).sort((a,b)=>a.escola.localeCompare(b.escola,"pt-BR"));
 }
@@ -83,13 +83,15 @@ function atualizaFiltros(){
  if(!series.includes(escolha.serie))escolha.serie=series[0]||3;
  const dias=unico(todos.filter(x=>x.sim===escolha.sim&&x.serie===escolha.serie).map(x=>x.dia));
  if(!dias.includes(escolha.dia))escolha.dia=dias[0]||1;
- const orig=juntar(todos,escolha.sim,escolha.serie,escolha.dia);
+ const areas=unico(todos.filter(x=>x.sim===escolha.sim&&x.serie===escolha.serie&&x.dia===escolha.dia).map(x=>x.area).filter(Boolean));
+ if(!areas.includes(escolha.area))escolha.area="Todas";
+ const orig=juntar(todos,escolha.sim,escolha.serie,escolha.dia,escolha.area);
  const municipios=unico(orig.filter(e=>ehCidade(e.municipio)).map(e=>e.municipio));
  if(escolha.municipio!=="Todos"&&!municipios.includes(escolha.municipio))escolha.municipio="Todos";
  const escolas=orig.filter(e=>escolha.municipio==="Todos"||e.municipio===escolha.municipio);
  if(escolha.escola!=="Todos"&&!escolas.some(e=>e.inep===escolha.escola))escolha.escola="Todos";
  if(ultimaSessao?.role==="school")escolha.escola=String(ultimaSessao.inep||"");
- return {todos,simulados,series,dias,orig,municipios,escolas};
+ return {todos,simulados,series,dias,areas,orig,municipios,escolas};
 }
 function filtradas(lista){
  const query=neutro(escolha.busca.trim());
@@ -102,8 +104,8 @@ function barra(nome,val,max,percentual){
   '<div class="enem-track"><span style="width:'+w+'%;background:'+(percentual&&val<40?"#df7a32":"#078f82")+'"></span></div></div>';
 }
 function evolucao(sources,sel){
- const simulados=unico(sources.filter(x=>x.serie===escolha.serie&&x.dia===escolha.dia).map(x=>x.sim));
- const rodadas=simulados.map(sim=>({sim,rows:juntar(sources,sim,escolha.serie,escolha.dia)}));
+ const simulados=unico(sources.filter(x=>x.serie===escolha.serie&&x.dia===escolha.dia&&(escolha.area==="Todas"||x.area===escolha.area)).map(x=>x.sim));
+ const rodadas=simulados.map(sim=>({sim,rows:juntar(sources,sim,escolha.serie,escolha.dia,escolha.area)}));
  let inepsComuns=[];
  if(rodadas.length){
   inepsComuns=rodadas[0].rows.map(r=>r.inep).filter(id=>rodadas.every(rd=>rd.rows.some(r=>r.inep===id)));
@@ -131,7 +133,7 @@ function evolucao(sources,sel){
   if(p.media!=null)svg+='<circle cx="'+x+'" cy="'+plotY(p.media)+'" r="8" stroke="white" stroke-width="3" fill="#078f82"/><text x="'+x+'" y="'+(plotY(p.media)-17)+'" text-anchor="middle" fill="#075e59" font-size="16" font-weight="800">'+nota(p.media)+'</text>';
  });
  svg+='</svg>';
- return '<div class="enem-card enem-chart-card"><div class="enem-section-title"><div><h3>Evolução por simulado</h3><p>'+escolha.serie+'ª série · '+escolha.dia+'º dia · '+(sel==="Todos"?"mesmas escolas nas aplicações":"escola selecionada")+'</p></div>'+
+ return '<div class="enem-card enem-chart-card"><div class="enem-section-title"><div><h3>Evolução por simulado</h3><p>'+escolha.serie+'ª série · '+escolha.dia+'º dia · '+(escolha.area==="Todas"?"todas as áreas":esc(escolha.area))+' · '+(sel==="Todos"?"mesmas escolas nas aplicações":"escola selecionada")+'</p></div>'+
   '<div class="enem-delta '+(delta==null?"":delta<0?"enem-neg":"enem-pos")+'">'+(delta==null?"—":(delta>0?"+":"")+nota(delta))+' <small>pontos</small></div></div>'+
   (validos.length?'<div class="enem-svg">'+svg+'</div>':'<div class="enem-empty">Não há resultados comparáveis nos simulados disponíveis para este recorte.</div>')+
   '<div class="enem-mini-table"><table><thead><tr><th>Aplicação</th><th>Média</th><th>Escolas analisadas</th></tr></thead><tbody>'+
@@ -152,6 +154,7 @@ function renderPainel(){
  '<div class="enem-filtros"><div class="enem-field"><label for="enemSim">Simulado</label><select id="enemSim">'+opcoes(r.simulados,escolha.sim,x=>x+"º simulado")+'</select></div>'+
  '<div class="enem-field"><label for="enemSerie">Série</label><select id="enemSerie">'+opcoes(r.series,escolha.serie,x=>x+"ª série")+'</select></div>'+
  '<div class="enem-field"><label for="enemDia">Dia de prova</label><select id="enemDia">'+opcoes(r.dias,escolha.dia,x=>x+"º dia")+'</select></div>'+
+ (r.areas.length?'<div class="enem-field"><label for="enemArea">Área do conhecimento</label><select id="enemArea">'+opcoes(["Todas",...r.areas],escolha.area,x=>x==="Todas"?"Todas as áreas":x)+'</select></div>':'')+
  (permitirTodas?'<div class="enem-field"><label for="enemMunicipio">Município</label><select id="enemMunicipio">'+opcoes(["Todos",...r.municipios],escolha.municipio)+'</select></div>'+
  '<div class="enem-field"><label for="enemEscola">Escola</label><select id="enemEscola">'+opcoes(["Todos",...r.escolas.map(e=>e.inep)],selecionado,id=>id==="Todos"?"Todas as escolas":(r.escolas.find(e=>e.inep===id)?.escola||id))+'</select></div>':'')+
  '<div class="enem-field"><label for="enemBusca">Buscar</label><input type="search" id="enemBusca" placeholder="Nome ou INEP" value="'+esc(escolha.busca)+'"></div>'+
@@ -171,14 +174,14 @@ function renderPainel(){
  '<div class="enem-table-wrap"><table class="enem-table"><thead><tr><th>Escola / INEP</th><th>Município</th><th>Alunos</th><th>Turmas</th><th>Média</th><th>Faixa</th></tr></thead><tbody>'+
  ordem.map(e=>'<tr data-inep="'+esc(e.inep)+'" class="enem-school-row"><td><strong>'+esc(e.escola)+'</strong><small>'+esc(e.inep)+'</small></td><td>'+esc(e.municipio)+'</td><td>'+numero(e.alunos)+'</td><td>'+numero(e.turmas)+'</td><td><strong>'+nota(e.media)+'</strong></td><td>'+esc(e.faixa)+'</td></tr>').join("")+
  '</tbody></table></div></div>'+
- '<p class="enem-note enem-bottom"><b>Critério de análise:</b> resultados agrupados por simulado, série, dia e INEP, sem repetições por exportação. Quando a escola possui médias em diferentes boletins, a média apresentada é aritmética entre esses boletins. Essa síntese é indicativa e não substitui a proficiência TRI oficial. A taxa de participação exige o número de estudantes previstos, ausente nas fontes.</p>';
+ '<p class="enem-note enem-bottom"><b>Critério de análise:</b> resultados agrupados por simulado, série, dia, área (quando informada) e INEP, sem repetições por exportação. Quando a escola possui médias em diferentes boletins, a média apresentada é aritmética entre esses boletins. Essa síntese é indicativa e não substitui a proficiência TRI oficial. A taxa de participação exige o número de estudantes previstos, ausente nas fontes.</p>';
  const change=(id,key,fun)=>{const el=$(id);if(el)el.addEventListener("change",ev=>{
   escolha[key]=fun(ev.target.value);
-  if(["sim","serie","dia","municipio"].includes(key)){if(key!=="municipio")escolha.municipio="Todos";escolha.escola="Todos";}
+  if(["sim","serie","dia","area","municipio"].includes(key)){if(["sim","serie","dia"].includes(key))escolha.area="Todas";if(key!=="municipio")escolha.municipio="Todos";escolha.escola="Todos";}
   if(ultimaSessao?.role==="school")escolha.escola=String(ultimaSessao.inep||"");
   renderPainel();
  });};
- change("enemSim","sim",Number);change("enemSerie","serie",Number);change("enemDia","dia",Number);
+ change("enemSim","sim",Number);change("enemSerie","serie",Number);change("enemDia","dia",Number);change("enemArea","area",String);
  change("enemMunicipio","municipio",String);change("enemEscola","escola",String);
  $("enemBusca")?.addEventListener("change",ev=>{escolha.busca=ev.target.value;renderPainel();});
  $("enemExportar")?.addEventListener("click",()=>exportar(ordem));
@@ -190,9 +193,9 @@ function renderPainel(){
 }
 function exportar(rows){
  const escCsv=x=>'"'+String(x??"").replace(/"/g,'""')+'"';
- const header=["Simulado","Série","Dia","INEP","Escola","Município","Alunos","Online","Impresso","Turmas","Média","Faixa"];
+ const header=["Simulado","Série","Dia","Área","INEP","Escola","Município","Alunos","Online","Impresso","Turmas","Média","Faixa"];
  const lines=[header.map(escCsv).join(";")];
- for(const r of rows)lines.push([escolha.sim,escolha.serie,escolha.dia,r.inep,r.escola,r.municipio,r.alunos,r.online,r.impresso,r.turmas,r.media==null?"":nota(r.media),r.faixa].map(escCsv).join(";"));
+ for(const r of rows)lines.push([escolha.sim,escolha.serie,escolha.dia,escolha.area,r.inep,r.escola,r.municipio,r.alunos,r.online,r.impresso,r.turmas,r.media==null?"":nota(r.media),r.faixa].map(escCsv).join(";"));
  const blob=new Blob(["\ufeff"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"});
  const url=URL.createObjectURL(blob);
  const a=document.createElement("a");a.href=url;a.download="DIASMATH_ENEM_"+escolha.sim+"sim_"+escolha.serie+"serie_"+escolha.dia+"dia.csv";
