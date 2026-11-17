@@ -1,0 +1,2104 @@
+{
+  "versao": "SIMULA-2026-5-20261117",
+  "descricao": "Resultados do 5º Simula+ e do Modelo 03 - Alternância da 2ª série, extraídos dos PDFs SEDUC-PI (16)-(19), recebidos em 17/11/2026; apenas sete descritores por boletim estão explicitamente detalhados nas colunas A/E/P.",
+  "aplicacoes": [
+    {
+      "origem": "consolidado-escolas (16)(1).pdf",
+      "modalidade": "regular",
+      "avaliacao": "5ª SIMULA + LÍNGUA PORTUGUESA E MATEMÁTICA - 2ª SÉRIE",
+      "serie": "2ª Série",
+      "simulado": 5,
+      "disciplina": "Língua Portuguesa",
+      "descritores": [
+        {
+          "codigo": "D14",
+          "itens": 1
+        },
+        {
+          "codigo": "D12",
+          "itens": 1
+        },
+        {
+          "codigo": "D21",
+          "itens": 1
+        },
+        {
+          "codigo": "D15",
+          "itens": 1
+        },
+        {
+          "codigo": "D16",
+          "itens": 1
+        },
+        {
+          "codigo": "D13",
+          "itens": 2
+        },
+        {
+          "codigo": "D05",
+          "itens": 1
+        }
+      ],
+      "escolas": [
+        {
+          "inep": "22080333",
+          "turmas": 5,
+          "alunos": 120,
+          "media": 4.4,
+          "habilidades": [
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 49,
+              "esperado": 120,
+              "percentual": 41
+            },
+            {
+              "codigo": "D12",
+              "itens": 1,
+              "acertos": 78,
+              "esperado": 120,
+              "percentual": 65
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 43,
+              "esperado": 120,
+              "percentual": 36
+            },
+            {
+              "codigo": "D15",
+              "itens": 1,
+              "acertos": 45,
+              "esperado": 120,
+              "percentual": 38
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 38,
+              "esperado": 120,
+              "percentual": 32
+            },
+            {
+              "codigo": "D13",
+              "itens": 2,
+              "acertos": 110,
+              "esperado": 240,
+              "percentual": 46
+            },
+            {
+              "codigo": "D05",
+              "itens": 1,
+              "acertos": 20,
+              "esperado": 120,
+              "percentual": 17
+            }
+          ]
+        },
+        {
+          "inep": "22133968",
+          "turmas": 3,
+          "alunos": 89,
+          "media": 4.8,
+          "habilidades": [
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 50,
+              "esperado": 89,
+              "percentual": 56
+            },
+            {
+              "codigo": "D12",
+              "itens": 1,
+              "acertos": 51,
+              "esperado": 89,
+              "percentual": 57
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 34,
+              "esperado": 89,
+              "percentual": 38
+            },
+            {
+              "codigo": "D15",
+              "itens": 1,
+              "acertos": 49,
+              "esperado": 89,
+              "percentual": 55
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 23,
+              "esperado": 89,
+              "percentual": 26
+            },
+            {
+              "codigo": "D13",
+              "itens": 2,
+              "acertos": 87,
+              "esperado": 178,
+              "percentual": 49
+            },
+            {
+              "codigo": "D05",
+              "itens": 1,
+              "acertos": 24,
+              "esperado": 89,
+              "percentual": 27
+            }
+          ]
+        },
+        {
+          "inep": "22078096",
+          "turmas": 2,
+          "alunos": 63,
+          "media": 4.4,
+          "habilidades": [
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 22,
+              "esperado": 63,
+              "percentual": 35
+            },
+            {
+              "codigo": "D12",
+              "itens": 1,
+              "acertos": 32,
+              "esperado": 63,
+              "percentual": 51
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 23,
+              "esperado": 63,
+              "percentual": 37
+            },
+            {
+              "codigo": "D15",
+              "itens": 1,
+              "acertos": 30,
+              "esperado": 63,
+              "percentual": 48
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 12,
+              "esperado": 63,
+              "percentual": 19
+            },
+            {
+              "codigo": "D13",
+              "itens": 2,
+              "acertos": 49,
+              "esperado": 126,
+              "percentual": 39
+            },
+            {
+              "codigo": "D05",
+              "itens": 1,
+              "acertos": 11,
+              "esperado": 63,
+              "percentual": 17
+            }
+          ]
+        },
+        {
+          "inep": "22083510",
+          "turmas": 2,
+          "alunos": 40,
+          "media": 4.1,
+          "habilidades": [
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 13,
+              "esperado": 40,
+              "percentual": 33
+            },
+            {
+              "codigo": "D12",
+              "itens": 1,
+              "acertos": 23,
+              "esperado": 40,
+              "percentual": 58
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 16,
+              "esperado": 40,
+              "percentual": 40
+            },
+            {
+              "codigo": "D15",
+              "itens": 1,
+              "acertos": 11,
+              "esperado": 40,
+              "percentual": 28
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 7,
+              "esperado": 40,
+              "percentual": 18
+            },
+            {
+              "codigo": "D13",
+              "itens": 2,
+              "acertos": 32,
+              "esperado": 80,
+              "percentual": 40
+            },
+            {
+              "codigo": "D05",
+              "itens": 1,
+              "acertos": 10,
+              "esperado": 40,
+              "percentual": 25
+            }
+          ]
+        },
+        {
+          "inep": "22083022",
+          "turmas": 2,
+          "alunos": 61,
+          "media": 3.6,
+          "habilidades": [
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 11,
+              "esperado": 61,
+              "percentual": 18
+            },
+            {
+              "codigo": "D12",
+              "itens": 1,
+              "acertos": 22,
+              "esperado": 61,
+              "percentual": 36
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 17,
+              "esperado": 61,
+              "percentual": 28
+            },
+            {
+              "codigo": "D15",
+              "itens": 1,
+              "acertos": 17,
+              "esperado": 61,
+              "percentual": 28
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 7,
+              "esperado": 61,
+              "percentual": 11
+            },
+            {
+              "codigo": "D13",
+              "itens": 2,
+              "acertos": 37,
+              "esperado": 122,
+              "percentual": 30
+            },
+            {
+              "codigo": "D05",
+              "itens": 1,
+              "acertos": 21,
+              "esperado": 61,
+              "percentual": 34
+            }
+          ]
+        },
+        {
+          "inep": "22136886",
+          "turmas": 1,
+          "alunos": 17,
+          "media": 5.7,
+          "habilidades": [
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 9,
+              "esperado": 17,
+              "percentual": 53
+            },
+            {
+              "codigo": "D12",
+              "itens": 1,
+              "acertos": 15,
+              "esperado": 17,
+              "percentual": 88
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 13,
+              "esperado": 17,
+              "percentual": 76
+            },
+            {
+              "codigo": "D15",
+              "itens": 1,
+              "acertos": 13,
+              "esperado": 17,
+              "percentual": 76
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 8,
+              "esperado": 17,
+              "percentual": 47
+            },
+            {
+              "codigo": "D13",
+              "itens": 2,
+              "acertos": 16,
+              "esperado": 34,
+              "percentual": 47
+            },
+            {
+              "codigo": "D05",
+              "itens": 1,
+              "acertos": 1,
+              "esperado": 17,
+              "percentual": 6
+            }
+          ]
+        },
+        {
+          "inep": "22088024",
+          "turmas": 2,
+          "alunos": 46,
+          "media": 3,
+          "habilidades": [
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 10,
+              "esperado": 46,
+              "percentual": 22
+            },
+            {
+              "codigo": "D12",
+              "itens": 1,
+              "acertos": 16,
+              "esperado": 46,
+              "percentual": 35
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 9,
+              "esperado": 46,
+              "percentual": 20
+            },
+            {
+              "codigo": "D15",
+              "itens": 1,
+              "acertos": 17,
+              "esperado": 46,
+              "percentual": 37
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 9,
+              "esperado": 46,
+              "percentual": 20
+            },
+            {
+              "codigo": "D13",
+              "itens": 2,
+              "acertos": 25,
+              "esperado": 92,
+              "percentual": 27
+            },
+            {
+              "codigo": "D05",
+              "itens": 1,
+              "acertos": 13,
+              "esperado": 46,
+              "percentual": 28
+            }
+          ]
+        },
+        {
+          "inep": "22223606",
+          "turmas": 1,
+          "alunos": 27,
+          "media": 5.1,
+          "habilidades": [
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 17,
+              "esperado": 27,
+              "percentual": 63
+            },
+            {
+              "codigo": "D12",
+              "itens": 1,
+              "acertos": 22,
+              "esperado": 27,
+              "percentual": 81
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 3,
+              "esperado": 27,
+              "percentual": 11
+            },
+            {
+              "codigo": "D15",
+              "itens": 1,
+              "acertos": 19,
+              "esperado": 27,
+              "percentual": 70
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 5,
+              "esperado": 27,
+              "percentual": 19
+            },
+            {
+              "codigo": "D13",
+              "itens": 2,
+              "acertos": 13,
+              "esperado": 54,
+              "percentual": 24
+            },
+            {
+              "codigo": "D05",
+              "itens": 1,
+              "acertos": 6,
+              "esperado": 27,
+              "percentual": 22
+            }
+          ]
+        },
+        {
+          "inep": "22080481",
+          "turmas": 2,
+          "alunos": 41,
+          "media": 4.4,
+          "habilidades": [
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 19,
+              "esperado": 41,
+              "percentual": 46
+            },
+            {
+              "codigo": "D12",
+              "itens": 1,
+              "acertos": 24,
+              "esperado": 41,
+              "percentual": 59
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 19,
+              "esperado": 41,
+              "percentual": 46
+            },
+            {
+              "codigo": "D15",
+              "itens": 1,
+              "acertos": 9,
+              "esperado": 41,
+              "percentual": 22
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 11,
+              "esperado": 41,
+              "percentual": 27
+            },
+            {
+              "codigo": "D13",
+              "itens": 2,
+              "acertos": 35,
+              "esperado": 82,
+              "percentual": 43
+            },
+            {
+              "codigo": "D05",
+              "itens": 1,
+              "acertos": 3,
+              "esperado": 41,
+              "percentual": 7
+            }
+          ]
+        },
+        {
+          "inep": "22080449",
+          "turmas": 3,
+          "alunos": 59,
+          "media": 4.1,
+          "habilidades": [
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 12,
+              "esperado": 59,
+              "percentual": 20
+            },
+            {
+              "codigo": "D12",
+              "itens": 1,
+              "acertos": 33,
+              "esperado": 59,
+              "percentual": 56
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 19,
+              "esperado": 59,
+              "percentual": 32
+            },
+            {
+              "codigo": "D15",
+              "itens": 1,
+              "acertos": 27,
+              "esperado": 59,
+              "percentual": 46
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 11,
+              "esperado": 59,
+              "percentual": 19
+            },
+            {
+              "codigo": "D13",
+              "itens": 2,
+              "acertos": 38,
+              "esperado": 118,
+              "percentual": 32
+            },
+            {
+              "codigo": "D05",
+              "itens": 1,
+              "acertos": 17,
+              "esperado": 59,
+              "percentual": 29
+            }
+          ]
+        },
+        {
+          "inep": "22080392",
+          "turmas": 3,
+          "alunos": 51,
+          "media": 4.6,
+          "habilidades": [
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 4,
+              "esperado": 51,
+              "percentual": 8
+            },
+            {
+              "codigo": "D12",
+              "itens": 1,
+              "acertos": 33,
+              "esperado": 51,
+              "percentual": 65
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 30,
+              "esperado": 51,
+              "percentual": 59
+            },
+            {
+              "codigo": "D15",
+              "itens": 1,
+              "acertos": 9,
+              "esperado": 51,
+              "percentual": 18
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 19,
+              "esperado": 51,
+              "percentual": 37
+            },
+            {
+              "codigo": "D13",
+              "itens": 2,
+              "acertos": 56,
+              "esperado": 102,
+              "percentual": 55
+            },
+            {
+              "codigo": "D05",
+              "itens": 1,
+              "acertos": 9,
+              "esperado": 51,
+              "percentual": 18
+            }
+          ]
+        },
+        {
+          "inep": "22083480",
+          "turmas": 2,
+          "alunos": 52,
+          "media": 4.9,
+          "habilidades": [
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 27,
+              "esperado": 52,
+              "percentual": 52
+            },
+            {
+              "codigo": "D12",
+              "itens": 1,
+              "acertos": 29,
+              "esperado": 52,
+              "percentual": 56
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 12,
+              "esperado": 52,
+              "percentual": 23
+            },
+            {
+              "codigo": "D15",
+              "itens": 1,
+              "acertos": 21,
+              "esperado": 52,
+              "percentual": 40
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 25,
+              "esperado": 52,
+              "percentual": 48
+            },
+            {
+              "codigo": "D13",
+              "itens": 2,
+              "acertos": 41,
+              "esperado": 104,
+              "percentual": 39
+            },
+            {
+              "codigo": "D05",
+              "itens": 1,
+              "acertos": 9,
+              "esperado": 52,
+              "percentual": 17
+            }
+          ]
+        },
+        {
+          "inep": "22099476",
+          "turmas": 2,
+          "alunos": 36,
+          "media": 6.6,
+          "habilidades": [
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 21,
+              "esperado": 36,
+              "percentual": 58
+            },
+            {
+              "codigo": "D12",
+              "itens": 1,
+              "acertos": 26,
+              "esperado": 36,
+              "percentual": 72
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 24,
+              "esperado": 36,
+              "percentual": 67
+            },
+            {
+              "codigo": "D15",
+              "itens": 1,
+              "acertos": 27,
+              "esperado": 36,
+              "percentual": 75
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 18,
+              "esperado": 36,
+              "percentual": 50
+            },
+            {
+              "codigo": "D13",
+              "itens": 2,
+              "acertos": 53,
+              "esperado": 72,
+              "percentual": 74
+            },
+            {
+              "codigo": "D05",
+              "itens": 1,
+              "acertos": 7,
+              "esperado": 36,
+              "percentual": 19
+            }
+          ]
+        },
+        {
+          "inep": "22134050",
+          "turmas": 2,
+          "alunos": 46,
+          "media": 3.8,
+          "habilidades": [
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 7,
+              "esperado": 46,
+              "percentual": 15
+            },
+            {
+              "codigo": "D12",
+              "itens": 1,
+              "acertos": 22,
+              "esperado": 46,
+              "percentual": 48
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 20,
+              "esperado": 46,
+              "percentual": 43
+            },
+            {
+              "codigo": "D15",
+              "itens": 1,
+              "acertos": 13,
+              "esperado": 46,
+              "percentual": 28
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 13,
+              "esperado": 46,
+              "percentual": 28
+            },
+            {
+              "codigo": "D13",
+              "itens": 2,
+              "acertos": 24,
+              "esperado": 92,
+              "percentual": 26
+            },
+            {
+              "codigo": "D05",
+              "itens": 1,
+              "acertos": 13,
+              "esperado": 46,
+              "percentual": 28
+            }
+          ]
+        },
+        {
+          "inep": "22061258",
+          "turmas": 1,
+          "alunos": 25,
+          "media": 4.8,
+          "habilidades": [
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 11,
+              "esperado": 25,
+              "percentual": 44
+            },
+            {
+              "codigo": "D12",
+              "itens": 1,
+              "acertos": 10,
+              "esperado": 25,
+              "percentual": 40
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 6,
+              "esperado": 25,
+              "percentual": 24
+            },
+            {
+              "codigo": "D15",
+              "itens": 1,
+              "acertos": 15,
+              "esperado": 25,
+              "percentual": 60
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 4,
+              "esperado": 25,
+              "percentual": 16
+            },
+            {
+              "codigo": "D13",
+              "itens": 2,
+              "acertos": 22,
+              "esperado": 50,
+              "percentual": 44
+            },
+            {
+              "codigo": "D05",
+              "itens": 1,
+              "acertos": 5,
+              "esperado": 25,
+              "percentual": 20
+            }
+          ]
+        },
+        {
+          "inep": "22083065",
+          "turmas": 2,
+          "alunos": 51,
+          "media": 5.4,
+          "habilidades": [
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 26,
+              "esperado": 51,
+              "percentual": 51
+            },
+            {
+              "codigo": "D12",
+              "itens": 1,
+              "acertos": 39,
+              "esperado": 51,
+              "percentual": 76
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 27,
+              "esperado": 51,
+              "percentual": 53
+            },
+            {
+              "codigo": "D15",
+              "itens": 1,
+              "acertos": 29,
+              "esperado": 51,
+              "percentual": 57
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 17,
+              "esperado": 51,
+              "percentual": 33
+            },
+            {
+              "codigo": "D13",
+              "itens": 2,
+              "acertos": 48,
+              "esperado": 102,
+              "percentual": 47
+            },
+            {
+              "codigo": "D05",
+              "itens": 1,
+              "acertos": 22,
+              "esperado": 51,
+              "percentual": 43
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "origem": "consolidado-escolas (17)(1).pdf",
+      "modalidade": "regular",
+      "avaliacao": "5ª SIMULA + LÍNGUA PORTUGUESA E MATEMÁTICA - 2ª SÉRIE",
+      "serie": "2ª Série",
+      "simulado": 5,
+      "disciplina": "Matemática",
+      "descritores": [
+        {
+          "codigo": "D12 EF",
+          "itens": 1
+        },
+        {
+          "codigo": "D14",
+          "itens": 1
+        },
+        {
+          "codigo": "D17",
+          "itens": 1
+        },
+        {
+          "codigo": "D26",
+          "itens": 1
+        },
+        {
+          "codigo": "D32 EF",
+          "itens": 2
+        },
+        {
+          "codigo": "D16",
+          "itens": 2
+        },
+        {
+          "codigo": "D29",
+          "itens": 2
+        }
+      ],
+      "escolas": [
+        {
+          "inep": "22080333",
+          "turmas": 5,
+          "alunos": 120,
+          "media": 4.3,
+          "habilidades": [
+            {
+              "codigo": "D12 EF",
+              "itens": 1,
+              "acertos": 41,
+              "esperado": 120,
+              "percentual": 34
+            },
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 74,
+              "esperado": 120,
+              "percentual": 62
+            },
+            {
+              "codigo": "D17",
+              "itens": 1,
+              "acertos": 70,
+              "esperado": 120,
+              "percentual": 58
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 51,
+              "esperado": 120,
+              "percentual": 43
+            },
+            {
+              "codigo": "D32 EF",
+              "itens": 2,
+              "acertos": 80,
+              "esperado": 240,
+              "percentual": 33
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 108,
+              "esperado": 240,
+              "percentual": 45
+            },
+            {
+              "codigo": "D29",
+              "itens": 2,
+              "acertos": 110,
+              "esperado": 240,
+              "percentual": 46
+            }
+          ]
+        },
+        {
+          "inep": "22133968",
+          "turmas": 3,
+          "alunos": 89,
+          "media": 3.8,
+          "habilidades": [
+            {
+              "codigo": "D12 EF",
+              "itens": 1,
+              "acertos": 11,
+              "esperado": 89,
+              "percentual": 12
+            },
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 53,
+              "esperado": 89,
+              "percentual": 60
+            },
+            {
+              "codigo": "D17",
+              "itens": 1,
+              "acertos": 41,
+              "esperado": 89,
+              "percentual": 46
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 50,
+              "esperado": 89,
+              "percentual": 56
+            },
+            {
+              "codigo": "D32 EF",
+              "itens": 2,
+              "acertos": 51,
+              "esperado": 178,
+              "percentual": 29
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 52,
+              "esperado": 178,
+              "percentual": 29
+            },
+            {
+              "codigo": "D29",
+              "itens": 2,
+              "acertos": 64,
+              "esperado": 178,
+              "percentual": 36
+            }
+          ]
+        },
+        {
+          "inep": "22078096",
+          "turmas": 2,
+          "alunos": 63,
+          "media": 2.5,
+          "habilidades": [
+            {
+              "codigo": "D12 EF",
+              "itens": 1,
+              "acertos": 7,
+              "esperado": 63,
+              "percentual": 11
+            },
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 40,
+              "esperado": 63,
+              "percentual": 63
+            },
+            {
+              "codigo": "D17",
+              "itens": 1,
+              "acertos": 14,
+              "esperado": 63,
+              "percentual": 22
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 30,
+              "esperado": 63,
+              "percentual": 48
+            },
+            {
+              "codigo": "D32 EF",
+              "itens": 2,
+              "acertos": 15,
+              "esperado": 126,
+              "percentual": 12
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 16,
+              "esperado": 126,
+              "percentual": 13
+            },
+            {
+              "codigo": "D29",
+              "itens": 2,
+              "acertos": 35,
+              "esperado": 126,
+              "percentual": 28
+            }
+          ]
+        },
+        {
+          "inep": "22083510",
+          "turmas": 2,
+          "alunos": 40,
+          "media": 2.8,
+          "habilidades": [
+            {
+              "codigo": "D12 EF",
+              "itens": 1,
+              "acertos": 8,
+              "esperado": 40,
+              "percentual": 20
+            },
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 18,
+              "esperado": 40,
+              "percentual": 45
+            },
+            {
+              "codigo": "D17",
+              "itens": 1,
+              "acertos": 12,
+              "esperado": 40,
+              "percentual": 30
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 21,
+              "esperado": 40,
+              "percentual": 53
+            },
+            {
+              "codigo": "D32 EF",
+              "itens": 2,
+              "acertos": 22,
+              "esperado": 80,
+              "percentual": 28
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 14,
+              "esperado": 80,
+              "percentual": 18
+            },
+            {
+              "codigo": "D29",
+              "itens": 2,
+              "acertos": 27,
+              "esperado": 80,
+              "percentual": 34
+            }
+          ]
+        },
+        {
+          "inep": "22083022",
+          "turmas": 2,
+          "alunos": 61,
+          "media": 2.2,
+          "habilidades": [
+            {
+              "codigo": "D12 EF",
+              "itens": 1,
+              "acertos": 10,
+              "esperado": 61,
+              "percentual": 16
+            },
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 25,
+              "esperado": 61,
+              "percentual": 41
+            },
+            {
+              "codigo": "D17",
+              "itens": 1,
+              "acertos": 11,
+              "esperado": 61,
+              "percentual": 18
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 19,
+              "esperado": 61,
+              "percentual": 31
+            },
+            {
+              "codigo": "D32 EF",
+              "itens": 2,
+              "acertos": 13,
+              "esperado": 122,
+              "percentual": 11
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 16,
+              "esperado": 122,
+              "percentual": 13
+            },
+            {
+              "codigo": "D29",
+              "itens": 2,
+              "acertos": 30,
+              "esperado": 122,
+              "percentual": 25
+            }
+          ]
+        },
+        {
+          "inep": "22136886",
+          "turmas": 1,
+          "alunos": 17,
+          "media": 5.6,
+          "habilidades": [
+            {
+              "codigo": "D12 EF",
+              "itens": 1,
+              "acertos": 9,
+              "esperado": 17,
+              "percentual": 53
+            },
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 9,
+              "esperado": 17,
+              "percentual": 53
+            },
+            {
+              "codigo": "D17",
+              "itens": 1,
+              "acertos": 3,
+              "esperado": 17,
+              "percentual": 18
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 2,
+              "esperado": 17,
+              "percentual": 12
+            },
+            {
+              "codigo": "D32 EF",
+              "itens": 2,
+              "acertos": 20,
+              "esperado": 34,
+              "percentual": 59
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 12,
+              "esperado": 34,
+              "percentual": 35
+            },
+            {
+              "codigo": "D29",
+              "itens": 2,
+              "acertos": 22,
+              "esperado": 34,
+              "percentual": 65
+            }
+          ]
+        },
+        {
+          "inep": "22088024",
+          "turmas": 2,
+          "alunos": 46,
+          "media": 2.1,
+          "habilidades": [
+            {
+              "codigo": "D12 EF",
+              "itens": 1,
+              "acertos": 5,
+              "esperado": 46,
+              "percentual": 11
+            },
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 16,
+              "esperado": 46,
+              "percentual": 35
+            },
+            {
+              "codigo": "D17",
+              "itens": 1,
+              "acertos": 7,
+              "esperado": 46,
+              "percentual": 15
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 8,
+              "esperado": 46,
+              "percentual": 17
+            },
+            {
+              "codigo": "D32 EF",
+              "itens": 2,
+              "acertos": 14,
+              "esperado": 92,
+              "percentual": 15
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 12,
+              "esperado": 92,
+              "percentual": 13
+            },
+            {
+              "codigo": "D29",
+              "itens": 2,
+              "acertos": 24,
+              "esperado": 92,
+              "percentual": 26
+            }
+          ]
+        },
+        {
+          "inep": "22223606",
+          "turmas": 1,
+          "alunos": 27,
+          "media": 5.4,
+          "habilidades": [
+            {
+              "codigo": "D12 EF",
+              "itens": 1,
+              "acertos": 19,
+              "esperado": 27,
+              "percentual": 70
+            },
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 22,
+              "esperado": 27,
+              "percentual": 81
+            },
+            {
+              "codigo": "D17",
+              "itens": 1,
+              "acertos": 19,
+              "esperado": 27,
+              "percentual": 70
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 24,
+              "esperado": 27,
+              "percentual": 89
+            },
+            {
+              "codigo": "D32 EF",
+              "itens": 2,
+              "acertos": 15,
+              "esperado": 54,
+              "percentual": 28
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 9,
+              "esperado": 54,
+              "percentual": 17
+            },
+            {
+              "codigo": "D29",
+              "itens": 2,
+              "acertos": 39,
+              "esperado": 54,
+              "percentual": 72
+            }
+          ]
+        },
+        {
+          "inep": "22080481",
+          "turmas": 2,
+          "alunos": 41,
+          "media": 3.7,
+          "habilidades": [
+            {
+              "codigo": "D12 EF",
+              "itens": 1,
+              "acertos": 12,
+              "esperado": 41,
+              "percentual": 29
+            },
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 14,
+              "esperado": 41,
+              "percentual": 34
+            },
+            {
+              "codigo": "D17",
+              "itens": 1,
+              "acertos": 15,
+              "esperado": 41,
+              "percentual": 37
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 24,
+              "esperado": 41,
+              "percentual": 59
+            },
+            {
+              "codigo": "D32 EF",
+              "itens": 2,
+              "acertos": 15,
+              "esperado": 82,
+              "percentual": 18
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 35,
+              "esperado": 82,
+              "percentual": 43
+            },
+            {
+              "codigo": "D29",
+              "itens": 2,
+              "acertos": 33,
+              "esperado": 82,
+              "percentual": 40
+            }
+          ]
+        },
+        {
+          "inep": "22080449",
+          "turmas": 3,
+          "alunos": 59,
+          "media": 3.7,
+          "habilidades": [
+            {
+              "codigo": "D12 EF",
+              "itens": 1,
+              "acertos": 10,
+              "esperado": 59,
+              "percentual": 17
+            },
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 37,
+              "esperado": 59,
+              "percentual": 63
+            },
+            {
+              "codigo": "D17",
+              "itens": 1,
+              "acertos": 24,
+              "esperado": 59,
+              "percentual": 41
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 28,
+              "esperado": 59,
+              "percentual": 47
+            },
+            {
+              "codigo": "D32 EF",
+              "itens": 2,
+              "acertos": 45,
+              "esperado": 118,
+              "percentual": 38
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 22,
+              "esperado": 118,
+              "percentual": 19
+            },
+            {
+              "codigo": "D29",
+              "itens": 2,
+              "acertos": 54,
+              "esperado": 118,
+              "percentual": 46
+            }
+          ]
+        },
+        {
+          "inep": "22080392",
+          "turmas": 3,
+          "alunos": 51,
+          "media": 5,
+          "habilidades": [
+            {
+              "codigo": "D12 EF",
+              "itens": 1,
+              "acertos": 34,
+              "esperado": 51,
+              "percentual": 67
+            },
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 25,
+              "esperado": 51,
+              "percentual": 49
+            },
+            {
+              "codigo": "D17",
+              "itens": 1,
+              "acertos": 31,
+              "esperado": 51,
+              "percentual": 61
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 27,
+              "esperado": 51,
+              "percentual": 53
+            },
+            {
+              "codigo": "D32 EF",
+              "itens": 2,
+              "acertos": 51,
+              "esperado": 102,
+              "percentual": 50
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 47,
+              "esperado": 102,
+              "percentual": 46
+            },
+            {
+              "codigo": "D29",
+              "itens": 2,
+              "acertos": 48,
+              "esperado": 102,
+              "percentual": 47
+            }
+          ]
+        },
+        {
+          "inep": "22083480",
+          "turmas": 2,
+          "alunos": 52,
+          "media": 3.8,
+          "habilidades": [
+            {
+              "codigo": "D12 EF",
+              "itens": 1,
+              "acertos": 15,
+              "esperado": 52,
+              "percentual": 29
+            },
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 12,
+              "esperado": 52,
+              "percentual": 23
+            },
+            {
+              "codigo": "D17",
+              "itens": 1,
+              "acertos": 22,
+              "esperado": 52,
+              "percentual": 42
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 20,
+              "esperado": 52,
+              "percentual": 38
+            },
+            {
+              "codigo": "D32 EF",
+              "itens": 2,
+              "acertos": 32,
+              "esperado": 104,
+              "percentual": 31
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 36,
+              "esperado": 104,
+              "percentual": 35
+            },
+            {
+              "codigo": "D29",
+              "itens": 2,
+              "acertos": 49,
+              "esperado": 104,
+              "percentual": 47
+            }
+          ]
+        },
+        {
+          "inep": "22099476",
+          "turmas": 2,
+          "alunos": 36,
+          "media": 4.8,
+          "habilidades": [
+            {
+              "codigo": "D12 EF",
+              "itens": 1,
+              "acertos": 0,
+              "esperado": 36,
+              "percentual": 0
+            },
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 8,
+              "esperado": 36,
+              "percentual": 22
+            },
+            {
+              "codigo": "D17",
+              "itens": 1,
+              "acertos": 21,
+              "esperado": 36,
+              "percentual": 58
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 23,
+              "esperado": 36,
+              "percentual": 64
+            },
+            {
+              "codigo": "D32 EF",
+              "itens": 2,
+              "acertos": 38,
+              "esperado": 72,
+              "percentual": 53
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 17,
+              "esperado": 72,
+              "percentual": 24
+            },
+            {
+              "codigo": "D29",
+              "itens": 2,
+              "acertos": 37,
+              "esperado": 72,
+              "percentual": 51
+            }
+          ]
+        },
+        {
+          "inep": "22134050",
+          "turmas": 2,
+          "alunos": 46,
+          "media": 2.7,
+          "habilidades": [
+            {
+              "codigo": "D12 EF",
+              "itens": 1,
+              "acertos": 2,
+              "esperado": 46,
+              "percentual": 4
+            },
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 26,
+              "esperado": 46,
+              "percentual": 57
+            },
+            {
+              "codigo": "D17",
+              "itens": 1,
+              "acertos": 19,
+              "esperado": 46,
+              "percentual": 41
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 5,
+              "esperado": 46,
+              "percentual": 11
+            },
+            {
+              "codigo": "D32 EF",
+              "itens": 2,
+              "acertos": 8,
+              "esperado": 92,
+              "percentual": 9
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 9,
+              "esperado": 92,
+              "percentual": 10
+            },
+            {
+              "codigo": "D29",
+              "itens": 2,
+              "acertos": 41,
+              "esperado": 92,
+              "percentual": 45
+            }
+          ]
+        },
+        {
+          "inep": "22061258",
+          "turmas": 1,
+          "alunos": 25,
+          "media": 3.4,
+          "habilidades": [
+            {
+              "codigo": "D12 EF",
+              "itens": 1,
+              "acertos": 0,
+              "esperado": 25,
+              "percentual": 0
+            },
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 15,
+              "esperado": 25,
+              "percentual": 60
+            },
+            {
+              "codigo": "D17",
+              "itens": 1,
+              "acertos": 6,
+              "esperado": 25,
+              "percentual": 24
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 13,
+              "esperado": 25,
+              "percentual": 52
+            },
+            {
+              "codigo": "D32 EF",
+              "itens": 2,
+              "acertos": 22,
+              "esperado": 50,
+              "percentual": 44
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 25,
+              "esperado": 50,
+              "percentual": 50
+            },
+            {
+              "codigo": "D29",
+              "itens": 2,
+              "acertos": 10,
+              "esperado": 50,
+              "percentual": 20
+            }
+          ]
+        },
+        {
+          "inep": "22083065",
+          "turmas": 2,
+          "alunos": 51,
+          "media": 4.2,
+          "habilidades": [
+            {
+              "codigo": "D12 EF",
+              "itens": 1,
+              "acertos": 22,
+              "esperado": 51,
+              "percentual": 43
+            },
+            {
+              "codigo": "D14",
+              "itens": 1,
+              "acertos": 20,
+              "esperado": 51,
+              "percentual": 39
+            },
+            {
+              "codigo": "D17",
+              "itens": 1,
+              "acertos": 29,
+              "esperado": 51,
+              "percentual": 57
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 21,
+              "esperado": 51,
+              "percentual": 41
+            },
+            {
+              "codigo": "D32 EF",
+              "itens": 2,
+              "acertos": 30,
+              "esperado": 102,
+              "percentual": 29
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 52,
+              "esperado": 102,
+              "percentual": 51
+            },
+            {
+              "codigo": "D29",
+              "itens": 2,
+              "acertos": 52,
+              "esperado": 102,
+              "percentual": 51
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "origem": "consolidado-escolas (18)(1).pdf",
+      "modalidade": "alternancia_modelo03",
+      "avaliacao": "5º SIMULA + SAEB - 2ª SÉRIE - MODELO 03 - ALTERNÂNCIA",
+      "serie": "2ª Série",
+      "simulado": 5,
+      "disciplina": "Língua Portuguesa",
+      "descritores": [
+        {
+          "codigo": "D12",
+          "itens": 2
+        },
+        {
+          "codigo": "D21",
+          "itens": 1
+        },
+        {
+          "codigo": "D15",
+          "itens": 4
+        },
+        {
+          "codigo": "D16",
+          "itens": 1
+        },
+        {
+          "codigo": "D13",
+          "itens": 3
+        },
+        {
+          "codigo": "D17",
+          "itens": 2
+        },
+        {
+          "codigo": "D19",
+          "itens": 1
+        }
+      ],
+      "escolas": [
+        {
+          "inep": "22124586",
+          "turmas": 1,
+          "alunos": 13,
+          "media": 4.4,
+          "habilidades": [
+            {
+              "codigo": "D12",
+              "itens": 2,
+              "acertos": 14,
+              "esperado": 26,
+              "percentual": 54
+            },
+            {
+              "codigo": "D21",
+              "itens": 1,
+              "acertos": 8,
+              "esperado": 13,
+              "percentual": 62
+            },
+            {
+              "codigo": "D15",
+              "itens": 4,
+              "acertos": 23,
+              "esperado": 52,
+              "percentual": 44
+            },
+            {
+              "codigo": "D16",
+              "itens": 1,
+              "acertos": 5,
+              "esperado": 13,
+              "percentual": 38
+            },
+            {
+              "codigo": "D13",
+              "itens": 3,
+              "acertos": 18,
+              "esperado": 39,
+              "percentual": 46
+            },
+            {
+              "codigo": "D17",
+              "itens": 2,
+              "acertos": 9,
+              "esperado": 26,
+              "percentual": 35
+            },
+            {
+              "codigo": "D19",
+              "itens": 1,
+              "acertos": 8,
+              "esperado": 13,
+              "percentual": 62
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "origem": "consolidado-escolas (19)(1).pdf",
+      "modalidade": "alternancia_modelo03",
+      "avaliacao": "5º SIMULA + SAEB - 2ª SÉRIE - MODELO 03 - ALTERNÂNCIA",
+      "serie": "2ª Série",
+      "simulado": 5,
+      "disciplina": "Matemática",
+      "descritores": [
+        {
+          "codigo": "D26 EF",
+          "itens": 1
+        },
+        {
+          "codigo": "D36 EF",
+          "itens": 1
+        },
+        {
+          "codigo": "D11",
+          "itens": 1
+        },
+        {
+          "codigo": "D14",
+          "itens": 2
+        },
+        {
+          "codigo": "D16",
+          "itens": 2
+        },
+        {
+          "codigo": "D29",
+          "itens": 1
+        },
+        {
+          "codigo": "D26",
+          "itens": 1
+        }
+      ],
+      "escolas": [
+        {
+          "inep": "22124586",
+          "turmas": 1,
+          "alunos": 13,
+          "media": 4.3,
+          "habilidades": [
+            {
+              "codigo": "D26 EF",
+              "itens": 1,
+              "acertos": 7,
+              "esperado": 13,
+              "percentual": 54
+            },
+            {
+              "codigo": "D36 EF",
+              "itens": 1,
+              "acertos": 2,
+              "esperado": 13,
+              "percentual": 15
+            },
+            {
+              "codigo": "D11",
+              "itens": 1,
+              "acertos": 5,
+              "esperado": 13,
+              "percentual": 38
+            },
+            {
+              "codigo": "D14",
+              "itens": 2,
+              "acertos": 8,
+              "esperado": 26,
+              "percentual": 31
+            },
+            {
+              "codigo": "D16",
+              "itens": 2,
+              "acertos": 16,
+              "esperado": 26,
+              "percentual": 62
+            },
+            {
+              "codigo": "D29",
+              "itens": 1,
+              "acertos": 4,
+              "esperado": 13,
+              "percentual": 31
+            },
+            {
+              "codigo": "D26",
+              "itens": 1,
+              "acertos": 7,
+              "esperado": 13,
+              "percentual": 54
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
